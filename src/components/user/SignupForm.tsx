@@ -13,6 +13,7 @@ function SignupForm() {
       } = useForm<SignupForm>();
 
     const onCheckEmail = async() => {
+      // 이메일 인증 API 에러 발생중 해결 필요함.
       try {
         const email = watch('email');
         if(!email) {
