@@ -1,14 +1,4 @@
 /** @type {import('next').NextConfig} */
-<<<<<<< Updated upstream
-const nextConfig = {
-  reactStrictMode: false,
-};
-
-module.exports = nextConfig;
-=======
-const nextConfig = {};
-
-module.exports = nextConfig;
 
 module.exports = {
     webpack(config) {
@@ -20,4 +10,6 @@ module.exports = {
         return config;
     },
 };
->>>>>>> Stashed changes
+const nextConfig = {
+    reactStrictMode: false,
+};

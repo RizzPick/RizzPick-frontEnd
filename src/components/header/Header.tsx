@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import profile from '../../../public/images/profile.jpeg';
 import { useState } from 'react';
-// import Alarm from './Alarm';
+import Alarm from '../../components/alarm/Alarm';
 
 export default function Header() {
     const [showOverlay, setShowOverlay] = useState(false);
@@ -27,7 +27,7 @@ export default function Header() {
             </Link>
             <nav className="flex gap-4 items-center">
                 <Link href="/noticeBoard">게시판</Link>
-                {/* {openChatModal && <Alarm close={close} />} */}
+                {openChatModal && <Alarm close={close} />}
 
                 {showOverlay && (
                     // 오버레이 클릭 시 모달도 닫히도록 함
