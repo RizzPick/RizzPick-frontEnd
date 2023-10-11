@@ -1,30 +1,32 @@
 'use client'
-
 import AuthAPI from "@/features/auth";
+import { setCookie } from "@/utils/cookie";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react"; // useRef 추가
 
 export default function KakaoCallback() {
     const router = useRouter();
-    const kakaoOuthCode = new URL(window.location.href).searchParams.get("code");
-    
+    const kakaoOuthCodeRef = useRef<any>(null); // useRef로 변수를 초기화
+
     useEffect(()=>{
+        kakaoOuthCodeRef.current = new URL(window.location.href).searchParams.get("code"); // .current를 사용하여 값을 저장
+
         const kakaoLogin = async() => {
             try{
-                const response = await AuthAPI.kakaoLogin(kakaoOuthCode);
+                const response = await AuthAPI.kakaoLogin(kakaoOuthCodeRef.current); // .current를 사용하여 값에 접근
                 console.log(response);
                 if(response.status === 200) {
-                    {response.data.data.userActiveStatus && router.replace('/')};
-                    {!response.data.data.userActiveStatus && alert('프로필 등록을 진행합니다.')};
+                    const token = response.headers['authorization'];
+                    setCookie('Authorization',token);
+                    {response.data.data.userActiveStatus && router.push('/')};
+                    {!response.data.data.userActiveStatus && router.push('/')};
                 }
             } catch(error) { 
                 console.log(error);
             }
         }
         kakaoLogin();
-    },[kakaoOuthCode, router])
+    },[router]) // useEffect의 의존성 배열에서 kakaoOuthCode를 제거
 
   return <div>카카오 로그인 처리중...</div>;
 }
-
-
