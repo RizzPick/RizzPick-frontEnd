@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.bubble-tail {
+    border-style: solid;
+    border-width: 0 20px 15px 5px;
+    border-color: transparent rgb(100 116 139 / var(--tw-bg-opacity))
+        transparent transparent;
+}
+
+.hover-shadow:hover {
+    filter: drop-shadow(0 4px 6px rgba(185, 171, 171, 0.5));
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+}

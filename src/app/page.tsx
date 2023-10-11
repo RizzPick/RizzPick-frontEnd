@@ -1,5 +1,8 @@
+<<<<<<< Updated upstream
+=======
+import Image from 'next/image';
+
+>>>>>>> Stashed changes
 export default function Home() {
-  return (
-    <div>Will You 메인페이지</div>
-  )
+    return <section className="flex flex-col justify-between "></section>;
 }
