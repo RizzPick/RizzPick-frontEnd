@@ -10,3 +10,14 @@ export type SignupReq = {
 }
 
 export type SignupForm = SignupReq & { password_confirm : string};
+
+export type KakaoLoginRes = {
+  data : KakaoLoginResData;
+  message? : string;
+  status : string;
+}
+
+type KakaoLoginResData = {
+  userId : number;
+  userActiveStatus : boolean;
+}
