@@ -1,10 +1,10 @@
 'use client'
+import React from 'react'
+import Image from 'next/image';
 import AuthAPI from '@/features/auth';
 import { LoginReq } from '@/types/auth';
 import { setCookie, setRefreshToken } from '@/utils/cookie';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React from 'react'
 import { useForm } from 'react-hook-form';
 
 function LoginForm() {
@@ -23,6 +23,7 @@ function LoginForm() {
         const res = await AuthAPI.login(data);
         try {
           if(res.status === 200) {
+            console.log(res);
             const token = res.headers['authorization'];
             const refreshToken = res.headers['authorization_refresh'];
             setCookie('Authorization', token);

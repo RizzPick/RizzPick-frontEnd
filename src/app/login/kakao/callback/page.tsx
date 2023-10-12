@@ -16,6 +16,7 @@ export default function KakaoCallback() {
                 const response = await AuthAPI.kakaoLogin(kakaoOuthCodeRef.current); // .current를 사용하여 값에 접근
                 console.log(response);
                 if(response.status === 200) {
+                    console.log(response);
                     const token = response.headers['authorization'];
                     setCookie('Authorization',token);
                     {response.data.data.userActiveStatus && router.push('/')};
@@ -26,7 +27,7 @@ export default function KakaoCallback() {
             }
         }
         kakaoLogin();
-    },[router]) // useEffect의 의존성 배열에서 kakaoOuthCode를 제거
+    },[router])
 
   return <div>카카오 로그인 처리중...</div>;
 }
