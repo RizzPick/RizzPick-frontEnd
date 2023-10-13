@@ -1,6 +1,6 @@
 'use client'
 import AuthAPI from "@/features/auth";
-import { setCookie } from "@/utils/cookie";
+import { setCookie, setRefreshToken } from "@/utils/cookie";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react"; // useRef 추가
 
@@ -18,7 +18,9 @@ export default function KakaoCallback() {
                 if(response.status === 200) {
                     console.log(response);
                     const token = response.headers['authorization'];
+                    const refreshToken = response.headers['authorization_refresh'];
                     setCookie('Authorization',token);
+                    setRefreshToken('Authorization_Refresh', refreshToken);
                     {response.data.data.userActiveStatus && router.push('/')};
                     {!response.data.data.userActiveStatus && router.push('/')};
                 }
