@@ -6,6 +6,7 @@ import { LoginReq } from '@/types/auth';
 import { setCookie, setRefreshToken } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import kakaoLoginLogo from "../../../public/kakao_login.png";
 
 function LoginForm() {
     const {
@@ -20,18 +21,22 @@ function LoginForm() {
       };
 
       const onSubmit = async (data:LoginReq) => {
-        const res = await AuthAPI.login(data);
         try {
+          const res = await AuthAPI.login(data);
           if(res.status === 200) {
             console.log(res);
             const token = res.headers['authorization'];
             const refreshToken = res.headers['authorization_refresh'];
             setCookie('Authorization', token);
             setRefreshToken('Authorization_Refresh', refreshToken);
-            router.replace('/');
+            const {data} = await AuthAPI.getUserStatus();
+            const status = data.data.userActiveStatus;
+            {status && router.replace('/')}
+            {!status && router.replace('/user/profil/edit')}
           }
+          console.log(res)
         } catch (error) {
-          console.error("로그인 요청 실패:", error);
+          console.log(error);
         }
       };
 
@@ -57,8 +62,9 @@ function LoginForm() {
             {errors.password && <p className="text-red-500">This password field is required</p>}
 
             <button className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out'>로그인</button>
+            <button className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out' onClick={()=>router.push('/user/signup')}>회원가입</button>
             <div className="mt-4 cursor-pointer">
-                <Image src="/kakao_login.png" width={300} height={200} alt="카카오 로그인" onClick={kakaoLogin} />
+                <Image src={kakaoLoginLogo} priority width={300} height={200} alt="카카오 로그인" onClick={kakaoLogin} />
             </div>
         </form>
     </section>
