@@ -7,10 +7,10 @@ let fetchedUserIds: number[] = [];
 export async function fetchRandomUser(
     token: string,
     refreshToken: string
-): Promise<UserProfile | any> {
+): Promise<UserProfile[]> {
     try {
         const response = await axios.get(
-            'https://willyouback.shop/api/userProfiles',
+            'https://willyouback.shop//api/userprofile/recommendations',
             {
                 headers: {
                     Authorization: getCookie('Authorization'),
@@ -18,28 +18,10 @@ export async function fetchRandomUser(
                 },
             }
         );
-        console.log(response.data);
-
-        const users = response.data.data;
-
-        const randomIndex = Math.floor(Math.random() * users.length);
-        const randomUser = users[randomIndex];
-
-        console.log(users.nickname);
-        return randomUser;
+        console.log(response);
+        return response.data.data; // 데이터 배열을 반환합니다.
     } catch (error: any) {
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.error(error.response.data);
-            console.error(error.response.status);
-            console.error(error.response.headers);
-        } else if (error.request) {
-            // The request was made but no response was received
-            console.error(error.request);
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            console.error('Error', error.message);
-        }
+        console.error(error);
+        return [];
     }
 }
