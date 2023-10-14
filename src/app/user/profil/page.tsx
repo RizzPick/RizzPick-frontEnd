@@ -5,5 +5,4 @@ function Profilpage() {
     <div>page</div>
   )
 }
-
 export default Profilpage

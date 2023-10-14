@@ -6,9 +6,9 @@ import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 
 function UserProfileEdit() {
-  const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
+  const { data : profile,isValidating } = useSWR<MyProfileRes>(PROFILE_KEY);
   const { setCurrentProfile } = UseProfile();
-  const { register, handleSubmit, setValue } = useForm<ProfileForm>();
+  const { register, handleSubmit, setValue, formState: {errors} } = useForm<ProfileForm>();
   
   
 
@@ -45,25 +45,36 @@ function UserProfileEdit() {
     }
   };
 
+  if (isValidating) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <section className='w-full'>
       <h2 className="text-2xl mb-6">프로필 수정</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
+          <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2">닉네임</label>
-          <input {...register("nickname")} className="w-full p-2 border rounded" placeholder="닉네임을 입력하세요" />
-          <label className="block text-gray-700 mb-2">학교</label>
-          <input {...register("education")} className="w-full p-2 border rounded" placeholder="학교를 입력하세요" />
+          {errors.nickname && <p className="text-red-500">필수값입니다.</p>}
+          </div>
+          <input {...register("nickname", {required : true})} className="w-full p-2 border rounded" placeholder="닉네임을 입력하세요" />
+          
+          <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2">성별</label>
-          <select {...register("gender")} className="w-full p-2 border rounded" >
-            <option value="NONE">성별을 선택하세요</option>
+          {errors.gender && <p className="text-red-500">필수값입니다.</p>}
+          </div>
+          <select {...register("gender", {required :true})} className="w-full p-2 border rounded" >
+            <option value="">성별을 선택하세요</option>
             <option value="MALE">남자</option>
             <option value="FEMALE">여자</option>
             <option value="TRANSGENDER">트랜스젠더</option>
           </select>
-
+          <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2">나이</label>
-          <select {...register("age")} className="w-full p-2 border rounded" >
+          {errors.age && <p className="text-red-500">필수값입니다.</p>}
+          </div>
+          <select {...register("age", {required:true})} className="w-full p-2 border rounded">
             <option value="">나이를 선택하세요</option>
             {/* 예시로 18~30세까지 옵션 추가 (필요에 따라 수정) */}
             {Array.from({ length: 13 }, (_, i) => i + 18).map((age) => (
@@ -71,8 +82,13 @@ function UserProfileEdit() {
             ))}
           </select>
 
+          <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
+          <label className="block text-gray-700 mb-2">학교</label>
+          <input {...register("education")} className="w-full p-2 border rounded" placeholder="학교를 입력하세요" />
+
+
           <label className="block text-gray-700 mb-2">지역</label>
-          <select {...register("location")} className="w-full p-2 border rounded" >
+          <select {...register("location")} className="w-full p-2 border rounded">
             <option value="NONE">지역을 선택하세요</option>
             <option value="SEOUL">서울</option>
             <option value="BUSAN">부산</option>

@@ -1,7 +1,7 @@
 'use client'
 import ProfileAPI from '@/features/profile';
 import Image from 'next/image'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 import UserImageCamera from './UserImageCamera';
 import { ProfileImages } from '@/types/profile';
@@ -21,12 +21,21 @@ function UserImageCard({ onImageClick, isModalVisible, setModalVisible, image,is
 
   const [isCameraVisible, setCameraVisible] = useState<boolean>(false);
   const imageInput = useRef<HTMLInputElement | null>(null);
+  const FILE_SIZE_MAX_LIMIT = 10 * 1024 & 1024;
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
-    if (fileList) {
+   
+    if (!fileList) {
+      return;
+    }
       const file = fileList[0];
       const url = URL.createObjectURL(file);
+      if(file.size > FILE_SIZE_MAX_LIMIT) {
+        e.target.value = "";
+        alert("업로드 가능한 최대 용량은 20MB입니다.");
+        return;
+      }
 
       // API 호출 로직
       const formData = new FormData();
@@ -43,12 +52,11 @@ function UserImageCard({ onImageClick, isModalVisible, setModalVisible, image,is
               }
       }, false);  // revalidate를 false로 설정하여 재검증 없이 데이터만 갱신
         console.log(response.data);
-
       } catch (error) {
         // API 호출 실패 시 처리 로직
         console.error("Image upload failed:", error);
       }
-    }
+    
   };
 
 const onGallerySelect = () => {
@@ -57,7 +65,6 @@ const onGallerySelect = () => {
 };
 
 const handleImageDelete = async (imageId : number) => {
-
   const ys = window.confirm('정말 삭제하시겠습니까?');
   if(ys) {
     const formData = new FormData();

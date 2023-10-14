@@ -13,7 +13,7 @@ const AuthAPI = {
   getUserStatus: () => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/status`, {
     headers : {
       Authorization : getCookie('Authorization'),
-    Authorization_Refresh : getCookie('Authorization_Refresh')
+      Authorization_Refresh : getCookie('Authorization_Refresh')
     }
   })
 };

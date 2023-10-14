@@ -9,11 +9,10 @@ export default function KakaoCallback() {
     const kakaoOuthCodeRef = useRef<any>(null); // useRef로 변수를 초기화
 
     useEffect(()=>{
-        kakaoOuthCodeRef.current = new URL(window.location.href).searchParams.get("code"); // .current를 사용하여 값을 저장
-
+        kakaoOuthCodeRef.current = new URL(window.location.href).searchParams.get("code");
         const kakaoLogin = async() => {
             try{
-                const response = await AuthAPI.kakaoLogin(kakaoOuthCodeRef.current); // .current를 사용하여 값에 접근
+                const response = await AuthAPI.kakaoLogin(kakaoOuthCodeRef.current);
                 console.log(response);
                 if(response.status === 200) {
                     console.log(response);

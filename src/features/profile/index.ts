@@ -2,13 +2,12 @@ import service from '@/features';
 import { ProfileForm } from '@/types/profile';
 import { getCookie } from '@/utils/cookie';
 
-
 const ProfileAPI = {
   updateProfile: (data: ProfileForm) => service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/updateProfile`, data, {
-  headers : {
-    Authorization : getCookie('Authorization'),
-    Authorization_Refresh : getCookie('Authorization_Refresh')
-  }
+    headers : {
+      Authorization : getCookie('Authorization'),
+      Authorization_Refresh : getCookie('Authorization_Refresh')
+    }
   }),
   updateImage: (data:any) => service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/profileImage/updateImage`, data, {
     headers : {
@@ -21,7 +20,7 @@ const ProfileAPI = {
   getMyProfile: () => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/myProfile`, {
     headers : {
       Authorization : getCookie('Authorization'),
-    Authorization_Refresh : getCookie('Authorization_Refresh')
+      Authorization_Refresh : getCookie('Authorization_Refresh')
     }
   })
 };
