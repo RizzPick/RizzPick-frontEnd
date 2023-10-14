@@ -1,6 +1,4 @@
 'use client';
-
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { fetchRandomUser } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
@@ -32,65 +30,38 @@ export default function Match({ userId }: { userId: string }) {
     };
 
     //! 랜덤 매칭
-    const [users, setUsers] = useState<UserProfile[]>([]);
-    const [userIndex, setUserIndex] = useState(0);
+    const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
-    // 사용자 정보를 불러오는 함수입니다.
-    const fetchUsers = async () => {
-        const token = getCookie('Authorization') as string;
-        const refreshToken = getCookie('Authorization_Refresh') as string;
+    const handleButtonClick = async () => {
+        const token = getCookie('Authorization');
+        const refreshToken = getRefreshToken();
 
-        try {
-            const response = await axios.get(
-                'https://willyouback.shop/api/userprofile/recommendations',
-                {
-                    headers: {
-                        Authorization: token,
-                        Authorization_Refresh: refreshToken,
-                    },
-                }
-            );
-
-            const usersData = response.data.data; // 사용자 정보 배열을 가져옵니다.
-
-            console.log('response:', response);
-            console.log(usersData);
-            setUsers(usersData); // 상태에 사용자 정보 배열을 저장합니다.
-        } catch (error) {
-            console.error(error);
-        }
+        const randomUser = await fetchRandomUser(
+            token as string,
+            refreshToken as string
+        ); // 토큰을 변수로 전달합니다.
+        console.log(randomUser.userId);
+        setCurrentUser(randomUser);
     };
 
+    //! 2023.10.13 유저의 정보가 모두 null로 되어있어, userId가 정상적으로 변경되는 지 확인하기위한 용도?
     useEffect(() => {
-        fetchUsers();
-    }, []);
-
-    const handleButtonClick = () => {
-        if (userIndex === users.length - 1) {
-            fetchUsers(); // 마지막 사용자에 도달했을 때 새 사용자 데이터를 불러옵니다.
-            setUserIndex(0); // 인덱스를 리셋합니다.
-        } else {
-            setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
+        if (currentUser) {
+            console.log(`User ID: ${currentUser.userId}`);
         }
-    };
+    }, [currentUser]);
 
     //! 사진 슬라이드
-    const currentUser = users[userIndex];
-    const [slideIndex, setSlideIndex] = useState(0);
+    const images = [profiledog1, profiledog];
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     const nextSlide = () => {
-        if (!currentUser) return; // currentUser가 undefined인 경우 early return
-        setSlideIndex(
-            (prevIndex) => (prevIndex + 1) % currentUser.profileImages.length
-        );
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     };
 
     const prevSlide = () => {
-        if (!currentUser) return; // currentUser가 undefined인 경우 early return
-        setSlideIndex(
-            (prevIndex) =>
-                (prevIndex - 1 + currentUser.profileImages.length) %
-                currentUser.profileImages.length
+        setCurrentIndex(
+            (prevIndex) => (prevIndex - 1 + images.length) % images.length
         );
     };
 
@@ -104,17 +75,15 @@ export default function Match({ userId }: { userId: string }) {
                     <div className="relative h-full w-full overflow-hidden rounded-2xl ">
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
-                            {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
-                                ? currentUser.profileImages.map((_, index) => (
-                                      <div key={index} className="mx-1 z-50">
-                                          {index === slideIndex ? (
-                                              <NowPageIcon />
-                                          ) : (
-                                              <PageIcon />
-                                          )}
-                                      </div>
-                                  ))
-                                : null}
+                            {images.map((_, index) => (
+                                <div key={index} className="mx-1 z-50">
+                                    {index === currentIndex ? (
+                                        <NowPageIcon />
+                                    ) : (
+                                        <PageIcon />
+                                    )}
+                                </div>
+                            ))}
                         </div>
 
                         {/* 페이지 이동 버튼 */}
@@ -126,31 +95,26 @@ export default function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 이미지 가져오기 */}
-                        {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
-                            ? currentUser.profileImages.map(
-                                  (imageObj, index) => (
-                                      <div
-                                          className={
-                                              index === slideIndex
-                                                  ? 'slide active'
-                                                  : 'slide'
-                                          }
-                                          key={index}
-                                      >
-                                          {index === slideIndex && (
-                                              <Image
-                                                  src={imageObj.image}
-                                                  alt="User"
-                                                  layout="fill"
-                                                  objectFit="cover"
-                                                  className="absolute"
-                                              />
-                                          )}
-                                      </div>
-                                  )
-                              )
-                            : null}
-
+                        {images.map((image, index) => (
+                            <div
+                                className={
+                                    index === currentIndex
+                                        ? 'slide active'
+                                        : 'slide'
+                                }
+                                key={index}
+                            >
+                                {index === currentIndex && (
+                                    <Image
+                                        src={image}
+                                        alt="User"
+                                        layout="fill"
+                                        objectFit="cover"
+                                        className="absolute"
+                                    />
+                                )}
+                            </div>
+                        ))}
                         <button
                             onClick={nextSlide}
                             className="absolute top-1/2 right-0 transform -translate-y-1/2 z-50 m-2"
@@ -159,19 +123,20 @@ export default function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-full top-0 left-0 text-white font-bold  mt-[380px] mx-[10px] flex flex-col">
-                            <div className="flex flex-row items-center">
-                                <div className="text-2xl p-[10px] flex">
-                                    <div className="text-4xl">
-                                        {users[userIndex]?.nickname ??
-                                            'Unknown'}
-                                    </div>
-                                    &nbsp; &nbsp;
-                                    <span className="mt-2">
-                                        {users[userIndex]?.age ?? 'Unknown'}{' '}
+                        <div className="absolute top-0 left-0 text-white font-bold  mt-[380px] mx-[10px] flex flex-col">
+                            <div className="flex flex-row">
+                                <div className="text-2xl p-[10px] flex items-center w-full">
+                                    <span className="text-4xl">
+                                        {currentUser?.nickname ?? 'Unknown'}
                                     </span>
+                                    &nbsp; &nbsp;
+                                    <span className="mt-3">
+                                        {currentUser?.age ?? 'Unknown'}
+                                    </span>
+                                </div>
+                                <div className="flex w-[100px]">
                                     <button
-                                        className="absolute z-50 mr-4"
+                                        className="absolute right-[2px] top-3 z-50"
                                         onClick={toggleDetailsVisibility}
                                     >
                                         <ReadMore />
@@ -208,11 +173,8 @@ export default function Match({ userId }: { userId: string }) {
                         <h2 className="text-2xl font-bold mb-4 text-black text-center">
                             나랑 이런 데이트 어때요?
                         </h2>
-                        <div className="bg-white rounded-2xl p-4 h-[30vh] flex flex-col">
-                            <span>💭 밥먹고 영화보기</span>
-                            <span>💭 밥먹고 영화보기</span>
-                            <span>💭 밥먹고 영화보기</span>
-                            <span>💭 밥먹고 영화보기</span>
+                        <div className="bg-white rounded-2xl p-4 h-[30vh]">
+                            💭 밥먹고 영화보기
                         </div>
                         <button className="absolute right-[15px]">
                             <BlackHeartIcon />
@@ -226,13 +188,7 @@ export default function Match({ userId }: { userId: string }) {
                     >
                         <div className="flex flex-col bg-slate-300 h-[40vh]">
                             <span className="bg-slate-500 text-white m-1 p-1">
-                                성별:{users[userIndex]?.gender ?? 'Unknown'}{' '}
-                            </span>
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                지역:{users[userIndex]?.location ?? 'Unknown'}{' '}
-                            </span>
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                학력:{users[userIndex]?.education ?? 'Unknown'}{' '}
+                                위치
                             </span>
                             <span className="bg-slate-500 text-white m-1 p-1">
                                 MBTI

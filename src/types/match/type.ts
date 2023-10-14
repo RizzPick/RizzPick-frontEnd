@@ -7,10 +7,5 @@ export type UserProfile = {
     location?: string;
     mbti?: string;
     religion?: string;
-    profileImages: ImageObject[];
-};
-
-export type ImageObject = {
-    id: number;
-    image: string;
+    profileImages: string;
 };
