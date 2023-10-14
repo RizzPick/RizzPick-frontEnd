@@ -1,12 +1,13 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image';
 import AuthAPI from '@/features/auth';
 import { LoginReq } from '@/types/auth';
-import { setCookie, setRefreshToken } from '@/utils/cookie';
-import { useRouter } from 'next/navigation';
+import { setCookie } from '@/utils/cookie';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from "../../../public/kakao_login.png";
+import service from '@/features';
 
 function LoginForm() {
     const {
@@ -16,6 +17,9 @@ function LoginForm() {
       } = useForm<LoginReq>();
     
       const router = useRouter();
+      const params = useSearchParams();
+      const message = params.get('message');
+
       const kakaoLogin = () => {
         window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}`;
       };
@@ -28,17 +32,21 @@ function LoginForm() {
             const token = res.headers['authorization'];
             const refreshToken = res.headers['authorization_refresh'];
             setCookie('Authorization', token);
-            setRefreshToken('Authorization_Refresh', refreshToken);
+            setCookie('Authorization_Refresh',refreshToken);
             const {data} = await AuthAPI.getUserStatus();
             const status = data.data.userActiveStatus;
             {status && router.replace('/')}
-            {!status && router.replace('/user/profil/edit')}
+            {!status && router.replace('/user/profile/edit')}
           }
           console.log(res)
         } catch (error) {
           console.log(error);
         }
       };
+
+      useEffect(()=>{
+        message && alert("잘못된 접근입니다, 로그인이 필요합니다.");
+      },[message])
 
       return (
         <section className='bg-blue-400 min-h-screen flex justify-center items-center'>

@@ -24,12 +24,11 @@ service.interceptors.response.use(
 
     /** 2 */
     // config.sent = true;
-    // // const { headers } = await AuthAPI.refresh();
+    // const { headers } = await AuthAPI.refresh();
     // const accessToken = headers.authorization;
     // console.log(accessToken);
 
     // if (accessToken) {
-    //   localStorage.setItem('accessToken', accessToken);
     //   config.headers.Authorization = `${accessToken}`;
     // }
 

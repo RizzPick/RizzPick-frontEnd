@@ -27,19 +27,4 @@ export const setCookie = (name: string, value: string, days?: number): void => {
   export const eraseCookie = (name: string): void => {
     cookies.remove(name); // 이름에 해당하는 쿠키를 제거하도록 수정
   }
-
-  export const setRefreshToken = (name:string, value:string) => {
-    // name과 value를 받도록 수정
-    cookies.set(name, value, { path: "/", maxAge: 60 * 60 * 24 * 7 });
-  };
-  
-  // 리프레시 토큰 가져오기 함수
-  export const getRefreshToken = () => {
-    return cookies.get("refreshToken");
-  };
-  
-  // 리프레시 토큰 삭제 함수
-  export const removeRefreshToken = () => {
-    cookies.remove("refreshToken", { path: "/" });
-  };
   
