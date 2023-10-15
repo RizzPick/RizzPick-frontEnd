@@ -5,7 +5,7 @@ export default function matchPage() {
     return (
         <>
             <Header />
-            <Match />
+            <Match userId="userId" />
         </>
     );
 }
