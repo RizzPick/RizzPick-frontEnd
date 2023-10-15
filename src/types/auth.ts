@@ -48,3 +48,8 @@ export type SignupErrorRes = {
     }
   }
 }
+
+export type UserActiveStatus = {
+  userActiveStatus : boolean;
+  userId : number;
+}

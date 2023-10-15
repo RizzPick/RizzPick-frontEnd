@@ -45,7 +45,6 @@ function UserImageCard({ onImageClick, isModalVisible, setModalVisible, image,is
       try {
         const response = await ProfileAPI.updateImage(formData);
         mutate(PROFILE_KEY, (currentData:any) => {
-          console.log(currentData);
           return {
               ...currentData,
                 profileImages: [...currentData.profileImages, response.data.data]

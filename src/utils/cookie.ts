@@ -10,6 +10,10 @@ const cookies = new Cookies();
 export const setCookie = (name: string, value: string, days?: number): void => {
     cookies.set(name, value, { path: "/", maxAge: 60 * 60 * 24 * 1 }); // 1일 동안 유효한 쿠키로 저장 : maxAge: 60 * 60 * 24 * 1
   }
+
+export const setStatus = (name: string, value: boolean, days?: number): void => {
+    cookies.set(name, value, { path: "/", maxAge: 60 * 60 * 24 * 1 }); // 1일 동안 유효한 쿠키로 저장 : maxAge: 60 * 60 * 24 * 1
+  }
   
   /**
    * 쿠키 가져오는 함수

@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from "../../../public/kakao_login.png";
 import service from '@/features';
+import UseProfile from '@/hooks/useProfile';
 
 function LoginForm() {
     const {
@@ -19,6 +20,7 @@ function LoginForm() {
       const router = useRouter();
       const params = useSearchParams();
       const message = params.get('message');
+      const { initializeUserActiveStatus } = UseProfile();
 
       const kakaoLogin = () => {
         window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}`;
@@ -35,6 +37,7 @@ function LoginForm() {
             setCookie('Authorization_Refresh',refreshToken);
             const {data} = await AuthAPI.getUserStatus();
             const status = data.data.userActiveStatus;
+            initializeUserActiveStatus(data.data);
             {status && router.replace('/')}
             {!status && router.replace('/user/profile/edit')}
           }

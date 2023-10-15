@@ -9,8 +9,6 @@ function UserProfileEdit() {
   const { data : profile,isValidating } = useSWR<MyProfileRes>(PROFILE_KEY);
   const { setCurrentProfile } = UseProfile();
   const { register, handleSubmit, setValue, formState: {errors} } = useForm<ProfileForm>();
-  
-  
 
   useEffect(() => {
     const profileFormKeys: (keyof ProfileForm)[] = [
