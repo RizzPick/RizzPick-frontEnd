@@ -1,14 +1,22 @@
 import ProfileAPI from '@/features/profile';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
-import { Mbti, MyProfileRes, ProfileForm, Religion } from '@/types/profile';
-import React, { useEffect } from 'react'
+import { Mbti, MyProfileRes, ProfileForm } from '@/types/profile';
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
+import UserImageGrid from './UserImageGrid';
 
 function UserProfileEdit() {
   const { data : profile,isValidating } = useSWR<MyProfileRes>(PROFILE_KEY);
   const { setCurrentProfile } = UseProfile();
-  const { register, handleSubmit, setValue, formState: {errors} } = useForm<ProfileForm>();
+  const { register, handleSubmit, setValue, formState: {errors}, getValues } = useForm<ProfileForm>();
+  const [localProfile, setLocalProfile] = useState<MyProfileRes | null>(null);
+
+  useEffect(() => {
+    if (profile) {
+      setLocalProfile(profile);
+    }
+  }, [profile]);
 
   useEffect(() => {
     const profileFormKeys: (keyof ProfileForm)[] = [
@@ -21,14 +29,15 @@ function UserProfileEdit() {
         'mbti',
         'religion',
       ];
-    if (profile) {
-      for (const key of profileFormKeys) {
-        if (profile[key] !== undefined) {
-          setValue(key, profile[key]);
+      if (localProfile) {
+        for (const key of profileFormKeys) {
+          const currentValue = getValues(key); // getValues를 사용하여 현재 값 가져오기
+          if (localProfile[key] !== undefined && !currentValue) {
+            setValue(key, localProfile[key]);
+          }
         }
       }
-    }
-  }, [profile, setValue]);
+  }, [localProfile, setValue, getValues]);
 
   const onSubmit = async(data: ProfileForm) => {
     // 프로필 등록 로직 (API 호출 등)
@@ -36,6 +45,7 @@ function UserProfileEdit() {
       const response = await ProfileAPI.updateProfile(data);
       if(response.status === 200) {
         setCurrentProfile(response.data.data);
+        setLocalProfile(response.data.data);
       }
       console.log(response);
     } catch(error) {
@@ -48,7 +58,8 @@ function UserProfileEdit() {
   }
 
   return (
-    <section className='w-full'>
+    <section className='w-full flex'>
+      <div>
       <h2 className="text-2xl mb-6">프로필 수정</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
@@ -121,6 +132,12 @@ function UserProfileEdit() {
         </div>
         <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-200">제출하기</button>
       </form>
+      </div>
+      <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
+      <div>
+      <h3 className="text-xl mb-4">프로필 이미지 관리</h3>
+      <UserImageGrid />
+      </div>
       </section>
   )
 }

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react'
 import { useForm } from 'react-hook-form';
 
-function SignupForm() {
+function SignupComponent() {
     const {
         watch,
         register,
@@ -14,9 +14,12 @@ function SignupForm() {
       } = useForm<SignupForm>();
       const router = useRouter();
 
+      const [showTimer, setShowTimer] = useState(false);
+      const [timer, setTimer] = useState(300); // 5분은 300초
       const [isEmailVerified, setEmailVerified] = useState(false);
+      const [isVerificationCodeShown, setVerificationCodeShown] = useState(false);
       const [verify, setVerify] = useState<EmailVerifyReq>({email:"", authKey:""});
-      const onChange = (e:ChangeEvent<HTMLInputElement | null>) => {
+      const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
         setVerify({
           ...verify,
           authKey : e.target.value
@@ -36,6 +39,18 @@ function SignupForm() {
             alert('인증번호가 전송되었습니다.');
             setVerify({...verify, email});
             setEmailVerified(true);
+            setVerificationCodeShown(true);
+            setShowTimer(true);
+            let interval = setInterval(() => {
+              setTimer(prevTimer => {
+                if (prevTimer <= 1) {
+                  clearInterval(interval);
+                  setShowTimer(false);
+                  return 0;
+                }
+                return prevTimer - 1;
+              });
+            }, 1000);
           }
         }
       } catch(error) {
@@ -52,6 +67,7 @@ function SignupForm() {
         const response = await AuthAPI.emailAuthVerify(verify);
         if(response.status === 200) {
           alert(response.data.message);
+          setVerificationCodeShown(false);
         }
         console.log(response);
       } catch(error) {
@@ -98,7 +114,9 @@ function SignupForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-6 bg-white rounded-xl shadow-xl w-96">
         <div className='flex justify-between items-center'>
             <label className="font-bold text-xl">이메일</label>
-            <button onClick={onCheckEmail} type="button" className="bg-green-500 text-white px-4 py-1 rounded-full" disabled={isEmailVerified}>인증요청</button>
+            {!isEmailVerified && (
+    <button onClick={onCheckEmail} type="button" className="bg-green-500 text-white px-4 py-1 rounded-full">인증요청</button>
+)}
         </div>
         <input
             id="email"
@@ -111,9 +129,10 @@ function SignupForm() {
             })}
         />
         {errors.email && <p className="text-red-500">This email field is required</p>}
-        {isEmailVerified && ( 
+        {isEmailVerified && isVerificationCodeShown && ( 
                 <div className='flex gap-2'>
-                    <input type='text' name='verify' onChange={onChange} value={verify?.authKey} placeholder='인증번호를 입력하세요' className="border rounded-md p-2 flex-grow"/>
+                    <input type='text' name='verify' onChange={handleChange} value={verify?.authKey} placeholder='인증번호를 입력하세요' className="border rounded-md p-2 flex-grow"/>
+                    {showTimer && <span className="text-red-500">{Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</span>}
                     <button type='button' onClick={onCheckEmailVerify} className="bg-green-500 text-white px-4 py-1 rounded-full">인증</button>
                 </div>
             )}
@@ -161,4 +180,4 @@ function SignupForm() {
   )
 }
 
-export default SignupForm
+export default SignupComponent

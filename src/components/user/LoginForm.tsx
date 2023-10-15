@@ -29,6 +29,7 @@ function LoginForm() {
       const onSubmit = async (data:LoginReq) => {
         try {
           const res = await AuthAPI.login(data);
+          console.log(res);
           if(res.status === 200) {
             console.log(res);
             const token = res.headers['authorization'];
@@ -41,7 +42,7 @@ function LoginForm() {
             {status && router.replace('/')}
             {!status && router.replace('/user/profile/edit')}
           }
-          console.log(res)
+          
         } catch (error) {
           console.log(error);
         }
@@ -73,7 +74,7 @@ function LoginForm() {
             {errors.password && <p className="text-red-500">This password field is required</p>}
 
             <button className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out'>로그인</button>
-            <button className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out' onClick={()=>router.push('/user/signup')}>회원가입</button>
+            <button className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out' onClick={()=>router.push('/signup')}>회원가입</button>
             <div className="mt-4 cursor-pointer">
                 <Image src={kakaoLoginLogo} priority width={300} height={200} alt="카카오 로그인" onClick={kakaoLogin} />
             </div>

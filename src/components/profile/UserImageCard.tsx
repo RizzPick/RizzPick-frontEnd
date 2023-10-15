@@ -1,12 +1,9 @@
 'use client'
-import ProfileAPI from '@/features/profile';
 import Image from 'next/image'
 import React, { useRef, useState } from 'react'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 import UserImageCamera from './UserImageCamera';
 import { ProfileImages } from '@/types/profile';
-import { mutate } from 'swr';
-import { PROFILE_KEY } from '@/hooks/useProfile';
 import { PuffLoader } from "react-spinners"
 
 interface Props {
@@ -15,13 +12,14 @@ interface Props {
     setModalVisible: (visible: boolean) => void;
     image : ProfileImages | null;
     isLoading : boolean;
+    onAddImage: any;
+    onDeleteImage : any;
   }
 
-function UserImageCard({ onImageClick, isModalVisible, setModalVisible, image,isLoading }: Props) {
-
+function UserImageCard({ onAddImage, onDeleteImage,onImageClick, isModalVisible, setModalVisible, image,isLoading }: Props) {
   const [isCameraVisible, setCameraVisible] = useState<boolean>(false);
   const imageInput = useRef<HTMLInputElement | null>(null);
-  const FILE_SIZE_MAX_LIMIT = 10 * 1024 & 1024;
+  const FILE_SIZE_MAX_LIMIT = 20 * 1024 * 1024;
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
@@ -30,32 +28,12 @@ function UserImageCard({ onImageClick, isModalVisible, setModalVisible, image,is
       return;
     }
       const file = fileList[0];
-      const url = URL.createObjectURL(file);
       if(file.size > FILE_SIZE_MAX_LIMIT) {
         e.target.value = "";
         alert("업로드 가능한 최대 용량은 20MB입니다.");
         return;
       }
-
-      // API 호출 로직
-      const formData = new FormData();
-      formData.append('action', "ADD");
-      formData.append('image', file);
-
-      try {
-        const response = await ProfileAPI.updateImage(formData);
-        mutate(PROFILE_KEY, (currentData:any) => {
-          return {
-              ...currentData,
-                profileImages: [...currentData.profileImages, response.data.data]
-              }
-      }, false);  // revalidate를 false로 설정하여 재검증 없이 데이터만 갱신
-        console.log(response.data);
-      } catch (error) {
-        // API 호출 실패 시 처리 로직
-        console.error("Image upload failed:", error);
-      }
-    
+      onAddImage(file);
   };
 
 const onGallerySelect = () => {
@@ -66,23 +44,7 @@ const onGallerySelect = () => {
 const handleImageDelete = async (imageId : number) => {
   const ys = window.confirm('정말 삭제하시겠습니까?');
   if(ys) {
-    const formData = new FormData();
-    formData.append('action', "DELETE");
-    formData.append('id', imageId.toString());
-    try {
-      const response = await ProfileAPI.updateImage(formData);
-      mutate(PROFILE_KEY, (currentData:any) => {
-        console.log(currentData);
-        return {
-            ...currentData,
-            profileImages: currentData.profileImages.filter((image:any) => image.id !== imageId)
-            }
-    }, false);  // revalidate를 false로 설정하여 재검증 없이 데이터만 갱신
-      console.log(response);
-      alert("삭제 처리되었습니다.");
-    } catch(error) {
-      console.log(error);
-    }
+    onDeleteImage(imageId);
   } else {
     alert("취소되었습니다.")
     return;

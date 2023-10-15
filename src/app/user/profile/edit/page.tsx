@@ -1,5 +1,4 @@
 'use client'
-import UserImageGrid from '@/components/profile/UserImageGrid';
 import UserProfileEdit from '@/components/profile/UserProfileEdit';
 
 import ProfileAPI from '@/features/profile'
@@ -26,7 +25,6 @@ function ProfilEditPage() {
   return (
     <section className='container mx-auto w-full mt-10 bg-white rounded shadow flex p-4 gap-4'>
       <UserProfileEdit />
-      <UserImageGrid />
     </section>
   )
 }
