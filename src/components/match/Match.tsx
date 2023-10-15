@@ -21,7 +21,7 @@ import RightButton from '../../../public/matchIcon/right.svg';
 import PageIcon from '../../../public/matchIcon/pageIcon.svg';
 import NowPageIcon from '../../../public/matchIcon/nowPage.svg';
 
-import { getCookie, getRefreshToken } from '@/utils/cookie';
+import { getCookie } from '@/utils/cookie';
 
 export default function Match({ userId }: { userId: string }) {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
