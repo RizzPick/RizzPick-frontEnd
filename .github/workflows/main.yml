@@ -18,4 +18,4 @@ jobs:
         PERSONAL_REPO: seokjin909/WillYou-frontEnd
       run: |
         git remote add personal https://${PERSONAL_TOKEN}@github.com/${PERSONAL_REPO}.git
-        git push personal HEAD:main
+        git push personal HEAD:dev
