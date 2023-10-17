@@ -14,7 +14,7 @@ jobs:
       
     - name: Push to Personal Repository
       env:
-        PERSONAL_TOKEN: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
+        PERSONAL_TOKEN: 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
         PERSONAL_REPO: seokjin909/WillYou-frontEnd
       run: |
         git remote add personal https://${PERSONAL_TOKEN}@github.com/${PERSONAL_REPO}.git
