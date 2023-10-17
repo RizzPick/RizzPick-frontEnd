@@ -1,4 +1,4 @@
-name: Sync to Personal Repo
+name: Update to Personal Repo
 
 on:
   push:
