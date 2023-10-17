@@ -3,7 +3,7 @@ name: Sync to Personal Repo
 on:
   push:
     branches:
-      - dev # or your default branch name
+      - dev
 
 jobs:
   sync:
