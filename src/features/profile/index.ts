@@ -14,8 +14,7 @@ const ProfileAPI = {
       "Content-Type": "multipart/form-data",
       Authorization : getCookie('Authorization'),
       Authorization_Refresh : getCookie('Authorization_Refresh')
-    },
-    withCredentials : true
+    }
   }),
   getMyProfile: () => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/myProfile`, {
     headers : {

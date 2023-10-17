@@ -49,6 +49,14 @@ export type SignupErrorRes = {
   }
 }
 
+export type LoginErrorRes = {
+  response?: {
+    data: {
+      data? :string;
+    }
+  }
+}
+
 export type UserActiveStatus = {
   userActiveStatus : boolean;
   userId : number;

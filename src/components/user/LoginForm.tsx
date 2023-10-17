@@ -7,7 +7,6 @@ import { setCookie } from '@/utils/cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from "../../../public/kakao_login.png";
-import service from '@/features';
 import UseProfile from '@/hooks/useProfile';
 
 function LoginForm() {
@@ -37,14 +36,23 @@ function LoginForm() {
             setCookie('Authorization', token);
             setCookie('Authorization_Refresh',refreshToken);
             const {data} = await AuthAPI.getUserStatus();
+            // 이 부분 개선이 필요해 보임
             const status = data.data.userActiveStatus;
             initializeUserActiveStatus(data.data);
             {status && router.replace('/')}
             {!status && router.replace('/user/profile/edit')}
           }
-          
-        } catch (error) {
+        } catch (error:any) {
           console.log(error);
+          if (error.response) {
+            const errorMessage = error.response.data;
+            console.log(errorMessage);
+            alert(errorMessage);
+          } else if (error.request) {
+              console.log("No response received:", error.request);
+          } else {
+              console.log("Axios configuration error:", error.message);
+          }
         }
       };
 

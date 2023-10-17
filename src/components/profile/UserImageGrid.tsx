@@ -38,7 +38,6 @@ function UserImageGrid() {
     formData.append('id', imageId.toString());
     try {
       await ProfileAPI.updateImage(formData);
-      // Update local data using SWR's mutate
       mutate(PROFILE_KEY, (currentData:any) => ({
         ...currentData,
         profileImages: currentData.profileImages.filter((image:any) => image.id !== imageId)
