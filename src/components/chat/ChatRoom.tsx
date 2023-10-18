@@ -11,9 +11,8 @@ const ChatPage = () => {
         const MY_TOKEN = fullToken?.split(' ')[1];
         setToken(MY_TOKEN);
     },[])
-  const chatRoomId = 1;
+  const chatRoomId = -9128315079999336103;
 
-  
   // utils
   const stompSendFn = (des:any, body:any) => {
     client.current.publish({
@@ -31,7 +30,6 @@ const ChatPage = () => {
       message: [msgData.message],
       sender: msgData.sender,
     };
-
     console.log(newData);
     console.log(message);
     console.log(msgData);
@@ -51,50 +49,39 @@ const ChatPage = () => {
   );
 
   useEffect(() => {
+    client.current.onConnect = () => {
+      console.log("소켓 연결완료✅");
+      client.current.subscribe(`/topic/${chatRoomId}/message`, messageCallbackHandler);
+      client.current.subscribe(`/topic/${chatRoomId}/user`, userCallbackHandler);
+      stompSendFn("/app/user", {status: "JOIN", token, chatRoomId, message: "소켓연결됨"});
+    };
+
     client.current.activate();
     return () => {
-      // 유저가 나갈때마다 실행
-      stompSendFn("/app/user", {
-        status: "LEAVE",
-        token,
-        chatRoomId,
-        message: "소켓연결종료",
-      });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      client.current.deactivate();
+      if (client.current.connected) {  // STOMP 연결 상태 확인 추가
+        stompSendFn("/app/user", {
+          status: "LEAVE",
+          token,
+          chatRoomId,
+          message: "소켓연결종료",
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        client.current.deactivate();
+      }
     };
-  }, [token]);
-
-  // 브라우저에서 웹소켓 지원 안할시 sockJS로 연결
-  // client.current.webSocketFactory = () => {
-  //   return new SockJS("http://18.206.140.108/chatroom");
-  // };
-
+  }, [chatRoomId, token]);
 
   const onClick = () => {
     stompSendFn("/app/message", {
         token,
         chatRoomId,
         status : "MESSAGE",
-        message : "하이 여러분"
+        message : "안녕하세요 석진님"
     })
   }
 
   const userCallbackHandler = (message:any) => {
     console.log((JSON.parse(message.body)));
-  };
-
-  //채팅 로직
-  client.current.onConnect = () => {
-    console.log("소켓 연결완료✅");
-    // 채팅관련 구독
-    client.current.subscribe(`/topic/${chatRoomId}/message`, messageCallbackHandler);
-    // user상태관련 구독
-    client.current.subscribe(`/topic/${chatRoomId}/user`, userCallbackHandler);
-    // 업데이트 구독
-    // client.current.subscribe(`/topic/${chatRoomId}/update`, updateCallbackHandler)
-    // 유저가 입장할때마다 실행(소켓연결)
-    stompSendFn("/app/user", {status: "JOIN", token, chatRoomId, message: "소켓연결됨",});
   };
 
   return (

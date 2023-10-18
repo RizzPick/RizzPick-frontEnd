@@ -63,8 +63,9 @@ export type ProfileForm = {
   userActiveStatus?: boolean;
   gender: Gender;
   location: Location;
-  mbti: Mbti;
+  mbti: string;
   religion: Religion;
+  intro : string;
 };
 
 export type MyProfileRes = {
@@ -75,10 +76,11 @@ export type MyProfileRes = {
   userActiveStatus: boolean;
   gender: Gender;
   location: Location;
-  mbti: Mbti;
+  mbti: string;
   religion: Religion;
   dating? : string;
   profileImages : ProfileImages[];
+  intro : string;
 }
 
 export type ProfileImages = {
