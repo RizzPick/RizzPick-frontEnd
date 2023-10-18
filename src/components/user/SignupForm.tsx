@@ -13,7 +13,6 @@ function SignupComponent() {
         formState: { errors },
       } = useForm<SignupForm>();
       const router = useRouter();
-
       const [showTimer, setShowTimer] = useState(false);
       const [timer, setTimer] = useState(300); // 5분은 300초
       const [isEmailVerified, setEmailVerified] = useState(false);
