@@ -10,7 +10,6 @@ function ProfilEditPage() {
   const { initializeProfile } = UseProfile();
   
   useEffect(()=>{
-    console.log(service.defaults.headers.common);
     const getProfile = async() => {
       try {
         const response = await ProfileAPI.getMyProfile();

@@ -32,7 +32,6 @@ function SignupComponent() {
           alert("이메일을 입력해주세요.");
           return;
         } else {
-          console.log(email);
           const res = await AuthAPI.emailAuth(email);
           if(res.status === 200) {
             alert('인증번호가 전송되었습니다.');
@@ -52,8 +51,11 @@ function SignupComponent() {
             }, 1000);
           }
         }
-      } catch(error) {
-        console.log(error);
+      } catch(error:any) {
+        if (error.response) {
+          const errorMessage = error.response.data.message;
+          alert(errorMessage);
+        }
       }
     }
 
