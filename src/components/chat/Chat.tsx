@@ -1,10 +1,12 @@
-import React from 'react';
+'use client'
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import profiledog from '../../../public/images/profiledog.jpeg';
 import SendIcon from '../../../public/chatIcon/send.svg';
 import MoreIcon from '../../../public/chatIcon/more.svg';
+import ChatAPI from '@/features/chat';
 
-export default function Chat() {
+const Chat = () => {
     return (
         <div className="flex flex-row h-screen w-[100vw] overflow-hidden">
             {/* 채팅목록 */}
@@ -74,3 +76,5 @@ export default function Chat() {
         </div>
     );
 }
+
+export default Chat;

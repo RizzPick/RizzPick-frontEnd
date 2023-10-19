@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from "../../../public/kakao_login.png";
 import UseProfile from '@/hooks/useProfile';
+import service from '@/features';
 
 function LoginForm() {
     const {

@@ -10,14 +10,7 @@ export async function fetchRandomUser(
 ): Promise<UserProfile | any> {
     try {
         const response = await axios.get(
-            'https://willyouback.shop/api/userProfiles',
-            {
-                headers: {
-                    Authorization: getCookie('Authorization'),
-                    Authorization_Refresh: getCookie('Authorization_Refresh'),
-                },
-            }
-        );
+            'https://willyouback.shop/api/userProfiles');
         console.log(response.data);
 
         const users = response.data.data;

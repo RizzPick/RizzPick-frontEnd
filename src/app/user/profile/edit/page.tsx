@@ -1,5 +1,6 @@
 'use client'
 import UserProfileEdit from '@/components/profile/UserProfileEdit';
+import service from '@/features';
 
 import ProfileAPI from '@/features/profile'
 import UseProfile from '@/hooks/useProfile';
@@ -9,6 +10,7 @@ function ProfilEditPage() {
   const { initializeProfile } = UseProfile();
   
   useEffect(()=>{
+    console.log(service.defaults.headers.common);
     const getProfile = async() => {
       try {
         const response = await ProfileAPI.getMyProfile();
