@@ -20,6 +20,7 @@ export default function KakaoCallback() {
                     const refreshToken = response.headers['authorization_refresh'];
                     setCookie('Authorization',token);
                     setCookie('Authorization_Refresh',refreshToken);
+                    setCookie('status', response.data.data.userActiveStatus);
                     {response.data.data.userActiveStatus && router.push('/')};
                     {!response.data.data.userActiveStatus && router.push('/user/profil/edit')};
                 }
