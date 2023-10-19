@@ -1,7 +1,5 @@
 'use client'
 import UserProfileEdit from '@/components/profile/UserProfileEdit';
-import service from '@/features';
-
 import ProfileAPI from '@/features/profile'
 import UseProfile from '@/hooks/useProfile';
 import React, { useEffect } from 'react'

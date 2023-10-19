@@ -4,11 +4,27 @@ import Chat from '@/components/chat/Chat';
 import ChatList from '@/components/chat/ChatList';
 import ChatProfile from '@/components/chat/ChatProfile';
 import ChatAPI from '@/features/chat';
+import UseChat from '@/hooks/useChat';
+import { useEffect } from 'react';
 
 
 export default function ChatPage() {
-    const chats = ChatAPI.getChats();
-    console.log(chats);
+    const { initializeChats } = UseChat();
+    useEffect(()=>{
+        const getChats = async() => {
+            try {
+                const response = await ChatAPI.getChats();
+                console.log(response);
+                if(response.status === 200){
+                    initializeChats(response.data);
+                }
+            } catch(error) {
+                console.log(error);
+            }
+        }
+        getChats();
+    },[initializeChats])
+
     return (
         <>
             {/* 헤더 공통 레이아웃으로 변경 예정 */}

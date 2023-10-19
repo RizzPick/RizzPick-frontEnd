@@ -1,33 +1,42 @@
 'use client'
-import Image from 'next/image'
 import React from 'react'
-import profiledog from '../../../public/images/profiledog.jpeg';
+import ChatComp from './ChatComp';
+import { ChatData } from '@/types/chat';
+import { CHAT_KEY } from '@/hooks/useChat';
+import useSWR from 'swr';
 
 function ChatList() {
+    const dummyData : ChatData[] = [
+      {
+        chatRoomId: 11111,
+        image : "테스트이미지.jpg",
+        nickname : "테스트닉네임",
+        users : ['테스트유저'],
+        latestMessage : "최근 메시지"
+    },
+      {
+        chatRoomId: 22222,
+        image : "테스트이미지2.jpg",
+        nickname : "테스트닉네임2",
+        users : ['테스트유저2'],
+        latestMessage : "최근 메시지"
+    }
+  ]
+  // API 로 불러온 데이터로 변경하는 작업 필요 🔥
+  const { data : chats, isValidating } = useSWR<ChatData[]>(CHAT_KEY);
+  console.log(chats);
+
+  if(isValidating){
+    return <div>Loading...</div>
+  }
+    
   return (
     <div className=" flex flex-col w-[429px] overflow-y-auto">
-                <div className="flex flex-row items-center border-t-[1px] border-b-[1px] border-s-1-gray-400 h-[122px] my-20  mx-2">
-                    <div className="rounded-full overflow-hidden w-[95px] h-[95px] mr-4">
-                        <Image
-                            src={profiledog}
-                            alt="Picture of the author"
-                            objectFit="cover" // 이 부분은 이미지 비율을 유지하면서, 주어진 width/height 안에 이미지를 채워넣습니다.
-                        />
-                    </div>
-                    <div>
-                        <div>
-                            <span>이름</span>
-                            &nbsp;
-                            <span>나이</span>
-                        </div>
-                        <p className="w-[180px] text-ellipsis overflow-hidden break-words line-clamp-2 text-xs text-gray-600">
-                            두 줄 정도 보이도록 했어요 만약 2줄이 넘어가면
-                            이렇게 보인답니다. 두 줄 정도 보이도록 했어요 만약
-                            2줄이 넘어가면 이렇게 보인답니다.
-                        </p>
-                    </div>
-                </div>
-            </div>
+      {chats && chats.map((chat)=>{
+        return <ChatComp data={chat} key={chat.chatRoomId}/>
+      })}
+        
+    </div>
   )
 }
 
