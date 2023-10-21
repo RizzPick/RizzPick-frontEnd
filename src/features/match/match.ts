@@ -7,16 +7,7 @@ const token = getCookie('Authorization') as string;
 const refreshToken = getCookie('Authorization_Refresh') as string;
 export async function fetchRandomUser(): Promise<UserProfile | any> {
     try {
-        const response = await axios.get(
-            'https://willyouback.shop/api/userprofile/recommendations',
-            {
-                headers: {
-                    Authorization: getCookie('Authorization'),
-                    Authorization_Refresh: getCookie('Authorization_Refresh'),
-                },
-            }
-        );
-
+        const response = await axios.get('https://willyouback.shop/api/userprofile/recommendations');
         console.log(response.data);
 
         const users = response.data.data;

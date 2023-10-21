@@ -23,16 +23,18 @@ function UserProfileEdit() {
         'nickname',
         'age',
         'education',
-        'userActiveStatus',
         'gender',
         'location',
-        'mbti',
         'religion',
+        'mbti',
+        'intro',
       ];
       if (localProfile) {
         for (const key of profileFormKeys) {
           const currentValue = getValues(key); // getValues를 사용하여 현재 값 가져오기
+          console.log(currentValue);
           if (localProfile[key] !== undefined && !currentValue) {
+            console.log(localProfile[key]);
             setValue(key, localProfile[key]);
           }
         }
@@ -68,6 +70,11 @@ function UserProfileEdit() {
           {errors.nickname && <p className="text-red-500">필수값입니다.</p>}
           </div>
           <input {...register("nickname", {required : true})} className="w-full p-2 border rounded" placeholder="닉네임을 입력하세요" />
+
+          <div className='flex justify-between'>
+          <label className="block text-gray-700 mb-2">소개</label>
+          </div>
+          <input {...register("intro")} className="w-full p-2 border rounded" placeholder="소개" />
           
           <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2">성별</label>
@@ -98,7 +105,7 @@ function UserProfileEdit() {
 
           <label className="block text-gray-700 mb-2">지역</label>
           <select {...register("location")} className="w-full p-2 border rounded">
-            <option value="NONE">지역을 선택하세요</option>
+            <option value="">지역을 선택하세요</option>
             <option value="SEOUL">서울</option>
             <option value="BUSAN">부산</option>
             <option value="INCHEON">인천</option>
@@ -110,16 +117,28 @@ function UserProfileEdit() {
 
           <label className="block text-gray-700 mb-2">MBTI</label>
           <select {...register("mbti")} className="w-full p-2 border rounded">
-            {Object.values(Mbti).map((mbtiValue) => (
-              <option key={mbtiValue} value={mbtiValue}>
-                {mbtiValue === "NONE" ? "MBTI를 선택하세요" : mbtiValue}
-              </option>
-            ))}
+          <option value="">MBTI를 선택하세요</option>
+            <option value="ISTJ">ISTJ</option>
+            <option value="ISFJ">ISFJ</option>
+            <option value="INFJ">INFJ</option>
+            <option value="INFP">INFP</option>
+            <option value="INTJ">INTJ</option>
+            <option value="ISTP">ISTP</option>
+            <option value="ISFP">ISFP</option>
+            <option value="INTP">INTP</option>
+            <option value="ESTP">ESTP</option>
+            <option value="ESFP">ESFP</option>
+            <option value="ENFP">ENFP</option>
+            <option value="ENTP">ENTP</option>
+            <option value="ESTJ">ESTJ</option>
+            <option value="ESFJ">ESFJ</option>
+            <option value="ENFJ">ENFJ</option>
+            <option value="ENTJ">ENTJ</option>
           </select>
 
           <label className="block text-gray-700 mb-2">종교</label>
           <select {...register("religion")} className="w-full p-2 border rounded" >
-            <option value="NONE">종교를 선택하세요</option>
+            <option value="">종교를 선택하세요</option>
             <option value="OTHERS">무교</option>
             <option value="CHRISTIANITY">기독교</option>
             <option value="JUDAISM">유대교</option>

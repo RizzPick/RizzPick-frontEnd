@@ -43,12 +43,12 @@ function Match({ userId }: { userId: string }) {
         try {
             const response = await axios.get(
                 'https://willyouback.shop/api/userprofile/recommendations',
-                {
-                    headers: {
-                        Authorization: token,
-                        Authorization_Refresh: refreshToken,
-                    },
-                }
+                // {
+                //     headers: {
+                //         Authorization: token,
+                //         Authorization_Refresh: refreshToken,
+                //     },
+                // }
             );
 
             const usersData = response.data.data; // 사용자 정보 배열을 가져옵니다.
