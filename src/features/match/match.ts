@@ -1,23 +1,22 @@
 import axios from 'axios';
 import { UserProfile } from '../../types/match/type';
-import { getCookie, getRefreshToken } from '@/utils/cookie';
+import { getCookie } from '@/utils/cookie';
 
 let fetchedUserIds: number[] = [];
-
-export async function fetchRandomUser(
-    token: string,
-    refreshToken: string
-): Promise<UserProfile | any> {
+const token = getCookie('Authorization') as string;
+const refreshToken = getCookie('Authorization_Refresh') as string;
+export async function fetchRandomUser(): Promise<UserProfile | any> {
     try {
         const response = await axios.get(
-            'https://willyouback.shop/api/userProfiles',
+            'https://willyouback.shop/api/userprofile/recommendations',
             {
                 headers: {
-                    Authorization: getCookie('Authorization'),
-                    Authorization_Refresh: getRefreshToken(),
+                    Authorization: token,
+                    Authorization_Refresh: refreshToken,
                 },
             }
         );
+
         console.log(response.data);
 
         const users = response.data.data;
