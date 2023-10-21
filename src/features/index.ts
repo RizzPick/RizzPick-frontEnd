@@ -17,7 +17,6 @@ service.interceptors.request.use((req) => {
     if (refreshToken) {
       req.headers['Authorization_Refresh'] = refreshToken;
     }
-  
     return req;
   });
 

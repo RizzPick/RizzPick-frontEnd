@@ -2,19 +2,65 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SendIcon from '../../../public/chatIcon/send.svg';
 import MoreIcon from '../../../public/chatIcon/more.svg';
+import ChatAPI from '@/features/chat';
+import useSWR from 'swr';
 import { getCookie } from '@/utils/cookie';
 import { Client } from '@stomp/stompjs';
-import useSWR from 'swr';
 import { CURRENT_CHAT_KEY } from '@/hooks/useChat';
+import { MessagesRes } from '@/types/chat';
 
 const Chat = () => {
-    const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
-    const { data:chatRoomId, isValidating } = useSWR<number>(CURRENT_CHAT_KEY);
-    console.log(chatRoomId);
 
-  useEffect(() => {
+    const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
+    const [messages, setMessages] = useState<MessagesRes[]>();
+    const { data:chatRoomId, isValidating } = useSWR<number>(CURRENT_CHAT_KEY);
     const fullToken = getCookie('Authorization');
     const MY_TOKEN = fullToken?.split(' ')[1];
+
+    const client = useRef(
+      new Client({
+        brokerURL: "wss://willyouback.shop/chatroom",
+        debug: function (str) {
+          console.log(str);
+        },
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+      })
+    );
+
+    const stompSendFn = (des: any, body: any) => {
+      client.current.publish({
+        destination: des,
+        headers: {},
+        body: JSON.stringify(body),
+      });
+    };
+  
+    const messageCallbackHandler = (message: any) => {
+      const msgData = JSON.parse(message.body);
+      const newData = {
+        message: [msgData.message],
+        sender: msgData.sender,
+      };
+      console.log(newData);
+    };
+
+  useEffect(() => {
+    const getMessages = async() => {
+        if(!chatRoomId) {
+            return;
+        }
+        try {
+            const response = await ChatAPI.getChatMessages(chatRoomId);
+            if(response.status === 200) {
+                setMessages(response.data);
+                console.log(response);
+            }
+        } catch(error) {
+            console.log(error);
+        }
+    }
     const currentClient = client.current;
     currentClient.onConnect = () => {
       console.log("소켓 연결완료✅");
@@ -22,8 +68,8 @@ const Chat = () => {
       currentClient.subscribe(`/topic/${chatRoomId}/user`, userCallbackHandler);
       stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId, message: "소켓연결됨" });
     };
-
     currentClient.activate();
+    getMessages();
     return () => {
       if (currentClient.connected) {
         stompSendFn("/app/user", {
@@ -35,45 +81,9 @@ const Chat = () => {
         currentClient.deactivate();
       }
     };
-  }, [chatRoomId]);
-
-  
-
-  // utils
-  const stompSendFn = (des: any, body: any) => {
-    client.current.publish({
-      destination: des,
-      headers: {},
-      body: JSON.stringify(body),
-    });
-  };
-
-  const messageCallbackHandler = (message: any) => {
-    const msgData = JSON.parse(message.body);
-    const newData = {
-      message: [msgData.message],
-      sender: msgData.sender,
-    };
-    console.log(newData);
-  };
-
-  const client = useRef(
-    new Client({
-      brokerURL: "wss://willyouback.shop/chatroom",
-      debug: function (str) {
-        console.log(str);
-      },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-    })
-  );
-
-  
+  }, [MY_TOKEN, chatRoomId]);  
 
   const onClick = () => {
-    const fullToken = getCookie('Authorization');
-    const MY_TOKEN = fullToken?.split(' ')[1];
     if (message.trim()) { // 메시지가 비어있지 않을 때만 전송
       stompSendFn("/app/message", {
         token : MY_TOKEN,
@@ -88,6 +98,7 @@ const Chat = () => {
   const userCallbackHandler = (message: any) => {
     console.log((JSON.parse(message.body)));
   };
+  
     return (
         <div>
             {/* 채팅창 */}
@@ -96,7 +107,13 @@ const Chat = () => {
                     <div className="rounded-2xl bg-white w-[586px] h-[72vh]">
                         {/* 채팅내용 */}
                         <div>
-                            <p>채팅내용</p>
+                            {messages && messages.map((message)=>{
+                              return (
+                              <div key={message.time}>
+                                <p>{message.sender}</p>
+                                <p>{message.message}</p>
+                              </div>)
+                            })}
                         </div>
                         <div className="flex-grow h-[66vh]  border-b-[2px] border-s-2-#BBBBBB ">
                         {/* 보내는 구간 */}

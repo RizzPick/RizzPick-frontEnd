@@ -8,7 +8,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from "../../../public/kakao_login.png";
 import UseProfile from '@/hooks/useProfile';
-import service from '@/features';
 
 function LoginForm() {
     const {
@@ -83,7 +82,7 @@ function LoginForm() {
             {errors.password && <p className="text-red-500">This password field is required</p>}
 
             <button className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out'>로그인</button>
-            <button className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out' onClick={()=>router.push('/signup')}>회원가입</button>
+            <button type="button" className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out' onClick={()=>router.push('/signup')}>회원가입</button>
             <div className="mt-4 cursor-pointer">
                 <Image src={kakaoLoginLogo} priority width={300} height={200} alt="카카오 로그인" onClick={kakaoLogin} />
             </div>

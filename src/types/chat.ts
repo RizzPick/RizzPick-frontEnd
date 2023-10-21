@@ -5,3 +5,10 @@ export type ChatData = {
     nickname : string;
     users : string[];
 }
+
+export type MessagesRes = {
+    chatRoomId? : number;
+    message : string;
+    sender : string;
+    time : string;
+}
