@@ -26,7 +26,7 @@ export default function Header() {
                 <h2 className="text-3xl font-bold">Will you</h2>
             </Link>
             <nav className="flex gap-4 items-center">
-                <Link href="/noticeBoard">게시판</Link>
+                <Link href="/board">게시판</Link>
                 {openChatModal && <Alarm close={close} />}
 
                 {showOverlay && (
@@ -40,7 +40,8 @@ export default function Header() {
                     알림
                 </span>
 
-                <Link href="/profile">
+                {/* 다른 페이지에서 넘어갈때 404 나와서 경로 수정 필요 */}
+                <Link href="profile/edit">
                     <Image
                         className="rounded-full mx-auto"
                         src={profile}
