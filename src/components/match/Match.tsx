@@ -23,7 +23,7 @@ import NowPageIcon from '../../../public/matchIcon/nowPage.svg';
 
 import { getCookie } from '@/utils/cookie';
 
-export default function Match({ userId }: { userId: string }) {
+function Match({ userId }: { userId: string }) {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
 
     //! 상세 정보 보이기/숨기기 토글 함수
@@ -201,7 +201,7 @@ export default function Match({ userId }: { userId: string }) {
                 </div>
 
                 {/* 데이트 계획 및 상세 정보 */}
-                <div className="flex-1 max-w-md p-6 bg-slate-300 rounded-2xl shadow-lg h-[45vh] relative mr-[60px]">
+                <div className="flex-1 max-w-md p-6 bg-[#A627A9] rounded-2xl shadow-lg h-[45vh] relative mr-[60px]">
                     {/* 데이트 계획 */}
                     <div>
                         <h2 className="text-2xl font-bold mb-4 text-black text-center">
@@ -247,3 +247,5 @@ export default function Match({ userId }: { userId: string }) {
         </div>
     );
 }
+
+export default Match;
