@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { UserProfile } from '../../types/match/type';
 import { getCookie } from '@/utils/cookie';
-import { getCookie } from '@/utils/cookie';
 
 let fetchedUserIds: number[] = [];
 const token = getCookie('Authorization') as string;
