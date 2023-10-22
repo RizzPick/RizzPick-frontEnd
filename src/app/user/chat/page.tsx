@@ -15,36 +15,12 @@ export default async function ChatPage() {
         }
     })
     const chats = response.data;
-    /* Fetch 를 사용한 Data Fetching */
-    /* const response = await fetch(`${process.env.SERVER_URL}/chat/rooms/me`,
-    { 
-        method: "GET",
-        headers: {
-            "Authorization" : token
-        },
-        cache: 'force-cache'
-     })
-        .then((response) => {
-        if (!response.ok) {
-            throw new Error(
-                `This is an HTTP error: The status is ${response.status}`
-            );
-        }
-            return response.json();
-        })
-        .catch((err) => {
-            console.log(err.message);
-        }); */
-        
+    console.log(chats)
     return (
-        <>
-            {/* 헤더 공통 레이아웃으로 변경 예정 */}
-            <Header />
-            <div className="flex flex-row h-screen w-[100vw] overflow-hidden">
+        <div className="grid grid-cols-4 h-screen w-[100vw] overflow-hidden">
             <ChatList chats={chats}/>
             <Chat />
             <ChatProfile />
-            </div>
-        </>
+        </div>
     );
 }

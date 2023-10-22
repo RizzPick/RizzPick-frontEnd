@@ -4,9 +4,9 @@ import React from 'react'
 
 function Loginpage() {
   return (
-    <section>
+    <div className='bg-custom-gradient'>
     <LoginForm />
-    </section>
+    </div>
   )
 }
 

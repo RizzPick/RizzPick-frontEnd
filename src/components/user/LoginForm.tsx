@@ -6,20 +6,19 @@ import { LoginReq } from '@/types/auth';
 import { setCookie } from '@/utils/cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import kakaoLoginLogo from "../../../public/kakao_login.png";
+import kakaoLoginLogo from "../../../public/images/kakaoLogo.png";
 import UseProfile from '@/hooks/useProfile';
 
 function LoginForm() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
       } = useForm<LoginReq>();
     
       const router = useRouter();
       const params = useSearchParams();
       const message = params.get('message');
-      const { initializeUserActiveStatus } = UseProfile();
+      const { initializeUserActiveStatus, initializeUserInfo } = UseProfile();
 
       const kakaoLogin = () => {
         window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}`;
@@ -35,12 +34,17 @@ function LoginForm() {
             const refreshToken = res.headers['authorization_refresh'];
             setCookie('Authorization', token);
             setCookie('Authorization_Refresh',refreshToken);
-            const {data} = await AuthAPI.getUserStatus();
+
             // 이 부분 개선이 필요해 보임
+            const {data} = await AuthAPI.getUserStatus();
             const status = data.data.userActiveStatus;
             initializeUserActiveStatus(data.data);
-            {status && router.replace('/')}
-            {!status && router.replace('/user/profile/edit')}
+            const userInfo = await AuthAPI.getUserInfo();
+            initializeUserInfo(userInfo.data);
+            console.log(userInfo);
+            {status && router.replace('/user/match')}
+            {!status && router.replace('/profile/edit')}
+            
           }
         } catch (error:any) {
           console.log(error);
@@ -61,33 +65,32 @@ function LoginForm() {
       },[message])
 
       return (
-        <section className='bg-blue-400 min-h-screen flex justify-center items-center'>
-        <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-6 bg-white rounded-xl shadow-xl w-96">
-            <label className="font-bold text-xl">Username</label>
-            <input
-                id="username"
-                type="text"
-                className="border rounded-md p-2 w-full"
-                {...register("username", { required: true })}
-            />
-            {errors.username && <p className="text-red-500">This username field is required</p>}
-
-            <label className="font-bold text-xl">Password</label>
-            <input
-                id="password"
-                type="password"
-                className="border rounded-md p-2 w-full"
-                {...register("password", { required: true })}
-            />
-            {errors.password && <p className="text-red-500">This password field is required</p>}
-
-            <button className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out'>로그인</button>
-            <button type="button" className='bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-xl w-full mt-4 transition duration-200 ease-in-out' onClick={()=>router.push('/signup')}>회원가입</button>
-            <div className="mt-4 cursor-pointer">
-                <Image src={kakaoLoginLogo} priority width={300} height={200} alt="카카오 로그인" onClick={kakaoLogin} />
-            </div>
-        </form>
-    </section>
+        <section className='min-h-screen flex justify-center items-center'>
+            <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl w-[600px]">
+              <Image src={kakaoLoginLogo} alt='로고' width={100} height={50} priority className='mx-auto' />
+                <label className="font-bold text-xl ml-2">아이디</label>
+                <input
+                    id="username"
+                    type="text"
+                    className="border rounded-3xl py-2 px-3 w-full text-sm"
+                    placeholder='아이디를 입력하세요'
+                    {...register("username", { required: true })}
+                />
+                <label className="font-bold text-xl mt-4 ml-2">비밀번호</label>
+                <input
+                    id="password"
+                    type="password"
+                    className="border rounded-3xl py-2 px-3 w-full text-sm"
+                    placeholder='비밀번호를 입력하세요'
+                    {...register("password", { required: true })}
+                />
+                <button className='bg-gradient-start text-white p-2 rounded-3xl w-full mt-4 transition duration-200 ease-in-out'>로그인</button>
+                <div className="mt-4 cursor-pointer mx-auto">
+                    <Image src={kakaoLoginLogo} priority width={50} height={50} alt="카카오 로그인" onClick={kakaoLogin} />
+                </div>
+                <button type="button" className='text-gray-400 mt-4 font-medium text-sm' onClick={()=>router.push('/signup')}>회원가입하기</button>
+            </form>
+        </section>
       );
 }
 

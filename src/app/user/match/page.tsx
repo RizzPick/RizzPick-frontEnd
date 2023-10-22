@@ -4,7 +4,6 @@ import Match from '@/components/match/Match';
 export default function matchPage() {
     return (
         <>
-            <Header />
             <Match userId="userId" />
         </>
     );
