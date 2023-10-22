@@ -5,8 +5,8 @@ export default function SignupPage() {
     
     
   return (
-    <section>
+    <div className='bg-custom-gradient'>
         <SignupComponent />
-    </section>
+    </div>
   )
 }

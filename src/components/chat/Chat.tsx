@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react';
 import SendIcon from '../../../public/chatIcon/send.svg';
-import MoreIcon from '../../../public/chatIcon/more.svg';
 import ChatAPI from '@/features/chat';
 import useSWR from 'swr';
 import { getCookie } from '@/utils/cookie';

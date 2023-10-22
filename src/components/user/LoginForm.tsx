@@ -68,7 +68,7 @@ function LoginForm() {
         <section className='min-h-screen flex justify-center items-center'>
             <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl w-[600px]">
               <Image src={kakaoLoginLogo} alt='로고' width={100} height={50} priority className='mx-auto' />
-                <label className="font-bold text-xl ml-2">아이디</label>
+                <label className="font-bold text-xl">아이디</label>
                 <input
                     id="username"
                     type="text"
@@ -76,7 +76,7 @@ function LoginForm() {
                     placeholder='아이디를 입력하세요'
                     {...register("username", { required: true })}
                 />
-                <label className="font-bold text-xl mt-4 ml-2">비밀번호</label>
+                <label className="font-bold text-xl mt-4">비밀번호</label>
                 <input
                     id="password"
                     type="password"
