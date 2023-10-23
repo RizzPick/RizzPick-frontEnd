@@ -1,4 +1,3 @@
-import Header from '@/components/header/Header';
 import Chat from '@/components/chat/Chat';
 import ChatList from '@/components/chat/ChatList';
 import ChatProfile from '@/components/chat/ChatProfile';

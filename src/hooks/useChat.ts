@@ -12,13 +12,13 @@ const UseChat = () => {
         mutate(CHAT_KEY, chats);
     },[])
 
-    const setCurrentChatRoom = useCallback((chatRoomId : number)=> {
-        mutate(CURRENT_CHAT_KEY, chatRoomId);
+    const setCurrentChat= useCallback((chat : ChatData)=> {
+        mutate(CURRENT_CHAT_KEY, chat);
     },[]);
 
     return {
         initializeChats,
-        setCurrentChatRoom
+        setCurrentChat
     }
 }
 export default UseChat

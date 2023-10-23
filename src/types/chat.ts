@@ -12,3 +12,9 @@ export type MessagesRes = {
     sender : string;
     time : string;
 }
+
+export type ChatRoomInfo = {
+    chatRoomId : number;
+    nickname : string;
+    image : string;
+}
