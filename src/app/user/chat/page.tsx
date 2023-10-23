@@ -16,7 +16,7 @@ export default async function ChatPage() {
     const chats = response.data;
     console.log(chats)
     return (
-        <div className="grid grid-cols-4 h-screen w-[100vw] overflow-hidden">
+        <div className="grid grid-cols-4 w-[100vw]">
             <ChatList chats={chats}/>
             <Chat />
             <ChatProfile />

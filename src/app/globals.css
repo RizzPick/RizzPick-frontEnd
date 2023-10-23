@@ -4,58 +4,57 @@
 
 html,
 body {
-    height: 100vh;
-    overflow-y: auto;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .bubble-tail {
-    border-style: solid;
-    border-width: 0 20px 15px 5px;
-    border-color: transparent rgb(100 116 139 / var(--tw-bg-opacity))
-        transparent transparent;
+  border-style: solid;
+  border-width: 0 20px 15px 5px;
+  border-color: transparent rgb(100 116 139 / var(--tw-bg-opacity)) transparent transparent;
 }
 
 .hover-shadow:hover {
-    filter: drop-shadow(0 4px 6px rgba(185, 171, 171, 0.5));
+  filter: drop-shadow(0 4px 6px rgba(185, 171, 171, 0.5));
 }
 
 .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
 }
 
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 input:focus {
-    outline: none;
+  outline: none;
 }
 
 .slider {
-    position: relative;
-    width: 100%;
-    height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .slide {
-    opacity: 0;
-    transition-duration: 1s ease;
+  opacity: 0;
+  transition-duration: 1s ease;
 }
 
 .slide.active {
-    opacity: 1;
-    transition-duration: 1s;
+  opacity: 1;
+  transition-duration: 1s;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 button:last-of-type {
-    right: 0;
+  right: 0;
 }

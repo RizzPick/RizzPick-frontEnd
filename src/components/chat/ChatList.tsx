@@ -7,7 +7,7 @@ type Props = {
 }
 function ChatList({chats}:Props) {
   return (
-    <div className="overflow-y-auto">
+    <div className="h-[800px] overflow-y-auto">
       {chats && chats.map((chat)=>{
         return <ChatComp data={chat} key={chat.chatRoomId}/>
       })}

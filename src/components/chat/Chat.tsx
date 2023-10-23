@@ -9,11 +9,13 @@ import { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import { ChatData, MessagesRes } from '@/types/chat';
 import Image from 'next/image';
 import moment from 'moment';
+import ChatSkeleton from './ChatSkeleton';
 
 const Chat = () => {
 
     const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
     const [messages, setMessages] = useState<MessagesRes[]>();
+    const [isLoading, setIsLoading] = useState(true);
     const { data:chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
     const fullToken = getCookie('Authorization');
     const MY_TOKEN = fullToken?.split(' ')[1];
@@ -57,9 +59,10 @@ const Chat = () => {
             const response = await ChatAPI.getChatMessages(chat.chatRoomId);
             if(response.status === 200) {
                 setMessages(response.data.data);
-                console.log(response);
+                setIsLoading(false);
             }
         } catch(error) {
+          setIsLoading(false);
             console.log(error);
         }
     }
@@ -125,14 +128,18 @@ const Chat = () => {
   const userCallbackHandler = (message: any) => {
     console.log((JSON.parse(message.body)));
   };
-
   
     return (
       <div className='col-span-2'>
         {/* 채팅창 */}
-        <div className='w-full relative h-[700px] border-8 border-gray-400 rounded-3xl p-4'>
+        <div className='w-full relative h-[800px] border-8 border-gray-400 rounded-3xl p-4'>
           {/* 메시지 출력 부분 */}
-          <div className="h-[calc(700px-100px)] overflow-y-auto pb-4 scrollbar-hide">
+          {isLoading ? (
+            <ChatSkeleton />
+          ):
+          (
+            <>
+            <div className="h-[calc(800px-120px)] overflow-y-auto pb-4 scrollbar-hide">
             {messages && (() => {
               const groupedByDate: Record<string, MessagesRes[]> = {};
               messages.forEach(mes => {
@@ -155,13 +162,13 @@ const Chat = () => {
                           {mes.sender === chat?.users[0] ?
                               (<div className='flex items-center gap-2 mb-2 relative' ref={messagesEndRef}>
                                   <Image src={chat.image} alt='프로필 이미지' width={30} height={30} priority className='rounded-full' />
-                                  <p className='bg-gray-200 rounded-3xl px-4 py-2 whitespace-pre-line'>
+                                  <p className='bg-gray-200 rounded-2xl px-4 py-2 whitespace-pre-line'>
                                       {mes.message}
                                   </p>
                                   <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
                               </div>) :
                               (<div className='flex items-center mb-2 relative' ref={messagesEndRef}>
-                                  <p className='bg-gray-400 rounded-3xl px-4 py-2 whitespace-pre-line'>
+                                  <p className='bg-gray-400 rounded-2xl px-4 py-2 whitespace-pre-line'>
                                       {mes.message}
                                   </p>
                                   <span className="text-gray-500 absolute bottom-0 -left-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
@@ -172,18 +179,18 @@ const Chat = () => {
               ));
             })()}
           </div>
-          {/* 메시지 입력 부분 */}
           <div className="flex justify-between items-center rounded-2xl bg-gray-100 px-2 py-1 mx-4 absolute inset-x-0 bottom-0 mb-4">
           <textarea
               className="bg-gray-100 w-full resize-none"
               rows={2}
-              placeholder='내용을 입력하세요...'
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
             />
             <button onClick={onClick}><SendIcon/></button>
           </div>
+          </>
+          )}
         </div>
       </div>
     );
