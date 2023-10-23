@@ -61,14 +61,24 @@ const handleImageDelete = async (imageId : number) => {
   return (
     <>
     {image && 
-      <div className='relative w-36 shadow-lg border-gray-500 rounded-lg h-40 transition-all hover:scale-105'>
-        <Image src={image.image} alt="Profile Image" layout="fill" objectFit='fill' /> 
-          <button className='absolute -bottom-2 -right-2 text-2xl rounded-full bg-white border' onClick={()=>handleImageDelete(image.id)}><AiOutlineClose/></button>
+      <div className='relative w-60 shadow-md border-gray-500 rounded-lg h-72'>
+        <Image src={image.image} alt="Profile Image" fill style={{objectFit : 'cover'}} className='rounded-lg'/> 
+        <button 
+          className='absolute -bottom-2 text-3xl rounded-full bg-white border transform transition-transform duration-500 hover:rotate-90' 
+          onClick={()=>handleImageDelete(image.id)}
+        >
+          <AiOutlineClose/>
+        </button>
       </div>  
     }
     {!image && 
-      <div className='relative w-36 shadow-lg border-gray-500 rounded-lg h-40 cursor-pointer transition-all hover:scale-105' onClick={onImageClick}>
-        <button type="button" className='absolute -bottom-2 -right-2 text-2xl bg-white rounded-full border'><AiOutlinePlus/></button>
+      <div className='relative w-60 shadow-md border-gray-500 rounded-lg h-72 cursor-pointer transition-all hover:scale-105' onClick={onImageClick}>
+        <button 
+          type="button" 
+          className='absolute -bottom-2 -right-2 text-3xl bg-pink-300 rounded-full border transform transition-transform duration-500 hover:rotate-90'
+        >
+          <AiOutlinePlus/>
+        </button>
       </div>
     }
       <input
@@ -79,17 +89,38 @@ const handleImageDelete = async (imageId : number) => {
         className='hidden'
       />
       {isModalVisible && (
-                <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-5 rounded-lg flex flex-col gap-4 relative w-96 h-96">
-                        <p className='font-bold text-2xl'>새 미디어 콘텐츠 만들기</p>
-                        <p className='font-semibold text-gray-500 mb-4'>콘텐츠 유형 선택</p>
-                        <button onClick={onGallerySelect} className='bg-red-300 h-24 rounded-lg text-white'>갤러리에서 사진 선택</button>
-                        <button onClick={() => setCameraVisible(true)} className='bg-blue-300 h-24 rounded-lg text-white'>카메라로 사진 촬영</button>
-                        {isCameraVisible && <UserImageCamera />}
-                        <button className='absolute top-0 right-0 p-4' onClick={() => setModalVisible(false)}><AiOutlineClose/></button>
-                    </div>
-                </div>
-            )}
+          <div 
+              className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center"
+              onClick={() => setModalVisible(false)} // 여기서 모달 밖을 클릭했을 때 모달을 닫습니다.
+          >
+              <div 
+                  className="bg-white p-5 rounded-lg flex flex-col gap-4 relative w-96 h-96"
+                  onClick={e => e.stopPropagation()} // 모달 안을 클릭하면 이벤트 전파를 막아서 모달이 닫히지 않게 합니다.
+              >
+                  <p className='font-bold text-2xl'>새 미디어 콘텐츠 만들기</p>
+                  <p className='font-semibold text-gray-500 mb-4'>콘텐츠 유형 선택</p>
+                  <button 
+                      onClick={onGallerySelect} 
+                      className='bg-red-300 h-24 rounded-lg text-white transition-transform duration-300 transform hover:scale-105'
+                  >
+                      갤러리에서 사진 선택
+                  </button>
+                  <button 
+                      onClick={() => setCameraVisible(true)} 
+                      className='bg-blue-300 h-24 rounded-lg text-white transition-transform duration-300 transform hover:scale-105'
+                  >
+                      카메라로 사진 촬영
+                  </button>
+                  {isCameraVisible && <UserImageCamera />}
+                  <button 
+                      className='absolute top-0 right-0 p-4 transform transition-transform duration-500 hover:rotate-90'
+                      onClick={() => setModalVisible(false)}
+                  >
+                      <AiOutlineClose/>
+                  </button>
+              </div>
+          </div>
+      )}
       </>
   )
 }

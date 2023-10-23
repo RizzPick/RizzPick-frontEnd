@@ -42,12 +42,11 @@ function LoginForm() {
             const userInfo = await AuthAPI.getUserInfo();
             initializeUserInfo(userInfo.data);
             console.log(userInfo);
-            {status && router.replace('/user/match')}
+            {status && router.replace('/')}
             {!status && router.replace('/profile/edit')}
             
           }
         } catch (error:any) {
-          console.log(error);
           if (error.response) {
             const errorMessage = error.response.data;
             console.log(errorMessage);
@@ -60,9 +59,9 @@ function LoginForm() {
         }
       };
 
-      useEffect(()=>{
-        message && alert("잘못된 접근입니다, 로그인이 필요합니다.");
-      },[message])
+      // useEffect(()=>{
+      //   message && alert("잘못된 접근입니다, 로그인이 필요합니다.");
+      // },[message])
 
       return (
         <section className='min-h-screen flex justify-center items-center'>
@@ -84,7 +83,7 @@ function LoginForm() {
                     placeholder='비밀번호를 입력하세요'
                     {...register("password", { required: true })}
                 />
-                <button className='bg-gradient-start text-white p-2 rounded-3xl w-full mt-4 transition duration-200 ease-in-out'>로그인</button>
+                <button className='bg-gradient-start text-white p-2 rounded-3xl w-full mt-4'>로그인</button>
                 <div className="mt-4 cursor-pointer mx-auto">
                     <Image src={kakaoLoginLogo} priority width={50} height={50} alt="카카오 로그인" onClick={kakaoLogin} />
                 </div>

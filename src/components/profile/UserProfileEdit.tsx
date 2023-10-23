@@ -1,16 +1,17 @@
 import ProfileAPI from '@/features/profile';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
-import { Mbti, MyProfileRes, ProfileForm } from '@/types/profile';
+import { MyProfileRes, ProfileForm } from '@/types/profile';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
-import UserImageGrid from './UserImageGrid';
 
 function UserProfileEdit() {
   const { data : profile,isValidating } = useSWR<MyProfileRes>(PROFILE_KEY);
   const { setCurrentProfile } = UseProfile();
   const { register, handleSubmit, setValue, formState: {errors}, getValues } = useForm<ProfileForm>();
   const [localProfile, setLocalProfile] = useState<MyProfileRes | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (profile) {
@@ -32,9 +33,7 @@ function UserProfileEdit() {
       if (localProfile) {
         for (const key of profileFormKeys) {
           const currentValue = getValues(key); // getValues를 사용하여 현재 값 가져오기
-          console.log(currentValue);
           if (localProfile[key] !== undefined && !currentValue) {
-            console.log(localProfile[key]);
             setValue(key, localProfile[key]);
           }
         }
@@ -48,6 +47,8 @@ function UserProfileEdit() {
       if(response.status === 200) {
         setCurrentProfile(response.data.data);
         setLocalProfile(response.data.data);
+        alert('프로필 등록이 완료되었습니다!');
+        router
       }
       console.log(response);
     } catch(error) {
@@ -60,27 +61,20 @@ function UserProfileEdit() {
   }
 
   return (
-    <section className='w-full flex'>
+    <section className='w-full p-8'>
       <div>
-      <h2 className="text-2xl mb-6">프로필 수정</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2">닉네임</label>
           {errors.nickname && <p className="text-red-500">필수값입니다.</p>}
           </div>
-          <input {...register("nickname", {required : true})} className="w-full p-2 border rounded" placeholder="닉네임을 입력하세요" />
-
-          <div className='flex justify-between'>
-          <label className="block text-gray-700 mb-2">소개</label>
-          </div>
-          <input {...register("intro")} className="w-full p-2 border rounded" placeholder="소개" />
-          
+          <input {...register("nickname", {required : true})} className="w-full p-3 border rounded-3xl" placeholder="닉네임을 입력하세요" />
           <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2">성별</label>
           {errors.gender && <p className="text-red-500">필수값입니다.</p>}
           </div>
-          <select {...register("gender", {required :true})} className="w-full p-2 border rounded" >
+          <select {...register("gender", {required :true})} className="w-full p-3 border rounded-3xl" >
             <option value="">성별을 선택하세요</option>
             <option value="MALE">남자</option>
             <option value="FEMALE">여자</option>
@@ -90,21 +84,30 @@ function UserProfileEdit() {
           <label className="block text-gray-700 mb-2">나이</label>
           {errors.age && <p className="text-red-500">필수값입니다.</p>}
           </div>
-          <select {...register("age", {required:true})} className="w-full p-2 border rounded">
+          <select {...register("age", {required:true})} className="w-full p-3 border rounded-3xl">
             <option value="">나이를 선택하세요</option>
             {/* 예시로 18~30세까지 옵션 추가 (필요에 따라 수정) */}
             {Array.from({ length: 13 }, (_, i) => i + 18).map((age) => (
               <option key={age} value={age}>{age}</option>
             ))}
           </select>
+          <div className='flex justify-between'>
+          <label className="block text-gray-700 mb-2">소개</label>
+          </div>
+          <input {...register("intro")} className="w-full p-3 border rounded-3xl" placeholder="소개" />
+          
+          <div className="relative flex py-5 items-center">
+            <div className="flex-grow border-t border-gray-400"></div>
+            <span className="flex-shrink mx-4">선택 사항</span>
+            <div className="flex-grow border-t border-gray-400"></div>
+          </div>
 
-          <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
           <label className="block text-gray-700 mb-2">학교</label>
-          <input {...register("education")} className="w-full p-2 border rounded" placeholder="학교를 입력하세요" />
+          <input {...register("education")} className="w-full p-3 border rounded-3xl" placeholder="학교를 입력하세요" />
 
 
           <label className="block text-gray-700 mb-2">지역</label>
-          <select {...register("location")} className="w-full p-2 border rounded">
+          <select {...register("location")} className="w-full p-3 border rounded-3xl">
             <option value="">지역을 선택하세요</option>
             <option value="SEOUL">서울</option>
             <option value="BUSAN">부산</option>
@@ -116,7 +119,7 @@ function UserProfileEdit() {
           </select>
 
           <label className="block text-gray-700 mb-2">MBTI</label>
-          <select {...register("mbti")} className="w-full p-2 border rounded">
+          <select {...register("mbti")} className="w-full p-3 border rounded-3xl">
           <option value="">MBTI를 선택하세요</option>
             <option value="ISTJ">ISTJ</option>
             <option value="ISFJ">ISFJ</option>
@@ -137,7 +140,7 @@ function UserProfileEdit() {
           </select>
 
           <label className="block text-gray-700 mb-2">종교</label>
-          <select {...register("religion")} className="w-full p-2 border rounded" >
+          <select {...register("religion")} className="w-full p-3 border rounded-3xl" >
             <option value="">종교를 선택하세요</option>
             <option value="OTHERS">무교</option>
             <option value="CHRISTIANITY">기독교</option>
@@ -151,11 +154,6 @@ function UserProfileEdit() {
         </div>
         <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-200">제출하기</button>
       </form>
-      </div>
-      <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
-      <div>
-      <h3 className="text-xl mb-4">프로필 이미지 관리</h3>
-      <UserImageGrid />
       </div>
       </section>
   )

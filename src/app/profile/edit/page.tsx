@@ -1,4 +1,5 @@
 'use client'
+import UserImageGrid from '@/components/profile/UserImageGrid';
 import UserProfileEdit from '@/components/profile/UserProfileEdit';
 import ProfileAPI from '@/features/profile'
 import UseProfile from '@/hooks/useProfile';
@@ -23,9 +24,13 @@ function ProfilEditPage() {
   },[initializeProfile])
   
   return (
-    <section className='container mx-auto w-full mt-10 bg-white rounded shadow flex p-4 gap-4'>
-      <UserProfileEdit />
-    </section>
+    <div>
+      <h2 className='text-center font-bold text-3xl p-4'>프로필 등록</h2>
+      <div className='grid grid-cols-2 bg-white'>
+        <UserProfileEdit />
+        <UserImageGrid />
+      </div>
+    </div>
   )
 }
 

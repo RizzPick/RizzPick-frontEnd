@@ -49,20 +49,23 @@ function UserImageGrid() {
 
   return (
     <section className='w-full'>
-      <h2 className='mb-5 text-xl font-bold'>사진 등록하기</h2>
-      <div className='flex gap-4 justify-around flex-wrap p-4'>
-        {[...Array(6)].map((_, index) => (
-          <UserImageCard 
-            key={index}
-            onAddImage={addImage}
-            onDeleteImage={deleteImage}
-            onImageClick={() => handleModalOpen(index)}
-            isModalVisible={isModalVisible && selectedImage === index}
-            setModalVisible={setModalVisible}
-            image={profile?.profileImages && profile.profileImages[index] ? profile.profileImages[index] : null}
-            isLoading={isValidating}
-          />
-        ))}
+      <div className='border p-4'>
+        <h2 className='mb-5 text-xl font-bold'>사진 등록하기</h2>
+        <div className='grid grid-cols-3 gap-4 p-4'>
+          {[...Array(6)].map((_, index) => (
+            <UserImageCard 
+              key={index}
+              onAddImage={addImage}
+              onDeleteImage={deleteImage}
+              onImageClick={() => handleModalOpen(index)}
+              isModalVisible={isModalVisible && selectedImage === index}
+              setModalVisible={setModalVisible}
+              image={profile?.profileImages && profile.profileImages[index] ? profile.profileImages[index] : null}
+              isLoading={isValidating}
+            />
+          ))}
+        </div>
+        <p className='font-semibold text-sm'>📸 사진은 얼굴 사진과 전신 사진을 추가하면 더 정확한 이상형과 매칭되기 좋아요!</p>
       </div>
     </section>
   );

@@ -121,7 +121,7 @@ const Chat = () => {
 
               {/* 메시지 입력 부분 */}
               <div className="flex justify-between items-center rounded-2xl bg-gray-100 px-2 py-1 mx-4 absolute inset-x-0 bottom-0 mb-4">
-                <input type="text" className="bg-gray-100" placeholder='내용을 입력하세요...' value={message} onChange={(e)=>setMessage(e.target.value)} onKeyDown={handleKeyPress}/>
+                <input type="text" className="bg-gray-100 w-full" placeholder='내용을 입력하세요...' value={message} onChange={(e)=>setMessage(e.target.value)} onKeyDown={handleKeyPress}/>
                 <button onClick={onClick}><SendIcon/></button>
               </div>
             </div>
