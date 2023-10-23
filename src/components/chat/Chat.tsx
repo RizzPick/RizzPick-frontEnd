@@ -128,9 +128,9 @@ const Chat = () => {
     return (
       <div className='col-span-2'>
         {/* 채팅창 */}
-        <div className='w-full relative h-[600px] border-8 border-gray-400 rounded-3xl p-4'>
+        <div className='w-full relative h-[700px] border-8 border-gray-400 rounded-3xl p-4'>
           {/* 메시지 출력 부분 */}
-          <div className="h-[calc(600px-100px)] overflow-y-auto pb-4 scrollbar-hide">
+          <div className="h-[calc(700px-100px)] overflow-y-auto pb-4 scrollbar-hide">
             {messages && (() => {
               const groupedByDate: Record<string, MessagesRes[]> = {};
               messages.forEach(mes => {
@@ -143,22 +143,28 @@ const Chat = () => {
 
               return Object.entries(groupedByDate).map(([date, messagesForDate]) => (
                 <div key={date}>
-                  <p className="text-center text-gray-500">{date}</p>
+                  <div className="relative flex py-5 items-center">
+                    <div className="flex-grow border-t border-gray-400"></div>
+                    <span className="flex-shrink mx-4">{date}</span>
+                    <div className="flex-grow border-t border-gray-400"></div>
+                  </div>
                   {messagesForDate.map(mes => (
-                    <div key={mes.time} className={`flex ${mes.sender === chat?.users[0] ? 'justify-start' : 'justify-end'}`}>
-                      {mes.sender === chat?.users[0] ?
-                        (<div className='flex items-center gap-2 mb-2' ref={messagesEndRef}>
-                          <Image src={chat.image} alt='프로필 이미지' width={30} height={30} priority className='rounded-full' />
-                          <p className='bg-gray-200 rounded-3xl px-4 py-2'>
-                            {mes.message} <span className="text-gray-500">{moment(mes.time).format('HH:mm')}</span>
-                          </p>
-                        </div>) :
-                        (<div className='flex items-center mb-2' ref={messagesEndRef}>
-                          <p className='bg-gray-400 rounded-3xl px-4 py-2'>
-                            {mes.message} <span className="text-gray-500">{moment(mes.time).format('HH:mm')}</span>
-                          </p>
-                        </div>)}
-                    </div>
+                      <div key={mes.time} className={`flex ${mes.sender === chat?.users[0] ? 'justify-start' : 'justify-end'}`}>
+                          {mes.sender === chat?.users[0] ?
+                              (<div className='flex items-center gap-2 mb-2 relative' ref={messagesEndRef}>
+                                  <Image src={chat.image} alt='프로필 이미지' width={30} height={30} priority className='rounded-full' />
+                                  <p className='bg-gray-200 rounded-3xl px-4 py-2'>
+                                      {mes.message}
+                                  </p>
+                                  <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
+                              </div>) :
+                              (<div className='flex items-center mb-2 relative' ref={messagesEndRef}>
+                                  <p className='bg-gray-400 rounded-3xl px-4 py-2'>
+                                      {mes.message}
+                                  </p>
+                                  <span className="text-gray-500 absolute bottom-0 -left-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
+                              </div>)}
+                      </div>
                   ))}
                 </div>
               ));
