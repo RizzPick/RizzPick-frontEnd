@@ -99,6 +99,7 @@ const Chat = () => {
 
   const onClick = () => {
     if (message.trim()) { // 메시지가 비어있지 않을 때만 전송
+      // const replaceMessage = message.replaceAll("<br>", "\r\n");
       stompSendFn("/app/message", {
         token : MY_TOKEN,
         chatRoomId: chat?.chatRoomId,
@@ -109,9 +110,10 @@ const Chat = () => {
     }
   }
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if(event.nativeEvent.isComposing) return;
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault(); // 줄바꿈을 방지하기 위해 기본 동작을 방지
       onClick();
     }
   }
@@ -153,13 +155,13 @@ const Chat = () => {
                           {mes.sender === chat?.users[0] ?
                               (<div className='flex items-center gap-2 mb-2 relative' ref={messagesEndRef}>
                                   <Image src={chat.image} alt='프로필 이미지' width={30} height={30} priority className='rounded-full' />
-                                  <p className='bg-gray-200 rounded-3xl px-4 py-2'>
+                                  <p className='bg-gray-200 rounded-3xl px-4 py-2 whitespace-pre-line'>
                                       {mes.message}
                                   </p>
                                   <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
                               </div>) :
                               (<div className='flex items-center mb-2 relative' ref={messagesEndRef}>
-                                  <p className='bg-gray-400 rounded-3xl px-4 py-2'>
+                                  <p className='bg-gray-400 rounded-3xl px-4 py-2 whitespace-pre-line'>
                                       {mes.message}
                                   </p>
                                   <span className="text-gray-500 absolute bottom-0 -left-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
@@ -172,7 +174,14 @@ const Chat = () => {
           </div>
           {/* 메시지 입력 부분 */}
           <div className="flex justify-between items-center rounded-2xl bg-gray-100 px-2 py-1 mx-4 absolute inset-x-0 bottom-0 mb-4">
-            <input type="text" className="bg-gray-100 w-full" placeholder='내용을 입력하세요...' value={message} onChange={(e)=>setMessage(e.target.value)} onKeyPress={handleKeyPress}/>
+          <textarea
+              className="bg-gray-100 w-full resize-none"
+              rows={2}
+              placeholder='내용을 입력하세요...'
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={handleKeyPress}
+            />
             <button onClick={onClick}><SendIcon/></button>
           </div>
         </div>
