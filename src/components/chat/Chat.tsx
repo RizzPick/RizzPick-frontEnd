@@ -43,7 +43,7 @@ const Chat = () => {
       }
     };
 
-    useEffect(() => {
+  useEffect(() => {
       scrollToBottom();
   }, [messages]);
 
@@ -83,7 +83,8 @@ const Chat = () => {
       console.log("소켓 연결완료✅");
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
-      stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId:chat?.chatRoomId, message: "소켓연결됨" });
+      currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);
+      stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId:chat?.chatRoomId, message: "채팅방에 입장하셨습니다" });
     };
     currentClient.activate();
     getMessages();
@@ -93,7 +94,7 @@ const Chat = () => {
           status: "LEAVE",
           token: MY_TOKEN,
           chatRoomId : chat?.chatRoomId,
-          message: "소켓연결종료",
+          message: "채팅방을 나가셨습니다",
         });
         currentClient.deactivate();
       }
@@ -101,13 +102,13 @@ const Chat = () => {
   }, [MY_TOKEN, chat?.chatRoomId]);  
 
   const onClick = () => {
+    console.log("메시지 전송!");
     if (message.trim()) { // 메시지가 비어있지 않을 때만 전송
-      // const replaceMessage = message.replaceAll("<br>", "\r\n");
       stompSendFn("/app/message", {
         token : MY_TOKEN,
         chatRoomId: chat?.chatRoomId,
         status: "MESSAGE",
-        message: message // 입력된 메시지 전송
+        message: message,
       });
       setMessage(""); // 메시지 초기화
     }
@@ -120,6 +121,9 @@ const Chat = () => {
       onClick();
     }
   }
+  const readMessageCallbackHandler = (message : any) => {
+    console.log((JSON.parse(message.body)));
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block:"end" });
@@ -130,7 +134,7 @@ const Chat = () => {
   };
   
     return (
-      <div className='col-span-2'>
+      <div className='col-span-2 p-4'>
         {/* 채팅창 */}
         <div className='w-full relative h-[800px] border-8 border-gray-400 rounded-3xl p-4'>
           {/* 메시지 출력 부분 */}
@@ -171,7 +175,7 @@ const Chat = () => {
                                   <p className='bg-gray-400 rounded-2xl px-4 py-2 whitespace-pre-line'>
                                       {mes.message}
                                   </p>
-                                  <span className="text-gray-500 absolute bottom-0 -left-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
+                                  <span className="text-gray-500 absolute -bottom-0 -left-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
                               </div>)}
                       </div>
                   ))}

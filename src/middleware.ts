@@ -17,7 +17,6 @@ export function middleware(request: NextRequest) {
     }
 
     if (request.nextUrl.pathname.startsWith('/profile')) {
-        console.log("profile 경로에서 미들웨어 실행!!")
         if (authToken) {
             // 토큰이 있다면, 그대로 요청을 진행
             return NextResponse.next();

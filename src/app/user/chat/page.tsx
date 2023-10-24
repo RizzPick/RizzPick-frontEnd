@@ -8,13 +8,30 @@ export default async function ChatPage() {
     const cookieStore = cookies();
     const accessToken = cookieStore.get('Authorization');
     const token = accessToken?.value;
-    const response = await axios.get(`${process.env.SERVER_URL}/chat/rooms/me`, {
+    // const response = await axios.get(`${process.env.SERVER_URL}/chat/rooms/me`, {
+    //     headers : {
+    //         "Authorization" : token
+    //     }
+    // })
+
+    if(!token) return;
+    const chats = await fetch(`${process.env.SERVER_URL}/chat/rooms/me`,{ 
+        cache : "no-cache",
         headers : {
             "Authorization" : token
+        }})
+        .then((response) => {
+        if (!response.ok) {
+            throw new Error(
+                `This is an HTTP error: The status is ${response.status}`
+            );
         }
-    })
-    const chats = response.data;
-    console.log(chats)
+            return response.json();
+        })
+        .catch((err) => {
+            console.log(err.message);
+    });
+    console.log(chats);
     return (
         <div className="grid grid-cols-4 w-[100vw]">
             <ChatList chats={chats}/>

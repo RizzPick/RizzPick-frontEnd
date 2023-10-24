@@ -12,7 +12,6 @@ function ProfilEditPage() {
     const getProfile = async() => {
       try {
         const response = await ProfileAPI.getMyProfile();
-        console.log(response);
         if(response.status === 200) {
           initializeProfile(response.data.data);
         }

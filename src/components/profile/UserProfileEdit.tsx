@@ -119,7 +119,7 @@ function UserProfileEdit() {
           </select>
 
           <label className="block text-gray-700 mb-2">MBTI</label>
-          <select {...register("mbti")} className="w-full p-3 border rounded-3xl">
+          <select {...register("mbti")} className="w-full p-3 border rounded-3xl text-gray-400">
           <option value="">MBTI를 선택하세요</option>
             <option value="ISTJ">ISTJ</option>
             <option value="ISFJ">ISFJ</option>

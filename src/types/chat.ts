@@ -4,6 +4,13 @@ export type ChatData = {
     latestMessage? : string;
     nickname : string;
     users : string[];
+    age? :number;
+    education? : string;
+    intro? : string;
+    latestMessageTime? : string;
+    location? : string;
+    mbti? : string;
+    religion? : string;
 }
 
 export type MessagesRes = {

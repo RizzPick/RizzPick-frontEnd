@@ -11,6 +11,7 @@ const config: Config = {
             colors: {
                 'gradient-start': '#cb17f9',
                 'gradient-end': '#ee9abc',
+                'exit-mark' : "#fd2f79"
             },
             backgroundImage: {
                 'custom-gradient': 'linear-gradient(180deg, rgba(203,23,249,1) 0%, rgba(238,154,188,1) 65%)'

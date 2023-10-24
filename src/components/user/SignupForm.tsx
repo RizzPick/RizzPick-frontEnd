@@ -4,7 +4,7 @@ import { EmailVerifyReq, SignupErrorRes, SignupForm } from '@/types/auth';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { PacmanLoader } from 'react-spinners';
+import { SyncLoader } from 'react-spinners';
 
 function SignupComponent() {
     const {
@@ -113,7 +113,7 @@ function SignupComponent() {
     <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-4 bg-white rounded-3xl shadow-xl w-[500px]">
       {isLoading && 
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-      <PacmanLoader />
+      <SyncLoader />
     </div>}
       <div className='flex justify-between'>
     <label className="font-bold text-xl">아이디</label>
@@ -145,12 +145,12 @@ function SignupComponent() {
             })}
         />
         {errors.password && renderErrorMessages(errors.password)}
-        <label className="font-bold text-xl">비밀번호 확인</label>
+        {/* <label className="font-bold text-xl">비밀번호 확인</label> */}
         <input
             type="password"
             id="password_confirm"
             className="border rounded-3xl py-2 px-3 w-full text-sm"
-            placeholder='비밀번호를 입력하세요'
+            placeholder='비밀번호를 재입력하세요'
             required
             {...register("password_confirm", {
                 required: true,
