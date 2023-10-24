@@ -1,10 +1,10 @@
 import Header from '@/components/header/Header';
-import Match from '@/components/match/Match';
+import MyPlanList from '@/components/plan/MyPlanList';
 
 export default function matchPage() {
     return (
         <>
-            <Match userId="userId" />
+            <MyPlanList />
         </>
     );
 }

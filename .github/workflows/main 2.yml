@@ -1,0 +1,21 @@
+name: Update to Personal Repo
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Update code for deploy
+      uses: actions/checkout@v2
+      
+    - name: Push to Personal Repository
+      env:
+        PERSONAL_TOKEN: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
+        PERSONAL_REPO: seokjin909/WillYou-frontEnd
+      run: |
+        git remote add personal https://${PERSONAL_TOKEN}@github.com/${PERSONAL_REPO}.git
+        git push personal HEAD:dev

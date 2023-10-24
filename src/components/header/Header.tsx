@@ -26,7 +26,7 @@ export default function Header() {
                 <h2 className="text-3xl font-bold">Will you</h2>
             </Link>
             <nav className="flex gap-4 items-center">
-                <Link href="/board">게시판</Link>
+                <Link href="/user/plan/board">게시판</Link>
                 {openChatModal && <Alarm close={close} />}
 
                 {showOverlay && (

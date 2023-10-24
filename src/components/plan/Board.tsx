@@ -69,7 +69,7 @@ export default function Board() {
                     데이트 계획 작성하러가기!
                 </button>
             </div>
-            <div w-full>
+            <div>
                 <DatingGrid datings={currentPageData} />
             </div>
             <div className="pagination flex justify-center">
