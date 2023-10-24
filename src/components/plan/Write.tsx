@@ -7,11 +7,12 @@ import {
     updateDating,
     getDatingAuthorId,
     getDatingData,
+    createActivity,
 } from '../../features/plan/dating';
 import { getCookie } from '@/utils/cookie';
 import { useParams, useSearchParams } from 'next/navigation';
 import { ActivityResponse } from '@/types/plan/activity/type';
-import { deleteActivity } from '../../features/plan/dating';
+// import { deleteActivity } from '../../features/plan/dating';
 
 export default function Write() {
     const [title, setTitle] = useState('');
@@ -24,6 +25,9 @@ export default function Write() {
     const [activityId, setActivityId] = useState<number | null>(null);
     const [authorId, setAuthorId] = useState<number | null>(null);
     const [datingAuthorId, setDatingAuthorId] = useState<number | null>(null);
+    const [activities, setActivities] = useState<
+        { id: number; content: string }[]
+    >([]);
 
     const param = useParams();
     console.log(param);
@@ -44,54 +48,7 @@ export default function Write() {
         setActivityContent(e.target.value);
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        console.log('Form Submit');
-        e.preventDefault();
-        try {
-            const id = Number(param.slug);
-            const response = await axios.put(
-                `https://willyouback.shop/api/dating/${id}`,
-                { title, location, theme },
-                {
-                    headers: {
-                        Authorization: getCookie('Authorization'),
-                        Authorization_Refresh: getCookie(
-                            'Authorization_Refresh'
-                        ),
-                    },
-                }
-            );
-            console.log(response);
-            if (response.status == 200) {
-                const activityResponse = await axios.post<ActivityResponse>(
-                    `https://willyouback.shop/api/activity/${id}`,
-                    {
-                        activityContent,
-                    },
-                    {
-                        headers: {
-                            Authorization: getCookie('Authorization'),
-                            Authorization_Refresh: getCookie(
-                                'Authorization_Refresh'
-                            ),
-                        },
-                    }
-                );
-                console.log(activityResponse);
-            }
-            setResponseMessage('Post created successfully!');
-        } catch (error) {
-            console.log('catch:', error);
-            setResponseMessage('An error occurred. Please try again.');
-        }
-    };
-
-    useEffect(() => {
-        if (param.slug && typeof param.slug === 'string') {
-            fetchDatingData();
-        }
-    }, [param.slug]);
-
+    //? 더미 데이터를 받아요
     const fetchDatingData = async () => {
         try {
             const response = await axios.get(
@@ -111,86 +68,95 @@ export default function Write() {
         }
     };
 
-    const getAuthorId = async () => {
-        const token = getCookie('Authorization') as string;
-        const refreshToken = getCookie('Authorization_Refresh') as string;
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        console.log('Form Submit');
+        e.preventDefault();
         try {
-            const response = await axios.get(
-                'https://willyouback.shop/api/myProfile',
+            const id = Number(param.slug);
+            const response = await axios.put(
+                `https://willyouback.shop/api/dating/${id}`,
+                { title, location, theme },
                 {
                     headers: {
-                        Authorization: token,
-                        Authorization_Refresh: refreshToken,
+                        Authorization: getCookie('Authorization'),
+                        Authorization_Refresh: getCookie(
+                            'Authorization_Refresh'
+                        ),
                     },
                 }
             );
-            return response.data.userId;
+            console.log(response);
         } catch (error) {
-            console.error('Failed:', error);
-        }
-        return null; // 오류 발생시 null 반환
-    };
-
-    const fetchAuthorId = async () => {
-        const id = await getAuthorId();
-        setAuthorId(id);
-    };
-
-    useEffect(() => {
-        fetchAuthorId();
-    }, []);
-
-    const handleDelete = async () => {
-        if (activityId !== null) {
-            try {
-                const response = await deleteActivity(activityId);
-                console.log(response);
-                setActivityContent('');
-                setActivityId(null);
-            } catch (error) {
-                console.error('Failed to delete activity:', error);
-            }
-        }
-    };
-
-    const adjustHeight = () => {
-        if (inputRef.current) {
-            if (theme.length === 0) {
-                inputRef.current.style.height = '50px';
-            } else {
-                inputRef.current.style.height = 'inherit';
-                const computed = window.getComputedStyle(inputRef.current);
-                const height =
-                    parseInt(
-                        computed.getPropertyValue('border-top-width'),
-                        10
-                    ) +
-                    parseInt(
-                        computed.getPropertyValue('border-bottom-width'),
-                        10
-                    ) +
-                    inputRef.current.scrollHeight;
-                inputRef.current.style.height = `${height}px`;
-            }
+            console.log('catch:', error);
+            setResponseMessage('An error occurred. Please try again.');
         }
     };
 
     useEffect(() => {
-        async function fetchIds() {
-            const id = await getAuthorId();
-            setAuthorId(id);
-
-            if (param.slug && typeof param.slug === 'string') {
-                const datingData = await getDatingData(param.slug);
-                setDatingAuthorId(datingData.userId); // 데이트 작성자의 ID를 설정하십시오.
-            }
+        if (param.slug && typeof param.slug === 'string') {
+            fetchDatingData();
         }
-        fetchIds();
     }, [param.slug]);
 
-    useEffect(() => {
-        adjustHeight();
-    }, [theme]);
+    const handleAddActivity = async () => {
+        if (activityContent) {
+            const id = Number(param.slug); // datingId를 가져옵니다.
+            try {
+                const activityResponse = await createActivity(
+                    id,
+                    activityContent
+                );
+                if (activityResponse.status === 'success') {
+                    // 활동 추가 버튼 클릭 시 활동 목록에 새로운 활동 추가
+                    setActivities([
+                        ...activities,
+                        {
+                            id: activityResponse.data.activityId,
+                            content: activityContent,
+                        },
+                    ]);
+                    setActivityContent(''); // 입력 칸을 비우기
+                } else {
+                    throw new Error('Failed to create an activity');
+                }
+            } catch (error) {
+                console.log('catch:', error);
+                setResponseMessage('An error occurred. Please try again.');
+            }
+        }
+    };
+    async function deleteActivity(activityId: number) {
+        try {
+            const response = await axios.delete(
+                `https://willyouback.shop/api/activity/${activityId}`,
+                {
+                    headers: {
+                        Authorization: getCookie('Authorization'),
+                        Authorization_Refresh: getCookie(
+                            'Authorization_Refresh'
+                        ),
+                    },
+                }
+            );
+            // 응답을 확인하고, 성공적으로 삭제되었는지 확인합니다.
+            if (response.data.status === 'success') {
+                // activities 상태에서 삭제된 activity를 제거합니다.
+                setActivities(
+                    activities.filter(
+                        (activity) =>
+                            activity !== response.data.data.activityContent
+                    )
+                );
+            } else {
+                console.error(
+                    'Failed to delete activity:',
+                    response.data.message
+                );
+            }
+        } catch (error) {
+            console.error('Failed to delete activity:', error);
+        }
+    }
 
     return (
         <div className=" w-3/4 h-[100vh] p-4 mx-auto">
@@ -219,98 +185,113 @@ export default function Write() {
                     </p>
                 </div>
             </div>
-            <div className="flex flex-row items-center p-4 w-full">
-                <div className=" flex-col items-center p-4 w-full">
-                    {successMessage && (
-                        <div className="alert alert-success">
-                            {successMessage}
-                        </div>
-                    )}
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-4">
-                            <label
-                                htmlFor="title"
-                                className="block text-gray-700 text-sm font-bold mb-2"
+            <div className="flex flex-row items-center p-4">
+                <div className="flex flex-col items-center p-4 w-full">
+                    <div className=" flex-col items-center p-4 w-full">
+                        {successMessage && (
+                            <div className="alert alert-success">
+                                {successMessage}
+                            </div>
+                        )}
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <label
+                                    htmlFor="title"
+                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                >
+                                    제목:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="title"
+                                    value={title}
+                                    onChange={handleTitleChange}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    placeholder="이목을 끄는 이름을 지어주세요!!"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label
+                                    htmlFor="location"
+                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                >
+                                    Location:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="location"
+                                    value={location}
+                                    onChange={handleLocationChange}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    placeholder="어디서 만나실건가요?"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label
+                                    htmlFor="theme"
+                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                >
+                                    주제
+                                </label>
+                                <input
+                                    type="text"
+                                    id="theme"
+                                    value={theme}
+                                    onChange={handleThemeChange}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    placeholder="어떤 컨셉의 데이트인가요?"
+                                />
+                            </div>
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                style={{
+                                    display:
+                                        authorId === datingAuthorId
+                                            ? 'block'
+                                            : 'none',
+                                }}
                             >
-                                제목:
-                            </label>
-                            <input
-                                type="text"
-                                id="title"
-                                value={title}
-                                onChange={handleTitleChange}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                placeholder="이목을 끄는 이름을 지어주세요!!"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label
-                                htmlFor="location"
-                                className="block text-gray-700 text-sm font-bold mb-2"
-                            >
-                                Location:
-                            </label>
-                            <input
-                                type="text"
-                                id="location"
-                                value={location}
-                                onChange={handleLocationChange}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                placeholder="어디서 만나실건가요?"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label
-                                htmlFor="theme"
-                                className="block text-gray-700 text-sm font-bold mb-2"
-                            >
-                                주제
-                            </label>
-                            <input
-                                type="text"
-                                id="theme"
-                                value={theme}
-                                onChange={handleThemeChange}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                placeholder="어떤 컨셉의 데이트인가요?"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label
-                                htmlFor={`activity`}
-                                className="block text-gray-700 text-sm font-bold mb-2"
-                            >
-                                활동:
-                            </label>
-                            <input
-                                type="text"
-                                id="location"
-                                value={activityContent}
-                                onChange={handleActivityChange}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none"
-                                style={{ height: '50px' }}
-                                placeholder="활동을 입력하세요"
-                            />
-                        </div>
-                        <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            style={{
-                                display:
-                                    authorId === datingAuthorId
-                                        ? 'block'
-                                        : 'none',
-                            }}
-                        >
-                            작성완료!
-                        </button>
-                    </form>
+                                작성완료!
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div className="flex-col items-center p-4 w-full">
+                <div className="flex flex-col items-center w-full mb-10">
+                    <h2 className="text-xl mb-4">데이트 활동을 작성해주세요</h2>
+                    <div className="mb-4 flex justify-between items-center w-full">
+                        <input
+                            type="text"
+                            id="location"
+                            value={activityContent}
+                            onChange={handleActivityChange}
+                            className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none flex-grow mr-2"
+                            style={{ height: '50px' }}
+                            placeholder="활동을 입력하세요"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleAddActivity}
+                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                            추가
+                        </button>
+                    </div>
                     <h3 className="">데이트 내용</h3>
-                    <div>{activityContent}</div>
-                    {activityId !== null && (
-                        <button onClick={handleDelete}>x</button>
-                    )}
+                    {activities.map((activity, index) => (
+                        <div
+                            key={index}
+                            className="flex justify-between items-center border-[1px] border-[blue] rounded-xl p-2 m-1"
+                        >
+                            {activity.content}
+                            <button
+                                type="button"
+                                onClick={() => deleteActivity(activity.id)}
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                            >
+                                x
+                            </button>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

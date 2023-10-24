@@ -2,9 +2,8 @@
 
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { fetchRandomUser } from '../../features/match/match';
+import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
-
 import Image from 'next/image';
 
 import profiledog from '../../../public/images/profiledog.jpeg';
@@ -35,40 +34,25 @@ function Match({ userId }: { userId: string }) {
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
 
-    // 사용자 정보를 불러오는 함수입니다.
-    const fetchUsers = async () => {
-        const token = getCookie('Authorization') as string;
-        const refreshToken = getCookie('Authorization_Refresh') as string;
-
-        try {
-            const response = await axios.get(
-                'https://willyouback.shop/api/userprofile/recommendations',
-                // {
-                //     headers: {
-                //         Authorization: token,
-                //         Authorization_Refresh: refreshToken,
-                //     },
-                // }
-            );
-
-            const usersData = response.data.data; // 사용자 정보 배열을 가져옵니다.
-
-            console.log('response:', response);
-            console.log(usersData);
-            setUsers(usersData); // 상태에 사용자 정보 배열을 저장합니다.
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     useEffect(() => {
-        fetchUsers();
+        const fetchData = async () => {
+            const response = await MatchAPI.fetchRandomUser();
+            const usersData = response.data.data;
+
+            const randomIndex = Math.floor(Math.random() * users.length);
+            const randomUser = users[randomIndex];
+            console.log('users', users);
+            console.log('response', response);
+            console.log('randomUser', randomUser);
+            setUsers(usersData);
+        };
+        fetchData();
+        console.log(users);
     }, []);
 
     const handleButtonClick = () => {
         if (userIndex === users.length - 1) {
-            fetchUsers(); // 마지막 사용자에 도달했을 때 새 사용자 데이터를 불러옵니다.
-            setUserIndex(0); // 인덱스를 리셋합니다.
+            setUserIndex(0);
         } else {
             setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
         }
@@ -167,7 +151,7 @@ function Match({ userId }: { userId: string }) {
                                     </div>
                                     &nbsp; &nbsp;
                                     <span className="mt-2">
-                                        {users[userIndex]?.age ?? 'Unknown'}{' '}
+                                        {users[userIndex]?.age ?? 'Unknown'}
                                     </span>
                                     <button
                                         className="absolute z-50 mr-4"
@@ -177,9 +161,6 @@ function Match({ userId }: { userId: string }) {
                                     </button>
                                 </div>
                             </div>
-                            <span className="p-[10px] z-50">
-                                안녕하세요 will you입니다. 잘부탁드립니다.
-                            </span>
                         </div>
 
                         {/* 좋아요, 싫어요 버튼 */}

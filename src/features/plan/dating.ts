@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { DatingResponse } from '@/types/plan/write/type';
 import { getCookie } from '@/utils/cookie';
+import { UserProfile } from '@/types/match/type';
+import service from '@/features';
+
+export const PlanAPI = {};
 
 //? 데이트 계획 작성 (더미 데이터 만들기!)
 export const createDating = async (
@@ -44,7 +48,6 @@ export const updateDating = async (
         const response = await axios.put(
             `https://willyouback.shop/api/dating/${id}`,
             {
-                datingId: id,
                 datingTitle: title,
                 datingLocation: location,
                 datingTheme: theme,
@@ -56,8 +59,14 @@ export const updateDating = async (
                 },
             }
         );
+        console.log('Response:', response.data); // Response logging
         return response.data;
     } catch (error: any) {
+        console.error(
+            `Failed to update dating: ${
+                error.response?.data.message || error.message
+            }`
+        );
         throw new Error(
             `Failed to update dating: ${
                 error.response?.data.message || error.message
@@ -106,6 +115,26 @@ export async function getDatingData(datingId: string) {
     }
 }
 
+//? 유저가 작성한 데이트 전체 조회
+export async function getMyDatingData() {
+    try {
+        const response = await axios.get(
+            `https://willyouback.shop/api/datings/user`,
+            {
+                headers: {
+                    Authorization: getCookie('Authorization'),
+                    Authorization_Refresh: getCookie('Authorization_Refresh'),
+                },
+            }
+        );
+        console.log(response);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching dating data:', error);
+        throw error;
+    }
+}
+
 //? 본인 데이트 계획인지 확인
 export async function getDatingAuthorId(
     datingId: string
@@ -127,21 +156,19 @@ export async function getDatingAuthorId(
     }
 }
 
-//? 활동 추가
+// //? 활동 추가
 
 import { Activity, ActivityResponse } from '../../types/plan/activity/type';
 
 export const createActivity = async (
     datingId: number,
-    activityTitle: string,
-    activityContent: string
+    content: string
 ): Promise<ActivityResponse> => {
     try {
         const response = await axios.post<ActivityResponse>(
             `https://willyouback.shop/api/activity/${datingId}`,
             {
-                activityTitle,
-                activityContent,
+                content,
             },
             {
                 headers: {
@@ -150,6 +177,7 @@ export const createActivity = async (
                 },
             }
         );
+        console.log(response.data.data);
         return response.data;
     } catch (error: any) {
         throw new Error(
@@ -160,7 +188,7 @@ export const createActivity = async (
     }
 };
 
-//? 활동삭제
+// //? 활동삭제
 
 export const deleteActivity = async (
     activityId: number

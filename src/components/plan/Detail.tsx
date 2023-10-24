@@ -11,7 +11,11 @@ export default function Detail() {
                 </h1>
             </div>
             <div className="flex flex-row items-center p-4 w-full">
-                제목 : 지역 : 주제 :
+                <div className="flex flex-col items-center p-4">
+                    <span>제목 :</span>
+                    <span>지역 :</span>
+                    <span>주제 :</span>
+                </div>
                 <div className="flex-col items-center p-4 w-full">
                     <h3 className="">데이트 내용</h3>
                     <div>활동 :</div>
