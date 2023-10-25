@@ -64,7 +64,7 @@ export default function Header() {
 
                 {/* 다른 페이지에서 넘어갈때 404 나와서 경로 수정 필요 */}
                 {userInfo && 
-                <Link href="user/profile/edit">
+                <Link href="/profile">
                     <Image
                         className="rounded-full mx-auto"
                         src={userInfo.data.profileImages[0].image}
@@ -76,7 +76,7 @@ export default function Header() {
                 </Link>
                 }
                 {!userInfo && 
-                <Link href="user/profile/edit">
+                <Link href="/profile">
                 <Image
                     className="rounded-full mx-auto"
                     src={profiledog}
