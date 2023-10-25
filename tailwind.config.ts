@@ -16,6 +16,7 @@ const config: Config = {
             },
             backgroundImage: {
                 'custom-gradient': 'linear-gradient(180deg, rgba(203,23,249,1) 0%, rgba(238,154,188,1) 65%)',
+                'profile-gradient': 'linear-gradient(180deg, rgba(53,61,255,0.53) 55%, rgba(211,119,255,0.53) 78%)',
                 'sendbtn-gradient': 'linear-gradient(329deg, rgba(34,30,208,1) 26%, rgba(129,48,209,1) 54%, rgba(177,52,171,1) 83%)'
             }
         },

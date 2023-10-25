@@ -59,28 +59,17 @@ button:last-of-type {
   right: 0;
 }
 
-.custom-dot-list-style {
+.dot-item {
+  margin: 0 5px;
+}
+
+.carousel .react-multi-carousel-dot-list {
   position: absolute;
-  bottom: 90%; /* 이 값을 조절하여 원하는 위치로 이동시키면 됩니다. */
+  bottom: -25px; /* 원하는 위치로 조절 */
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   list-style-type: none;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  width: 100%;
-  z-index: 10;
-}
-
-.custom-dot-list-style li {
-  display: inline-block;
-  margin: 0 5px; /* 원하는 마진 값을 설정하여 간격 조절 가능합니다. */
-}
-
-.custom-dot-list-style .active {
-  color: #333; /* 활성화된 Dot의 색상입니다. 원하는 색상으로 변경 가능합니다. */
-}
-
-.custom-dot-list-style .inactive {
-  color: #ddd; /* 비활성화된 Dot의 색상입니다. 원하는 색상으로 변경 가능합니다. */
 }

@@ -84,7 +84,7 @@ function SignupComponent() {
         const res = await AuthAPI.join(formData);
           if(res.status === 201){
             alert(res.data.message);
-            router.push('/');
+            router.push('/signin');
           }
         } catch (error) {
           const errorMessage = (error as SignupErrorRes).response?.data.message;

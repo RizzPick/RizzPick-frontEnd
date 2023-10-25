@@ -48,7 +48,7 @@ function UserProfileEdit() {
         setCurrentProfile(response.data.data);
         setLocalProfile(response.data.data);
         alert('프로필 등록이 완료되었습니다!');
-        router
+        router.push('/profile');
       }
       console.log(response);
     } catch(error) {

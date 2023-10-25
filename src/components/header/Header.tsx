@@ -44,7 +44,7 @@ export default function Header() {
     // 로딩 과정 중 보여질 이미지 처리
     return (
         <header className="flex justify-between item-center p-4 border-b-2 border-s-1-white-100">
-            <Link href="/">
+            <Link href="/user/match">
                 <h2 className="text-3xl font-bold">Will you</h2>
             </Link>
             <nav className="flex gap-4 items-center">
@@ -52,7 +52,6 @@ export default function Header() {
                 {openChatModal && <Alarm close={close} />}
 
                 {showOverlay && (
-                    // 오버레이 클릭 시 모달도 닫히도록 함
                     <div
                         className="block fixed top-0 left-1/2 transform -translate-x-1/2 h-full bg-black bg-opacity-50 z-30 w-full"
                         onClick={close}
