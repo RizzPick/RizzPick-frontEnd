@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import {GoDotFill, GoDot} from "react-icons/go"
-import {GrPrevious,GrNext} from "react-icons/gr"
-
+import { GoDotFill, GoDot } from "react-icons/go";
+import styles from './MultiCarousel.module.css';
 
 const responsive = {
   desktop: {
@@ -12,7 +11,7 @@ const responsive = {
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
-    items: 3,
+    items: 1,
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
@@ -21,39 +20,38 @@ const responsive = {
 };
 
 type Props = {
-    children: React.ReactNode
+  children: React.ReactNode[]
 }
 
-
-const CustomDot = ({ onMove, index, onClick, active } : any) => {
+const CustomDot = ({ onMove, index, onClick, active }: any) => {
   return (
     <li
-      className={active ? "active" : "inactive"}
+      className={`${active ? "active" : "inactive"}`}
       onClick={() => onClick()}
     >
-      { active ? <GoDotFill /> : <GoDot /> }
+      {active ? <GoDotFill /> : <GoDot />}
     </li>
   );
 };
 
-export const LeftArrow = () => {
-return <div className='cursor-pointer'><GrPrevious type="left" style={{ position: 'absolute', left: 5, fontSize: 15 }} /></div>};
-
-
 function MultiCarousel({ children }: Props) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
+    <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <Carousel
-      customDot={<CustomDot/>}
-      showDots={true}
-      infinite
-      customTransition="all .5"
-      ssr={true}
-      responsive={responsive}
-      itemClass="carousel-item-padding-40-px"
+        customDot={<CustomDot />}
+        showDots={children.length > 1}
+        arrows={isHovered}
+        infinite
+        customTransition="all .5"
+        ssr={true}
+        responsive={responsive}
       >
         {children}
       </Carousel>
-  )
+    </div>
+  );
 }
 
 export default MultiCarousel;

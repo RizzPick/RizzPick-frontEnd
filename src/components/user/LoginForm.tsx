@@ -21,8 +21,8 @@ function LoginForm() {
       const { initializeUserActiveStatus, initializeUserInfo } = UseProfile();
 
       const kakaoLogin = () => {
-        // window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}`;
-        window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL_VERCEL}`;
+        window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}`;
+        // window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL_VERCEL}`;
       };
 
       const onSubmit = async (data:LoginReq) => {
@@ -42,10 +42,11 @@ function LoginForm() {
             initializeUserActiveStatus(data.data);
             const userInfo = await AuthAPI.getUserInfo();
             initializeUserInfo(userInfo.data);
-            console.log(userInfo);
-            {status && router.replace('/')}
-            {!status && router.replace('/profile/edit')}
-            
+            {status && router.replace('/user/match')}
+            if(!status) {
+              alert("프로필을 등록해주세요.")
+              router.replace('/profile/edit')
+            }
           }
         } catch (error:any) {
           if (error.response) {
