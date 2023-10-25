@@ -9,12 +9,22 @@ import Image from 'next/image';
 import profiledog from '../../../../../../public/images/profiledog1.jpeg';
 import { getUserProfileData } from '@/features/plan/dating';
 import Write from '@/components/plan/Write';
+import { getDateList } from '@/features/plan/dating';
+import Link from 'next/link';
 
 type Props = {
     params: {
         slug: string;
     };
 };
+
+interface DateItem {
+    datingId: number;
+    userId: number;
+    datingTitle: string;
+    datingLocation: string;
+    datingTheme: string;
+}
 
 interface DatingInfo {
     datingTitle: string;
@@ -27,20 +37,9 @@ export default function PostPage({ params: { slug } }: Props) {
     const [dating, setDating] = useState<DatingInfo>();
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const [isEditing, setIsEditing] = useState(false);
+    const [dateList, setDateList] = useState<DateItem[]>([]);
 
     const [activities, setActivities] = useState([]);
-
-    useEffect(() => {
-        // Assume the API endpoint is '/api/activities'
-        axios
-            .get('https://willyouback.shop/api/activities')
-            .then((response) => {
-                setActivities(response.data.data); // Adjust this line according to the response structure
-            })
-            .catch((error) => {
-                console.error('Error fetching activities:', error);
-            });
-    }, []);
 
     useEffect(() => {
         axios
@@ -51,18 +50,25 @@ export default function PostPage({ params: { slug } }: Props) {
                 },
             })
             .then((response) => {
-                const datingData = response.data;
+                const datingData = response.data.data;
                 setDating({
-                    datingTitle: datingData.data.datingTitle,
-                    datingLocation: datingData.data.datingLocation,
-                    datingTheme: datingData.data.datingTheme,
-                    activities: datingData.data.activityResponseDtoList,
+                    datingTitle: datingData.datingTitle,
+                    datingLocation: datingData.datingLocation,
+                    datingTheme: datingData.datingTheme,
+                    activities: datingData.activityResponseDtoList,
                 });
+
                 // 데이트를 작성한 사용자의 ID를 가져와서 프로필 정보를 불러옵니다.
-                return getUserProfileData(datingData.data.userId);
+                return getUserProfileData(datingData.userId);
             })
             .then((userData) => {
                 setUserProfile(userData); // 프로필 데이터를 상태에 설정합니다.
+                // 여기서 userId를 사용하여 getDateList를 호출합니다.
+                return getDateList(userData.userId);
+            })
+            .then((dateListData) => {
+                // dateListData를 사용하여 dateList 상태를 설정합니다.
+                setDateList(dateListData);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -140,7 +146,17 @@ export default function PostPage({ params: { slug } }: Props) {
                     <button onClick={handleEditClick}>수정</button>
                     <button onClick={handleDeleteClick}>삭제</button>
                     <div className="flex flex-row">
-                        <div className="w-1/6">목록 보이기</div>
+                        <div className="w-1/6">
+                            <ul>
+                                {dateList.map((date, index) => (
+                                    <li key={index}>
+                                        <Link href={`${date.datingId}`}>
+                                            <span>{date.datingTitle}</span>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                         <div className="flex flex-col justify-evenly w-full border-l-[1px] border-r-[1px] border-[whitegray]">
                             <div className="flex flex-col items-center p-4 w-full">
                                 <div className="flex flex-col p-4">
@@ -153,11 +169,9 @@ export default function PostPage({ params: { slug } }: Props) {
                                 <div className="flex-col items-center p-4 w-full">
                                     <h3 className="">데이트 내용</h3>
                                     {dating &&
+                                        dating.activities &&
                                         dating.activities.map(
-                                            (
-                                                activity,
-                                                index // activities 배열을 매핑합니다.
-                                            ) => (
+                                            (activity, index) => (
                                                 <div
                                                     key={index}
                                                     className="p-2 my-2 border-[1px] border-[black] rounded-lg"

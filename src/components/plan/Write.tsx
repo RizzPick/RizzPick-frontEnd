@@ -43,12 +43,13 @@ export default function Write({
     const [authorId, setAuthorId] = useState<number | null>(null);
     const [datingAuthorId, setDatingAuthorId] = useState<number | null>(null);
 
-    const transformedActivities = initialActivities
-        ? initialActivities.map((activity) => ({
-              id: activity.id,
-              content: activity.activityContent,
-          }))
-        : [];
+    const transformedActivities =
+        initialActivities && Array.isArray(initialActivities)
+            ? initialActivities.map((activity) => ({
+                  id: activity.id,
+                  content: activity.activityContent,
+              }))
+            : [];
 
     const [activities, setActivities] = useState(transformedActivities);
 
@@ -73,6 +74,7 @@ export default function Write({
 
     //? 더미 데이터를 받아요
     const fetchDatingData = async () => {
+        console.log('fetchData 실행!');
         try {
             const response = await axios.get(
                 `https://willyouback.shop/api/dating/${param.slug}`
@@ -83,6 +85,7 @@ export default function Write({
                 setTitle(data.datingTitle);
                 setLocation(data.datingLocation);
                 setTheme(data.datingTheme);
+                setActivities(data.activityResponseDtoList); // 여기에서 activities 상태를 업데이트합니다.
             } else {
                 console.error('No data received');
             }
@@ -136,9 +139,10 @@ export default function Write({
                         ...activities,
                         {
                             id: activityResponse.data.activityId,
-                            content: activityContent,
+                            content: activityResponse.data.activityContent,
                         },
                     ]);
+                    console.log(activities);
                     setActivityContent(''); // 입력 칸을 비우기
                 } else {
                     throw new Error('Failed to create an activity');
@@ -149,7 +153,9 @@ export default function Write({
             }
         }
     };
+
     async function deleteActivity(activityId: number) {
+        console.log('deleteActivity called with:', activityId);
         try {
             const response = await axios.delete(
                 `https://willyouback.shop/api/activity/${activityId}`,
@@ -167,13 +173,13 @@ export default function Write({
                 // activities 상태에서 삭제된 activity를 제거합니다.
                 setActivities(
                     activities.filter(
-                        (activity) =>
-                            activity !== response.data.data.activityContent
+                        (activity) => activity.id !== activityId // 아이디를 사용하여 필터링합니다.
                     )
                 );
+                console.log(activities);
             } else {
                 console.error(
-                    'Failed to delete activity:',
+                    'Failed to delete activity!:',
                     response.data.message
                 );
             }
@@ -181,6 +187,10 @@ export default function Write({
             console.error('Failed to delete activity:', error);
         }
     }
+
+    console.log(activities);
+
+    if (!activities) return;
 
     return (
         <div className=" w-3/4 h-[100vh] p-4 mx-auto">
@@ -301,15 +311,17 @@ export default function Write({
                         </button>
                     </div>
                     <h3 className="">데이트 내용</h3>
-                    {activities.map((activity, index) => (
+                    {activities.map((activity: any) => (
                         <div
-                            key={index}
+                            key={activity.activityId}
                             className="flex justify-between items-center border-[1px] border-[blue] rounded-xl p-2 m-1"
                         >
-                            {activity.content}
+                            {activity.activityContent}
                             <button
                                 type="button"
-                                onClick={() => deleteActivity(activity.id)}
+                                onClick={() =>
+                                    deleteActivity(activity.activityId)
+                                }
                                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
                             >
                                 x

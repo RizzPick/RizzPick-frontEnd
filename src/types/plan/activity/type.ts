@@ -1,8 +1,7 @@
 export interface Activity {
-    activityTitle: string;
+    id: number;
     activityContent: string;
 }
-
 export interface ActivityResponse {
     status: string;
     message: string;
@@ -13,3 +12,5 @@ export interface ActivityResponse {
         activityContent: string;
     };
 }
+
+export interface deleteActivityResponse {}
