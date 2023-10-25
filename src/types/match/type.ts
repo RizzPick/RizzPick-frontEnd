@@ -1,3 +1,11 @@
+export type Dating = {
+    datingId: number;
+    userId: number;
+    datingTitle: string;
+    datingLocation: string;
+    datingTheme: string;
+};
+
 export type UserProfile = {
     userId: string;
     nickname: string;
@@ -8,6 +16,7 @@ export type UserProfile = {
     mbti?: string;
     religion?: string;
     profileImages: ImageObject[];
+    dating: Dating;
 };
 
 export type ImageObject = {

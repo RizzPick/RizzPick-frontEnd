@@ -212,3 +212,23 @@ export const deleteActivity = async (
         );
     }
 };
+
+//? 데이트 계획 클릭 후 데이트를 작성 한 유저정보 가져오기
+
+export async function getUserProfileData(userId: number) {
+    try {
+        const response = await axios.get(
+            `https://willyouback.shop/api/userProfile/${userId}`,
+            {
+                headers: {
+                    Authorization: getCookie('Authorization'),
+                    Authorization_Refresh: getCookie('Authorization_Refresh'),
+                },
+            }
+        );
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching user profile data:', error);
+        throw error;
+    }
+}
