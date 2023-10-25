@@ -232,3 +232,43 @@ export async function getUserProfileData(userId: number) {
         throw error;
     }
 }
+
+//? 활동 조회
+
+export async function getActivity(userId: number) {
+    try {
+        const response = await axios.get(
+            `https://willyouback.shop/api/activities
+            `,
+            {
+                headers: {
+                    Authorization: getCookie('Authorization'),
+                    Authorization_Refresh: getCookie('Authorization_Refresh'),
+                },
+            }
+        );
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching user profile data:', error);
+        throw error;
+    }
+}
+
+//? 데이트 목록 조회
+export async function getDateList(userId: number) {
+    try {
+        const response = await axios.get(
+            `https://willyouback.shop/api/dataings/user/${userId}`,
+            {
+                headers: {
+                    Authorization: getCookie('Authorization'),
+                    Authorization_Refresh: getCookie('Authorization_Refresh'),
+                },
+            }
+        );
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching user profile data:', error);
+        throw error;
+    }
+}
