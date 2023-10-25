@@ -12,6 +12,7 @@ type Props = {
 function ChatComp({data}:Props) {
     const { setCurrentChat } = UseChat();
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
+    console.log(chat);
 
   return (
     <div className="flex flex-row items-center border-b-[1px] border-s-1-gray-400 h-[122px] mx-2 cursor-pointer my-2 relative" onClick={()=>setCurrentChat(data)}>
