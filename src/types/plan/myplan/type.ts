@@ -11,3 +11,10 @@ export interface MyAllDatingResponse {
     message: string | null;
     data: MyDating[];
 }
+
+export interface DatingInfo {
+    datingTitle: string;
+    datingLocation: string;
+    datingTheme: string;
+    activities: { activityContent: string }[];
+}

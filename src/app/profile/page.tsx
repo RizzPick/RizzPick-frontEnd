@@ -14,8 +14,6 @@ export default async function ProfilePage() {
         }
     })
     const profile : UserInfo = response.data;
-    console.log(profile);
-
   return (
     <div><UserProfile profile={profile}/></div>
   )

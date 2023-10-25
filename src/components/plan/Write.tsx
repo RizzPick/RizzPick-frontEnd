@@ -12,9 +12,26 @@ import {
 import { getCookie } from '@/utils/cookie';
 import { useParams, useSearchParams } from 'next/navigation';
 import { ActivityResponse } from '@/types/plan/activity/type';
+import { AllDatingResponse } from '@/types/plan/board/type';
+import { DatingInfo } from '@/types/plan/myplan/type';
 // import { deleteActivity } from '../../features/plan/dating';
 
-export default function Write() {
+interface Activity {
+    id: number;
+    activityContent: string;
+}
+
+interface WriteProps {
+    initialData: DatingInfo;
+    initialActivities: Activity[];
+    onEditComplete: () => void;
+}
+
+export default function Write({
+    initialData,
+    initialActivities,
+    onEditComplete,
+}: WriteProps) {
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [activityContent, setActivityContent] = useState('');
@@ -25,9 +42,15 @@ export default function Write() {
     const [activityId, setActivityId] = useState<number | null>(null);
     const [authorId, setAuthorId] = useState<number | null>(null);
     const [datingAuthorId, setDatingAuthorId] = useState<number | null>(null);
-    const [activities, setActivities] = useState<
-        { id: number; content: string }[]
-    >([]);
+
+    const transformedActivities = initialActivities
+        ? initialActivities.map((activity) => ({
+              id: activity.id,
+              content: activity.activityContent,
+          }))
+        : [];
+
+    const [activities, setActivities] = useState(transformedActivities);
 
     const param = useParams();
     console.log(param);
@@ -86,6 +109,7 @@ export default function Write() {
                 }
             );
             console.log(response);
+            onEditComplete();
         } catch (error) {
             console.log('catch:', error);
             setResponseMessage('An error occurred. Please try again.');

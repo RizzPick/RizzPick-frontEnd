@@ -21,7 +21,8 @@ function LoginForm() {
       const { initializeUserActiveStatus, initializeUserInfo } = UseProfile();
 
       const kakaoLogin = () => {
-        window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}`;
+        // window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}`;
+        window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL_VERCEL}`;
       };
 
       const onSubmit = async (data:LoginReq) => {

@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react';
-import SendIcon from '../../../public/chatIcon/send.svg';
 import ChatAPI from '@/features/chat';
 import useSWR from 'swr';
 import { getCookie } from '@/utils/cookie';
@@ -10,6 +9,7 @@ import { ChatData, MessagesRes } from '@/types/chat';
 import Image from 'next/image';
 import moment from 'moment';
 import ChatSkeleton from './ChatSkeleton';
+import {FiArrowUp} from "react-icons/fi"
 
 const Chat = () => {
 
@@ -136,7 +136,7 @@ const Chat = () => {
     return (
       <div className='col-span-2 p-4'>
         {/* 채팅창 */}
-        <div className='w-full relative h-[800px] border-8 border-gray-400 rounded-3xl p-4'>
+        <div className='w-full relative h-[800px] border-4 border-[#cb88ea] rounded-3xl p-4'>
           {/* 메시지 출력 부분 */}
           {isLoading ? (
             <ChatSkeleton />
@@ -172,7 +172,7 @@ const Chat = () => {
                                   <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
                               </div>) :
                               (<div className='flex items-center mb-2 relative' ref={messagesEndRef}>
-                                  <p className='bg-gray-400 rounded-2xl px-4 py-2 whitespace-pre-line'>
+                                  <p className='bg-[#ab62e5] rounded-2xl px-4 py-2 whitespace-pre-line'>
                                       {mes.message}
                                   </p>
                                   <span className="text-gray-500 absolute -bottom-0 -left-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
@@ -191,7 +191,7 @@ const Chat = () => {
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
             />
-            <button onClick={onClick}><SendIcon/></button>
+            <button onClick={onClick} className='bg-sendbtn-gradient text-white rounded-full text-2xl'><FiArrowUp/></button>
           </div>
           </>
           )}

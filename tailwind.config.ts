@@ -11,10 +11,12 @@ const config: Config = {
             colors: {
                 'gradient-start': '#cb17f9',
                 'gradient-end': '#ee9abc',
-                'exit-mark' : "#fd2f79"
+                'exit-mark' : "#fd2f79",
+                'chat-selected' : "#4d49e7"
             },
             backgroundImage: {
-                'custom-gradient': 'linear-gradient(180deg, rgba(203,23,249,1) 0%, rgba(238,154,188,1) 65%)'
+                'custom-gradient': 'linear-gradient(180deg, rgba(203,23,249,1) 0%, rgba(238,154,188,1) 65%)',
+                'sendbtn-gradient': 'linear-gradient(329deg, rgba(34,30,208,1) 26%, rgba(129,48,209,1) 54%, rgba(177,52,171,1) 83%)'
             }
         },
     },

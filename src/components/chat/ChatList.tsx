@@ -1,17 +1,34 @@
-import React from 'react'
+'use client'
+import React, { useEffect } from 'react'
 import ChatComp from './ChatComp';
 import { ChatData } from '@/types/chat';
+import ChatAPI from '@/features/chat';
+import UseChat, { CHAT_KEY } from '@/hooks/useChat';
+import useSWR from 'swr';
 
-type Props = {
-  chats : ChatData[];
-}
-function ChatList({chats}:Props) {
+function ChatList() {
+  const { initializeChats } = UseChat();
+  const {data:chats} = useSWR<ChatData[]>(CHAT_KEY);
+
+  useEffect(()=>{
+    const getChatRooms = async() => {
+        try {
+            const response = await ChatAPI.getChats();
+            if(response.status === 200) {
+                initializeChats(response.data);
+            }   
+        } catch (error) {
+          console.log(error);
+        }
+    }
+    getChatRooms();
+},[initializeChats])
+
   return (
     <div className="h-[800px] overflow-y-auto">
       {chats && chats.map((chat)=>{
         return <ChatComp data={chat} key={chat.chatRoomId}/>
       })}
-      {/* 매칭된 회원이 없을 경우 보여져야 할 컴포넌트 처리 필요 */}
     </div>
   )
 }

@@ -34,8 +34,8 @@ function ChatProfile() {
             }
             {chat.intro && <div>{chat.intro}</div>}
             <div className='flex items-center gap-4'>
-              {chat.mbti && <div className='bg-gray-400 rounded-2xl px-2 py-1'>{chat.mbti}</div>}
-              {chat.religion && <div className='bg-gray-400 rounded-2xl px-2 py-1'>{chat.religion === "NONE" ? ("종교 없음"):(chat.religion)}</div>}
+              {chat.mbti && <div className='border-[#d67dff] border rounded-2xl px-2 py-1'>{chat.mbti}</div>}
+              {chat.religion && <div className='border-[#d67dff] border rounded-2xl px-2 py-1'>{chat.religion === "NONE" ? ("종교 없음"):(chat.religion)}</div>}
             </div>
           </div>
             <hr className='my-4' />

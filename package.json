@@ -18,6 +18,8 @@
     "react-dom": "^18",
     "react-hook-form": "^7.47.0",
     "react-icons": "^4.11.0",
+    "react-multi-carousel": "^2.8.4",
+    "react-responsive-carousel": "^3.2.23",
     "react-spinners": "^0.13.8",
     "sharp": "^0.32.6",
     "sockjs-client": "^1.6.1",
