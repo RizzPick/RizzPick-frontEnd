@@ -22,7 +22,7 @@ export default function KakaoCallback() {
                     setCookie('Authorization_Refresh',refreshToken);
                     setCookie('status', response.data.data.userActiveStatus);
                     {response.data.data.userActiveStatus && router.push('/')};
-                    {!response.data.data.userActiveStatus && router.push('/user/profil/edit')};
+                    {!response.data.data.userActiveStatus && router.push('/profile/edit')};
                 }
             } catch (error) {
                 console.log(error);
