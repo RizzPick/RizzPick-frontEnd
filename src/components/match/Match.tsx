@@ -79,13 +79,13 @@ function Match({ userId }: { userId: string }) {
     };
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex h-[92.2vh]">
             <div className="flex-1 flex justify-evenly items-start p-10">
                 {/*! 유저 정보 */}
-                <div className="flex-1 max-w-md rounded-lg h-[80vh] ml-[60px]">
+                <div className="flex-1 max-w-md rounded-full h-[80vh]">
                     {/* 유저 이미지 */}
 
-                    <div className="relative h-full w-full overflow-hidden rounded-2xl ">
+                    <div className="relative h-[695px] w-[463px] overflow-hidden">
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
                             {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
@@ -142,16 +142,16 @@ function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-full top-0 left-0 text-white font-bold  mt-[380px] mx-[10px] flex flex-col">
-                            <div className="flex flex-row items-center">
-                                <div className="text-2xl p-[10px] flex">
-                                    <div className="text-4xl">
+                        <div className="absolute w-full bottom-[150px] bg-[#fff] h-[110px] rounded-3xl left-0 flex flex-col">
+                            <div className="flex flex-col items-center">
+                                <div>
+                                    <div className="text-4xl font-bold">
                                         {users[userIndex]?.nickname ??
                                             'Unknown'}
                                     </div>
                                     &nbsp; &nbsp;
                                     <span className="mt-2">
-                                        {users[userIndex]?.age ?? 'Unknown'}
+                                        {users[userIndex]?.age ?? 'Unknown'}세
                                     </span>
                                     <button
                                         className="absolute z-50 mr-4"
@@ -160,29 +160,18 @@ function Match({ userId }: { userId: string }) {
                                         <ReadMore />
                                     </button>
                                 </div>
+                                <div className=""> 안녕하세요 반가워요!</div>
                             </div>
-                        </div>
-
-                        {/* 좋아요, 싫어요 버튼 */}
-                        <div className="absolute top-0 left-0 h-56 text-white bg-gradient-to-t from-black to-transparent w-full mt-[420px] flex justify-between">
-                            <button
-                                className="mt-[100px] mx-[20px] hover-shadow"
-                                onClick={handleButtonClick}
-                            >
-                                <BadIcon />
-                            </button>
-                            <button
-                                className="mt-[100px] mx-[20px] hover-shadow"
-                                onClick={handleButtonClick}
-                            >
-                                <WhiteHeartIcon />
-                            </button>
                         </div>
                     </div>
                 </div>
 
                 {/* 데이트 계획 및 상세 정보 */}
-                <div className="flex-1 max-w-md p-6 bg-[#A627A9] rounded-2xl shadow-lg h-[45vh] relative mr-[60px]">
+                <div
+                    className={`flex-1 max-w-md p-6 bg-[#A627A9] rounded-2xl shadow-lg h-[45vh] relative mr-[60px] ${
+                        isDetailsVisible ? '' : 'hidden'
+                    }`}
+                >
                     {/* 데이트 계획 */}
                     <div>
                         <h2 className="text-2xl font-bold mb-4 text-black text-center">
@@ -223,6 +212,21 @@ function Match({ userId }: { userId: string }) {
                     <div className="absolute top-[-20px] right-[-20px]">
                         <Pin />
                     </div>
+                </div>
+                {/* 좋아요, 싫어요 버튼 */}
+                <div className="absolute w-1/4 bottom-0 left-50 h-56 text-white flex justify-between">
+                    <button
+                        className="mt-[100px] mx-[20px] hover-shadow"
+                        onClick={handleButtonClick}
+                    >
+                        <BadIcon />
+                    </button>
+                    <button
+                        className="mt-[100px] mx-[20px] hover-shadow"
+                        onClick={handleButtonClick}
+                    >
+                        <WhiteHeartIcon />
+                    </button>
                 </div>
             </div>
         </div>
