@@ -1,3 +1,4 @@
+import Header from '@/components/header/Header';
 import UserProfile from '@/components/profile/UserProfile';
 import { MyProfileRes } from '@/types/profile';
 import { UserInfo } from '@/types/user';
@@ -16,7 +17,7 @@ export default async function ProfilePage() {
     //         "Authorization" : token
     //     }
     // })
-    const response = await fetch(`${process.env.SERVER_URL}/api/myProfile`,{ cache: 'no-store', headers : {
+    const response = await fetch(`${process.env.SERVER_URL}/api/myProfile`,{ cache: 'no-cache', headers : {
       "Authorization" : token
     } })
         .then((response) => {
@@ -34,6 +35,7 @@ export default async function ProfilePage() {
     console.log("프로필 페이지 렌더링",profile);
   return (
     <div>
+      <Header />
       <UserProfile profile={profile}/>
       </div>
   )

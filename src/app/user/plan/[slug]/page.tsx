@@ -114,6 +114,7 @@ export default function PostPage({ params: { slug } }: Props) {
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     );

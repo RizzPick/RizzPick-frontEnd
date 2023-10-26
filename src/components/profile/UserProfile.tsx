@@ -1,5 +1,4 @@
 'use client'
-import { UserInfo } from '@/types/user'
 import Image from 'next/image';
 import React, { useState } from 'react'
 import MultiCarousel from '../common/MultiCarousel';
@@ -13,8 +12,6 @@ type Props = {
     profile : MyProfileRes
 }
 function UserProfile({profile} : Props) {
-  // const [images, setImages] = useState(profile.data.profileImages);
-  // const [currentImage, setCurrentImage] = useState(profile.data.profileImages[0]);
   const router = useRouter();
   const [showSecondSection, setShowSecondSection] = useState(false); // 두 번째 section을 보여줄지 결정하는 상태
 
@@ -44,16 +41,19 @@ function UserProfile({profile} : Props) {
         </article>)}
       </MultiCarousel>
       </section>
-      <section className='flex flex-col h-[731px] ml-6' style={{ display: showSecondSection ? 'block' : 'none' }}>
-        <div className='w-[467px] border bg-[#CACFFF] h-[398px] rounded-3xl mb-3'>
-          <h1 className='text-center text-xl mt-4'>나랑 이런 데이트 어때요</h1>
-          <div className='w-[430px] h-[312px] border bg-white mx-auto rounded-3xl mt-4 p-4'>
-            <ul className='list-disc pl-5 space-y-2'>
-              <li>밥 먹고 영화보기</li>
-              <li>비 오는 날 대학로에서 연극 보기</li>
-              <li>시원한 날 한강에서 치맥하기</li>
-              <li>겨울에 바다 보러가서 감기걸리기</li>
-            </ul>
+      <section className='flex flex-col h-[731px] ml-20' style={{ display: showSecondSection ? 'block' : 'none' }}>
+      <div className='w-[467px] border bg-[#CACFFF] h-[398px] rounded-3xl mb-3'>
+            <h1 className='text-center text-xl mt-4'>나랑 이런 데이트 어때요</h1>
+            <div className='w-[430px] h-[312px] border bg-white mx-auto rounded-3xl mt-4 p-4 flex items-center justify-center'>
+              {profile.dating && profile.dating.length > 0 ? 
+                  <ul className='list-disc pl-5 space-y-2'>
+                      {profile.dating.map((date) => {
+                          return <li key={date.datingId}>{date.datingTitle}</li>
+                      })}
+                  </ul>
+                  : 
+              <button onClick={()=>router.push('/user/plan/board')} className='mx-auto px-4 py-2 bg-gradient-end mt-4 rounded-3xl text-white font-bold hover:bg-pink-300'>데이트 계획 추가하기</button>
+              }
           </div>
         </div>
         <div className="flex-1 bg-profile-gradient text-white p-4 rounded-3xl mb-2 relative h-[315px] w-[467px]" id='options'>

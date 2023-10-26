@@ -68,6 +68,13 @@ export type ProfileForm = {
   intro : string;
 };
 
+export type Dating = {
+  datingId: number,
+      userId: number,
+      datingTitle: string,
+      datingLocation: string,
+      datingTheme: string
+}
 export type MyProfileRes = {
   userId : number;
   nickname: string;
@@ -78,7 +85,7 @@ export type MyProfileRes = {
   location: Location;
   mbti: string;
   religion: Religion;
-  dating? : string;
+  dating? : Dating[];
   profileImages : ProfileImages[];
   intro : string;
 }

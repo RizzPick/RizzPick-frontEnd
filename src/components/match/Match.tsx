@@ -6,9 +6,6 @@ import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
 
-import profiledog from '../../../public/images/profiledog.jpeg';
-import profiledog1 from '../../../public/images/profiledog1.jpeg';
-
 // ICON
 import WhiteHeartIcon from '../../../public/matchIcon/whiteHeart.svg';
 import BadIcon from '../../../public/matchIcon/bad.svg';
@@ -21,9 +18,11 @@ import PageIcon from '../../../public/matchIcon/pageIcon.svg';
 import NowPageIcon from '../../../public/matchIcon/nowPage.svg';
 
 import { getCookie } from '@/utils/cookie';
+import { useRouter } from 'next/navigation';
 
 function Match({ userId }: { userId: string }) {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
+    const router = useRouter();
 
     //! 상세 정보 보이기/숨기기 토글 함수
     const toggleDetailsVisibility = () => {
@@ -77,6 +76,8 @@ function Match({ userId }: { userId: string }) {
                 currentUser.profileImages.length
         );
     };
+
+    if(!users) return;
 
     return (
         <div className="flex flex-col h-screen">
@@ -142,7 +143,7 @@ function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-full top-0 left-0 text-white font-bold  mt-[380px] mx-[10px] flex flex-col">
+                        <div className="absolute w-full bottom-40 left-0 text-white font-bold mx-[10px] flex flex-col">
                             <div className="flex flex-row items-center">
                                 <div className="text-2xl p-[10px] flex">
                                     <div className="text-4xl">
@@ -164,7 +165,7 @@ function Match({ userId }: { userId: string }) {
                         </div>
 
                         {/* 좋아요, 싫어요 버튼 */}
-                        <div className="absolute top-0 left-0 h-56 text-white bg-gradient-to-t from-black to-transparent w-full mt-[420px] flex justify-between">
+                        <div className="absolute bottom-0 left-0 h-56 text-white bg-gradient-to-t from-black to-transparent w-full flex justify-between">
                             <button
                                 className="mt-[100px] mx-[20px] hover-shadow"
                                 onClick={handleButtonClick}
@@ -182,21 +183,23 @@ function Match({ userId }: { userId: string }) {
                 </div>
 
                 {/* 데이트 계획 및 상세 정보 */}
-                <div className="flex-1 max-w-md p-6 bg-[#A627A9] rounded-2xl shadow-lg h-[45vh] relative mr-[60px]">
+                <div className="flex-1 max-w-md p-6 bg-[#CACFFF] rounded-3xl shadow-lg h-[45vh] relative mr-[60px]" style={{display:isDetailsVisible ? 'block' : 'none'}}>
                     {/* 데이트 계획 */}
                     <div>
                         <h2 className="text-2xl font-bold mb-4 text-black text-center">
                             나랑 이런 데이트 어때요?
                         </h2>
-                        <div className="bg-white rounded-2xl p-4 h-[30vh] flex flex-col">
-                            <span>💭 밥먹고 영화보기</span>
-                            <span>💭 밥먹고 영화보기</span>
-                            <span>💭 밥먹고 영화보기</span>
-                            <span>💭 밥먹고 영화보기</span>
+                        <div className='h-[312px] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center'>
+                            {currentUser && currentUser.dating && currentUser.dating.length > 1 ? 
+                                <ul className='list-disc pl-5 space-y-2'>
+                                {users[userIndex].dating?.map((date) => {
+                                    return <li key={date.datingId}>{date.datingTitle}</li>
+                                })}
+                                </ul>
+                            : 
+                            <button onClick={()=>router.push('/user/plan/board')} className='mx-auto px-4 py-2 bg-gradient-end mt-4 rounded-3xl text-white font-bold hover:bg-pink-300'>데이트 계획 추가하기</button>
+                            }
                         </div>
-                        <button className="absolute right-[15px]">
-                            <BlackHeartIcon />
-                        </button>
                     </div>
                     {/* 상세 정보 */}
                     <div
@@ -220,9 +223,9 @@ function Match({ userId }: { userId: string }) {
                         </div>
                         <div className="bubble-tail absolute top-5 left-0 transform -translate-x-full -translate-y-1/2 w-0 h-0"></div>
                     </div>
-                    <div className="absolute top-[-20px] right-[-20px]">
+                    {/* <div className="absolute top-[-20px] right-[-20px]">
                         <Pin />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

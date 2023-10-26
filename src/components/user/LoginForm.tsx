@@ -25,41 +25,47 @@ function LoginForm() {
         // window.location.href = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL_VERCEL}`;
       };
 
-      const onSubmit = async (data:LoginReq) => {
+      const onSubmit = async (data: LoginReq) => {
         try {
           const res = await AuthAPI.login(data);
-          console.log(res);
-          if(res.status === 200) {
-            console.log(res);
-            const token = res.headers['authorization'];
-            const refreshToken = res.headers['authorization_refresh'];
-            setCookie('Authorization', token);
-            setCookie('Authorization_Refresh',refreshToken);
-
-            // 이 부분 개선이 필요해 보임
-            const {data} = await AuthAPI.getUserStatus();
-            const status = data.data.userActiveStatus;
-            initializeUserActiveStatus(data.data);
-            const userInfo = await AuthAPI.getUserInfo();
-            initializeUserInfo(userInfo.data);
-            {status && router.replace('/user/match')}
-            if(!status) {
-              alert("프로필을 등록해주세요.")
-              router.replace('/profile/edit')
-            }
+      
+          if (res.status !== 200) {
+            alert("로그인에 실패했습니다. 다시 시도해주세요.");
+            return;
           }
-        } catch (error:any) {
+      
+          const token = res.headers['authorization'];
+          const refreshToken = res.headers['authorization_refresh'];
+          setCookie('Authorization', token);
+          setCookie('Authorization_Refresh', refreshToken);
+      
+          const userStatusResponse = await AuthAPI.getUserStatus();
+          initializeUserActiveStatus(userStatusResponse.data);
+      
+          const userInfoResponse = await AuthAPI.getUserInfo();
+          initializeUserInfo(userInfoResponse.data);
+      
+          if (userStatusResponse.data.data.userActiveStatus) {
+            router.replace('/user/match');
+          } else {
+            alert("프로필 등록 페이지로 이동합니다");
+            router.replace('/profile/edit');
+          }
+      
+        } catch (error: any) {
           if (error.response) {
             const errorMessage = error.response.data;
-            console.log(errorMessage);
             alert(errorMessage);
           } else if (error.request) {
-              console.log("No response received:", error.request);
+            console.log("No response received:", error.request);
+            alert("서버 응답이 없습니다. 다시 시도해주세요.");
           } else {
-              console.log("Axios configuration error:", error.message);
+            console.log("Axios configuration error:", error.message);
+            alert("요청 중 오류가 발생했습니다. 다시 시도해주세요.");
           }
         }
       };
+      
 
       // useEffect(()=>{
       //   message && alert("잘못된 접근입니다, 로그인이 필요합니다.");

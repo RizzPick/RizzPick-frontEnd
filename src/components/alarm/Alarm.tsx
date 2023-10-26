@@ -1,15 +1,41 @@
 import Image from 'next/image';
 import profile1 from '../../../public/images/profile1.jpeg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AlarmProps } from '../../types/alarm/type';
+import UseChat, { CHAT_KEY } from '@/hooks/useChat';
+import { ChatData } from '@/types/chat';
+import useSWR from 'swr';
+import ChatAPI from '@/features/chat';
+import { useRouter } from 'next/navigation';
 
 export default function Alarm({ close }: AlarmProps) {
     const [closeModal] = useState(true);
+    const { initializeChats } = UseChat();
+    const {data:chats} = useSWR<ChatData[]>(CHAT_KEY);
+    const router = useRouter();
 
+    useEffect(()=>{
+        const getChatRooms = async() => {
+            try {
+                const response = await ChatAPI.getChats();
+                if(response.status === 200) {
+                    initializeChats(response.data);
+                }   
+            } catch (error) {
+            console.log(error);
+            }
+        }
+        getChatRooms();
+    },[initializeChats])
+
+    const onClick = () => {
+        close();
+        router.push('/user/chat');
+    }
     return (
         <>
             {closeModal && (
-                <div className="absolute top-[70px] right-[50px] translate-[-50%] bg-white p-10 w-[500px] h-[100vh] flex flex-col z-50">
+                <div className="absolute top-[70px] right-[50px] translate-[-50%] bg-white p-10 w-[500px] h-[80vh] flex flex-col z-50">
                     <div className="h-36">
                         <h2 className="mb-2">
                             받은 좋아요( 여기에 갯수 표시 )
@@ -33,31 +59,31 @@ export default function Alarm({ close }: AlarmProps) {
                         </div>
                     </div>
                     <div className="rounded-2xl">
-                        <h2 className="mb-2">메시지( 여기에 갯수 표시 )</h2>
-                        <div
-                            className="flex flex-row items-center border-t-[1px] border-b-[1px] border-transparent h-20"
-                            style={{ borderColor: 'black' }}
-                        >
-                            <div className="rounded-full overflow-hidden w-[100px] h-[50px] mr-4">
+                        <h2 className="mb-2 font-bold text-2xl">메시지</h2>
+                        <div className='overflow-y-auto h-[calc(70vh-36px)]'>
+                        {chats?.map((chat)=> {
+                            return (
+                            <div className="flex flex-row items-center border-b-[1px] border-transparent h-20 cursor-pointer" style={{ borderColor: 'black' }} key={chat.chatRoomId} onClick={onClick}>
+                            <div className="rounded-full overflow-hidden w-[50px] h-[50px] mr-4 relative">
                                 <Image
-                                    src={profile1}
+                                    src={chat.image}
                                     alt="Picture of the author"
-                                    objectFit="cover" // 이 부분은 이미지 비율을 유지하면서, 주어진 width/height 안에 이미지를 채워넣습니다.
+                                    fill
+                                    style={{objectFit:"cover"}}
                                 />
                             </div>
                             <div>
                                 <div>
-                                    <span>이름</span>
+                                    <span className='font-bold'>{chat.nickname}</span>
                                     &nbsp;
-                                    <span>나이</span>
+                                    <span>{chat.age}</span>
                                 </div>
-                                <p className="w-full text-ellipsis overflow-hidden break-words line-clamp-2 text-sm text-gray-600">
-                                    두 줄 정도 보이도록 했어요 만약 2줄이
-                                    넘어가면 이렇게 보인답니다. 두 줄 정도
-                                    보이도록 했어요 만약 2줄이 넘어가면 이렇게
-                                    보인답니다.
+                                <p className="w-full text-ellipsis overflow-hidden break-words line-clamp-2 text-sm text-gray-600 font-bold">
+                                    {chat.latestMessage}
                                 </p>
                             </div>
+                        </div>)
+                        })}
                         </div>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ import UseChat, { CHAT_KEY } from '@/hooks/useChat';
 import useSWR from 'swr';
 
 function ChatList() {
-  const { initializeChats } = UseChat();
+  const { initializeChats,setCurrentChat } = UseChat();
   const {data:chats} = useSWR<ChatData[]>(CHAT_KEY);
 
   useEffect(()=>{
@@ -16,13 +16,14 @@ function ChatList() {
             const response = await ChatAPI.getChats();
             if(response.status === 200) {
                 initializeChats(response.data);
+                setCurrentChat(response.data[0]);
             }   
         } catch (error) {
           console.log(error);
         }
     }
     getChatRooms();
-},[initializeChats])
+},[initializeChats, setCurrentChat])
 
   return (
     <div className="h-[800px] overflow-y-auto">
