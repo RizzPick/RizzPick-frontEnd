@@ -8,12 +8,22 @@ import { UserProfile } from '@/types/match/type';
 import Image from 'next/image';
 import profiledog from '../../../../../public/images/profiledog.jpeg';
 import { getUserProfileData } from '@/features/plan/dating';
+import { getDateList } from '@/features/plan/dating';
+import Link from 'next/link';
 
 type Props = {
     params: {
         slug: string;
     };
 };
+
+interface DateItem {
+    datingId: number;
+    userId: number;
+    datingTitle: string;
+    datingLocation: string;
+    datingTheme: string;
+}
 
 interface DatingInfo {
     datingTitle: string;
@@ -25,6 +35,7 @@ interface DatingInfo {
 export default function PostPage({ params: { slug } }: Props) {
     const [dating, setDating] = useState<DatingInfo>();
     const [userProfile, setUserProfile] = useState<UserProfile>();
+    const [dateList, setDateList] = useState<DateItem[]>([]);
 
     useEffect(() => {
         axios
@@ -47,6 +58,12 @@ export default function PostPage({ params: { slug } }: Props) {
             })
             .then((userData) => {
                 setUserProfile(userData); // 프로필 데이터를 상태에 설정합니다.
+                // 여기서 userId를 사용하여 getDateList를 호출합니다.
+                return getDateList(userData.userId);
+            })
+            .then((dateListData) => {
+                // dateListData를 사용하여 dateList 상태를 설정합니다.
+                setDateList(dateListData);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -61,7 +78,17 @@ export default function PostPage({ params: { slug } }: Props) {
     return (
         <div className=" w-4/5 h-[100vh] p-4 mx-auto">
             <div className="flex flex-row">
-                <div className="w-1/6"></div>
+                <div className="w-1/6">
+                    <ul>
+                        {dateList.map((date, index) => (
+                            <li key={index}>
+                                <Link href={`${date.datingId}`}>
+                                    <span>{date.datingTitle}</span>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
                 <div className="flex flex-col justify-evenly w-full border-l-[1px] border-r-[1px] border-[whitegray]">
                     <div className="flex flex-col items-center p-4 w-full">
                         <div className="flex flex-col p-4">
