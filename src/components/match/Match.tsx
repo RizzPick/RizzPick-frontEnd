@@ -244,21 +244,6 @@ function Match({ userId }: { userId: string }) {
                         <Pin />
                     </div> */}
                 </div>
-                {/* 좋아요, 싫어요 버튼 */}
-                <div className="absolute w-1/4 bottom-0 left-50 h-56 text-white flex justify-between">
-                    <button
-                        className="mt-[100px] mx-[20px] hover-shadow"
-                        onClick={handleButtonClick}
-                    >
-                        <BadIcon />
-                    </button>
-                    <button
-                        className="mt-[100px] mx-[20px] hover-shadow"
-                        onClick={handleButtonClick}
-                    >
-                        <WhiteHeartIcon />
-                    </button>
-                </div>
             </div>
         </div>
     );
