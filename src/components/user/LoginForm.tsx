@@ -40,7 +40,7 @@ function LoginForm() {
           setCookie('Authorization_Refresh', refreshToken);
       
           const userStatusResponse = await AuthAPI.getUserStatus();
-          initializeUserActiveStatus(userStatusResponse.data);
+          initializeUserActiveStatus(userStatusResponse.data.data);
       
           const userInfoResponse = await AuthAPI.getUserInfo();
           initializeUserInfo(userInfoResponse.data);
