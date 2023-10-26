@@ -67,9 +67,9 @@ function LoginForm() {
       };
       
 
-      // useEffect(()=>{
-      //   message && alert("잘못된 접근입니다, 로그인이 필요합니다.");
-      // },[message])
+      useEffect(()=>{
+        message && alert("잘못된 접근입니다, 로그인이 필요합니다.");
+      },[message])
 
       return (
         <section className='min-h-screen flex justify-center items-center'>
