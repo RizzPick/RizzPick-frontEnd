@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
+import { sendLike, sendNope } from '@/features/thumbsUpDown/thumbsUpDown';
 
 // ICON
 import WhiteHeartIcon from '../../../public/matchIcon/whiteHeart.svg';
@@ -35,18 +36,53 @@ function Match({ userId }: { userId: string }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await MatchAPI.fetchRandomUser();
-            const usersData = response.data.data;
+            try {
+                const response = await MatchAPI.fetchRandomUser();
+                const usersData = response.data.data;
 
-            const randomIndex = Math.floor(Math.random() * users.length);
-            const randomUser = users[randomIndex];
-            console.log('users', users);
-            console.log('response', response);
-            console.log('randomUser', randomUser);
-            setUsers(usersData);
+                // users 상태를 usersData로 설정합니다.
+                setUsers(usersData);
+                console.log('usersData', usersData);
+                console.log('responseData', response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
+
+        const fetchLikedUsers = async () => {
+            const response = await axios.get(
+                'https://willyouback.shop/api/like/status',
+                {
+                    headers: {
+                        Authorization: getCookie('Authorization'),
+                        Authorization_Refresh: getCookie(
+                            'Authorization_Refresh'
+                        ),
+                    },
+                }
+            );
+            console.log('like user : ', response.data.data);
+            return response.data.data; // 좋아요 상태 데이터 반환
+        };
+
+        const updateUsersArray = async () => {
+            try {
+                const likedUsers = await fetchLikedUsers(); // 좋아요 상태 가져오기
+
+                // 기존 사용자 배열에서 좋아요를 보낸 사용자 제외
+                setUsers((prevUsers) =>
+                    prevUsers.filter(
+                        (user) => !likedUsers.includes(user.userId)
+                    )
+                );
+            } catch (error) {
+                console.error('Error fetching liked users:', error);
+                // Optionally, inform the user that an error occurred
+            }
+        };
+
         fetchData();
-        console.log(users);
+        updateUsersArray(); // 배열 업데이트 함수 호출
     }, []);
 
     const handleButtonClick = () => {
@@ -79,6 +115,72 @@ function Match({ userId }: { userId: string }) {
 
     if (!users) return;
 
+    const sendLike = async (userId: string, targetUserId: string) => {
+        try {
+            const url = `https://willyouback.shop/api/like/${targetUserId}`;
+            const response = await axios.post(
+                url,
+                {},
+                {
+                    headers: {
+                        Authorization: getCookie('Authorization'),
+                        Authorization_Refresh: getCookie(
+                            'Authorization_Refresh'
+                        ),
+                    },
+                }
+            );
+            handleButtonClick();
+            return response;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const handleLike = async () => {
+        try {
+            const response = await sendLike(userId, users[userIndex].userId);
+            console.log(response);
+            handleButtonClick(); // 좋아요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
+        } catch (error) {
+            console.error('좋아요 보내기 오류:', error);
+        }
+    };
+
+    const sendNope = async (userId: string, targetUserId: string) => {
+        try {
+            const url = `https://willyouback.shop/api/nope/${targetUserId}`;
+            const response = await axios.post(
+                url,
+                {},
+                {
+                    headers: {
+                        Authorization: getCookie('Authorization'),
+                        Authorization_Refresh: getCookie(
+                            'Authorization_Refresh'
+                        ),
+                    },
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const handleNope = async () => {
+        try {
+            const response = await sendNope(userId, users[userIndex].userId);
+            console.log(response);
+            handleButtonClick(); // 싫어요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
+        } catch (error) {
+            console.error('싫어요 보내기 오류:', error);
+        }
+    };
+
+    console.log(users);
     return (
         <div className="flex h-[92.2vh]">
             <div className="flex-1 flex justify-evenly items-start p-10">
@@ -161,7 +263,9 @@ function Match({ userId }: { userId: string }) {
                                         <ReadMore />
                                     </button>
                                 </div>
-                                <div className=""> 안녕하세요 반가워요!</div>
+                                <div className="">
+                                    {users[userIndex]?.intro ?? 'Unknown'}
+                                </div>
                             </div>
                         </div>
 
@@ -169,13 +273,13 @@ function Match({ userId }: { userId: string }) {
                         <div className="absolute bottom-0 left-0 h-56 text-white bg-gradient-to-t from-black to-transparent w-full flex justify-between">
                             <button
                                 className="mt-[100px] mx-[20px] hover-shadow"
-                                onClick={handleButtonClick}
+                                onClick={handleNope}
                             >
                                 <BadIcon />
                             </button>
                             <button
                                 className="mt-[100px] mx-[20px] hover-shadow"
-                                onClick={handleButtonClick}
+                                onClick={handleLike}
                             >
                                 <WhiteHeartIcon />
                             </button>
@@ -240,9 +344,6 @@ function Match({ userId }: { userId: string }) {
                         </div>
                         <div className="bubble-tail absolute top-5 left-0 transform -translate-x-full -translate-y-1/2 w-0 h-0"></div>
                     </div>
-                    {/* <div className="absolute top-[-20px] right-[-20px]">
-                        <Pin />
-                    </div> */}
                 </div>
             </div>
         </div>
