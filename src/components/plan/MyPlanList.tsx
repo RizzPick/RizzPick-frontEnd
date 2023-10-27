@@ -18,7 +18,7 @@ export default function MyPlanList() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const data = await getMyDatingData(); // response.json() 호출을 제거합니다.
+                const data = await getMyDatingData();
                 setMyDatings(data);
             } catch (error) {
                 console.error('Error fetching my dating data:', error);

@@ -119,7 +119,7 @@ export async function getDatingData(datingId: string) {
 export async function getMyDatingData() {
     try {
         const response = await axios.get(
-            `https://willyouback.shop/api/datings/user`,
+            `https://willyouback.shop/api/datings/user/me`,
             {
                 headers: {
                     Authorization: getCookie('Authorization'),
@@ -205,6 +205,7 @@ export const deleteActivity = async (
         );
         return response.data;
     } catch (error: any) {
+        console.error(error); // 에러 로그 추가
         throw new Error(
             `Failed to delete activity: ${
                 error.response?.data.message || error.message
@@ -271,4 +272,8 @@ export async function getDateList(userId: number) {
         console.error('Error fetching user profile data:', error);
         throw error;
     }
+}
+
+function saveToken(token: any) {
+    localStorage.setItem('Authorization', token);
 }

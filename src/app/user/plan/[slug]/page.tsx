@@ -120,13 +120,27 @@ export default function PostPage({ params: { slug } }: Props) {
                 <div className="w-1/6">
                     <div className="h-screen w-[395px] flex flex-col items-center">
                         <div className="h-[231px] w-[231px] rounded-full overflow-hidden mx-auto mt-5">
-                            <Image
-                                src={profiledog}
-                                alt="Picture of the author"
-                                width={231}
-                                height={231}
-                                priority
-                            />
+                            {userProfile &&
+                            userProfile.profileImages &&
+                            userProfile.profileImages.length > 0 ? (
+                                <Image
+                                    src={
+                                        userProfile.profileImages[0].image || ''
+                                    }
+                                    alt="User profile image"
+                                    width={231}
+                                    height={231}
+                                    priority
+                                />
+                            ) : (
+                                <Image
+                                    src={profiledog}
+                                    alt="Default profile image"
+                                    width={231}
+                                    height={231}
+                                    priority
+                                />
+                            )}
                         </div>
                         <div>
                             {userProfile && (

@@ -24,7 +24,12 @@ export default function Board() {
         async function fetchData() {
             try {
                 const datingData = await getDatings();
-                setDatings(datingData);
+                // datingId를 기준으로 내림차순 정렬
+                const sortedData = datingData.sort(
+                    (a: any, b: any) =>
+                        parseInt(b.datingId, 10) - parseInt(a.datingId, 10)
+                );
+                setDatings(sortedData);
             } catch (error) {
                 console.error('Error fetching dating data:', error);
             }
@@ -39,7 +44,7 @@ export default function Board() {
             const response = await createDating(title, location, theme);
             // 생성된 데이터의 ID를 저장
             const createdDatingId = response.data.datingId;
-            router.push(`write/${createdDatingId}`);
+            router.push(`${createdDatingId}`);
         } catch (error) {
             console.error('데이터 생성 오류:', error);
         }
@@ -53,6 +58,11 @@ export default function Board() {
 
     const handlePageClick = (pageNumber: number) => {
         setCurrentPage(pageNumber);
+        // 페이지를 이동할 때마다 datings 배열을 정렬
+        const sortedData = datings.sort(
+            (a, b) => parseInt(b.datingId, 10) - parseInt(a.datingId, 10)
+        );
+        setDatings(sortedData);
     };
 
     return (

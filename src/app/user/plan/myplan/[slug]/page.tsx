@@ -57,7 +57,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     datingTheme: datingData.datingTheme,
                     activities: datingData.activityResponseDtoList,
                 });
-
+                setActivities(datingData.activityResponseDtoList); // activities 상태 업데이트
                 // 데이트를 작성한 사용자의 ID를 가져와서 프로필 정보를 불러옵니다.
                 return getUserProfileData(datingData.userId);
             })
@@ -134,14 +134,12 @@ export default function PostPage({ params: { slug } }: Props) {
     return (
         <div className=" w-4/5 h-[100vh] p-4 mx-auto">
             {isEditing ? (
-                // isEditing 상태가 true일 때 Write 컴포넌트를 렌더링합니다.
                 <Write
                     initialData={dating}
                     initialActivities={activities}
                     onEditComplete={handleEditComplete}
                 />
             ) : (
-                // isEditing 상태가 false일 때 기존의 렌더링을 수행합니다.
                 <>
                     <button onClick={handleEditClick}>수정</button>
                     <button onClick={handleDeleteClick}>삭제</button>
