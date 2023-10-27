@@ -1,6 +1,5 @@
 'use client';
 
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
@@ -11,12 +10,8 @@ import {GoDotFill } from "react-icons/go"
 import WhiteHeartIcon from '../../../public/matchIcon/whiteHeart.svg';
 import BadIcon from '../../../public/matchIcon/bad.svg';
 import ReadMore from '../../../public/matchIcon/readMore.svg';
-import Pin from '../../../public/matchIcon/pin.svg';
-import BlackHeartIcon from '../../../public/matchIcon/blackHeart.svg';
 import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
-
-import { getCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
 
 function Match({ userId }: { userId: string }) {
@@ -139,13 +134,12 @@ function Match({ userId }: { userId: string }) {
 
                         {/* 간단한 정보, 설명란 */}
                         <div className="absolute w-full bottom-40 left-0 text-white font-bold mx-[10px] flex flex-col">
-                            <div className="flex flex-row items-center">
-                                <div className="text-2xl p-[10px] flex">
+                            <div className="flex flex-col items-center justify-between">
+                                <div className="text-2xl p-[10px] flex items-center">
                                     <div className="text-4xl">
                                         {users[userIndex]?.nickname ??
                                             'Unknown'}
                                     </div>
-                                    &nbsp; &nbsp;
                                     <span className="mt-2">
                                         {users[userIndex]?.age ?? 'Unknown'}세
                                     </span>
@@ -156,7 +150,7 @@ function Match({ userId }: { userId: string }) {
                                         <ReadMore />
                                     </button>
                                 </div>
-                                <div className=""> 안녕하세요 반가워요!</div>
+                                <div className="">{users[userIndex]?.intro}</div>
                             </div>
                         </div>
 
