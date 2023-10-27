@@ -13,7 +13,7 @@ export default function Home() {
     }, []);
 
     return (
-        <div className={`w-full bg-[#FFA438] h-[100vh] flex flex-col items-center relative overflow-hidden sm:py-4 ${loaded ? 'animate-fadeIn' : ''}`}>
+        <div className={`w-full bg-custom-gradient h-[100vh] flex flex-col items-center relative overflow-hidden sm:py-4 ${loaded ? 'animate-fadeIn' : ''}`}>
             <header className="flex justify-between w-full p-4 sm:hidden">
                 <h2 className={`text-3xl font-bold text-white transform transition-transform duration-1000 ${loaded ? 'translate-y-0' : '-translate-y-full'}`}>Will you</h2>
                 <h2 className={`text-3xl font-bold text-white cursor-pointer transform transition-transform duration-1000 ${loaded ? 'translate-y-0' : '-translate-y-full'}`} onClick={() => router.push('/signin')}>로그인</h2>
