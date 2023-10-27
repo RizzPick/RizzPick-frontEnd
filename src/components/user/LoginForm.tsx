@@ -99,6 +99,6 @@ function LoginForm() {
             </form>
         </section>
       );
-}
+} 
 
 export default LoginForm

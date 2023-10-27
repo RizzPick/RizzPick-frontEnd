@@ -110,7 +110,7 @@ function SignupComponent() {
 
   return (
     <section className='min-h-screen flex justify-center items-center'>
-    <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-4 bg-white rounded-3xl shadow-xl w-[500px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-4 bg-white rounded-3xl shadow-xl w-[500px] ">
       {isLoading && 
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
       <SyncLoader />
