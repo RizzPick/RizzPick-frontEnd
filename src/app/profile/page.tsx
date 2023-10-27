@@ -30,7 +30,8 @@ export default async function ProfilePage() {
     //     .catch((err) => {
     //         console.log(err.message);
     //   });
-    const profile : MyProfileRes = response.data;
+    const profile : MyProfileRes = response.data.data;
+    console.log(profile);
   return (
     <div>
       <Header />

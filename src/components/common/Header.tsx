@@ -16,7 +16,6 @@ export default function Header() {
     const token = getCookie("Authorization");
     const [userInfo, setUserInfo] = useState<UserInfo>();
     const router = useRouter();
-
     const Open = () => {
         setShowOverlay(true);
         setOpenChatModal(true);

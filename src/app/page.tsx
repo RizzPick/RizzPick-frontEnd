@@ -29,7 +29,7 @@ export default function Home() {
                     <h2 className={`text-white text-3xl sm:text-[28px] mb-4 font-bold transform transition-transform duration-1000 ${loaded ? 'translate-y-0' : '-translate-y-full'}`}>같이 공유하실래요?</h2>
                 </div>
                 <div className="flex justify-end mb-5 sm:justify-center sm:w-[224px] sm:mx-auto sm:flex-col sm:mt-40 sm:gap-5">
-                    <button onClick={() => router.push('/signin')} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full sm:text-[32px]">
+                    <button onClick={() => router.push('/signin')} className="cursor-pointer bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full sm:text-[32px]">
                         시작하기
                     </button>
                     <button onClick={() => router.push('/signup')} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full hidden sm:block sm:text-[32px]">

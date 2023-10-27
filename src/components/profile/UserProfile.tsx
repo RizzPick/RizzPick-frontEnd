@@ -13,7 +13,7 @@ type Props = {
 }
 function UserProfile({profile} : Props) {
   const router = useRouter();
-  const [showSecondSection, setShowSecondSection] = useState(false); // 두 번째 section을 보여줄지 결정하는 상태
+  const [showSecondSection, setShowSecondSection] = useState(true); // 두 번째 section을 보여줄지 결정하는 상태
 
   const onClick = (event : any) => {
     event.stopPropagation();
