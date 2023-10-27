@@ -6,7 +6,6 @@ import { getCookie } from '@/utils/cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect } from 'react'
-import {AiOutlineHome, AiOutlineComment, AiOutlineBell} from "react-icons/ai"
 import useSWR from 'swr';
 import Bell from "../../../public/footerIcon/Bell.png"
 import BellSel from "../../../public/footerIcon/BellSel.png"
@@ -37,11 +36,11 @@ function Footer() {
 
 
   return (
-    <footer className='fixed bottom-0 left-0 w-full hidden sm:block bg-white'>
+    <footer className='fixed bottom-0 left-0 w-full hidden sm:block bg-white border-t-gray-400 rounded-t-3xl shadow-custom'>
       <nav className='flex justify-around text-[50px] py-4 items-center'>
-        <button><Image src={HomeSel} width={50} height={50} alt='홈으로' /></button>
-        <button><Image src={Chat} width={50} height={50} alt='채팅' /></button>
-        <button><Image src={Bell} width={50} height={50} alt='알림' /></button>
+        <button><Image src={HomeSel} width={33} height={33} alt='홈으로' /></button>
+        <button><Image src={Chat} width={33} height={33} alt='채팅' /></button>
+        <button><Image src={Bell} width={33} height={33} alt='알림' /></button>
         {profile ? (
           <Link href="/profile">
             <div className='w-[50px] h-[50px] rounded-full relative'>

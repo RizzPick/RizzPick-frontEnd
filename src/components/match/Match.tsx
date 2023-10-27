@@ -7,9 +7,9 @@ import Image from 'next/image';
 import {GoDotFill } from "react-icons/go"
 
 // ICON
-import WhiteHeartIcon from '../../../public/matchIcon/whiteHeart.svg';
-import BadIcon from '../../../public/matchIcon/bad.svg';
-import ReadMore from '../../../public/matchIcon/readMore.svg';
+import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
+import BadIcon from '../../../public/matchIcon/Nope.png';
+import ReadMore from '../../../public/matchIcon/Intro.png';
 import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
 import { useRouter } from 'next/navigation';
@@ -79,8 +79,8 @@ function Match({ userId }: { userId: string }) {
                 {/*! 유저 정보 */}
                 <div className="flex-1 max-w-md rounded-full h-[calc(100vh - 100px)]">
                     {/* 유저 이미지 */}
-
-                    <div className="relative h-[695px] w-[463px] sm:w-full rounded-3xl overflow-hidden">
+                    <div className="relative sm:h-[590px] h-[695px] w-[463px] sm:w-full rounded-3xl overflow-hidden sm:mt-14">
+                    <div className="absolute top-0 left-0 w-full h-full z-20 bg-gradient-to-b from-white via-[#9f9f9f] to-black opacity-10"></div>
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
                             {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
@@ -133,40 +133,33 @@ function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-full bottom-40 left-0 text-white font-bold mx-[10px] flex flex-col">
-                            <div className="flex flex-col items-center justify-between">
-                                <div className="text-2xl p-[10px] flex items-center">
-                                    <div className="text-4xl">
-                                        {users[userIndex]?.nickname ??
-                                            'Unknown'}
+                        <div className="absolute w-full bottom-28 text-white flex flex-col p-6">
+                                <div className="text-2xl flex items-center justify-between">
+                                    <div className="flex items-center gap-4 ">
+                                        <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
+                                            'Unknown'}</p>
+                                        <p className='text-gray-400 text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
                                     </div>
-                                    <span className="mt-2">
-                                        {users[userIndex]?.age ?? 'Unknown'}세
-                                    </span>
-                                    <button
-                                        className="absolute z-50 mr-4"
-                                        onClick={toggleDetailsVisibility}
-                                    >
-                                        <ReadMore />
+                                    <button onClick={toggleDetailsVisibility} className='z-10 transition-all hover:scale-110 ease-in-out'>
+                                        <Image src={ReadMore} width={32} height={32} alt='ReadMore' />
                                     </button>
                                 </div>
-                                <div className="">{users[userIndex]?.intro}</div>
-                            </div>
+                                <div className="text-white mt-2">{users[userIndex]?.intro}</div>
                         </div>
 
                         {/* 좋아요, 싫어요 버튼 */}
-                        <div className="absolute bottom-0 left-0 h-56 text-white bg-gradient-to-t from-black to-transparent w-full flex justify-between">
+                        <div className="absolute bottom-2 text-white w-full flex justify-between p-4">
                             <button
-                                className="mt-[100px] mx-[20px] hover-shadow"
+                                className="hover:scale-110 transition-all ease-in-out"
                                 onClick={handleButtonClick}
                             >
-                                <BadIcon />
+                                <Image src={BadIcon} width={66} height={66} alt='싫어요' />
                             </button>
                             <button
-                                className="mt-[100px] mx-[20px] hover-shadow"
+                                className="hover:scale-110 transition-all ease-in-out"
                                 onClick={handleButtonClick}
                             >
-                                <WhiteHeartIcon />
+                                <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
                             </button>
                         </div>
                     </div>

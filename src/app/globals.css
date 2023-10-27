@@ -25,6 +25,16 @@ body {
   -webkit-line-clamp: 2;
 }
 
+footer {
+  border-top-left-radius: 20px; /* 위쪽 좌측 모서리 라운드 처리 */
+  border-top-right-radius: 20px; /* 위쪽 우측 모서리 라운드 처리 */
+  box-shadow: 0 -2px 3px rgba(155, 110, 250, 0.2); /* Drop Shadow 스타일 적용 */
+}
+
+.shadow-custom {
+  box-shadow: 0 -2px 3px rgba(155, 110, 250, 0.2);
+}
+
 *,
 *::before,
 *::after {
