@@ -91,7 +91,7 @@ const handleImageDelete = async (imageId : number) => {
       {isModalVisible && (
           <div 
               className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center"
-              onClick={() => setModalVisible(false)} // 여기서 모달 밖을 클릭했을 때 모달을 닫습니다.
+              onClick={() => {setModalVisible(false), setCameraVisible(false)}} // 여기서 모달 밖을 클릭했을 때 모달을 닫습니다.
           >
               <div 
                   className="bg-white p-5 rounded-lg flex flex-col gap-4 relative w-96 h-96"
@@ -111,7 +111,7 @@ const handleImageDelete = async (imageId : number) => {
                   >
                       카메라로 사진 촬영
                   </button>
-                  {isCameraVisible && <UserImageCamera />}
+                  {isCameraVisible && <UserImageCamera onAddImage={onAddImage} setCameraVisible={setCameraVisible} setModalVisible={setModalVisible}/>}
                   <button 
                       className='absolute top-0 right-0 p-4 transform transition-transform duration-500 hover:rotate-90'
                       onClick={() => setModalVisible(false)}
