@@ -1,4 +1,4 @@
-import Header from '@/components/header/Header';
+import Header from '@/components/common/Header';
 import UserProfile from '@/components/profile/UserProfile';
 import { MyProfileRes } from '@/types/profile';
 import axios from 'axios';

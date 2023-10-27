@@ -53,11 +53,11 @@ export default function Header() {
 
     // 로딩 과정 중 보여질 이미지 처리
     return (
-        <header className="flex justify-between item-center p-4 border-b-2 border-s-1-white-100">
+        <header className="flex justify-between item-center p-4">
             <Link href="/user/match">
                 <h2 className="text-3xl font-bold">Will you</h2>
             </Link>
-            <nav className="flex gap-4 items-center">
+            <nav className="flex gap-4 items-center sm:hidden">
                 <Link href="/user/plan/board">게시판</Link>
                 {openChatModal && <Alarm close={close} />}
 

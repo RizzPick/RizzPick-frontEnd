@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
+import {GoDotFill } from "react-icons/go"
 
 // ICON
 import WhiteHeartIcon from '../../../public/matchIcon/whiteHeart.svg';
@@ -14,8 +15,6 @@ import Pin from '../../../public/matchIcon/pin.svg';
 import BlackHeartIcon from '../../../public/matchIcon/blackHeart.svg';
 import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
-import PageIcon from '../../../public/matchIcon/pageIcon.svg';
-import NowPageIcon from '../../../public/matchIcon/nowPage.svg';
 
 import { getCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
@@ -80,23 +79,19 @@ function Match({ userId }: { userId: string }) {
     if (!users) return;
 
     return (
-        <div className="flex h-[92.2vh]">
-            <div className="flex-1 flex justify-evenly items-start p-10">
+        <div className="flex h-[calc(100vh - 100px)]">
+            <div className="flex-1 flex justify-evenly items-start p-10 sm:p-2">
                 {/*! 유저 정보 */}
-                <div className="flex-1 max-w-md rounded-full h-[80vh]">
+                <div className="flex-1 max-w-md rounded-full h-[calc(100vh - 100px)]">
                     {/* 유저 이미지 */}
 
-                    <div className="relative h-[695px] w-[463px] overflow-hidden">
+                    <div className="relative h-[695px] w-[463px] sm:w-full rounded-3xl overflow-hidden">
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
                             {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
                                 ? currentUser.profileImages.map((_, index) => (
-                                      <div key={index} className="mx-1 z-50">
-                                          {index === slideIndex ? (
-                                              <NowPageIcon />
-                                          ) : (
-                                              <PageIcon />
-                                          )}
+                                      <div key={index} className={`mx-1 z-10 text-2xl ${index === slideIndex ? ('text-white'):('text-gray-500')}`}>
+                                        <GoDotFill />
                                       </div>
                                   ))
                                 : null}

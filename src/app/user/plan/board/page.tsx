@@ -1,4 +1,4 @@
-import Header from '@/components/header/Header';
+import Header from '@/components/common/Header';
 import Board from '@/components/plan/Board';
 
 export default function BoardPage() {
