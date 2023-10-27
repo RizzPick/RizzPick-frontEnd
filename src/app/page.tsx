@@ -32,7 +32,7 @@ export default function Home() {
                     <button onClick={() => router.push('/signin')} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full sm:text-[32px]">
                         시작하기
                     </button>
-                    <button onClick={() => router.push('/signin')} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full hidden sm:block sm:text-[32px]">
+                    <button onClick={() => router.push('/signup')} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full hidden sm:block sm:text-[32px]">
                         회원가입
                     </button>
                 </div>
