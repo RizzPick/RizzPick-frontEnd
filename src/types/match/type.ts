@@ -11,7 +11,6 @@ export type UserProfile = {
     nickname: string;
     age: number;
     education?: string;
-    intro?: string;
     gender?: string;
     location?: string;
     mbti?: string;
