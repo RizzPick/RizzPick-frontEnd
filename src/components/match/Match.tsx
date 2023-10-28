@@ -79,8 +79,8 @@ function Match({ userId }: { userId: string }) {
                 {/*! 유저 정보 */}
                 <div className="flex-1 max-w-md rounded-full h-[calc(100vh - 100px)]">
                     {/* 유저 이미지 */}
-                    <div className="relative sm:h-[590px] h-[695px] w-[463px] sm:w-full rounded-3xl overflow-hidden sm:mt-14">
-                    <div className="absolute top-0 left-0 w-full h-full z-20 bg-gradient-to-b from-white via-[#9f9f9f] to-black opacity-10"></div>
+                    <div className="relative sm:h-[590px] h-[695px] w-[463px] sm:w-full rounded-2xl overflow-hidden sm:mt-14">
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20"/>
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
                             {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
@@ -100,7 +100,7 @@ function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 이미지 가져오기 */}
-                        {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
+                        {currentUser
                             ? currentUser.profileImages.map(
                                   (imageObj, index) => (
                                       <div
@@ -133,14 +133,14 @@ function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-full bottom-28 text-white flex flex-col p-6">
+                        <div className="absolute w-full bottom-28 text-white flex flex-col p-6 z-30">
                                 <div className="text-2xl flex items-center justify-between">
                                     <div className="flex items-center gap-4 ">
                                         <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
                                             'Unknown'}</p>
                                         <p className='text-gray-400 text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
                                     </div>
-                                    <button onClick={toggleDetailsVisibility} className='z-10 transition-all hover:scale-110 ease-in-out'>
+                                    <button onClick={toggleDetailsVisibility} className='z-30 transition-all hover:scale-110 ease-in-out'>
                                         <Image src={ReadMore} width={32} height={32} alt='ReadMore' />
                                     </button>
                                 </div>
@@ -164,7 +164,8 @@ function Match({ userId }: { userId: string }) {
                         </div>
                     </div>
                 </div>
-
+                
+                
                 {/* 데이트 계획 및 상세 정보 */}
                 <div
                     className="flex-1 max-w-md p-6 bg-[#CACFFF] rounded-3xl shadow-lg h-[45vh] relative mr-[60px]"

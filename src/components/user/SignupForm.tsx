@@ -128,7 +128,7 @@ function SignupComponent() {
 
   return (
     <section className='min-h-[100vh] flex justify-center items-center'>
-    <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-4 bg-white rounded-3xl shadow-xl w-[500px] sm:w-full sm:h-[100vh] h-[100vh-200px] sm:rounded-none sm:justify-center">
+    <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[500px] sm:w-full sm:h-[75vh] h-[100vh-200px] sm:rounded-none sm:rounded-tl-[56px] sm:justify-center">
       {/* 로딩 바 */}
       {isLoading && 
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
@@ -151,7 +151,7 @@ function SignupComponent() {
             })}
         />
         
-        <div className='flex justify-between items-center'>
+        <div className='flex justify-between items-center mt-4'>
           <label className="font-bold text-xl">비밀번호</label>
           {errors.password && renderPasswordErrorMessages(errors.password)}
           {errors.password_confirm && renderPasswordErrorMessages(errors.password_confirm)}
@@ -180,7 +180,7 @@ function SignupComponent() {
                 validate: (value) => value === watch('password'),
             })}
         />
-        <div className='flex justify-between items-center'>
+        <div className='flex justify-between items-center mt-4'>
             <label className="font-bold text-xl">이메일</label>
         </div>
         <div className='flex gap-2'>
@@ -205,7 +205,7 @@ function SignupComponent() {
             </div>
             <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-28 ${!isEmailVerified && 'bg-opacity-30'}`}>인증하기</button>
         </div>
-        <button className={`bg-gradient-start text-white p-2 font-bold text-xl rounded-3xl mt-4 transition duration-200 ease-in-out ${!isVerificationSuccessful && 'bg-opacity-30'}`} disabled={!isVerificationSuccessful}>가입하기</button>
+        <button className={`bg-gradient-start text-white p-2 font-bold text-xl rounded-3xl mt-8 transition duration-200 ease-in-out ${!isVerificationSuccessful && 'bg-opacity-30'}`} disabled={!isVerificationSuccessful}>가입하기</button>
     </form>
 </section>
   )
