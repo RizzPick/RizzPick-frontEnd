@@ -12,7 +12,7 @@ import UseProfile from '@/hooks/useProfile';
 function LoginForm() {
     const {
         register,
-        handleSubmit,
+        handleSubmit
       } = useForm<LoginReq>();
     
       const router = useRouter();
@@ -53,16 +53,8 @@ function LoginForm() {
           }
       
         } catch (error: any) {
-          if (error.response) {
-            const errorMessage = error.response.data;
-            alert(errorMessage);
-          } else if (error.request) {
-            console.log("No response received:", error.request);
-            alert("서버 응답이 없습니다. 다시 시도해주세요.");
-          } else {
-            console.log("Axios configuration error:", error.message);
-            alert("요청 중 오류가 발생했습니다. 다시 시도해주세요.");
-          }
+          console.log(error);
+          alert("아이디 또는 비밀번호가 틀렸습니다.");
         }
       };
       
@@ -73,13 +65,15 @@ function LoginForm() {
 
       return (
         <section className='min-h-screen flex justify-center items-center'>
-            <form onSubmit={handleSubmit(onSubmit)} className="p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl w-[600px]">
-              <Image src={kakaoLoginLogo} alt='로고' width={100} height={50} priority className='mx-auto' />
+          <div className='bg-gray-400 w-[157px] h-[89px] absolute top-[119px] sm:block hidden'/>
+            <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[600px] sm:w-full sm:h-[65vh] h-[100vh-200px] sm:py-[57px]">
+              {/* <Image src={kakaoLoginLogo} alt='로고' width={100} height={50} priority className='mx-auto' /> */}
                 <label className="font-bold text-xl">아이디</label>
                 <input
                     id="username"
                     type="text"
                     className="border rounded-3xl py-2 px-3 w-full text-sm"
+                    required
                     placeholder='아이디를 입력하세요'
                     {...register("username", { required: true })}
                 />
@@ -89,16 +83,17 @@ function LoginForm() {
                     type="password"
                     className="border rounded-3xl py-2 px-3 w-full text-sm"
                     placeholder='비밀번호를 입력하세요'
+                    required
                     {...register("password", { required: true })}
                 />
-                <button className='bg-gradient-start text-white p-2 rounded-3xl w-full mt-4'>로그인</button>
-                <div className="mt-4 cursor-pointer mx-auto">
+                <button className='bg-gradient-start text-white p-2 rounded-3xl w-full mt-4 sm:mt-[47px]'>로그인</button>
+                <div className="mt-6 cursor-pointer mx-auto">
                     <Image src={kakaoLoginLogo} priority width={50} height={50} alt="카카오 로그인" onClick={kakaoLogin} />
                 </div>
-                <button type="button" className='text-gray-400 mt-4 font-medium text-sm' onClick={()=>router.push('/signup')}>회원가입하기</button>
+                <button type="button" className='text-gray-400 mt-8 font-medium text-sm' onClick={()=>router.push('/signup')}>회원가입하기</button>
             </form>
         </section>
       );
-}
+} 
 
 export default LoginForm

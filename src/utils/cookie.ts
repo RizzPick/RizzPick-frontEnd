@@ -29,6 +29,6 @@ export const setStatus = (name: string, value: boolean, days?: number): void => 
    * @param name - 삭제할 쿠키의 이름
    */
   export const eraseCookie = (name: string): void => {
-    cookies.remove(name); // 이름에 해당하는 쿠키를 제거하도록 수정
-  }
+    cookies.remove(name, { path: "/" });
+}
   

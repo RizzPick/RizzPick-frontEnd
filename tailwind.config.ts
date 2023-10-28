@@ -7,6 +7,11 @@ const config: Config = {
         './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     ],
     theme: {
+        screens: {
+            sm: { min: "390px", max: "819px" },
+            md: { min: "820px", max: "1023px" },
+            lg: { min: "1080px" },
+          },
         extend: {
             colors: {
                 'gradient-start': '#cb17f9',

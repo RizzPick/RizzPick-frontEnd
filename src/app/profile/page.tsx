@@ -1,4 +1,4 @@
-import Header from '@/components/header/Header';
+import Header from '@/components/common/Header';
 import UserProfile from '@/components/profile/UserProfile';
 import { MyProfileRes } from '@/types/profile';
 import axios from 'axios';
@@ -30,7 +30,8 @@ export default async function ProfilePage() {
     //     .catch((err) => {
     //         console.log(err.message);
     //   });
-    const profile : MyProfileRes = response.data;
+    const profile : MyProfileRes = response.data.data;
+    console.log(profile);
   return (
     <div>
       <Header />

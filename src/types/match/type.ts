@@ -18,6 +18,7 @@ export type UserProfile = {
     religion?: string;
     profileImages: ImageObject[];
     dating?: Dating[];
+    intro? :string;
 };
 
 export type ImageObject = {

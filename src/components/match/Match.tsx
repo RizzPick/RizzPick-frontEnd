@@ -1,24 +1,21 @@
 'use client';
 
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
+<<<<<<< HEAD
 import { sendLike, sendNope } from '@/features/thumbsUpDown/thumbsUpDown';
+=======
+import {GoDotFill } from "react-icons/go"
+>>>>>>> features/ResponsiveDesign
 
 // ICON
-import WhiteHeartIcon from '../../../public/matchIcon/whiteHeart.svg';
-import BadIcon from '../../../public/matchIcon/bad.svg';
-import ReadMore from '../../../public/matchIcon/readMore.svg';
-import Pin from '../../../public/matchIcon/pin.svg';
-import BlackHeartIcon from '../../../public/matchIcon/blackHeart.svg';
+import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
+import BadIcon from '../../../public/matchIcon/Nope.png';
+import ReadMore from '../../../public/matchIcon/Intro.png';
 import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
-import PageIcon from '../../../public/matchIcon/pageIcon.svg';
-import NowPageIcon from '../../../public/matchIcon/nowPage.svg';
-
-import { getCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
 
 function Match({ userId }: { userId: string }) {
@@ -182,23 +179,19 @@ function Match({ userId }: { userId: string }) {
 
     console.log(users);
     return (
-        <div className="flex h-[92.2vh]">
-            <div className="flex-1 flex justify-evenly items-start p-10">
+        <div className="flex h-[calc(100vh - 100px)]">
+            <div className="flex-1 flex justify-evenly items-start p-10 sm:p-2">
                 {/*! 유저 정보 */}
-                <div className="flex-1 max-w-md rounded-full h-[80vh]">
+                <div className="flex-1 max-w-md rounded-full h-[calc(100vh - 100px)]">
                     {/* 유저 이미지 */}
-
-                    <div className="relative h-[695px] w-[463px] overflow-hidden">
+                    <div className="relative sm:h-[590px] h-[695px] w-[463px] sm:w-full rounded-2xl overflow-hidden sm:mt-14">
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20"/>
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
                             {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
                                 ? currentUser.profileImages.map((_, index) => (
-                                      <div key={index} className="mx-1 z-50">
-                                          {index === slideIndex ? (
-                                              <NowPageIcon />
-                                          ) : (
-                                              <PageIcon />
-                                          )}
+                                      <div key={index} className={`mx-1 z-10 text-2xl ${index === slideIndex ? ('text-white'):('text-gray-500')}`}>
+                                        <GoDotFill />
                                       </div>
                                   ))
                                 : null}
@@ -212,7 +205,7 @@ function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 이미지 가져오기 */}
-                        {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
+                        {currentUser
                             ? currentUser.profileImages.map(
                                   (imageObj, index) => (
                                       <div
@@ -245,48 +238,56 @@ function Match({ userId }: { userId: string }) {
                         </button>
 
                         {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-full bottom-40 left-0 text-white font-bold mx-[10px] flex flex-col">
-                            <div className="flex flex-row items-center">
-                                <div className="text-2xl p-[10px] flex">
-                                    <div className="text-4xl">
-                                        {users[userIndex]?.nickname ??
-                                            'Unknown'}
+                        <div className="absolute w-full bottom-28 text-white flex flex-col p-6 z-30">
+                                <div className="text-2xl flex items-center justify-between">
+                                    <div className="flex items-center gap-4 ">
+                                        <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
+                                            'Unknown'}</p>
+                                        <p className='text-gray-400 text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
                                     </div>
-                                    &nbsp; &nbsp;
-                                    <span className="mt-2">
-                                        {users[userIndex]?.age ?? 'Unknown'}세
-                                    </span>
-                                    <button
-                                        className="absolute z-50 mr-4"
-                                        onClick={toggleDetailsVisibility}
-                                    >
-                                        <ReadMore />
+                                    <button onClick={toggleDetailsVisibility} className='z-30 transition-all hover:scale-110 ease-in-out'>
+                                        <Image src={ReadMore} width={32} height={32} alt='ReadMore' />
                                     </button>
                                 </div>
+<<<<<<< HEAD
                                 <div className="">
                                     {users[userIndex]?.intro ?? 'Unknown'}
                                 </div>
                             </div>
+=======
+                                <div className="text-white mt-2">{users[userIndex]?.intro}</div>
+>>>>>>> features/ResponsiveDesign
                         </div>
 
                         {/* 좋아요, 싫어요 버튼 */}
-                        <div className="absolute bottom-0 left-0 h-56 text-white bg-gradient-to-t from-black to-transparent w-full flex justify-between">
+                        <div className="absolute bottom-2 text-white w-full flex justify-between p-4">
                             <button
+<<<<<<< HEAD
                                 className="mt-[100px] mx-[20px] hover-shadow"
                                 onClick={handleNope}
+=======
+                                className="hover:scale-110 transition-all ease-in-out"
+                                onClick={handleButtonClick}
+>>>>>>> features/ResponsiveDesign
                             >
-                                <BadIcon />
+                                <Image src={BadIcon} width={66} height={66} alt='싫어요' />
                             </button>
                             <button
+<<<<<<< HEAD
                                 className="mt-[100px] mx-[20px] hover-shadow"
                                 onClick={handleLike}
+=======
+                                className="hover:scale-110 transition-all ease-in-out"
+                                onClick={handleButtonClick}
+>>>>>>> features/ResponsiveDesign
                             >
-                                <WhiteHeartIcon />
+                                <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
                             </button>
                         </div>
                     </div>
                 </div>
-
+                
+                
                 {/* 데이트 계획 및 상세 정보 */}
                 <div
                     className="flex-1 max-w-md p-6 bg-[#CACFFF] rounded-3xl shadow-lg h-[45vh] relative mr-[60px]"

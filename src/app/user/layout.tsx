@@ -1,4 +1,5 @@
-import Header from '@/components/header/Header';
+import Footer from '@/components/common/Footer';
+import Header from '@/components/common/Header';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
@@ -18,7 +19,10 @@ export default function UserLayout({
         <html lang="en">
             <body className={inter.className}>
                 <Header />
-                {children}
+                <main>
+                    {children}
+                </main>
+                <Footer />
             </body>
         </html>
     );
