@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { GoDotFill, GoDot } from "react-icons/go";
-import styles from './MultiCarousel.module.css';
 
 const responsive = {
   desktop: {
@@ -45,8 +44,11 @@ function MultiCarousel({ children }: Props) {
         arrows={isHovered}
         infinite
         customTransition="all .5"
-        ssr={true}
         responsive={responsive}
+        // 모바일 환경
+        removeArrowOnDeviceType={["tablet", "mobile"]}
+        draggable={true}
+        swipeable={true}
       >
         {children}
       </Carousel>

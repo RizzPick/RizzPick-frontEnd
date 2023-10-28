@@ -24,9 +24,9 @@ function ProfilEditPage() {
   },[initializeProfile])
   
   return (
-    <div>
-      <h2 className='text-center font-bold text-3xl p-4'>프로필 등록</h2>
-      <div className='grid grid-cols-2 bg-white'>
+    <div className='bg-gradient-to-br from-fuchsia-400 via-purple-400 to-indigo-400'>
+      <h2 className='text-center font-bold text-3xl pt-10'>프로필 등록</h2>
+      <div className='grid grid-cols-2'>
         <UserProfileEdit />
         <UserImageGrid />
       </div>

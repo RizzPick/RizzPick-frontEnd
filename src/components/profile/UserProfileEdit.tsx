@@ -63,7 +63,7 @@ function UserProfileEdit() {
   return (
     <section className='w-full p-8'>
       <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className='bg-white p-8 rounded-xl border border-black'>
         <div className="mb-4">
           <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2">닉네임</label>

@@ -45,47 +45,51 @@ function Match({ userId }: { userId: string }) {
             }
         };
 
-        const fetchLikedUsers = async () => {
-            const response = await axios.get(
-                'https://willyouback.shop/api/like/status',
-                {
-                    headers: {
-                        Authorization: getCookie('Authorization'),
-                        Authorization_Refresh: getCookie(
-                            'Authorization_Refresh'
-                        ),
-                    },
-                }
-            );
-            console.log('like user : ', response.data.data);
-            return response.data.data; // 좋아요 상태 데이터 반환
-        };
+        // const fetchLikedUsers = async () => {
+        //     const response = await axios.get(
+        //         'https://willyouback.shop/api/like/status',
+        //         {
+        //             headers: {
+        //                 Authorization: getCookie('Authorization'),
+        //                 Authorization_Refresh: getCookie(
+        //                     'Authorization_Refresh'
+        //                 ),
+        //             },
+        //         }
+        //     );
+        //     console.log('like user : ', response.data.data);
+        //     return response.data.data; // 좋아요 상태 데이터 반환
+        // };
 
-        const updateUsersArray = async () => {
-            try {
-                const likedUsers = await fetchLikedUsers(); // 좋아요 상태 가져오기
-
-                // 기존 사용자 배열에서 좋아요를 보낸 사용자 제외
-                setUsers((prevUsers) =>
-                    prevUsers.filter(
-                        (user) => !likedUsers.includes(user.userId)
-                    )
-                );
-            } catch (error) {
-                console.error('Error fetching liked users:', error);
-                // Optionally, inform the user that an error occurred
-            }
-        };
+        // const updateUsersArray = async () => {
+        //     try {
+        //         const likedUsers = await fetchLikedUsers(); // 좋아요 상태 가져오기
+                
+        //         // 기존 사용자 배열에서 좋아요를 보낸 사용자 제외
+        //         setUsers((prevUsers) =>
+        //             prevUsers.filter(
+        //                 (user) => !likedUsers.includes(user.userId)
+        //             )
+        //         );
+        //         console.log(users);
+        //     } catch (error) {
+        //         console.error('Error fetching liked users:', error);
+        //         // Optionally, inform the user that an error occurred
+        //     }
+        // };
 
         fetchData();
-        updateUsersArray(); // 배열 업데이트 함수 호출
+        // updateUsersArray(); // 배열 업데이트 함수 호출
     }, []);
 
     const handleButtonClick = () => {
+        // 처음에 몇명의 유저를 추천받는 지 확인하고, 마지막 유저의 index 가 넘어가게 되면 페이지네이션 로직과 동일하게 유저 추천 배열 늘리기 작업 필요
         if (userIndex === users.length - 1) {
-            setUserIndex(0);
+            alert("오늘의 추천이 끝났습니다")
+            // setUserIndex(0);
         } else {
             setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
+            setSlideIndex(0);
         }
     };
 
@@ -126,7 +130,7 @@ function Match({ userId }: { userId: string }) {
                     },
                 }
             );
-            handleButtonClick();
+            // handleButtonClick();
             return response;
         } catch (error) {
             console.error(error);
@@ -134,6 +138,7 @@ function Match({ userId }: { userId: string }) {
         }
     };
 
+    // 에러 처리 필요 : 좋아요가 실패해도 handleButtonClick() 함수가 동작할 것으로 보임
     const handleLike = async () => {
         try {
             const response = await sendLike(userId, users[userIndex].userId);
@@ -167,6 +172,7 @@ function Match({ userId }: { userId: string }) {
         }
     };
 
+    // 에러 처리 필요 : 싫어요가 실패해도 handleButtonClick() 함수가 동작할 것으로 보임
     const handleNope = async () => {
         try {
             const response = await sendNope(userId, users[userIndex].userId);
@@ -199,7 +205,7 @@ function Match({ userId }: { userId: string }) {
                         {/* 페이지 이동 버튼 */}
                         <button
                             onClick={prevSlide}
-                            className="absolute top-1/2 left-0 transform -translate-y-1/2 z-50 m-2"
+                            className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 m-2"
                         >
                             <LeftButton />
                         </button>
@@ -223,6 +229,7 @@ function Match({ userId }: { userId: string }) {
                                                   layout="fill"
                                                   objectFit="cover"
                                                   className="absolute"
+                                                  priority
                                               />
                                           )}
                                       </div>
@@ -232,7 +239,7 @@ function Match({ userId }: { userId: string }) {
 
                         <button
                             onClick={nextSlide}
-                            className="absolute top-1/2 right-0 transform -translate-y-1/2 z-50 m-2"
+                            className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 m-2"
                         >
                             <RightButton />
                         </button>
@@ -281,7 +288,7 @@ function Match({ userId }: { userId: string }) {
                         <h2 className="text-2xl font-bold mb-4 text-black text-center">
                             나랑 이런 데이트 어때요?
                         </h2>
-                        <div className="h-[312px] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center">
+                        <div className="h-[30vh] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center">
                             {currentUser &&
                             currentUser.dating &&
                             currentUser.dating.length > 1 ? (

@@ -61,7 +61,7 @@ const handleImageDelete = async (imageId : number) => {
   return (
     <>
     {image && 
-      <div className='relative w-60 shadow-md border-gray-500 rounded-lg h-72'>
+      <div className='relative w-30vw shadow-md border-gray-500 rounded-lg h-72'>
         <Image src={image.image} alt="Profile Image" fill style={{objectFit : 'cover'}} className='rounded-lg'/> 
         <button 
           className='absolute -bottom-2 text-3xl rounded-full bg-white border transform transition-transform duration-500 hover:rotate-90' 
@@ -72,7 +72,7 @@ const handleImageDelete = async (imageId : number) => {
       </div>  
     }
     {!image && 
-      <div className='relative w-60 shadow-md border-gray-500 rounded-lg h-72 cursor-pointer transition-all hover:scale-105' onClick={onImageClick}>
+      <div className='relative w-30vw shadow-md border-gray-500 rounded-lg h-72 cursor-pointer transition-all hover:scale-105' onClick={onImageClick}>
         <button 
           type="button" 
           className='absolute -bottom-2 -right-2 text-3xl bg-pink-300 rounded-full border transform transition-transform duration-500 hover:rotate-90'

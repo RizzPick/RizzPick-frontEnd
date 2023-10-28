@@ -48,8 +48,8 @@ function UserImageGrid() {
   };
 
   return (
-    <section className='w-full'>
-      <div className='border p-4'>
+    <section className='w-full p-8'>
+      <div className='border p-4 bg-white rounded-xl border-black'>
         <h2 className='mb-5 text-xl font-bold'>사진 등록하기</h2>
         <div className='grid grid-cols-3 gap-4 p-4'>
           {[...Array(6)].map((_, index) => (
