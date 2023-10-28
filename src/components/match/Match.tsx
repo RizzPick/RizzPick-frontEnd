@@ -4,11 +4,8 @@ import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
-<<<<<<< HEAD
 import { sendLike, sendNope } from '@/features/thumbsUpDown/thumbsUpDown';
-=======
 import {GoDotFill } from "react-icons/go"
->>>>>>> features/ResponsiveDesign
 
 // ICON
 import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
@@ -17,6 +14,8 @@ import ReadMore from '../../../public/matchIcon/Intro.png';
 import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { getCookie } from '@/utils/cookie';
 
 function Match({ userId }: { userId: string }) {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
@@ -139,6 +138,7 @@ function Match({ userId }: { userId: string }) {
         try {
             const response = await sendLike(userId, users[userIndex].userId);
             console.log(response);
+            alert(response.data.message);
             handleButtonClick(); // 좋아요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
         } catch (error) {
             console.error('좋아요 보내기 오류:', error);
@@ -249,37 +249,20 @@ function Match({ userId }: { userId: string }) {
                                         <Image src={ReadMore} width={32} height={32} alt='ReadMore' />
                                     </button>
                                 </div>
-<<<<<<< HEAD
-                                <div className="">
-                                    {users[userIndex]?.intro ?? 'Unknown'}
-                                </div>
-                            </div>
-=======
                                 <div className="text-white mt-2">{users[userIndex]?.intro}</div>
->>>>>>> features/ResponsiveDesign
                         </div>
 
                         {/* 좋아요, 싫어요 버튼 */}
                         <div className="absolute bottom-2 text-white w-full flex justify-between p-4">
                             <button
-<<<<<<< HEAD
-                                className="mt-[100px] mx-[20px] hover-shadow"
+                                className="hover:scale-110 transition-all ease-in-out z-20"
                                 onClick={handleNope}
-=======
-                                className="hover:scale-110 transition-all ease-in-out"
-                                onClick={handleButtonClick}
->>>>>>> features/ResponsiveDesign
                             >
                                 <Image src={BadIcon} width={66} height={66} alt='싫어요' />
                             </button>
                             <button
-<<<<<<< HEAD
-                                className="mt-[100px] mx-[20px] hover-shadow"
+                                className="hover:scale-110 transition-all ease-in-out z-20"
                                 onClick={handleLike}
-=======
-                                className="hover:scale-110 transition-all ease-in-out"
-                                onClick={handleButtonClick}
->>>>>>> features/ResponsiveDesign
                             >
                                 <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
                             </button>
@@ -312,14 +295,11 @@ function Match({ userId }: { userId: string }) {
                                     })}
                                 </ul>
                             ) : (
-                                <button
-                                    onClick={() =>
-                                        router.push('/user/plan/board')
-                                    }
-                                    className="mx-auto px-4 py-2 bg-gradient-end mt-4 rounded-3xl text-white font-bold hover:bg-pink-300"
+                                <div
+                                    className="mx-auto px-4 py-2 mt-4 rounded-3xl font-bold"
                                 >
-                                    데이트 계획 추가하기
-                                </button>
+                                    작성한 계획이 없습니다
+                                </div>
                             )}
                         </div>
                     </div>
