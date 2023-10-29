@@ -1,4 +1,3 @@
-import Footer from '@/components/common/Footer';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
@@ -20,7 +19,6 @@ export default function UserLayout({
                 <main>
                     {children}
                 </main>
-                {/* <Footer /> */}
             </body>
         </html>
     );

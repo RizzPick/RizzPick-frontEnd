@@ -38,7 +38,7 @@ function Footer() {
         router.push('/user/chat');
         break;
       case 'bell':
-        router.push('/');
+        router.push('/user/notifications');
         break;
       case 'board':
         router.push('/user/plan/board');
