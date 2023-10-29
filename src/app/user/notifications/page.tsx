@@ -1,3 +1,4 @@
+import Footer from '@/components/common/Footer'
 import LikeList from '@/components/notifications/LikeList'
 import React from 'react'
 
@@ -8,6 +9,7 @@ function notificationsPage() {
             <h1>알림</h1>
         </header>
         <LikeList />
+        <Footer />
     </div>
   )
 }

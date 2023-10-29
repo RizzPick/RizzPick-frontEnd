@@ -3,6 +3,7 @@ import { getCookie } from '@/utils/cookie';
 import axios from 'axios';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
+import Like from "../../../public/notificationsIcon/Like.svg"
 
 interface LikeData {
     nickname: string;
@@ -39,9 +40,9 @@ function LikeList() {
     },[])
   return (
     <div>
-        <h2 className='text-zinc-800 text-xl font-semibold leading-tight tracking-wide'>좋아요({likesData.length})</h2>
+        <h2 className='text-zinc-800 text-xl font-semibold leading-tight tracking-wide px-5 py-2.5'>좋아요({likesData.length})</h2>
         <div
-            className="flex flex-row border-t-[1px]"
+            className="flex flex-row border-t-[1px] py-5 px-3 gap-5"
             style={{
                 borderColor: 'black',
                 overflowX: 'auto', // 가로 스크롤을 활성화합니다.
@@ -50,32 +51,21 @@ function LikeList() {
         >
             {likesData.map((like, index) => (
                 <div
-                    className="flex-col my-4"
+                    className="rounded-full bg-gradient-to-br from-fuchsia-600 via-purple-700 to-indigo-700 w-[95px] h-[95px] flex"
                     key={like.userId}
-                    style={{ minWidth: '100px' }} // 예시로 100px의 최소 너비를 설정합니다. 필요에 따라 조정하세요.
                 >
-                    <div className="rounded-full bg-[#A627A9] overflow-hidden w-[70px] h-[70px]">
-                        <div className="rounded-full overflow-hidden w-[60px] h-[60px] ml-[5px] mt-[5px]">
+                        <div className="rounded-full w-[85px] h-[85px] relative mx-auto my-auto">
                             <Image
                                 src={like.profilePic.image}
                                 alt={like.nickname}
-                                width={60}
-                                height={60}
-                                objectFit="cover"
+                                fill
+                                style={{objectFit:'cover'}}
+                                className='rounded-full'
                             />
+                            <div className='absolute -bottom-2 right-0 -mr-3'>
+                                <Like />
+                            </div>
                         </div>
-                    </div>
-                    <h3
-                        className="mx-[10px]"
-                        style={{
-                            maxWidth: '3ch',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                        }}
-                    >
-                        {like.nickname}
-                    </h3>
                 </div>
             ))}
         </div>
