@@ -9,6 +9,8 @@ import { eraseCookie, getCookie } from '@/utils/cookie';
 import profiledog from '../../../public/images/profiledog.jpeg';
 import Alarm from '@/components/alarm/Alarm';
 import { useRouter } from 'next/navigation';
+import Logo from "../../../public/Logo_color.png"
+
 
 export default function Header() {
     const [showOverlay, setShowOverlay] = useState(false);
@@ -51,9 +53,9 @@ export default function Header() {
 
     // 로딩 과정 중 보여질 이미지 처리
     return (
-        <header className="flex justify-between item-center p-4">
+        <header className="flex justify-between item-center p-5">
             <Link href="/user/match">
-                <h2 className="text-3xl font-bold">Will you</h2>
+                <Image src={Logo} priority alt='로고' width={95} height={40} style={{objectFit:"cover"}} />
             </Link>
             <nav className="flex gap-4 items-center sm:hidden">
                 <Link href="/user/plan/board">게시판</Link>

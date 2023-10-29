@@ -11,12 +11,12 @@ interface Props {
     isModalVisible: boolean;
     setModalVisible: (visible: boolean) => void;
     image : ProfileImages | null;
-    isLoading : boolean;
     onAddImage: any;
     onDeleteImage : any;
+    isLoading : boolean;
   }
 
-function UserImageCard({ onAddImage, onDeleteImage,onImageClick, isModalVisible, setModalVisible, image,isLoading }: Props) {
+function UserImageCard({ onAddImage, onDeleteImage,onImageClick, isModalVisible, setModalVisible, image, isLoading }: Props) {
   const [isCameraVisible, setCameraVisible] = useState<boolean>(false);
   const imageInput = useRef<HTMLInputElement | null>(null);
   const FILE_SIZE_MAX_LIMIT = 20 * 1024 * 1024;
@@ -61,23 +61,23 @@ const handleImageDelete = async (imageId : number) => {
   return (
     <>
     {image && 
-      <div className='relative w-30vw shadow-md border-gray-500 rounded-lg h-72'>
+      <div className='relative border-gray-500 rounded sm:w-24 sm:h-36 w-[142px] h-[172px]'>
         <Image src={image.image} alt="Profile Image" fill style={{objectFit : 'cover'}} className='rounded-lg'/> 
         <button 
-          className='absolute -bottom-2 text-3xl rounded-full bg-white border transform transition-transform duration-500 hover:rotate-90' 
+          className='absolute -bottom-2 text-3xl rounded-full bg-[#D57DFF] transform transition-transform duration-500 hover:rotate-90' 
           onClick={()=>handleImageDelete(image.id)}
         >
-          <AiOutlineClose/>
+          <AiOutlineClose color="#FFFFFF"/>
         </button>
       </div>  
     }
     {!image && 
-      <div className='relative w-30vw shadow-md border-gray-500 rounded-lg h-72 cursor-pointer transition-all hover:scale-105' onClick={onImageClick}>
+      <div className='relative border border-gray-500 sm:w-24 sm:h-36 w-[142px] h-[172px] cursor-pointer transition-all hover:scale-105' onClick={onImageClick}>
         <button 
           type="button" 
-          className='absolute -bottom-2 -right-2 text-3xl bg-pink-300 rounded-full border transform transition-transform duration-500 hover:rotate-90'
+          className='absolute bottom-0 right-0 -mr-2 -mb-2 text-3xl bg-[#D57DFF] rounded-full transform transition-transform duration-500 hover:rotate-90'
         >
-          <AiOutlinePlus/>
+          <AiOutlinePlus color="#FFFFFF"/>
         </button>
       </div>
     }

@@ -11,16 +11,15 @@ import moment from 'moment';
 import ChatSkeleton from './ChatSkeleton';
 import {FiArrowUp} from "react-icons/fi"
 
-const Chat = () => {
-
+const ChatRoom = ({chat,chatRoomId} : any) => {
+    console.log(chat);
+    console.log(chatRoomId);
     const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
     const [messages, setMessages] = useState<MessagesRes[]>();
-    const [isLoading, setIsLoading] = useState(true);
-    const { data:chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
+    const [isLoading, setIsLoading] = useState(false);
     const fullToken = getCookie('Authorization');
     const MY_TOKEN = fullToken?.split(' ')[1];
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    console.log(chat);
 
     const client = useRef(
       new Client({
@@ -49,24 +48,10 @@ const Chat = () => {
   }, [messages]);
 
   useEffect(() => {
-    if(!chat?.chatRoomId) {
+    if(!chatRoomId) {
       return;
     }
-    const getMessages = async() => {
-        if(!chat?.chatRoomId) {
-            return;
-        }
-        try {
-            const response = await ChatAPI.getChatMessages(chat.chatRoomId);
-            if(response.status === 200) {
-                setMessages(response.data.data);
-                setIsLoading(false);
-            }
-        } catch(error) {
-          setIsLoading(false);
-            console.log(error);
-        }
-    }
+    setMessages(chat);
     const messageCallbackHandler = (message: any) => {
       const msgData = JSON.parse(message.body);
       const newData = {
@@ -82,32 +67,31 @@ const Chat = () => {
     const currentClient = client.current;
     currentClient.onConnect = () => {
       console.log("소켓 연결완료✅");
-      currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
-      currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
-      currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);
-      stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId:chat?.chatRoomId, message: "채팅방에 입장하셨습니다" });
+      currentClient.subscribe(`/topic/${chatRoomId}/message`, messageCallbackHandler);
+      currentClient.subscribe(`/topic/${chatRoomId}/user`, userCallbackHandler);
+      currentClient.subscribe(`/topic/${chatRoomId}/readMessage`, readMessageCallbackHandler);
+      stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId, message: "채팅방에 입장하셨습니다" });
     };
-    currentClient.activate();
-    getMessages();
+    currentClient.activate();;
     return () => {
       if (currentClient.connected) {
         stompSendFn("/app/user", {
           status: "LEAVE",
           token: MY_TOKEN,
-          chatRoomId : chat?.chatRoomId,
+          chatRoomId,
           message: "채팅방을 나가셨습니다",
         });
         currentClient.deactivate();
       }
     };
-  }, [MY_TOKEN, chat?.chatRoomId]);  
+  }, [MY_TOKEN, chat, chatRoomId]);  
 
   const onClick = () => {
     console.log("메시지 전송!");
     if (message.trim()) { // 메시지가 비어있지 않을 때만 전송
       stompSendFn("/app/message", {
         token : MY_TOKEN,
-        chatRoomId: chat?.chatRoomId,
+        chatRoomId,
         status: "MESSAGE",
         message: message,
       });
@@ -201,4 +185,4 @@ const Chat = () => {
     );
 }
 
-export default Chat;
+export default ChatRoom;

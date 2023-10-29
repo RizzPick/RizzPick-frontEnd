@@ -13,7 +13,7 @@ type Props = {
 }
 function UserProfile({profile} : Props) {
   const router = useRouter();
-  const [showSecondSection, setShowSecondSection] = useState(true); // 두 번째 section을 보여줄지 결정하는 상태
+  const [showSecondSection, setShowSecondSection] = useState(false); // 두 번째 section을 보여줄지 결정하는 상태
 
   const onClick = (event : any) => {
     event.stopPropagation();
@@ -25,12 +25,12 @@ function UserProfile({profile} : Props) {
 
   return (
     <div className='flex items-center justify-center'>
-      <section className="my-5 w-[487px]">
+      <section className="my-5 w-[487px] sm:w-[90vw]">
       <MultiCarousel>
         {profile.profileImages.map((image) => 
-        <article key={image.id} className='rounded-3xl overflow-hidden w-[487px] h-[731px] relative'>
+        <article key={image.id} className='rounded-3xl overflow-hidden w-[487px] h-[731px] relative sm:w-full'>
           <Image src={image.image} alt='프로필 이미지' fill style={{objectFit : 'cover'}} priority className='rounded-md'/>
-          <div onClick={handleIntroClick} className='cursor-pointer flex flex-col p-4 border w-[487px] mx-auto rounded-3xl absolute -bottom-0 bg-white' id='intro'>
+          <div onClick={handleIntroClick} className='cursor-pointer flex flex-col p-4 border w-[487px] mx-auto rounded-3xl absolute -bottom-0 bg-white sm:w-full' id='intro'>
             <div className='flex justify-between w-full'>
               <h3 className='font-bold text-2xl'>{profile.nickname}</h3>
               <p className='text-gray-400 text-lg'>{profile.age}</p>

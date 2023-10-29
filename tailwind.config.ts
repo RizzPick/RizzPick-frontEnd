@@ -9,7 +9,7 @@ const config: Config = {
     theme: {
         screens: {
             sm: { min: "0px", max: "392px" },
-            md: { min: "820px", max: "1023px" },
+            md: { min: "392px", max: "1023px" },
             lg: { min: "1080px" },
           },
         extend: {

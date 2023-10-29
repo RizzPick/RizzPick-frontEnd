@@ -190,7 +190,7 @@ function Match({ userId }: { userId: string }) {
                 {/*! 유저 정보 */}
                 <div className="flex-1 max-w-md rounded-full h-[calc(100vh - 100px)]">
                     {/* 유저 이미지 */}
-                    <div className="relative sm:h-[590px] h-[695px] w-[463px] sm:w-full rounded-2xl overflow-hidden sm:mt-14">
+                    <div className="relative sm:h-[75vh] h-[695px] w-[463px] sm:w-full rounded-2xl overflow-hidden sm:mt-4">
                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20"/>
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">

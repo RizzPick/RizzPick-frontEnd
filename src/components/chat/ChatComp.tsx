@@ -1,27 +1,47 @@
 'use client'
 import { ChatData } from '@/types/chat'
 import Image from 'next/image';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import UseChat, { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import useSWR from 'swr';
+import { useMediaQuery } from 'react-responsive';
+import { useRouter } from 'next/navigation';
 
 type Props = {
     data : ChatData;
 }
 
 function ChatComp({data}:Props) {
+
+    const [mobile, setMobile] = useState(false);
+    const router = useRouter();
+    const isMobile = useMediaQuery({
+        query : "(max-width:767px)"
+    });
+
+    useEffect(() => {
+        setMobile(isMobile)
+    }, [isMobile])
     const { setCurrentChat } = UseChat();
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
-    console.log(chat);
+
+    const handleClick = () => {
+        if (mobile) {
+            router.push(`/user/chat/${data.chatRoomId}`);
+        } else {
+            setCurrentChat(data);
+        }
+    }
 
   return (
-    <div className="flex flex-row items-center border-b-[1px] border-s-1-gray-400 h-[122px] mx-2 cursor-pointer my-2 relative" onClick={()=>setCurrentChat(data)}>
-            <div className="rounded-full overflow-hidden h-[95px] mr-4">
+    <div className="flex flex-row items-center border-b-[1px] border-s-1-gray-400 h-[122px] mx-2 cursor-pointer my-2 relative" onClick={handleClick}>
+            <div className="rounded-full overflow-hidden h-[91px] w-[91px] mr-4 relative">
                 <Image
                     src={data.image}
                     alt="Picture of the author"
-                    width={100}
-                    height={100}
+                    fill
+                    style={{objectFit:'cover'}}
+                    priority
                 />
             </div>
             <div className='h-full mt-8'>

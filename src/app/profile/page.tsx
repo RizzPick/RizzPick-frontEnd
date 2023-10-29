@@ -16,20 +16,6 @@ export default async function ProfilePage() {
             "Authorization" : token
         }
     })
-    // const response = await fetch(`${process.env.SERVER_URL}/api/myProfile`,{ cache: 'no-cache', headers : {
-    //   "Authorization" : token
-    // } })
-    //     .then((response) => {
-    //     if (!response.ok) {
-    //         throw new Error(
-    //             `This is an HTTP error: The status is ${response.status}`
-    //         );
-    //     }
-    //         return response.json();
-    //     })
-    //     .catch((err) => {
-    //         console.log(err.message);
-    //   });
     const profile : MyProfileRes = response.data.data;
     console.log(profile);
   return (
