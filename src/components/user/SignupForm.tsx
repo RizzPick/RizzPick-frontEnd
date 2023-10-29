@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { SyncLoader } from 'react-spinners';
+import Logo from "../../../public/Logo.png"
+import Image from 'next/image';
 
 function SignupComponent() {
     const {
@@ -128,7 +130,10 @@ function SignupComponent() {
 
   return (
     <section className='min-h-[100vh] flex justify-center items-center'>
-    <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[500px] sm:w-full sm:h-[75vh] h-[100vh-200px] sm:rounded-none sm:rounded-tl-[56px] sm:justify-center">
+      <div className='w-[141px] h-[60px] absolute top-[94px] sm:block hidden'>
+            <Image src={Logo} alt='로고' fill style={{objectFit:"cover"}} priority/>
+      </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[500px] sm:w-full sm:h-[75vh] h-[100vh-200px] sm:rounded-none sm:rounded-tl-[56px] sm:pt-[51px]">
       {/* 로딩 바 */}
       {isLoading && 
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
@@ -159,7 +164,7 @@ function SignupComponent() {
         <input
             id="password"
             type="password"
-            className="border rounded-3xl py-2 px-3 w-full text-sm"
+            className="border rounded-3xl py-2 px-3 w-full text-sm mb-2"
             placeholder='비밀번호를 입력하세요'
             required
             {...register("password", {
@@ -173,7 +178,7 @@ function SignupComponent() {
             type="password"
             id="password_confirm"
             className="border rounded-3xl py-2 px-3 w-full text-sm"
-            placeholder='비밀번호를 재입력하세요'
+            placeholder='비밀번호를 한번 더 입력하세요'
             required
             {...register("password_confirm", {
                 required: true,

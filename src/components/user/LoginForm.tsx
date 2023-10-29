@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from "../../../public/images/kakaoLogo.png";
 import UseProfile from '@/hooks/useProfile';
+import Logo from "../../../public/Logo.png"
 
 function LoginForm() {
     const {
@@ -65,9 +66,10 @@ function LoginForm() {
 
       return (
         <section className='min-h-screen flex justify-center items-center'>
-          <div className='bg-gray-400 w-[157px] h-[89px] absolute top-[119px] sm:block hidden'/>
+          <div className='w-[141px] h-[60px] absolute top-[119px] sm:block hidden'>
+            <Image src={Logo} alt='로고' fill style={{objectFit:"cover"}} priority/>
+          </div>
             <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[600px] sm:w-full sm:h-[65vh] h-[100vh-200px] sm:py-[57px]">
-              {/* <Image src={kakaoLoginLogo} alt='로고' width={100} height={50} priority className='mx-auto' /> */}
                 <label className="font-bold text-xl">아이디</label>
                 <input
                     id="username"
