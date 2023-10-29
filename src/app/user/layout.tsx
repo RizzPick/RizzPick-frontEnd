@@ -20,7 +20,7 @@ export default function UserLayout({
                 <main>
                     {children}
                 </main>
-                <Footer />
+                {/* <Footer /> */}
             </body>
         </html>
     );

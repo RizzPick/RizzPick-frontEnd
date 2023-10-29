@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import Back from "../../../../public/chatIcon/Button.svg"
 import { useRouter } from 'next/navigation';
+import Footer from '@/components/common/Footer';
 
 export default function ChatPage() {
     const router = useRouter();
@@ -28,6 +29,7 @@ export default function ChatPage() {
                         <h1>메시지</h1>
                     </header>
                 <ChatList />
+                <Footer />
             </div>
         ):(
             <div className="grid grid-cols-4 w-[100vw]">

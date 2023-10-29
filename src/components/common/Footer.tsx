@@ -28,6 +28,7 @@ function Footer() {
 
   const [selectedIcon, setSelectedIcon] = useState<string>('home');
   const handleIconClick = (iconName:string) => {
+    sessionStorage.setItem('selectedIcon', iconName);
     setSelectedIcon(iconName);
     switch(iconName) {
       case 'home':
@@ -60,6 +61,13 @@ function Footer() {
         fetchData();
     }
 },[initializeUserInfo, token])
+
+  useEffect(() => {
+    const storedIcon = sessionStorage.getItem('selectedIcon');
+    if (storedIcon) {
+      setSelectedIcon(storedIcon);
+    }
+  }, []);
 
 
   return (

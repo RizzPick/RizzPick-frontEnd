@@ -10,17 +10,20 @@ import Image from 'next/image';
 import moment from 'moment';
 import ChatSkeleton from './ChatSkeleton';
 import {FiArrowUp} from "react-icons/fi"
+import Back from "../../../public/chatIcon/Button.svg"
+import { useRouter } from 'next/navigation';
 
-const ChatRoom = ({chat,chatRoomId} : any) => {
-    console.log(chat);
-    console.log(chatRoomId);
+const ChatRoom = () => {
+    
     const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
     const [messages, setMessages] = useState<MessagesRes[]>();
     const [isLoading, setIsLoading] = useState(false);
+    const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
     const fullToken = getCookie('Authorization');
     const MY_TOKEN = fullToken?.split(' ')[1];
     const messagesEndRef = useRef<HTMLDivElement>(null);
-
+    const router = useRouter();
+    
     const client = useRef(
       new Client({
         brokerURL: "wss://willyouback.shop/chatroom",
@@ -48,10 +51,26 @@ const ChatRoom = ({chat,chatRoomId} : any) => {
   }, [messages]);
 
   useEffect(() => {
-    if(!chatRoomId) {
+    if(!chat?.chatRoomId) {
       return;
     }
-    setMessages(chat);
+
+    const getMessages = async() => {
+        if(!chat?.chatRoomId) {
+            return;
+        }
+        try {
+            const response = await ChatAPI.getChatMessages(chat.chatRoomId);
+            if(response.status === 200) {
+                setMessages(response.data.data);
+                setIsLoading(false);
+            }
+        } catch(error) {
+          setIsLoading(false);
+            console.log(error);
+        }
+    }
+
     const messageCallbackHandler = (message: any) => {
       const msgData = JSON.parse(message.body);
       const newData = {
@@ -67,31 +86,32 @@ const ChatRoom = ({chat,chatRoomId} : any) => {
     const currentClient = client.current;
     currentClient.onConnect = () => {
       console.log("소켓 연결완료✅");
-      currentClient.subscribe(`/topic/${chatRoomId}/message`, messageCallbackHandler);
-      currentClient.subscribe(`/topic/${chatRoomId}/user`, userCallbackHandler);
-      currentClient.subscribe(`/topic/${chatRoomId}/readMessage`, readMessageCallbackHandler);
-      stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId, message: "채팅방에 입장하셨습니다" });
+      currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
+      currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
+      currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);
+      stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId:chat?.chatRoomId, message: "채팅방에 입장하셨습니다" });
     };
     currentClient.activate();;
+    getMessages();
     return () => {
       if (currentClient.connected) {
         stompSendFn("/app/user", {
           status: "LEAVE",
           token: MY_TOKEN,
-          chatRoomId,
+          chatRoomId : chat?.chatRoomId,
           message: "채팅방을 나가셨습니다",
         });
         currentClient.deactivate();
       }
     };
-  }, [MY_TOKEN, chat, chatRoomId]);  
+  }, [MY_TOKEN, chat]);  
 
   const onClick = () => {
     console.log("메시지 전송!");
     if (message.trim()) { // 메시지가 비어있지 않을 때만 전송
       stompSendFn("/app/message", {
         token : MY_TOKEN,
-        chatRoomId,
+        chatRoomId: chat?.chatRoomId,
         status: "MESSAGE",
         message: message,
       });
@@ -119,16 +139,20 @@ const ChatRoom = ({chat,chatRoomId} : any) => {
   };
   
     return (
-      <div className='col-span-2 p-4'>
+      <div>
+        <header className='text-center text-neutral-700 text-xl font-medium leading-tight tracking-wide flex justify-center p-4 border-b-1'>
+                <button className='absolute left-[15px]' onClick={()=>router.back()}><Back/></button>
+                <h1>{chat?.nickname}</h1>
+        </header>
         {/* 채팅창 */}
-        <div className='w-full relative h-[800px] border-4 border-[#cb88ea] rounded-3xl p-4'>
+        <div className='w-full relative h-[90vh] rounded-3xl px-4'>
           {/* 메시지 출력 부분 */}
           {isLoading ? (
             <ChatSkeleton />
           ):
           (
             <>
-            <div className="h-[calc(800px-120px)] overflow-y-auto pb-4 scrollbar-hide">
+            <div className="h-[calc(800px-100px)] overflow-y-auto pb-4 scrollbar-hide">
             {messages && (() => {
               const groupedByDate: Record<string, MessagesRes[]> = {};
               messages.forEach(mes => {
@@ -141,10 +165,8 @@ const ChatRoom = ({chat,chatRoomId} : any) => {
 
               return Object.entries(groupedByDate).map(([date, messagesForDate]) => (
                 <div key={date}>
-                  <div className="relative flex py-5 items-center">
-                    <div className="flex-grow border-t border-gray-400"></div>
-                    <span className="flex-shrink mx-4">{date}</span>
-                    <div className="flex-grow border-t border-gray-400"></div>
+                  <div className="w-40 h-8 p-2.5 flex items-center justify-center bg-neutral-200 mx-auto rounded-2xl my-4">
+                    <span className="mx-4 text-white">{date}</span>
                   </div>
                   {messagesForDate.map(mes => (
                       <div key={mes.time} className={`flex ${mes.sender === chat?.users[0] ? 'justify-start' : 'justify-end'}`}>
@@ -157,7 +179,7 @@ const ChatRoom = ({chat,chatRoomId} : any) => {
                                   <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
                               </div>) :
                               (<div className='flex items-center mb-2 relative' ref={messagesEndRef}>
-                                  <p className='bg-[#ab62e5] rounded-2xl px-4 py-2 whitespace-pre-line'>
+                                  <p className='bg-[#ab62e5] rounded-2xl px-4 py-2 whitespace-pre-line text-white'>
                                       {mes.message}
                                   </p>
                                   <span className="text-gray-500 absolute -bottom-0 -left-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
@@ -168,15 +190,16 @@ const ChatRoom = ({chat,chatRoomId} : any) => {
               ));
             })()}
           </div>
-          <div className="flex justify-between items-center rounded-2xl bg-gray-100 px-2 py-1 mx-4 absolute inset-x-0 bottom-0 mb-4">
-          <textarea
-              className="bg-gray-100 w-full resize-none"
-              rows={2}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={handleKeyPress}
-            />
-            <button onClick={onClick} className='bg-sendbtn-gradient text-white rounded-full text-2xl'><FiArrowUp/></button>
+          <div className="flex justify-between items-center rounded-2xl bg-gray-100 px-4 py-1 mx-4 absolute inset-x-0 bottom-0 h-[44px]">
+            <textarea
+                className="bg-gray-100 w-full resize-none"
+                rows={1}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={handleKeyPress}
+                placeholder='내용을 입력하세요'
+                />
+                <button onClick={onClick} className='bg-sendbtn-gradient text-white rounded-full text-2xl'><FiArrowUp/></button>
           </div>
           </>
           )}
