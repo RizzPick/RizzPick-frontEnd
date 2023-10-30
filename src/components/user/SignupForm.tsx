@@ -129,11 +129,11 @@ function SignupComponent() {
   }
 
   return (
-    <section className='min-h-[100vh] flex justify-center items-center'>
-      <div className='w-[141px] h-[60px] absolute top-[94px] sm:block hidden'>
+    <section className='min-h-screen flex justify-center items-center'>
+      <div className='w-[141px] h-[60px] absolute top-[60px] sm:block hidden'>
             <Image src={Logo} alt='로고' fill style={{objectFit:"cover"}} priority/>
       </div>
-    <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[500px] sm:w-full sm:h-[75vh] h-[100vh-200px] sm:rounded-none sm:rounded-tl-[56px] sm:pt-[51px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[500px] sm:w-full sm:h-[80vh] h-[100vh-200px] sm:rounded-none sm:rounded-tl-[56px]">
       {/* 로딩 바 */}
       {isLoading && 
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
