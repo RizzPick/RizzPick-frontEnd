@@ -17,7 +17,6 @@ export default async function ProfilePage() {
         }
     })
     const profile : MyProfileRes = response.data.data;
-    console.log(profile);
   return (
     <div>
       <Header />
