@@ -1,5 +1,7 @@
+import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import UserProfile from '@/components/profile/UserProfile';
+import UserProfileMobile from '@/components/profile/UserProfileMobile';
 import { MyProfileRes } from '@/types/profile';
 import axios from 'axios';
 import { cookies } from 'next/headers';
@@ -20,7 +22,14 @@ export default async function ProfilePage() {
   return (
     <div>
       <Header />
+      <div className='sm:hidden'>
       <UserProfile profile={profile}/>
       </div>
+
+      <div className='sm:block hidden'>
+        <UserProfileMobile profile={profile}/>
+        <Footer />
+      </div>
+    </div>
   )
 }
