@@ -40,13 +40,13 @@ function LikeList() {
     },[])
   return (
     <div>
-        <h2 className='text-zinc-800 text-xl font-semibold leading-tight tracking-wide px-5 py-2.5'>좋아요({likesData.length})</h2>
+        <h2 className='text-zinc-800 text-xl font-semibold leading-tight tracking-wide px-5 pb-2.5'>좋아요({likesData.length})</h2>
         <div
             className="flex flex-row border-t-[1px] py-5 px-3 gap-5"
             style={{
                 borderColor: 'black',
-                overflowX: 'auto', // 가로 스크롤을 활성화합니다.
-                whiteSpace: 'nowrap', // 내용을 한 줄에 유지합니다.
+                overflowX: 'auto',
+                whiteSpace: 'nowrap',
             }}
         >
             {likesData.map((like, index) => (
