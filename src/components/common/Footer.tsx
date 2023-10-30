@@ -87,7 +87,7 @@ function Footer() {
           {selectedIcon === 'chat' ? <ChatSel /> : <Chat />}
         </button>
         {profile ? (
-          <Link href="/profile">
+          <Link href="/profile" onClick={() => handleIconClick('profile')}>
             <div className='w-[50px] h-[50px] rounded-full relative'>
             <Image
                 className="rounded-full"

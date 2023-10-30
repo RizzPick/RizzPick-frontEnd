@@ -18,6 +18,7 @@ function UserProfileMobile({profile}:Props) {
         eraseCookie('Authorization');
         eraseCookie('Authorization_Refresh');
         eraseCookie('status');
+        sessionStorage.clear();
         alert('로그아웃 처리되었습니다.');
         router.push('/');
     };

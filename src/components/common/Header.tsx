@@ -33,6 +33,7 @@ export default function Header() {
         eraseCookie('Authorization_Refresh');
         eraseCookie('status');
         alert('로그아웃 처리되었습니다.');
+        sessionStorage.clear();
         router.push('/');
     };
 
