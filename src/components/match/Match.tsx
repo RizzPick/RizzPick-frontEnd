@@ -4,22 +4,20 @@ import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
-import { sendLike, sendNope } from '@/features/thumbsUpDown/thumbsUpDown';
 import {GoDotFill } from "react-icons/go"
 
 // ICON
 import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
 import BadIcon from '../../../public/matchIcon/Nope.png';
-import ReadMore from '../../../public/matchIcon/Intro.png';
 import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
+import Home from "../../../public/profileIcon/Home.svg"
 import { getCookie } from '@/utils/cookie';
 
 function Match() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
-    const router = useRouter();
 
     //! 상세 정보 보이기/숨기기 토글 함수
     const toggleDetailsVisibility = () => {
@@ -149,15 +147,15 @@ function Match() {
     };
 
     return (
-        <div className="relative flex">
+        <div className="relative flex bg-matchpage-gradient h-[100vh]">
             <div className="flex items-start p-10 mx-auto">
                 {/*! 유저 정보 */}
                 <div>
                     {/* 유저 이미지 */}
-                    <div className="relative h-[60vh] w-[20vw] rounded-2xl overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20"/>
+                    <div className="relative h-[60vh] w-full">
+                    {/* <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black z-10 opacity-20"/> */}
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
-                        <div className="flex justify-center mt-4">
+                        {/* <div className="flex justify-center mt-4">
                             {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
                                 ? currentUser.profileImages.map((_, index) => (
                                       <div key={index} className={`mx-1 z-10 text-2xl ${index === slideIndex ? ('text-white'):('text-gray-500')}`}>
@@ -165,7 +163,7 @@ function Match() {
                                       </div>
                                   ))
                                 : null}
-                        </div>
+                        </div> */}
                         {/* 페이지 이동 버튼 */}
                         <button
                             onClick={prevSlide}
@@ -174,33 +172,78 @@ function Match() {
                             <LeftButton />
                         </button>
 
-                        {/* 이미지 가져오기 */}
-                        {currentUser
-                            ? currentUser.profileImages.map(
-                                  (imageObj, index) => (
-                                      <div
-                                          className={
-                                              index === slideIndex
-                                                  ? 'slide active'
-                                                  : 'slide'
-                                          }
-                                          key={index}
-                                      >
-                                          {index === slideIndex && (
-                                              <Image
-                                                  src={imageObj.image}
-                                                  alt="User"
-                                                  layout="fill"
-                                                  objectFit="cover"
-                                                  className="absolute"
-                                                  priority
-                                              />
-                                          )}
-                                      </div>
-                                  )
-                              )
-                            : null}
+                        <div className='flex'>
+                    {/* 무한 루프의 환상을 위한 이전 이미지 */}
+                    {!isDetailsVisible && currentUser && (
+                        <div className='relative w-[20vw] h-[60vh] -right-[5%]' onClick={prevSlide}>
+                            <Image
+                                src={currentUser.profileImages[(slideIndex - 1 + currentUser.profileImages.length) % currentUser.profileImages.length].image}
+                                alt="Previous User"
+                                fill
+                                style={{objectFit:'cover'}}
+                                className="rounded-2xl scale-90 z-30"
+                                priority
+                            />
+                        </div>
+                    )}
 
+                    {/* 현재 이미지 */}
+                    {currentUser && (
+                        <div>
+                            <div className='relative w-[20vw] h-[60vh]'>
+                                <Image
+                                    src={currentUser.profileImages[slideIndex].image}
+                                    alt="Current User"
+                                    fill
+                                    style={{objectFit:'cover'}}
+                                    className="rounded-2xl z-40"
+                                    priority
+                                />
+                            </div>
+                        {/* 간단한 정보, 설명란 */}
+                        <div className="absolute w-[20vw] -bottom-5 flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer" onClick={toggleDetailsVisibility}>
+                        <div className="text-2xl flex items-center justify-between">
+                            <div className="flex items-center gap-4 ">
+                                <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
+                                    'Unknown'}</p>
+                                <p className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
+                            </div>
+                        </div>
+                        <div className="mt-2">{users[userIndex]?.intro}</div>
+                        </div>
+
+                        {/* 좋아요, 싫어요 버튼 */}
+                        <div className="absolute text-white w-[20vw] flex justify-center -bottom-28 gap-48">
+                            <button
+                                className="hover:scale-110 transition-all ease-in-out z-20"
+                                onClick={handleNope}
+                            >
+                                <Image src={BadIcon} width={66} height={66} alt='싫어요' />
+                            </button>
+                            <button
+                                className="hover:scale-110 transition-all ease-in-out z-20"
+                                onClick={handleLike}
+                            >
+                                <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
+                            </button>
+                        </div>
+                    </div>
+                    )}
+
+                    {/* 다음 이미지 */}
+                    {!isDetailsVisible && currentUser && (
+                        <div className='relative w-[20vw] h-[60vh] -left-[5%]' onClick={nextSlide}>
+                            <Image
+                                src={currentUser.profileImages[(slideIndex + 1) % currentUser.profileImages.length].image}
+                                alt="Next User"
+                                fill
+                                style={{objectFit:'cover'}}
+                                className="rounded-2xl scale-90 z-30"
+                                priority
+                            />
+                        </div>
+                    )}
+                        </div>
                         <button
                             onClick={nextSlide}
                             className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 m-2"
@@ -213,15 +256,15 @@ function Match() {
                 
                 {/* 데이트 계획 및 상세 정보 */}
                 <div
-                    className="flex-1 max-w-md p-6 bg-[#CACFFF] rounded-3xl shadow-lg h-[45vh] relative mr-[60px]"
+                    className="flex-1 w-[20vw] h-[60vh] relative ml-12"
                     style={{ display: isDetailsVisible ? 'block' : 'none' }}
                 >
                     {/* 데이트 계획 */}
-                    <div>
+                    <div className='border p-4 bg-matchpage-date-gradient rounded-3xl'>
                         <h2 className="text-2xl font-bold mb-4 text-black text-center">
                             나랑 이런 데이트 어때요?
                         </h2>
-                        <div className="h-[30vh] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center">
+                        <div className="h-[20vh] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center">
                             {currentUser &&
                             currentUser.dating &&
                             currentUser.dating.length > 1 ? (
@@ -245,54 +288,25 @@ function Match() {
                     </div>
                     {/* 상세 정보 */}
                     <div
-                        className={`p-[10px] bg-slate-500 max-w-md text-white relative rounded-lg mt-16 mx-auto h-[45vh] ${
+                        className={`p-[18px] bg-profile-edit-gradient max-w-md relative rounded-3xl mx-auto h-[30vh] mt-3 ${
                             isDetailsVisible ? '' : 'hidden'
                         }`}
                     >
-                        <div className="flex flex-col bg-slate-300 h-[40vh]">
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                나이 : {users[userIndex]?.age}
-                            </span>
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                성별 : {users[userIndex]?.gender}
-                            </span>
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                학력 : {users[userIndex]?.education}
-                            </span>
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                MBTI : {users[userIndex]?.mbti}
-                            </span>
+                        <div className="p-4 bg-white rounded-3xl h-[25vh] w-full flex flex-col justify-center gap-3">
+                            {!users[userIndex].location && !users[userIndex].education && !users[userIndex].mbti && !users[userIndex].religion ? 
+                                <p className="text-center">작성된 내용이 없습니다.</p>  : 
+                                <>
+                                   { users[userIndex].education ? <div className='flex items-center gap-4 border-b py-2'><EducationIcon/>{users[userIndex].education}</div> : null }
+                                    { users[userIndex].location ? <div className='flex items-center gap-4 border-b py-2'><Home/>{users[userIndex].location}</div> : null }
+                        <div className='flex items-center gap-4'>
+                        { users[userIndex].mbti ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].mbti}</div> : null }
+                        { users[userIndex].religion ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].religion}</div> : null }
+                        </div> 
+                            </>
+                            }
                         </div>
-                        <div className="bubble-tail absolute top-5 left-0 transform -translate-x-full -translate-y-1/2 w-0 h-0"></div>
+                        {/* <div className="bubble-tail absolute top-5 left-0 transform -translate-x-full -translate-y-1/2 w-0 h-0"></div> */}
                     </div>
-                </div>
-
-                {/* 간단한 정보, 설명란 */}
-                <div className="absolute w-[20vw] bottom-0 flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer" onClick={toggleDetailsVisibility}>
-                        <div className="text-2xl flex items-center justify-between">
-                            <div className="flex items-center gap-4 ">
-                                <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
-                                    'Unknown'}</p>
-                                <p className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
-                            </div>
-                        </div>
-                        <div className="mt-2">{users[userIndex]?.intro}</div>
-                </div>
-
-                {/* 좋아요, 싫어요 버튼 */}
-                <div className="absolute text-white w-[20vw] flex justify-center -bottom-20 gap-48">
-                    <button
-                        className="hover:scale-110 transition-all ease-in-out z-20"
-                        onClick={handleNope}
-                    >
-                        <Image src={BadIcon} width={66} height={66} alt='싫어요' />
-                    </button>
-                    <button
-                        className="hover:scale-110 transition-all ease-in-out z-20"
-                        onClick={handleLike}
-                    >
-                        <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
-                    </button>
                 </div>
             </div>
         </div>
