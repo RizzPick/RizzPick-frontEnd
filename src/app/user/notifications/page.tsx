@@ -10,7 +10,7 @@ function notificationsPage() {
             <h1>알림</h1>
         </header>
         <LikeComp />
-        <h2 className='text-zinc-800 text-xl font-semibold leading-tight tracking-wide px-5 py-2.5 border-b-black border-b'>메시지</h2>
+        <h2 className='text-zinc-800 text-xl font-semibold leading-tight tracking-wide px-5 pb-2.5 border-b-black border-b'>메시지</h2>
         <ChatList />
         <Footer />
     </div>

@@ -2,8 +2,8 @@
 import { MyProfileRes } from '@/types/profile'
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
-import LocationIcon from "../../../public/profileIcon/location.svg"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
+import Home from "../../../public/profileIcon/Home.svg"
 import Link from 'next/link';
 import { eraseCookie, getCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
@@ -55,16 +55,16 @@ function UserProfileMobile() {
             </div>
         <div className='flex flex-col mt-16 w-full items-center'>
           <div className='text-zinc-800 text-2xl font-semibold'>{profile.nickname}, {profile.age}</div>
-            <div className='p-6 bg-white h-[181px] w-full mt-10 rounded-2xl flex flex-col gap-3'>
+            <div className='p-4 bg-white h-[200px] w-full mt-10 rounded-2xl flex flex-col gap-3 justify-center'>
                 {!profile.location && !profile.education && !profile.mbti && !profile.religion ? 
                     <p className="text-center">작성된 내용이 없습니다.</p> 
                     : 
                     <>
-                        { profile.education ? <div className='flex items-center gap-2'><EducationIcon/>{profile.education}</div> : null }
-                        { profile.location ? <div className='flex items-center gap-2'><LocationIcon/>{profile.location}</div> : null }
+                        { profile.education ? <div className='flex items-center gap-4 border-b py-2'><EducationIcon/>{profile.education}</div> : null }
+                        { profile.location ? <div className='flex items-center gap-4 border-b py-2'><Home/>{profile.location}</div> : null }
                         <div className='flex items-center gap-4'>
-                        { profile.mbti ? <div className='px-3 py-1 border-[#d67dff] border-2 rounded-3xl'>{profile.mbti}</div> : null }
-                        { profile.religion ? <div className='px-3 py-1 border-[#d67dff] border-2 rounded-3xl'>{profile.religion}</div> : null }
+                        { profile.mbti ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.mbti}</div> : null }
+                        { profile.religion ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.religion}</div> : null }
                         </div>
                     </>
                 }

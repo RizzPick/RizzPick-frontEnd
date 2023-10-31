@@ -44,42 +44,7 @@ function Match() {
                 console.error('Error fetching data:', error);
             }
         };
-
-        // const fetchLikedUsers = async () => {
-        //     const response = await axios.get(
-        //         'https://willyouback.shop/api/like/status',
-        //         {
-        //             headers: {
-        //                 Authorization: getCookie('Authorization'),
-        //                 Authorization_Refresh: getCookie(
-        //                     'Authorization_Refresh'
-        //                 ),
-        //             },
-        //         }
-        //     );
-        //     console.log('like user : ', response.data.data);
-        //     return response.data.data; // 좋아요 상태 데이터 반환
-        // };
-
-        // const updateUsersArray = async () => {
-        //     try {
-        //         const likedUsers = await fetchLikedUsers(); // 좋아요 상태 가져오기
-                
-        //         // 기존 사용자 배열에서 좋아요를 보낸 사용자 제외
-        //         setUsers((prevUsers) =>
-        //             prevUsers.filter(
-        //                 (user) => !likedUsers.includes(user.userId)
-        //             )
-        //         );
-        //         console.log(users);
-        //     } catch (error) {
-        //         console.error('Error fetching liked users:', error);
-        //         // Optionally, inform the user that an error occurred
-        //     }
-        // };
-
         fetchData();
-        // updateUsersArray(); // 배열 업데이트 함수 호출
     }, []);
 
     const handleButtonClick = () => {
@@ -183,14 +148,13 @@ function Match() {
         }
     };
 
-    console.log(users);
     return (
-        <div className="flex h-[calc(100vh - 100px)]">
-            <div className="flex-1 flex justify-evenly items-start p-10 sm:p-2">
+        <div className="relative flex">
+            <div className="flex items-start p-10 mx-auto">
                 {/*! 유저 정보 */}
-                <div className="flex-1 max-w-md rounded-full h-[calc(100vh - 100px)]">
+                <div>
                     {/* 유저 이미지 */}
-                    <div className="relative sm:h-[75vh] h-[695px] w-[463px] sm:w-full rounded-2xl overflow-hidden sm:mt-4">
+                    <div className="relative h-[60vh] w-[20vw] rounded-2xl overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20"/>
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
@@ -243,37 +207,6 @@ function Match() {
                         >
                             <RightButton />
                         </button>
-
-                        {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-full bottom-28 text-white flex flex-col p-6 z-30">
-                                <div className="text-2xl flex items-center justify-between">
-                                    <div className="flex items-center gap-4 ">
-                                        <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
-                                            'Unknown'}</p>
-                                        <p className='text-white text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
-                                    </div>
-                                    <button onClick={toggleDetailsVisibility} className='z-30 transition-all hover:scale-110 ease-in-out'>
-                                        <Image src={ReadMore} width={32} height={32} alt='ReadMore' />
-                                    </button>
-                                </div>
-                                <div className="text-white mt-2">{users[userIndex]?.intro}</div>
-                        </div>
-
-                        {/* 좋아요, 싫어요 버튼 */}
-                        <div className="absolute sm:bottom-2 text-white w-full flex justify-between p-4 bottom-0">
-                            <button
-                                className="hover:scale-110 transition-all ease-in-out z-20"
-                                onClick={handleNope}
-                            >
-                                <Image src={BadIcon} width={66} height={66} alt='싫어요' />
-                            </button>
-                            <button
-                                className="hover:scale-110 transition-all ease-in-out z-20"
-                                onClick={handleLike}
-                            >
-                                <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
-                            </button>
-                        </div>
                     </div>
                 </div>
                 
@@ -332,6 +265,34 @@ function Match() {
                         </div>
                         <div className="bubble-tail absolute top-5 left-0 transform -translate-x-full -translate-y-1/2 w-0 h-0"></div>
                     </div>
+                </div>
+
+                {/* 간단한 정보, 설명란 */}
+                <div className="absolute w-[20vw] bottom-0 flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer" onClick={toggleDetailsVisibility}>
+                        <div className="text-2xl flex items-center justify-between">
+                            <div className="flex items-center gap-4 ">
+                                <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
+                                    'Unknown'}</p>
+                                <p className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
+                            </div>
+                        </div>
+                        <div className="mt-2">{users[userIndex]?.intro}</div>
+                </div>
+
+                {/* 좋아요, 싫어요 버튼 */}
+                <div className="absolute text-white w-[20vw] flex justify-center -bottom-20 gap-48">
+                    <button
+                        className="hover:scale-110 transition-all ease-in-out z-20"
+                        onClick={handleNope}
+                    >
+                        <Image src={BadIcon} width={66} height={66} alt='싫어요' />
+                    </button>
+                    <button
+                        className="hover:scale-110 transition-all ease-in-out z-20"
+                        onClick={handleLike}
+                    >
+                        <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
+                    </button>
                 </div>
             </div>
         </div>

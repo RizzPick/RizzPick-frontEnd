@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import Back from "../../../public/chatIcon/Button.svg"
 import Image from 'next/image'
-import LocationIcon from "../../../public/profileIcon/location.svg"
+import Home from "../../../public/profileIcon/Home.svg"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
 
 type Props = {
@@ -23,19 +23,22 @@ function OtherUserProfile({profile} : Props) {
             <Image src={profile.profileImages[0].image} alt='프로필 이미지' fill className='rounded-full' style={{objectFit:"cover"}} priority />
         </div>
         <div className='flex items-center justify-center mt-[33px] text-zinc-800 text-2xl'>{profile.nickname}, {profile.age}</div>
-        <div className='mt-[33px] p-6 bg-white h-[181px] w-full flex flex-col gap-3 border-b border-neutral-400 border-t'>
-                {!profile.location && !profile.education && !profile.mbti && !profile.religion ? 
-                    <p className="text-center">작성된 내용이 없습니다.</p> 
-                    : 
-                    <>
-                        { profile.education ? <div className='flex items-center gap-2'><EducationIcon/>{profile.education}</div> : null }
-                        { profile.location ? <div className='flex items-center gap-2'><LocationIcon/>{profile.location}</div> : null }
-                        <div className='flex items-center gap-4'>
-                        { profile.mbti ? <div className='px-3 py-1 border-[#d67dff] border-2 rounded-3xl'>{profile.mbti}</div> : null }
-                        { profile.religion ? <div className='px-3 py-1 border-[#d67dff] border-2 rounded-3xl'>{profile.religion}</div> : null }
-                        </div>
-                    </>
-                }
+        <div className='p-4'>
+            <div className='mt-[33px] px-4 py-1 h-[142px] flex flex-col gap-3 bg-neutral-100 rounded-2xl justify-center'>
+                    {!profile.location && !profile.education && !profile.mbti && !profile.religion ? 
+                        <p className="text-center">작성된 내용이 없습니다.</p> 
+                        : 
+                        <>
+                            { profile.education ? <div className='flex items-center gap-4'><EducationIcon/>{profile.education}</div> : null }
+                            <hr/>
+                            { profile.location ? <div className='flex items-center gap-4'><Home/>{profile.location}</div> : null }
+                        </>
+                    }
+            </div>
+            <div className='flex items-center gap-4 justify-center mt-6'>
+                            { profile.mbti ? <div className='px-3 py-1 border border-fuchsia-400 text-fuchsia-400 rounded-3xl'>#{profile.mbti}</div> : null }
+                            { profile.religion ? <div className='px-3 py-1 border border-fuchsia-400 text-fuchsia-400 rounded-3xl'>#{profile.religion}</div> : null }
+            </div>
         </div>
     </div>
   )

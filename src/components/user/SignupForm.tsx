@@ -129,11 +129,11 @@ function SignupComponent() {
   }
 
   return (
-    <section className='min-h-screen flex justify-center items-center'>
+    <section  className='flex justify-center items-center'>
       <div className='w-[141px] h-[60px] absolute top-[60px] sm:block hidden'>
             <Image src={Logo} alt='로고' fill style={{objectFit:"cover"}} priority/>
       </div>
-    <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[500px] sm:w-full sm:h-[80vh] h-[100vh-200px] sm:rounded-none sm:rounded-tl-[56px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-[80px] sm:p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[580px] sm:w-full sm:h-[80vh] h-[730px] sm:rounded-none sm:rounded-tl-[56px] justify-center">
       {/* 로딩 바 */}
       {isLoading && 
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
@@ -188,27 +188,31 @@ function SignupComponent() {
         <div className='flex justify-between items-center mt-4'>
             <label className="font-bold text-xl">이메일</label>
         </div>
-        <div className='flex gap-2'>
-        <input
-            id="email"
-            type="email"
-            disabled={isEmailVerified}
-            className="border rounded-3xl py-2 px-3 text-sm flex-grow"
-            placeholder='이메일을 입력하세요'
-            required
-            {...register("email", {
-                required: true,
-                pattern: /^\S+@\S+$/i,
-            })}
-        />
-              <button onClick={onCheckEmail} type="button" className="bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-28">인증번호 전송</button>
+        <div className='flex gap-2 mb-2 w-full'>
+          <div className='relative flex justify-between w-full sm:w-[60vw]'>
+          <input
+              id="email"
+              type="email"
+              disabled={isEmailVerified}
+              className="border rounded-3xl py-2 px-3 text-sm w-[286px]"
+              placeholder='이메일을 입력하세요'
+              required
+              {...register("email", {
+                  required: true,
+                  pattern: /^\S+@\S+$/i,
+              })}
+          />
+          </div>
+              <button onClick={onCheckEmail} type="button" className="bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 sm:hidden">인증번호 전송</button>
+              <button onClick={onCheckEmail} type="button" className="bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 hidden sm:block">인증하기</button>
             </div>
         <div className='flex gap-2 w-full'>
-            <div className='relative flex justify-between w-full'>
-                <input type='text' name='verify' onChange={handleChange} value={verify?.authKey} placeholder='인증번호를 입력하세요' className="border rounded-3xl py-2 px-3 text-sm flex-grow" required/>
+            <div className='relative flex justify-between w-full sm:w-[60vw]'>
+                <input type='text' name='verify' onChange={handleChange} value={verify?.authKey} placeholder='인증번호를 입력하세요' className="w-[286px] border rounded-3xl py-2 px-3 text-sm" required/>
                 {showTimer && <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-red-500 font-bold">{Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</span>}
             </div>
-            <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-28 ${!isEmailVerified && 'bg-opacity-30'}`}>인증하기</button>
+            <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 ${!isEmailVerified && 'bg-opacity-30'} sm:hidden`}>인증하기</button>
+            <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 ${!isEmailVerified && 'bg-opacity-30'} hidden sm:block`}>확인</button>
         </div>
         <button className={`bg-gradient-start text-white p-2 font-bold text-xl rounded-3xl mt-8 transition duration-200 ease-in-out ${!isVerificationSuccessful && 'bg-opacity-30'}`} disabled={!isVerificationSuccessful}>가입하기</button>
     </form>

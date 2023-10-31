@@ -25,6 +25,10 @@ const config: Config = {
                 'activityDelete-button': 'var(--fill-pur-c-242-ff, #C242FF)',
             },
             backgroundImage: {
+                'welcomepage-gradient':
+                    'linear-gradient(180deg, rgba(166.35, 39.42, 168.94, 0.55) 0%, rgba(147.01, 0, 170, 0.42) 14%, rgba(143.87, 87.76, 188.06, 0.16) 43%, rgba(143.67, 20.98, 218.88, 0.16) 69%, rgba(55.42, 51.46, 79.69, 0.17) 82%, rgba(66.74, 68.03, 79.69, 0.45) 100%)',
+                'signuppage-gradient':
+                    'linear-gradient(146deg, rgba(200.81, 41, 194.42, 0.83) 0%, rgba(128.64, 47.97, 209.31, 0.69) 51%, rgba(33.93, 30.37, 208.25, 0.56) 100%)',
                 'custom-gradient':
                     'linear-gradient(180deg, rgba(203,23,249,1) 0%, rgba(238,154,188,1) 65%)',
                 'sendbtn-gradient':

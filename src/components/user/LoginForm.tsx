@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from "../../../public/images/kakaoLogo.png";
 import UseProfile from '@/hooks/useProfile';
 import Logo from "../../../public/Logo.png"
+import LogoColor from "../../../public/Logo_color.png"
 
 function LoginForm() {
     const {
@@ -69,7 +70,10 @@ function LoginForm() {
           <div className='w-[141px] h-[60px] absolute top-[70px] sm:block hidden'>
             <Image src={Logo} alt='로고' fill style={{objectFit:"cover"}} priority/>
           </div>
-            <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[600px] sm:w-[100vw] sm:h-[80vh] h-[100vh-200px]">
+            <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-8 flex flex-col justify-center gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[586px] sm:w-[100vw] sm:h-[80vh] h-[70vh]">
+              <div className='w-[141px] h-[60px] relative mx-auto sm:hidden'>
+                <Image src={LogoColor} alt='로고' fill style={{objectFit:"cover"}} priority/>
+              </div>
                 <label className="font-bold text-xl">아이디</label>
                 <input
                     id="username"
@@ -88,7 +92,7 @@ function LoginForm() {
                     required
                     {...register("password", { required: true })}
                 />
-                <button className='bg-gradient-start text-white p-2 rounded-3xl w-full mt-4 sm:mt-[47px]'>로그인</button>
+                <button className='bg-gradient-start text-white p-2 rounded-3xl w-full mt-4 sm:mt-[47px] h-[60px] sm:h-[44px]'>로그인</button>
                 <div className="mt-6 cursor-pointer mx-auto">
                     <Image src={kakaoLoginLogo} priority width={50} height={50} alt="카카오 로그인" onClick={kakaoLogin} />
                 </div>

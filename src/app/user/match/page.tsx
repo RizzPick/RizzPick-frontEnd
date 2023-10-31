@@ -23,6 +23,7 @@ export default function MatchPage() {
             (<div>
                 <Header />
                 <MatchMobile />
+                <Footer />
             </div>):
             (<div>
                 <Header />

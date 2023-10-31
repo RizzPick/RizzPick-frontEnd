@@ -40,7 +40,7 @@ function LikeComp() {
         <h2 onClick={()=>router.push('notifications/liked')} className='text-zinc-800 text-xl font-semibold leading-tight tracking-wide px-5 pb-2.5'>좋아요({likesData.length})</h2>
         <div
             onClick={()=>router.push('notifications/liked')} 
-            className="flex flex-row border-t-[1px] py-5 px-3 gap-5 scrollbar-hide"
+            className="flex flex-row border-t-[1px] py-4 px-3 gap-5 scrollbar-hide"
             style={{
                 borderColor: 'black',
                 overflowX: 'auto',

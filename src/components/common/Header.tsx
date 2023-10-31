@@ -53,7 +53,7 @@ export default function Header() {
 
     // 로딩 과정 중 보여질 이미지 처리
     return (
-        <header className="flex justify-between item-center p-5 border-b-2 border-[#D9D9D9] sm:border-none">
+        <header className="flex justify-between item-center px-8 py-4 border-b-2 border-[#D9D9D9] sm:border-none">
             <Link href="/user/match">
                 <Image
                     src={Logo}
