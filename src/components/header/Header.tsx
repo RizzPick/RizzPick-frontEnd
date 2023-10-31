@@ -9,7 +9,6 @@ import { eraseCookie, getCookie } from '@/utils/cookie';
 import profiledog from '../../../public/images/profiledog.jpeg';
 import Alarm from '@/components/alarm/Alarm';
 import { useRouter } from 'next/navigation';
-import Logo from '../../../public/Logo_color.png';
 
 export default function Header() {
     const [showOverlay, setShowOverlay] = useState(false);
@@ -17,6 +16,7 @@ export default function Header() {
     const token = getCookie('Authorization');
     const [userInfo, setUserInfo] = useState<UserInfo>();
     const router = useRouter();
+
     const Open = () => {
         setShowOverlay(true);
         setOpenChatModal(true);
@@ -52,20 +52,14 @@ export default function Header() {
 
     // 로딩 과정 중 보여질 이미지 처리
     return (
-        <header className="flex justify-between item-center p-5 border-b-2 border-[#D9D9D9]">
+        <header className="flex justify-between items-center p-4 border-b-4 border-gray-500">
             <Link href="/user/match">
-                <Image
-                    src={Logo}
-                    priority
-                    alt="로고"
-                    width={95}
-                    height={40}
-                    style={{ objectFit: 'cover' }}
-                />
+                <h2 className="text-3xl font-bold">Will you</h2>
             </Link>
-            <nav className="flex gap-4 items-center sm:hidden">
+            <nav className="flex gap-4 items-center">
                 <Link href="/user/plan/board">게시판</Link>
                 {openChatModal && <Alarm close={close} />}
+
                 {showOverlay && (
                     <div
                         className="block fixed top-0 left-1/2 transform -translate-x-1/2 h-full bg-black bg-opacity-50 z-30 w-full"
@@ -75,6 +69,7 @@ export default function Header() {
                 <span onClick={Open} className="cursor-pointer">
                     알림
                 </span>
+
                 {/* 다른 페이지에서 넘어갈때 404 나와서 경로 수정 필요 */}
                 {userInfo && (
                     <>

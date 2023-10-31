@@ -41,18 +41,23 @@ export default function MyPlanList() {
     };
 
     return (
-        <div className="w-5/6 h-[100vh] p-4 mt-6 mx-auto">
+        <div className="min-h-screen w-full mx-auto bg-board-bg">
+            <div className="relative z-0 inset-x-0 top-[0px] h-[80px] mb-[-50px] min-w-full bg-white"></div>
             <div className="flex flex-col items-center mt-auto">
-                <h1 className="text-3xl font-bold ">나의 데이트 계획</h1>
+                <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-50">
+                    <h1 className="text-3xl font-bold ">
+                        🎈 나의 데이트 계획 🎈
+                    </h1>
+                </div>
                 <button
                     type="button"
                     onClick={handleButtonClick}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-7"
+                    className="bg-button-bg text-white font-bold p-[10px] rounded m-7 w-[287px] gap-2.5 items-center justify-center"
                 >
                     데이트 계획 작성하러가기!
                 </button>
             </div>
-            <div>
+            <div className="ml-[182px] mr-[122px]">
                 <MyPlan myDatings={myDatings} />
             </div>
         </div>

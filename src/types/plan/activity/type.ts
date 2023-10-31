@@ -1,5 +1,5 @@
 export interface Activity {
-    id: number;
+    activityId: number;
     activityContent: string;
 }
 

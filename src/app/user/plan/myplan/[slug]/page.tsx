@@ -38,8 +38,8 @@ export default function PostPage({ params: { slug } }: Props) {
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const [isEditing, setIsEditing] = useState(false);
     const [dateList, setDateList] = useState<DateItem[]>([]);
-
     const [activities, setActivities] = useState([]);
+    const [activePage, setActivePage] = useState(slug);
 
     useEffect(() => {
         axios
@@ -132,7 +132,7 @@ export default function PostPage({ params: { slug } }: Props) {
     };
 
     return (
-        <div className=" w-4/5 h-[100vh] p-4 mx-auto">
+        <div className=" w-full mx-auto">
             {isEditing ? (
                 <Write
                     initialData={dating}
@@ -141,38 +141,86 @@ export default function PostPage({ params: { slug } }: Props) {
                 />
             ) : (
                 <>
-                    <button onClick={handleEditClick}>수정</button>
-                    <button onClick={handleDeleteClick}>삭제</button>
                     <div className="flex flex-row">
-                        <div className="w-1/6">
+                        <div className="w-[365px] my-auto">
                             <ul>
                                 {dateList.map((date, index) => (
-                                    <li key={index}>
+                                    <li
+                                        key={index}
+                                        className={`flex flex-col border-2 border-rgba(172, 172, 172, 0.69) w-[332px] h-[74px] px-2 pt-2 ${
+                                            activePage ===
+                                            date.datingId.toString()
+                                                ? 'bg-[#F9ECFF]'
+                                                : ''
+                                        }`}
+                                        style={{
+                                            borderRadius: '4px 0px 0px 4px',
+                                        }}
+                                        onClick={() =>
+                                            setActivePage(
+                                                date.datingId.toString()
+                                            )
+                                        } // Convert date.datingId to string
+                                    >
                                         <Link href={`${date.datingId}`}>
-                                            <span>{date.datingTitle}</span>
+                                            <div
+                                                className={`font-bold-500 text-[24px] ${
+                                                    activePage ===
+                                                    date.datingId.toString()
+                                                        ? 'text-black'
+                                                        : ''
+                                                }`}
+                                            >
+                                                <span>{date.datingTitle}</span>
+                                            </div>
+                                            <div
+                                                className={`text-[#aaa] mt-2 text-xs text-end ${
+                                                    activePage ===
+                                                    date.datingId.toString()
+                                                        ? 'text-black'
+                                                        : ''
+                                                }`}
+                                            >
+                                                <span>
+                                                    데이트 계획을 생성한 날짜
+                                                </span>
+                                            </div>
                                         </Link>
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                        <div className="flex flex-col justify-evenly w-full border-l-[1px] border-r-[1px] border-[whitegray]">
-                            <div className="flex flex-col items-center p-4 w-full">
+                        <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5]">
+                            <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5]">
                                 <div className="flex flex-col p-4">
-                                    <h1>{dating.datingTitle}</h1>
-                                    <h2>{dating.datingLocation}</h2>
-                                    <h3>{dating.datingTheme}</h3>
+                                    <p className="text-[25px] text-[#666]">
+                                        {dating.datingLocation}
+                                    </p>
+                                    <p className="text-[36px] mt-1 mb-4 font-semibold">
+                                        {dating.datingTitle}
+                                    </p>
+                                    <p className="text-[25px]">
+                                        {dating.datingTheme}
+                                    </p>
+                                    <p className="text-[#aaa] mt-10 text-xs text-end">
+                                        작성시간
+                                    </p>
                                 </div>
                             </div>
-                            <div className="flex flex-col p-4 w-full">
+                            <div className="flex flex-col mx-auto p-4 w-5/6">
                                 <div className="flex-col items-center p-4 w-full">
-                                    <h3 className="">데이트 내용</h3>
+                                    <p className="flex justify-center mb-10 text-[30px]">
+                                        데이트 내용 🎈
+                                    </p>
                                     {dating &&
-                                        dating.activities &&
                                         dating.activities.map(
-                                            (activity, index) => (
+                                            (
+                                                activity,
+                                                index // activities 배열을 매핑합니다.
+                                            ) => (
                                                 <div
                                                     key={index}
-                                                    className="p-2 my-2 border-[1px] border-[black] rounded-lg"
+                                                    className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg"
                                                 >
                                                     {activity.activityContent}
                                                 </div>
@@ -180,11 +228,25 @@ export default function PostPage({ params: { slug } }: Props) {
                                         )}
                                 </div>
                             </div>
+                            <div className="flex flex-row justify-end w-5/6 gap-4  ml-10 text-[24px]">
+                                <button
+                                    className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
+                                    onClick={handleEditClick}
+                                >
+                                    수정
+                                </button>
+                                <button
+                                    className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
+                                    onClick={handleDeleteClick}
+                                >
+                                    삭제
+                                </button>
+                            </div>
                         </div>
-                        <div className="w-1/6">
+                        <div className="w-[394px]">
                             <div className="h-screen w-[395px] flex flex-col items-center">
-                                <div className="h-[231px] w-[231px] rounded-full overflow-hidden mx-auto mt-5">
-                                    {userProfile &&
+                                <div className="h-[231px] w-[231px] rounded-full overflow-hidden mx-auto mt-[136px]">
+                                    {/* {userProfile &&
                                     userProfile.profileImages &&
                                     userProfile.profileImages.length > 0 ? (
                                         <Image
@@ -205,10 +267,10 @@ export default function PostPage({ params: { slug } }: Props) {
                                             height={231}
                                             priority
                                         />
-                                    )}
+                                    )} */}
                                 </div>
                                 <div>
-                                    {userProfile && (
+                                    {/* {userProfile && (
                                         <div>
                                             <h2>{userProfile.nickname}</h2>
                                             <p>나이: {userProfile.age}</p>
@@ -218,7 +280,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                                 학력 : {userProfile.education}
                                             </p>
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,7 @@
 export interface Dating {
     datingId: string;
     userId: number;
+    userNickname: string;
     datingTitle: string;
     datingLocation: string;
     datingTheme: string;
