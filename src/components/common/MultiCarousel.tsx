@@ -39,16 +39,12 @@ function MultiCarousel({ children }: Props) {
   return (
     <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <Carousel
-        customDot={<CustomDot />}
-        showDots={children.length > 1}
+        // customDot={<CustomDot />}
+        // showDots={children.length > 1}
         arrows={isHovered}
-        // infinite
+        infinite
         customTransition="all .5"
         responsive={responsive}
-        // 모바일 환경
-        removeArrowOnDeviceType={["tablet", "mobile"]}
-        draggable={true}
-        swipeable={true}
       >
         {children}
       </Carousel>

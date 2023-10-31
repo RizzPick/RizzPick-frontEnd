@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import React, { useRef, useState } from 'react'
-import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
+import { AiOutlinePlus, AiOutlineClose,AiOutlineMinus } from 'react-icons/ai';
 import UserImageCamera from './UserImageCamera';
 import { ProfileImages } from '@/types/profile';
 import { PuffLoader } from "react-spinners"
@@ -64,10 +64,10 @@ const handleImageDelete = async (imageId : number) => {
       <div className='relative border-gray-500 rounded sm:w-24 sm:h-36 w-[142px] h-[172px]'>
         <Image src={image.image} alt="Profile Image" fill style={{objectFit : 'cover'}} className='rounded-lg'/> 
         <button 
-          className='absolute -bottom-2 text-3xl rounded-full bg-[#D57DFF] transform transition-transform duration-500 hover:rotate-90' 
+          className='absolute bottom-0 right-0 -mr-2 -mb-2 text-3xl rounded-full bg-[#D57DFF] transform transition-transform duration-500 hover:scale-110' 
           onClick={()=>handleImageDelete(image.id)}
         >
-          <AiOutlineClose color="#FFFFFF"/>
+          <AiOutlineMinus color="#FFFFFF" />
         </button>
       </div>  
     }

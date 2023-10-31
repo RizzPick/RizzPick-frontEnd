@@ -39,6 +39,8 @@ const config: Config = {
                     'linear-gradient(146deg, rgba(255, 185, 252, 0.17) 16.83%, rgba(176, 97, 255, 0.14) 53.75%, rgba(50, 46, 255, 0.11) 89.83%);',
                 'write-bg':
                     'linear-gradient(146deg, rgba(237, 101, 231, 0.66) 16.83%, rgba(190, 142, 237, 0.55) 53.75%, rgba(140, 138, 255, 0.45) 89.83%);',
+                'profile-edit-gradient' :
+                    'linear-gradient(146deg, rgba(236.94, 100.70, 231.49, 0.56) 0%, rgba(189.55, 142.16, 236.94, 0.47) 51%, rgba(140.46, 138.13, 255, 0.38) 100%)'
             },
         },
     },

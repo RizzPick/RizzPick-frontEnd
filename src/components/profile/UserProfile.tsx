@@ -56,21 +56,21 @@ function UserProfile({profile} : Props) {
               }
           </div>
         </div>
-        <div className="flex-1 bg-profile-gradient text-white p-4 rounded-3xl mb-2 relative h-[315px] w-[467px]" id='options'>
-        <div className='border rounded-3xl bg-white text-gray-500 p-4 h-[281px] mt-2.5 flex flex-col gap-4 justify-center'>
-        { !profile.location && !profile.education && !profile.mbti && !profile.religion ? 
-          <p className="text-center">작성된 내용이 없습니다.</p> 
-          : 
-          <>
-            { profile.location ? <div className='flex items-center gap-2'><LocationIcon/>{profile.location}</div> : null }
-            { profile.education ? <div className='flex items-center gap-2'><EducationIcon/>{profile.education}</div> : null }
-            { (profile.mbti || profile.religion) && <hr className='border-dashed'/> }
-            <div className='flex items-center gap-4'>
-              { profile.mbti ? <div className='px-3 py-1 border-[#d67dff] border-2 rounded-3xl'>{profile.mbti}</div> : null }
-              { profile.religion ? <div className='px-3 py-1 border-[#d67dff] border-2 rounded-3xl'>{profile.religion}</div> : null }
-            </div>
-          </>
-        }
+        <div className="flex-1 bg-profile-gradient text-white p-4 rounded-3xl relative h-[315px] w-[467px]" id='options'>
+          <div className='border rounded-3xl bg-white text-gray-500 p-4 h-[281px] flex flex-col gap-4 justify-center'>
+          { !profile.location && !profile.education && !profile.mbti && !profile.religion ? 
+            <p className="text-center">작성된 내용이 없습니다.</p> 
+            : 
+            <>
+              { profile.location ? <div className='flex items-center gap-2'><LocationIcon/>{profile.location}</div> : null }
+              { profile.education ? <div className='flex items-center gap-2'><EducationIcon/>{profile.education}</div> : null }
+              { (profile.mbti || profile.religion) && <hr className='border-dashed'/> }
+              <div className='flex items-center gap-4'>
+                { profile.mbti ? <div className='px-3 py-1 border-[#d67dff] border-2 rounded-3xl'>{profile.mbti}</div> : null }
+                { profile.religion ? <div className='px-3 py-1 border-[#d67dff] border-2 rounded-3xl'>{profile.religion}</div> : null }
+              </div>
+            </>
+          }
         </div>
       </div>
       </section>

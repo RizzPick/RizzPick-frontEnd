@@ -22,10 +22,12 @@ export default async function ProfilePage() {
   return (
     <div>
       <div className='sm:hidden'>
-      <UserProfile profile={profile}/>
+        <Header />
+        <UserProfile profile={profile}/>
       </div>
 
       <div className='sm:block hidden'>
+        <Header />
         <UserProfileMobile />
         <Footer />
       </div>

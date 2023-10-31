@@ -50,8 +50,8 @@ function UserImageGrid({onPrev} : any) {
 
   return (
     <div>
-      <div className='p-2 sm:bg-profile-gradient sm:mt-4 rounded-3xl sm:w-[100vw] sm:h-[100vh] mx-auto border border-black sm:border-none scrollbar-hide bg-white'>
-      <h1 className='flex justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3'>프로필 등록</h1>
+      <div className='w-[506px] h-[551px] p-2 sm:bg-profile-gradient sm:mt-4 rounded-xl sm:rounded-3xl sm:w-[100vw] sm:h-[100vh] mx-auto border border-black sm:border-none scrollbar-hide bg-white'>
+      <h1 className='justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3 sm:flex hidden'>프로필 등록</h1>
         <div className='bg-white p-4 rounded-2xl'>
           <h2 className='mb-5 text-zinc-800 text-xl font-medium leading-tight tracking-wide'>사진 등록</h2>
           <div className='grid grid-cols-3 gap-4'>

@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { getCookie } from '@/utils/cookie';
 
-function Match() {
+function MatchMobile() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
     const router = useRouter();
 
@@ -276,66 +276,9 @@ function Match() {
                         </div>
                     </div>
                 </div>
-                
-                
-                {/* 데이트 계획 및 상세 정보 */}
-                <div
-                    className="flex-1 max-w-md p-6 bg-[#CACFFF] rounded-3xl shadow-lg h-[45vh] relative mr-[60px]"
-                    style={{ display: isDetailsVisible ? 'block' : 'none' }}
-                >
-                    {/* 데이트 계획 */}
-                    <div>
-                        <h2 className="text-2xl font-bold mb-4 text-black text-center">
-                            나랑 이런 데이트 어때요?
-                        </h2>
-                        <div className="h-[30vh] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center">
-                            {currentUser &&
-                            currentUser.dating &&
-                            currentUser.dating.length > 1 ? (
-                                <ul className="list-disc pl-5 space-y-2">
-                                    {users[userIndex].dating?.map((date) => {
-                                        return (
-                                            <li key={date.datingId}>
-                                                {date.datingTitle}
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            ) : (
-                                <div
-                                    className="mx-auto px-4 py-2 mt-4 rounded-3xl font-bold"
-                                >
-                                    작성한 계획이 없습니다
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    {/* 상세 정보 */}
-                    <div
-                        className={`p-[10px] bg-slate-500 max-w-md text-white relative rounded-lg mt-16 mx-auto h-[45vh] ${
-                            isDetailsVisible ? '' : 'hidden'
-                        }`}
-                    >
-                        <div className="flex flex-col bg-slate-300 h-[40vh]">
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                나이 : {users[userIndex]?.age}
-                            </span>
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                성별 : {users[userIndex]?.gender}
-                            </span>
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                학력 : {users[userIndex]?.education}
-                            </span>
-                            <span className="bg-slate-500 text-white m-1 p-1">
-                                MBTI : {users[userIndex]?.mbti}
-                            </span>
-                        </div>
-                        <div className="bubble-tail absolute top-5 left-0 transform -translate-x-full -translate-y-1/2 w-0 h-0"></div>
-                    </div>
-                </div>
             </div>
         </div>
     );
 }
 
-export default Match;
+export default MatchMobile;

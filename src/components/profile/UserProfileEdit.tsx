@@ -87,17 +87,17 @@ function UserProfileEdit({onNext} : any) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className='sm:bg-profile-gradient md:bg-white lg:bg-white px-8 py-4 rounded-3xl border border-black sm:border-none sm:mt-4'>
-      <h1 className='flex justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3'>프로필 등록</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className='w-[605px] h-full sm:ml-0 sm:bg-profile-gradient md:bg-white lg:bg-white px-8 py-4 rounded-xl sm:rounded-3xl border border-black sm:border-none sm:mt-4 sm:w-[100vw] sm:h-full'>
+      <h1 className='justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3 hidden sm:flex'>프로필 등록</h1>
         <div className="mb-4">
           <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2 px-1">닉네임</label>
           {errors.nickname && renderNicknameErrorMessages(errors.nickname)}
           </div>
-          <input {...register("nickname", {required : true, maxLength: 10,})} className="w-full h-10 p-3 border rounded-3xl" placeholder="닉네임을 입력하세요" />
+          <input {...register("nickname", {required : true, maxLength: 10,})} className="sm:w-full w-[311px] h-10 p-3 border rounded-3xl" placeholder="닉네임을 입력하세요" />
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">나이</label>
-          {errors.age && <p className="text-red-500">필수값입니다.</p>}
+          {errors.age && <p className="text-red-500 text-[10px]">✱ 나이는 필수입니다.</p>}
           </div>
           <select {...register("age", {required:true})} className="w-20 h-10 px-3 border rounded-3xl">
             <option value="">나이</option>
@@ -108,7 +108,7 @@ function UserProfileEdit({onNext} : any) {
           </select>
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">성별</label>
-          {errors.gender && <p className="text-red-500">필수값입니다.</p>}
+          {errors.gender && <p className="text-red-500 text-[10px]">✱ 성별은 필수입니다.</p>}
           </div>
           <div className='flex gap-4'>
             {/* <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">남성</button>
@@ -136,14 +136,14 @@ function UserProfileEdit({onNext} : any) {
 
           <label className="block text-gray-700 my-2">지역</label>
           <select {...register("location")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
-            <option value="">선택</option>
-            <option value="SEOUL">서울특별시</option>
-            <option value="BUSAN">부산광역시</option>
-            <option value="INCHEON">인천광역시</option>
-            <option value="DAEGU">대구광역시</option>
-            <option value="DAEJEON">대전광역시</option>
-            <option value="GWANGJU">광주광역시</option>
-            <option value="ULSAN">울산광역시</option>
+            <option value="NONE">선택</option>
+            <option value="서울">서울특별시</option>
+            <option value="부산">부산광역시</option>
+            <option value="인천">인천광역시</option>
+            <option value="대구">대구광역시</option>
+            <option value="대전">대전광역시</option>
+            <option value="광주">광주광역시</option>
+            <option value="울산">울산광역시</option>
           </select>
 
           <label className="block text-gray-700 my-2">MBTI</label>
@@ -169,19 +169,19 @@ function UserProfileEdit({onNext} : any) {
 
           <label className="block text-gray-700 my-2">종교</label>
           <select {...register("religion")} className="w-28 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
-            <option value="">선택</option>
-            <option value="OTHERS">무교</option>
-            <option value="CHRISTIANITY">기독교</option>
-            <option value="JUDAISM">유대교</option>
-            <option value="ISLAM">이슬람교</option>
-            <option value="CATHOLICISM">천주교</option>
-            <option value="HINDUISM">힌두교</option>
-            <option value="BUDDHISM">불교</option>
-            <option value="CONFUCIANSM">유교</option>
+            <option value="NONE">선택</option>
+            <option value="무교">무교</option>
+            <option value="기독교">기독교</option>
+            <option value="유대교">유대교</option>
+            <option value="이슬람">이슬람교</option>
+            <option value="천주교">천주교</option>
+            <option value="힌두교">힌두교</option>
+            <option value="불교">불교</option>
+            <option value="유교">유교</option>
           </select>
         </div>
         <div className='flex justify-end'>
-        <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-200 sm:hidden">제출하기</button>
+        <button className="w-56 h-16 bg-fuchsia-600 rounded-3xl shadow-inner justify-center items-center absolute bottom-32 right-[24%] sm:hidden text-white text-3xl">저장하기</button>
         <button type='button' onClick={handleSubmit(onPrev)} className="text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide relative bottom-0 w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block hover:bg-neutral-200 hover:shadow shadow-inner">다음</button>
         </div>
       </form>
