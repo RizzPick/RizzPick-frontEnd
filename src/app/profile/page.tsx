@@ -21,7 +21,6 @@ export default async function ProfilePage() {
     const profile : MyProfileRes = response.data.data;
   return (
     <div>
-      <Header />
       <div className='sm:hidden'>
       <UserProfile profile={profile}/>
       </div>

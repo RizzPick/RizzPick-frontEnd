@@ -34,7 +34,9 @@ function UserProfileEdit({onNext} : any) {
       if (localProfile) {
         for (const key of profileFormKeys) {
           const currentValue = getValues(key); // getValues를 사용하여 현재 값 가져오기
+          console.log(currentValue);
           if (localProfile[key] !== undefined && !currentValue) {
+            console.log(localProfile[key]);
             setValue(key, localProfile[key]);
           }
         }
