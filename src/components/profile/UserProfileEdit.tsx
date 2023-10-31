@@ -56,8 +56,8 @@ function UserProfileEdit({onNext} : any) {
     }
   };
 
-  const onPrev = async(event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const onPrev = async(event: any) => {
+    // event.preventDefault();
     const data = getValues();
     try {
       const response = await ProfileAPI.updateProfile(data);
@@ -72,7 +72,16 @@ function UserProfileEdit({onNext} : any) {
     }
   };
 
-
+  function renderNicknameErrorMessages(error: any) {
+    switch (error.type) {
+      case 'required':
+        return <p className="text-red-500 text-[10px]">✱ 닉네임은 필수입니다.</p>;
+      case 'maxLength':
+        return <p className="text-red-500 text-[10px]">✱ 닉네임은 최대 6자까지 가능합니다.</p>;
+      default:
+        return null;
+    }
+  }
 
   return (
     <div>
@@ -81,9 +90,9 @@ function UserProfileEdit({onNext} : any) {
         <div className="mb-4">
           <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2 px-1">닉네임</label>
-          {errors.nickname && <p className="text-red-500">필수값입니다.</p>}
+          {errors.nickname && renderNicknameErrorMessages(errors.nickname)}
           </div>
-          <input {...register("nickname", {required : true})} className="w-full h-10 p-3 border rounded-3xl" placeholder="닉네임을 입력하세요" />
+          <input {...register("nickname", {required : true, maxLength: 10,})} className="w-full h-10 p-3 border rounded-3xl" placeholder="닉네임을 입력하세요" />
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">나이</label>
           {errors.age && <p className="text-red-500">필수값입니다.</p>}
@@ -171,7 +180,7 @@ function UserProfileEdit({onNext} : any) {
         </div>
         <div className='flex justify-end'>
         <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-200 sm:hidden">제출하기</button>
-        <button type='button' onClick={onPrev} className="text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide relative bottom-0 w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block hover:bg-neutral-200 hover:shadow shadow-inner">다음</button>
+        <button type='button' onClick={handleSubmit(onPrev)} className="text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide relative bottom-0 w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block hover:bg-neutral-200 hover:shadow shadow-inner">다음</button>
         </div>
       </form>
       </div>
