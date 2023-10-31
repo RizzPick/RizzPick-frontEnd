@@ -12,13 +12,12 @@ import { getDatings } from '../../features/plan/dating';
 export default function Board() {
     const [datings, setDatings] = useState<Dating[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 8;
     const [datingId, setDatingId] = useState<number | null>(null);
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [theme, setTheme] = useState('');
     const router = useRouter();
-    const pathname = usePathname();
 
     useEffect(() => {
         async function fetchData() {
@@ -27,7 +26,7 @@ export default function Board() {
                 // datingId를 기준으로 내림차순 정렬
                 const sortedData = datingData.sort(
                     (a: any, b: any) =>
-                        parseInt(b.datingId, 10) - parseInt(a.datingId, 10)
+                        parseInt(b.datingId, 8) - parseInt(a.datingId, 8)
                 );
                 setDatings(sortedData);
             } catch (error) {
@@ -50,6 +49,11 @@ export default function Board() {
         }
     };
 
+    //? 내 글 보기 버튼
+    const myPlanHandleClick = () => {
+        router.push('/user/plan/myplan');
+    };
+
     //? 페이지 이동
     const totalPages = Math.ceil(datings.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -66,20 +70,32 @@ export default function Board() {
     };
 
     return (
-        <div className="w-5/6 h-[100vh] p-4 mt-6 mx-auto">
+        <div className="min-h-screen w-full mx-auto bg-board-bg">
+            <div className="relative z-0 inset-x-0 top-[0px] h-[80px] mb-[-50px] min-w-full bg-white"></div>
             <div className="flex flex-col items-center mt-auto">
-                <h1 className="text-3xl font-bold ">
-                    데이트 계획을 보고 나에게 맞는 이성, 친구를 찾아요!
-                </h1>
-                <button
-                    type="button"
-                    onClick={handleButtonClick}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-7"
-                >
-                    데이트 계획 작성하러가기!
-                </button>
+                <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-50">
+                    <h1 className="text-3xl font-bold ">
+                        💜나랑 이런 데이트 어때요?💜
+                    </h1>
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        onClick={handleButtonClick}
+                        className="bg-button-bg text-white font-bold p-[10px] rounded m-7 w-[287px] gap-2.5 items-center justify-center"
+                    >
+                        <span className="">데이트 계획 작성하러가기!</span>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={myPlanHandleClick}
+                        className="bg-button-bg text-white font-bold p-[10px] rounded m-7 gap-2.5 items-center justify-center"
+                    >
+                        내 글 보러가기!
+                    </button>
+                </div>
             </div>
-            <div>
+            <div className="ml-[182px] mr-[122px]">
                 <DatingGrid datings={currentPageData} />
             </div>
             <div className="pagination flex justify-center">

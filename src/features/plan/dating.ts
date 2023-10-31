@@ -76,7 +76,6 @@ export const updateDating = async (
 };
 
 //? 데이트 전체 조회
-import { Dating, AllDatingResponse } from '../../types/plan/board/type';
 
 export const getDatings = async () => {
     try {
