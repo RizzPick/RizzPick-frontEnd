@@ -45,7 +45,7 @@ function ChatComp({data}:Props) {
                     priority
                 />
             </div>
-            <div className='h-full mt-8'>
+            <div className='h-full flex flex-col items-start justify-center gap-2'>
                 <div className='flex justify-between items-center'>
                     <div className='font-bold text-xl'>
                         {data.nickname}

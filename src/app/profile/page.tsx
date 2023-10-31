@@ -27,7 +27,7 @@ export default async function ProfilePage() {
       </div>
 
       <div className='sm:block hidden'>
-        <UserProfileMobile profile={profile}/>
+        <UserProfileMobile />
         <Footer />
       </div>
     </div>

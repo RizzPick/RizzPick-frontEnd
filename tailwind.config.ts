@@ -27,7 +27,9 @@ const config: Config = {
                 'main-background':
                     'linear-gradient(146deg, rgba(237, 101, 231, 0.56) 16.83%, rgba(190, 142, 237, 0.47) 53.75%, rgba(140, 138, 255, 0.38) 89.83%);',
                 'profile-gradient':
-                    'linear-gradient(146deg, rgba(236.94, 100.70, 231.49, 0.41) 0%, rgba(189.55, 142.16, 236.94, 0.35) 51%, rgba(140.46, 138.13, 255, 0.28) 100%);'
+                    'linear-gradient(146deg, rgba(236.94, 100.70, 231.49, 0.41) 0%, rgba(189.55, 142.16, 236.94, 0.35) 51%, rgba(140.46, 138.13, 255, 0.28) 100%);',
+                'profile-border-gradient':
+                    'linear-gradient(146deg, rgba(200.81, 41, 194.42, 0.75) 0%, rgba(128.64, 47.97, 209.31, 0.62) 51%, rgba(33.93, 30.37, 208.25, 0.50) 100%)'
             },
         },
     },

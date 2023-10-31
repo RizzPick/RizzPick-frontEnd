@@ -1,17 +1,21 @@
 'use client'
 import { MyProfileRes } from '@/types/profile'
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LocationIcon from "../../../public/profileIcon/location.svg"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
 import Link from 'next/link';
-import { eraseCookie } from '@/utils/cookie';
+import { eraseCookie, getCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
+import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
+import AuthAPI from '@/features/auth';
 
-type Props = {
-    profile : MyProfileRes;
-}
-function UserProfileMobile({profile}:Props) {
+function UserProfileMobile() {
+    const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
+    console.log(profile);
+    const token = getCookie("Authorization");
+    const { initializeProfile } = UseProfile();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const router = useRouter();
     const logout = () => {
@@ -22,6 +26,22 @@ function UserProfileMobile({profile}:Props) {
         alert('로그아웃 처리되었습니다.');
         router.push('/');
     };
+
+    useEffect(()=>{
+        if(token){
+            const fetchData = async() => {
+                try {
+                    const response = await AuthAPI.getUserInfo();
+                    initializeProfile(response.data.data);
+                } catch (error) {
+                    console.log(error);
+                }
+            } 
+            fetchData();
+        }
+    },[initializeProfile, token])
+
+    if(!profile) return
 
 
   return (

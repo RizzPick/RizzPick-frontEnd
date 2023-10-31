@@ -50,26 +50,31 @@ function UserImageGrid({onPrev} : any) {
 
   return (
     <div>
-      <div className='p-4 bg-white rounded-xl sm:w-[94vw] sm:h-[439px] mx-auto border border-black sm:border-none scrollbar-hide'>
-        <h2 className='mb-5 text-zinc-800 text-xl font-medium leading-tight tracking-wide'>사진 등록</h2>
-        <div className='grid grid-cols-3 gap-4'>
-          {[...Array(6)].map((_, index) => (
-            <UserImageCard 
-              key={index}
-              onAddImage={addImage}
-              onDeleteImage={deleteImage}
-              onImageClick={() => handleModalOpen(index)}
-              isModalVisible={isModalVisible && selectedImage === index}
-              setModalVisible={setModalVisible}
-              image={profile?.profileImages && profile.profileImages[index] ? profile.profileImages[index] : null}
-              isLoading={isValidating}
-            />
-          ))}
+      <div className='p-2 sm:bg-profile-gradient sm:mt-4 rounded-3xl sm:w-[100vw] sm:h-[100vh] mx-auto border border-black sm:border-none scrollbar-hide bg-white'>
+      <h1 className='flex justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3'>프로필 등록</h1>
+        <div className='bg-white p-4 rounded-2xl'>
+          <h2 className='mb-5 text-zinc-800 text-xl font-medium leading-tight tracking-wide'>사진 등록</h2>
+          <div className='grid grid-cols-3 gap-4'>
+            {[...Array(6)].map((_, index) => (
+              <UserImageCard 
+                key={index}
+                onAddImage={addImage}
+                onDeleteImage={deleteImage}
+                onImageClick={() => handleModalOpen(index)}
+                isModalVisible={isModalVisible && selectedImage === index}
+                setModalVisible={setModalVisible}
+                image={profile?.profileImages && profile.profileImages[index] ? profile.profileImages[index] : null}
+                isLoading={isValidating}
+              />
+            ))}
+          </div>
+          <p className='text-zinc-800 text-xs font-medium leading-none tracking-wide mt-5 w-[276px]'>✱얼굴 사진과 전신 사진을 추가하면 더 정확한 이상형과 매칭되기 좋아요!</p>
         </div>
-        <p className='text-zinc-800 text-xs font-medium leading-none tracking-wide mt-5 w-[276px]'>✱얼굴 사진과 전신 사진을 추가하면 더 정확한 이상형과 매칭되기 좋아요!</p>
+        <div className='mt-10'>
+          <button onClick={onPrev} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-left hover:bg-neutral-200 hover:shadow shadow-inner">이전</button>
+          <button onClick={()=>router.push('/profile')} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-right hover:bg-neutral-200 hover:shadow shadow-inner">완료</button>
+        </div>
       </div>
-      <button onClick={onPrev} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-left hover:bg-neutral-200 hover:shadow shadow-inner">이전</button>
-      <button onClick={()=>router.push('/profile')} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-right hover:bg-neutral-200 hover:shadow shadow-inner">완료</button>
     </div>
   );
 }

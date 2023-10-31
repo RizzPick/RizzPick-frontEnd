@@ -100,9 +100,9 @@ function UserProfileEdit({onNext} : any) {
           {errors.gender && <p className="text-red-500">필수값입니다.</p>}
           </div>
           <div className='flex gap-4'>
-            <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">남성</button>
-            <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">여성</button>
-          <select {...register("gender", {required :true})} className="w-20 text-center border rounded-3xl" >
+            {/* <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">남성</button>
+            <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">여성</button> */}
+          <select {...register("gender", {required :true})} className="w-20 text-center border rounded-3xl px-2 py-2" >
             <option value="">더보기</option>
             <option value="MALE">남자</option>
             <option value="FEMALE">여자</option>

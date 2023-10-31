@@ -72,7 +72,7 @@ const handleImageDelete = async (imageId : number) => {
       </div>  
     }
     {!image && 
-      <div className='relative border border-gray-500 sm:w-24 sm:h-36 w-[142px] h-[172px] cursor-pointer transition-all hover:scale-105' onClick={onImageClick}>
+      <div className='relative border border-gray-400 sm:w-24 sm:h-36 w-[142px] h-[172px] cursor-pointer transition-all hover:scale-105' onClick={onImageClick}>
         <button 
           type="button" 
           className='absolute bottom-0 right-0 -mr-2 -mb-2 text-3xl bg-[#D57DFF] rounded-full transform transition-transform duration-500 hover:rotate-90'

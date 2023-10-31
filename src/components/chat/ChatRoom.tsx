@@ -145,7 +145,7 @@ const ChatRoom = () => {
                 <h1>{chat?.nickname}</h1>
         </header>
         {/* 채팅창 */}
-        <div className='w-full relative h-[90vh] rounded-3xl px-4'>
+        <div className='w-full relative h-[90vh] rounded-3xl px-3'>
           {/* 메시지 출력 부분 */}
           {isLoading ? (
             <ChatSkeleton />
@@ -175,16 +175,16 @@ const ChatRoom = () => {
                                 <div className='relative w-[30px] h-[30px]'>
                                   <Image src={chat.image} alt='프로필 이미지' fill priority style={{objectFit:'cover'}} className='rounded-full' />
                                 </div>
-                                  <p className='bg-gray-200 rounded-2xl px-4 py-2 whitespace-pre-line'>
+                                  <p className='bg-gray-200 rounded-2xl px-3 py-2 whitespace-pre-line max-w-[70vw]'>
                                       {mes.message}
                                   </p>
-                                  <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
+                                  <span className="text-gray-500 relative  -bottom-2 mb-1 mr-2 text-xs">{moment(mes.time).format('A h:mm')}</span>
                               </div>) :
-                              (<div className='flex items-center mb-2 relative' ref={messagesEndRef}>
-                                  <p className='bg-[#ab62e5] rounded-2xl px-4 py-2 whitespace-pre-line text-white'>
+                              (<div className='flex flex-col items-end mb-2' ref={messagesEndRef}>
+                                  <p className='bg-[#ab62e5] rounded-2xl px-3 py-2 whitespace-pre-line text-white max-w-[70vw]'>
                                       {mes.message}
                                   </p>
-                                  <span className="text-gray-500 absolute -bottom-0 -left-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
+                                  <span className="text-gray-500 relative -bottom-1 mb-1 text-xs mr-1">{moment(mes.time).format('A h:mm')}</span>
                               </div>)}
                       </div>
                   ))}

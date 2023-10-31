@@ -250,7 +250,7 @@ function Match({ userId }: { userId: string }) {
                                     <div className="flex items-center gap-4 ">
                                         <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
                                             'Unknown'}</p>
-                                        <p className='text-gray-400 text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
+                                        <p className='text-white text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
                                     </div>
                                     <button onClick={toggleDetailsVisibility} className='z-30 transition-all hover:scale-110 ease-in-out'>
                                         <Image src={ReadMore} width={32} height={32} alt='ReadMore' />

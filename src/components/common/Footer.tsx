@@ -1,11 +1,5 @@
 'use client'
-import AuthAPI from '@/features/auth';
-import UseProfile, { USER_INFO_KEY } from '@/hooks/useProfile';
-import { UserInfo } from '@/types/user';
-import { getCookie } from '@/utils/cookie';
-import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
-import useSWR from 'swr';
 
 // ICON
 import Bell from "../../../public/footerIcon/bell.fill.svg"
@@ -17,13 +11,11 @@ import ChatSel from "../../../public/footerIcon/Vector.sel.svg"
 import List from "../../../public/footerIcon/list.bullet.svg"
 import ListSel from "../../../public/footerIcon/list.bullet.sel.svg"
 import User from "../../../public/footerIcon/User.svg"
+import UserSel from "../../../public/footerIcon/UserSel.svg"
 import { useRouter } from 'next/navigation';
 
 function Footer() {
 
-  const token = getCookie("Authorization");
-  const { initializeUserInfo } = UseProfile();
-  const { data: profile } = useSWR<UserInfo>(USER_INFO_KEY);
   const router = useRouter();
 
   const [selectedIcon, setSelectedIcon] = useState<string>('home');
@@ -43,24 +35,13 @@ function Footer() {
       case 'board':
         router.push('/user/plan/board');
         break;
+      case 'profile':
+        router.push('/profile');
+        break;
       default:
         break;
     }
   }
-
-  useEffect(()=>{
-    if(token){
-        const fetchData = async() => {
-            try {
-                const response = await AuthAPI.getUserInfo();
-                initializeUserInfo(response.data);
-            } catch (error) {
-                console.log(error);
-            }
-        } 
-        fetchData();
-    }
-},[initializeUserInfo, token])
 
   useEffect(() => {
     const storedIcon = sessionStorage.getItem('selectedIcon');
@@ -86,15 +67,9 @@ function Footer() {
         <button onClick={() => handleIconClick('chat')}>
           {selectedIcon === 'chat' ? <ChatSel /> : <Chat />}
         </button>
-        {profile ? (
-          <Link href="/profile" onClick={() => handleIconClick('profile')}>
-            <div className='w-[50px] h-[50px] rounded-full flex items-center'>
-              <User />
-            </div>
-          </Link>
-        ) : (
-          <div className='animate-pulse w-[50px] h-[50px] rounded-full bg-gray-200' role='status'></div>
-        )}
+        <button onClick={() => handleIconClick('profile')}>
+          {selectedIcon === 'profile' ? <UserSel /> : <User />}
+        </button>
       </nav>
     </footer>
   );

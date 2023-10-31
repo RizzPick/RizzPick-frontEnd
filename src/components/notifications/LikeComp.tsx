@@ -46,9 +46,9 @@ function LikeComp() {
                 whiteSpace: 'nowrap',
             }}
         >
-            {likesData.map((like, index) => (
+            {likesData.map((like) => (
                 <div
-                    className="bg-gradient-to-br from-fuchsia-600 via-purple-700 to-indigo-700 w-[95px] h-[95px] rounded-full p-2 flex items-center justify-center"
+                    className="bg-profile-border-gradient w-[95px] h-[95px] rounded-full p-2 flex items-center justify-center"
                     key={like.userId}
                 >
                         <div className='relative w-[85px] h-[85px]'>
