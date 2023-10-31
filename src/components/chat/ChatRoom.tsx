@@ -12,13 +12,14 @@ import ChatSkeleton from './ChatSkeleton';
 import {FiArrowUp} from "react-icons/fi"
 import Back from "../../../public/chatIcon/Button.svg"
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const ChatRoom = () => {
-    
     const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
     const [messages, setMessages] = useState<MessagesRes[]>();
     const [isLoading, setIsLoading] = useState(false);
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
+    console.log(chat);
     const fullToken = getCookie('Authorization');
     const MY_TOKEN = fullToken?.split(' ')[1];
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -172,9 +173,11 @@ const ChatRoom = () => {
                       <div key={mes.time} className={`flex ${mes.sender === chat?.users[0] ? 'justify-start' : 'justify-end'}`}>
                           {mes.sender === chat?.users[0] ?
                               (<div className='flex items-center gap-2 mb-2' ref={messagesEndRef}>
+                                <Link href={`/user/profile/${chat.userId}`}>
                                 <div className='relative w-[30px] h-[30px]'>
                                   <Image src={chat.image} alt='프로필 이미지' fill priority style={{objectFit:'cover'}} className='rounded-full' />
                                 </div>
+                                </Link>
                                   <p className='bg-gray-200 rounded-2xl px-3 py-2 whitespace-pre-line max-w-[70vw]'>
                                       {mes.message}
                                   </p>

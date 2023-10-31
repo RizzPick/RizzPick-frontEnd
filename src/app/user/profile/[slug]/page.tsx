@@ -1,8 +1,19 @@
+import OtherUserProfile from '@/components/profile/OtherUserProfile';
+import { MyProfileRes } from '@/types/profile';
+import axios from 'axios';
 import React from 'react'
 
-function OtherUserProfilepage() {
+type Props = {
+  params: {
+      slug: string;
+  };
+};
+
+async function OtherUserProfilepage({ params: { slug } }: Props) {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/userProfile/${slug}`)
+    const profile : MyProfileRes = response.data.data;
   return (
-    <div>OtherUserProfilepage</div>
+    <div><OtherUserProfile profile={profile}/></div>
   )
 }
 

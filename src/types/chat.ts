@@ -11,6 +11,7 @@ export type ChatData = {
     location? : string;
     mbti? : string;
     religion? : string;
+    userId? : number;
 }
 
 export type MessagesRes = {

@@ -9,6 +9,7 @@ import UseProfile, { USER_INFO_KEY } from '@/hooks/useProfile';
 import { UserInfo } from '@/types/user';
 import { getCookie } from '@/utils/cookie';
 import AuthAPI from '@/features/auth';
+import Link from 'next/link';
 
 type Props = {
     liked : LikeData[];
@@ -47,10 +48,12 @@ function LikeList({liked} : Props) {
           <div className='grid grid-cols-3 gap-3 mt-7'>
             {liked.map((like) => {
               return (
-              <div key={like.userId} className='w-28 relative h-36'>
-                <Image src={like.profilePic.image} alt={`${like.userId}`} fill style={{objectFit:"cover"}} className='rounded-md shadow'/>
-                <div className='absolute bottom-0 text-white p-2 text-base bg-black bg-opacity-40 rounded-md w-full'>{like.nickname}</div>
-              </div>
+                <Link key={like.userId} href={`/user/profile/${like.userId}`}>
+                  <div className='w-28 relative h-36'>
+                    <Image src={like.profilePic.image} alt={`${like.userId}`} fill style={{objectFit:"cover"}} className='rounded-md shadow'/>
+                    <div className='absolute bottom-0 text-white p-2 text-base bg-black bg-opacity-40 rounded-md w-full'>{like.nickname}</div>
+                  </div>
+              </Link>
               )
             })}
           </div>
