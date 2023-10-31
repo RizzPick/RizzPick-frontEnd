@@ -26,7 +26,7 @@ function UserProfileMobile({profile}:Props) {
 
   return (
     <div>
-        <div className='h-[80vh] bg-custom-gradient rounded-3xl p-4 relative mt-20 w-full flex justify-center'>
+        <div className='h-[80vh] bg-profile-gradient rounded-3xl p-4 relative mt-20 w-full flex justify-center'>
             <div className='absolute -top-0 -mt-20'>
             {/* 유저 이미지 태그 */}
                 <div className='relative h-[146px] w-[146px]'>
@@ -68,7 +68,7 @@ function UserProfileMobile({profile}:Props) {
                         <div>로그아웃 할까요?</div>
                         <div className="flex justify-between mt-4 w-full px-6">
                             <button onClick={() => setShowLogoutModal(false)} className="mr-2 px-4 py-2 rounded">취소</button>
-                            <button onClick={() => { logout(); setShowLogoutModal(false); }} className="px-4 py-2 bg-gray-200 bg-opacity-70 rounded-lg">확인</button>
+                            <button onClick={() => { logout(); setShowLogoutModal(false); }} className="px-4 py-2rounded-lg transition-all hover:scale-125">확인</button>
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,6 @@ import ChatSkeleton from './ChatSkeleton';
 import {FiArrowUp} from "react-icons/fi"
 
 const Chat = () => {
-
     const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
     const [messages, setMessages] = useState<MessagesRes[]>();
     const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +19,6 @@ const Chat = () => {
     const fullToken = getCookie('Authorization');
     const MY_TOKEN = fullToken?.split(' ')[1];
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    console.log(chat);
 
     const client = useRef(
       new Client({
@@ -82,9 +80,10 @@ const Chat = () => {
     const currentClient = client.current;
     currentClient.onConnect = () => {
       console.log("소켓 연결완료✅");
+      console.log("채팅방 아이디 : ", chat.chatRoomId);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
-      currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);
+      // currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);
       stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId:chat?.chatRoomId, message: "채팅방에 입장하셨습니다" });
     };
     currentClient.activate();

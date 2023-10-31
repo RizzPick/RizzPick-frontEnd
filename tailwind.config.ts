@@ -26,6 +26,8 @@ const config: Config = {
                     'linear-gradient(329deg, rgba(34,30,208,1) 26%, rgba(129,48,209,1) 54%, rgba(177,52,171,1) 83%)',
                 'main-background':
                     'linear-gradient(146deg, rgba(237, 101, 231, 0.56) 16.83%, rgba(190, 142, 237, 0.47) 53.75%, rgba(140, 138, 255, 0.38) 89.83%);',
+                'profile-gradient':
+                    'linear-gradient(146deg, rgba(236.94, 100.70, 231.49, 0.41) 0%, rgba(189.55, 142.16, 236.94, 0.35) 51%, rgba(140.46, 138.13, 255, 0.28) 100%);'
             },
         },
     },

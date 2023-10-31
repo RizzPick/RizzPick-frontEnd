@@ -40,7 +40,7 @@ function LikeList({liked} : Props) {
             <button className='absolute left-[15px]' onClick={()=>router.back()}><Back/></button>
             <h1>내가 받은 좋아요 ({liked.length})</h1>
         </header>
-        <div className='h-[100vh] bg-custom-gradient rounded-3xl p-4'>
+        <div className='h-[100vh] bg-profile-gradient rounded-3xl p-4'>
           <div className='relative h-[85px] w-[85px] mx-auto'>
             {profile && <Image src={profile?.data.profileImages[0].image} alt='프로필 이미지' fill style={{objectFit:'cover'}} className='rounded-full' />}
           </div>

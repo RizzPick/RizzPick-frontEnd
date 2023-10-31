@@ -76,7 +76,8 @@ function UserProfileEdit({onNext} : any) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className='sm:bg-gradient-to-br from-fuchsia-400 via-purple-400 to-indigo-400 md:bg-white lg:bg-white px-8 py-4 rounded-xl border border-black sm:border-none'>
+      <form onSubmit={handleSubmit(onSubmit)} className='sm:bg-profile-gradient md:bg-white lg:bg-white px-8 py-4 rounded-3xl border border-black sm:border-none sm:mt-4'>
+      <h1 className='flex justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3'>프로필 등록</h1>
         <div className="mb-4">
           <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2 px-1">닉네임</label>

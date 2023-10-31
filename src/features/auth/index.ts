@@ -12,7 +12,7 @@ const AuthAPI = {
   emailAuthVerify : (data:EmailVerifyReq) : Promise<AxiosResponse<EmailVerifyRes>> => service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/email/verify`, data),
   getUserStatus: () => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/status`),
   getUserInfo : () : Promise<AxiosResponse<UserInfo>> => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/myProfile`),
-  // refresh : (token) => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/refresh-token`, token),
+  refresh : (token:string) => service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/refresh`, token),
 };
 
 export default AuthAPI;

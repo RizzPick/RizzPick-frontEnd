@@ -35,8 +35,7 @@ function ProfilEditPage() {
   },[initializeProfile])
   
   return (
-    <div className='bg-gradient-to-br from-fuchsia-400 via-purple-400 to-indigo-400'>
-      <h1 className='flex justify-center text-zinc-800 text-4xl font-bold leading-10 tracking-widest pt-6 mb-3'>프로필 등록</h1>
+    <div>
     {mobile ? 
     (
       <div className='grid grid-cols-1 sm:h-[100vh]'>

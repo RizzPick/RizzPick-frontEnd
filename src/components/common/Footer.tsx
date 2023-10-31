@@ -3,7 +3,6 @@ import AuthAPI from '@/features/auth';
 import UseProfile, { USER_INFO_KEY } from '@/hooks/useProfile';
 import { UserInfo } from '@/types/user';
 import { getCookie } from '@/utils/cookie';
-import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr';
@@ -17,6 +16,7 @@ import Chat from "../../../public/footerIcon/Vector.svg"
 import ChatSel from "../../../public/footerIcon/Vector.sel.svg"
 import List from "../../../public/footerIcon/list.bullet.svg"
 import ListSel from "../../../public/footerIcon/list.bullet.sel.svg"
+import User from "../../../public/footerIcon/User.svg"
 import { useRouter } from 'next/navigation';
 
 function Footer() {
@@ -88,15 +88,8 @@ function Footer() {
         </button>
         {profile ? (
           <Link href="/profile" onClick={() => handleIconClick('profile')}>
-            <div className='w-[50px] h-[50px] rounded-full relative'>
-            <Image
-                className="rounded-full"
-                src={profile.data.profileImages[0].image}
-                alt="Picture of the author"
-                fill
-                style={{objectFit:"cover"}}
-                priority
-            />
+            <div className='w-[50px] h-[50px] rounded-full flex items-center'>
+              <User />
             </div>
           </Link>
         ) : (

@@ -56,7 +56,8 @@ function LikeComp() {
                                 src={like.profilePic.image}
                                 alt={like.nickname}
                                 fill
-                                // style={{objectFit:'cover'}}
+                                style={{objectFit:'cover'}}
+                                loading='lazy'
                                 className='rounded-full'
                             />
                             <div className='absolute -bottom-2 right-0 -mr-3'>

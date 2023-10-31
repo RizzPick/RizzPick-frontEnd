@@ -1,5 +1,6 @@
 import { getCookie } from '@/utils/cookie';
 import axios from 'axios';
+import AuthAPI from './auth';
 
 // 서버의 도메인주소
 // 캐시, 데이터 형식 ...
@@ -36,16 +37,22 @@ service.interceptors.response.use(
     }
 
     /** 2 */
-    // config.sent = true;
-    // const { headers } = await AuthAPI.refresh();
-    // const accessToken = headers.authorization;
-    // console.log(accessToken);
+    if(status === 499) {
+      config.sent = true;
+      const refreshToken = getCookie('Authorization_Refresh');
+      const token = refreshToken?.split(" ")[1];
 
-    // if (accessToken) {
-    //   config.headers.Authorization = `${accessToken}`;
-    // }
+      if(!token) return;
+      const { headers } = await AuthAPI.refresh(token);
+      const accessToken = headers.authorization;
+      console.log(accessToken);
 
-    // return service(config);
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
+
+      return service(config);
+    }
   }
 );
 

@@ -10,7 +10,6 @@ import Footer from '@/components/common/Footer';
 
 export default function ChatPage() {
     const router = useRouter();
-    
     const [mobile, setMobile] = useState(false);
     const isMobile = useMediaQuery({
         query : "(max-width:767px)"

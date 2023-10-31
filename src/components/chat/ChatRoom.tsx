@@ -171,8 +171,10 @@ const ChatRoom = () => {
                   {messagesForDate.map(mes => (
                       <div key={mes.time} className={`flex ${mes.sender === chat?.users[0] ? 'justify-start' : 'justify-end'}`}>
                           {mes.sender === chat?.users[0] ?
-                              (<div className='flex items-center gap-2 mb-2 relative' ref={messagesEndRef}>
-                                  <Image src={chat.image} alt='프로필 이미지' width={30} height={30} priority className='rounded-full' />
+                              (<div className='flex items-center gap-2 mb-2' ref={messagesEndRef}>
+                                <div className='relative w-[30px] h-[30px]'>
+                                  <Image src={chat.image} alt='프로필 이미지' fill priority style={{objectFit:'cover'}} className='rounded-full' />
+                                </div>
                                   <p className='bg-gray-200 rounded-2xl px-4 py-2 whitespace-pre-line'>
                                       {mes.message}
                                   </p>
