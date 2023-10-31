@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import ChatAPI from '@/features/chat';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/utils/cookie';
+import Like from "../../../public/notificationsIcon/Like.svg"
 
 interface LikeData {
     nickname: string;
@@ -70,13 +71,13 @@ export default function Alarm({ close }: AlarmProps) {
     return (
         <>
             {closeModal && (
-                <div className="absolute top-[70px] right-[50px] translate-[-50%] bg-white p-10 w-[500px] h-[80vh] flex flex-col z-50">
-                    <div className="h-36">
+                <div className="absolute top-[100px] right-[60px] translate-[-50%] bg-white p-6 w-[20vw] h-[60vh] flex flex-col z-50 border border-zinc-800 rounded-3xl">
+                    <div className="h-[20vh]">
                         <h2 className="mb-2">
-                            받은 좋아요 ({likesData.length})
+                            좋아요 ({likesData.length})
                         </h2>
                         <div
-                            className="flex flex-row border-t-[1px]"
+                            className="flex flex-row border-t-[1px] scrollbar-hide py-4 px-3 gap-3 overflow-x-auto"
                             style={{
                                 borderColor: 'black',
                                 overflowX: 'auto', // 가로 스크롤을 활성화합니다.
@@ -84,40 +85,26 @@ export default function Alarm({ close }: AlarmProps) {
                             }}
                         >
                             {likesData.map((like, index) => (
-                                <div
-                                    className="flex-col my-4"
-                                    key={like.userId}
-                                    style={{ minWidth: '100px' }} // 예시로 100px의 최소 너비를 설정합니다. 필요에 따라 조정하세요.
-                                >
-                                    <div className="rounded-full bg-[#A627A9] overflow-hidden w-[70px] h-[70px]">
-                                        <div className="rounded-full overflow-hidden w-[60px] h-[60px] ml-[5px] mt-[5px]">
+                                    <div className="rounded-full bg-[#A627A9] w-[70px] h-[70px] flex items-center justify-center" key={like.userId}>
+                                        <div className="w-[60px] h-[60px] relative">
                                             <Image
                                                 src={like.profilePic.image}
                                                 alt={like.nickname}
-                                                width={60}
-                                                height={60}
-                                                objectFit="cover"
+                                                fill
+                                                style={{objectFit:'cover'}}
+                                                className='rounded-full'
                                             />
+                                            <div className='absolute -bottom-2 right-0 -mr-3'>
+                                                <Like />
+                                            </div>
                                         </div>
                                     </div>
-                                    <h3
-                                        className="mx-[10px]"
-                                        style={{
-                                            maxWidth: '3ch',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap',
-                                        }}
-                                    >
-                                        {like.nickname}
-                                    </h3>
-                                </div>
                             ))}
                         </div>
                     </div>
-                    <div className="rounded-2xl">
+                    <div className="rounded-2xl h-[40vh]">
                         <h2 className="mb-2 font-bold text-2xl">메시지</h2>
-                        <div className="overflow-y-auto h-[calc(70vh-36px)]">
+                        <div className="overflow-y-auto h-[calc(70vh-36px)] border-t-[1px] border-black">
                             {chats?.map((chat) => {
                                 return (
                                     <div

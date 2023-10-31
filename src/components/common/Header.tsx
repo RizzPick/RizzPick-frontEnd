@@ -6,7 +6,6 @@ import { UserInfo } from '@/types/user';
 import { useEffect, useState } from 'react';
 import AuthAPI from '@/features/auth';
 import { eraseCookie, getCookie } from '@/utils/cookie';
-import profiledog from '../../../public/images/profiledog.jpeg';
 import Alarm from '@/components/alarm/Alarm';
 import { useRouter } from 'next/navigation';
 import Logo from '../../../public/Logo_color.png';
@@ -55,27 +54,28 @@ export default function Header() {
     return (
         <header className="flex justify-between item-center px-8 py-4 border-b-2 border-[#D9D9D9] sm:border-none">
             <Link href="/user/match">
+                <div className='relative w-[95px] h-[40px]'>
                 <Image
                     src={Logo}
                     priority
                     alt="로고"
-                    width={95}
-                    height={40}
+                    fill
                     style={{ objectFit: 'cover' }}
                 />
+                </div>
             </Link>
             <nav className="flex gap-4 items-center sm:hidden">
                 <Link href="/user/plan/board">게시판</Link>
-                {openChatModal && <Alarm close={close} />}
-                {showOverlay && (
-                    <div
-                        className="block fixed top-0 left-1/2 transform -translate-x-1/2 h-full bg-black bg-opacity-50 z-30 w-full"
-                        onClick={close}
-                    ></div>
-                )}
                 <span onClick={Open} className="cursor-pointer">
                     알림
                 </span>
+                {openChatModal && <Alarm close={close} />}
+                {showOverlay && (
+                    <div
+                        className="block fixed top-0 left-1/2 transform -translate-x-1/2 h-full z-30 w-full bg-stone-300 bg-opacity-40"
+                        onClick={close}
+                    ></div>
+                )}
                 {/* 다른 페이지에서 넘어갈때 404 나와서 경로 수정 필요 */}
                 {userInfo && (
                     <>
@@ -95,19 +95,6 @@ export default function Header() {
                             </div>
                         </Link>
                     </>
-                )}
-                {!userInfo && (
-                    <Link href="/profile">
-                        <Image
-                            className="rounded-full mx-auto"
-                            src={profiledog}
-                            placeholder="blur"
-                            blurDataURL="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
-                            alt="Picture of the author"
-                            width={30}
-                            height={30}
-                        />
-                    </Link>
                 )}
             </nav>
         </header>

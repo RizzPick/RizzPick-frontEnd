@@ -27,6 +27,7 @@ function Match() {
     //! 랜덤 매칭
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
+    console.log(users);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -146,6 +147,8 @@ function Match() {
         }
     };
 
+    if(!users[userIndex]) return;
+
     return (
         <div className="relative flex bg-matchpage-gradient h-[100vh]">
             <div className="flex items-start p-10 mx-auto">
@@ -153,17 +156,6 @@ function Match() {
                 <div>
                     {/* 유저 이미지 */}
                     <div className="relative h-[60vh] w-full">
-                    {/* <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black z-10 opacity-20"/> */}
-                        {/* 이미지 개수, 현재 페이지 보여주기 */}
-                        {/* <div className="flex justify-center mt-4">
-                            {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
-                                ? currentUser.profileImages.map((_, index) => (
-                                      <div key={index} className={`mx-1 z-10 text-2xl ${index === slideIndex ? ('text-white'):('text-gray-500')}`}>
-                                        <GoDotFill />
-                                      </div>
-                                  ))
-                                : null}
-                        </div> */}
                         {/* 페이지 이동 버튼 */}
                         <button
                             onClick={prevSlide}
