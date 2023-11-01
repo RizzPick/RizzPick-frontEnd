@@ -5,7 +5,7 @@ import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
 import { sendLike, sendNope } from '@/features/thumbsUpDown/thumbsUpDown';
-import {GoDotFill } from "react-icons/go"
+import { GoDotFill } from 'react-icons/go';
 
 // ICON
 import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
@@ -64,7 +64,7 @@ function Match({ userId }: { userId: string }) {
         // const updateUsersArray = async () => {
         //     try {
         //         const likedUsers = await fetchLikedUsers(); // 좋아요 상태 가져오기
-                
+
         //         // 기존 사용자 배열에서 좋아요를 보낸 사용자 제외
         //         setUsers((prevUsers) =>
         //             prevUsers.filter(
@@ -85,7 +85,7 @@ function Match({ userId }: { userId: string }) {
     const handleButtonClick = () => {
         // 처음에 몇명의 유저를 추천받는 지 확인하고, 마지막 유저의 index 가 넘어가게 되면 페이지네이션 로직과 동일하게 유저 추천 배열 늘리기 작업 필요
         if (userIndex === users.length - 1) {
-            alert("오늘의 추천이 끝났습니다")
+            alert('오늘의 추천이 끝났습니다');
             // setUserIndex(0);
         } else {
             setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
@@ -191,13 +191,20 @@ function Match({ userId }: { userId: string }) {
                 <div className="flex-1 max-w-md rounded-full h-[calc(100vh - 100px)]">
                     {/* 유저 이미지 */}
                     <div className="relative sm:h-[75vh] h-[695px] w-[463px] sm:w-full rounded-2xl overflow-hidden sm:mt-4">
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20"/>
+                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20" />
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
                             {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
                                 ? currentUser.profileImages.map((_, index) => (
-                                      <div key={index} className={`mx-1 z-10 text-2xl ${index === slideIndex ? ('text-white'):('text-gray-500')}`}>
-                                        <GoDotFill />
+                                      <div
+                                          key={index}
+                                          className={`mx-1 z-10 text-2xl ${
+                                              index === slideIndex
+                                                  ? 'text-white'
+                                                  : 'text-gray-500'
+                                          }`}
+                                      >
+                                          <GoDotFill />
                                       </div>
                                   ))
                                 : null}
@@ -246,17 +253,31 @@ function Match({ userId }: { userId: string }) {
 
                         {/* 간단한 정보, 설명란 */}
                         <div className="absolute w-full bottom-28 text-white flex flex-col p-6 z-30">
-                                <div className="text-2xl flex items-center justify-between">
-                                    <div className="flex items-center gap-4 ">
-                                        <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
-                                            'Unknown'}</p>
-                                        <p className='text-white text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
-                                    </div>
-                                    <button onClick={toggleDetailsVisibility} className='z-30 transition-all hover:scale-110 ease-in-out'>
-                                        <Image src={ReadMore} width={32} height={32} alt='ReadMore' />
-                                    </button>
+                            <div className="text-2xl flex items-center justify-between">
+                                <div className="flex items-center gap-4 ">
+                                    <p className="font-bold text-3xl">
+                                        {users[userIndex]?.nickname ??
+                                            'Unknown'}
+                                    </p>
+                                    <p className="text-white text-xl">
+                                        {users[userIndex]?.age ?? 'Unknown'}
+                                    </p>
                                 </div>
-                                <div className="text-white mt-2">{users[userIndex]?.intro}</div>
+                                <button
+                                    onClick={toggleDetailsVisibility}
+                                    className="z-30 transition-all hover:scale-110 ease-in-out"
+                                >
+                                    <Image
+                                        src={ReadMore}
+                                        width={32}
+                                        height={32}
+                                        alt="ReadMore"
+                                    />
+                                </button>
+                            </div>
+                            <div className="text-white mt-2">
+                                {users[userIndex]?.intro}
+                            </div>
                         </div>
 
                         {/* 좋아요, 싫어요 버튼 */}
@@ -265,19 +286,28 @@ function Match({ userId }: { userId: string }) {
                                 className="hover:scale-110 transition-all ease-in-out z-20"
                                 onClick={handleNope}
                             >
-                                <Image src={BadIcon} width={66} height={66} alt='싫어요' />
+                                <Image
+                                    src={BadIcon}
+                                    width={66}
+                                    height={66}
+                                    alt="싫어요"
+                                />
                             </button>
                             <button
                                 className="hover:scale-110 transition-all ease-in-out z-20"
                                 onClick={handleLike}
                             >
-                                <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
+                                <Image
+                                    src={WhiteHeartIcon}
+                                    width={66}
+                                    height={66}
+                                    alt="좋아요"
+                                />
                             </button>
                         </div>
                     </div>
                 </div>
-                
-                
+
                 {/* 데이트 계획 및 상세 정보 */}
                 <div
                     className="flex-1 max-w-md p-6 bg-[#CACFFF] rounded-3xl shadow-lg h-[45vh] relative mr-[60px]"
@@ -302,9 +332,7 @@ function Match({ userId }: { userId: string }) {
                                     })}
                                 </ul>
                             ) : (
-                                <div
-                                    className="mx-auto px-4 py-2 mt-4 rounded-3xl font-bold"
-                                >
+                                <div className="mx-auto px-4 py-2 mt-4 rounded-3xl font-bold">
                                     작성한 계획이 없습니다
                                 </div>
                             )}

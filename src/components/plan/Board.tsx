@@ -18,6 +18,22 @@ export default function Board() {
     const [location, setLocation] = useState('');
     const [theme, setTheme] = useState('');
     const router = useRouter();
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth <= 640);
+        }; // 초기 로드시 화면 크기 확인
+        handleResize();
+
+        // resize 이벤트에 핸들러 연결
+        window.addEventListener('resize', handleResize);
+
+        // 컴포넌트 언마운트 시 이벤트 핸들러 제거
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         async function fetchData() {
@@ -70,35 +86,37 @@ export default function Board() {
     };
 
     return (
-        <div className="min-h-screen w-full mx-auto bg-board-bg">
-            <div className="relative z-0 inset-x-0 top-[0px] h-[80px] mb-[-50px] min-w-full bg-white"></div>
+        <div className="min-h-screen w-full mx-auto bg-board-bg sm:bg-none sm:mb-20">
+            <div className="relative z-0 inset-x-0 top-[0px] h-[80px] mb-[-50px] min-w-full bg-white sm:hidden"></div>
             <div className="flex flex-col items-center mt-auto">
-                <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-50">
+                <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-50 sm:text-3xl">
                     <h1 className="text-3xl font-bold ">
                         💜나랑 이런 데이트 어때요?💜
                     </h1>
                 </div>
-                <div>
+                <div className="flex flex-row p-4 gap-4 items-center sm:mt-[-10px] sm:h-full">
                     <button
                         type="button"
                         onClick={handleButtonClick}
-                        className="bg-button-bg text-white font-bold p-[10px] rounded m-7 w-[287px] gap-2.5 items-center justify-center"
+                        className="bg-button-bg text-white text-2xl font-semibold font-['SUITE'] leading-normal w-[287px] h-11 p-2.5 rounded shadow justify-center items-center gap-2.5 inline-flex sm:w-[93px] sm:h-[26px] sm:text-base sm:p-[10px]"
                     >
-                        <span className="">데이트 계획 작성하러가기!</span>
+                        {isSmallScreen
+                            ? '작성하기'
+                            : '데이트 계획 작성하러가기!'}
                     </button>
                     <button
                         type="button"
                         onClick={myPlanHandleClick}
-                        className="bg-button-bg text-white font-bold p-[10px] rounded m-7 gap-2.5 items-center justify-center"
+                        className="bg-button-bg text-white text-2xl font-semibold font-['SUITE'] leading-normal w-[180px] h-11 p-2.5 rounded shadow justify-center items-center gap-2.5 inline-flex sm:w-[93px] sm:h-[26px] sm:text-base sm:p-[10px]"
                     >
-                        내 글 보러가기!
+                        {isSmallScreen ? '내 글 보기' : '내 글 보러가기!'}
                     </button>
                 </div>
             </div>
-            <div className="ml-[182px] mr-[122px]">
+            <div className="ml-[182px] mr-[122px] sm:mt-0 sm:ml-6 sm:mr-1">
                 <DatingGrid datings={currentPageData} />
             </div>
-            <div className="pagination flex justify-center">
+            <div className="pagination flex justify-center sm:mt-6">
                 {[...Array(totalPages)].map((_, index) => (
                     <button
                         key={index}

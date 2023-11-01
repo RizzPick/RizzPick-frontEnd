@@ -14,6 +14,22 @@ export default function MyPlanList() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
     const router = useRouter();
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth <= 640);
+        }; // 초기 로드시 화면 크기 확인
+        handleResize();
+
+        // resize 이벤트에 핸들러 연결
+        window.addEventListener('resize', handleResize);
+
+        // 컴포넌트 언마운트 시 이벤트 핸들러 제거
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         async function fetchData() {
@@ -41,10 +57,10 @@ export default function MyPlanList() {
     };
 
     return (
-        <div className="min-h-screen w-full mx-auto bg-board-bg">
-            <div className="relative z-0 inset-x-0 top-[0px] h-[80px] mb-[-50px] min-w-full bg-white"></div>
+        <div className="min-h-screen w-full mx-auto bg-board-bg sm:bg-none sm:mb-20">
+            <div className="relative z-0 inset-x-0 top-[0px] h-[80px] mb-[-50px] min-w-full bg-white sm:hidden"></div>
             <div className="flex flex-col items-center mt-auto">
-                <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-50">
+                <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-50 sm:text-3xl">
                     <h1 className="text-3xl font-bold ">
                         🎈 나의 데이트 계획 🎈
                     </h1>
@@ -52,12 +68,12 @@ export default function MyPlanList() {
                 <button
                     type="button"
                     onClick={handleButtonClick}
-                    className="bg-button-bg text-white font-bold p-[10px] rounded m-7 w-[287px] gap-2.5 items-center justify-center"
+                    className="bg-button-bg text-white text-2xl font-semibold font-['SUITE'] leading-normal w-[287px] my-8 h-11 p-2.5 rounded shadow justify-center items-center gap-2.5 inline-flex sm:w-[93px] sm:h-[26px] sm:text-base sm:p-[10px] sm:mb-6"
                 >
-                    데이트 계획 작성하러가기!
+                    {isSmallScreen ? '작성하기' : '데이트 계획 작성하러가기!'}
                 </button>
             </div>
-            <div className="ml-[182px] mr-[122px]">
+            <div className="ml-[182px] mr-[122px] sm:mt-0 sm:ml-6 sm:mr-1">
                 <MyPlan myDatings={myDatings} />
             </div>
         </div>

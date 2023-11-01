@@ -17,6 +17,7 @@ import { DatingInfo } from '@/types/plan/myplan/type';
 import DeleteIcon from '../../../public/planIcon/delete.svg';
 // import { deleteActivity } from '../../features/plan/dating';
 import { Activity } from '../../types/plan/activity/type';
+import BackIcon from '../../../public/planIcon/back.svg';
 
 interface WriteProps {
     initialData: DatingInfo;
@@ -66,6 +67,27 @@ export default function Write({
     const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setActivityContent(e.target.value);
     };
+
+    const handleBackButtonClick = () => {
+        history.back();
+    };
+
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth <= 640);
+        }; // 초기 로드시 화면 크기 확인
+        handleResize();
+
+        // resize 이벤트에 핸들러 연결
+        window.addEventListener('resize', handleResize);
+
+        // 컴포넌트 언마운트 시 이벤트 핸들러 제거
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     //? 더미 데이터를 받아요
     const fetchDatingData = useCallback(async () => {
@@ -120,14 +142,13 @@ export default function Write({
 
     const handleAddActivity = async () => {
         if (activityContent) {
-            const id = Number(param.slug); // datingId를 가져옵니다.
+            const id = Number(param.slug);
             try {
                 const activityResponse = await createActivity(
                     id,
                     activityContent
                 );
                 if (activityResponse.status === 'success') {
-                    // 활동 추가 버튼 클릭 시 활동 목록에 새로운 활동 추가
                     setActivities([
                         ...activities,
                         {
@@ -135,7 +156,7 @@ export default function Write({
                             content: activityContent,
                         },
                     ]);
-                    setActivityContent(''); // 입력 칸을 비우기
+                    setActivityContent('');
                 } else {
                     throw new Error('Failed to create an activity');
                 }
@@ -160,9 +181,7 @@ export default function Write({
                     },
                 }
             );
-            // 응답을 확인하고, 성공적으로 삭제되었는지 확인합니다.
             if (response.data.status === 'success') {
-                // activities 상태에서 삭제된 activity를 제거합니다.
                 setActivities(
                     activities.filter((activity) => activity.id !== activityId)
                 );
@@ -176,206 +195,240 @@ export default function Write({
             console.error('Failed to delete activity:', error);
         }
     }
-    console.log('null?', activityId); // activity 객체 로깅
+    console.log('null?', activityId);
 
     return (
-        <div className="w-full h-[100vh] mx-auto">
-            <div className="w-full flex flex-col items-center">
-                <div className="w-full h-[248px] bg-write-bg">
-                    <div className="pt-[67px] pl-[200px] leading-[48px] tracking-[3.60px]">
-                        <h1 className="text-[36px] text-white font-black">
-                            나만의 특별한 데이트 계획을 <br /> 작성해 보세요!
-                        </h1>
-                    </div>
+        <>
+            <div className="hidden sm:block">
+                <div className="flex flex-row h-20 items-center">
+                    <button onClick={handleBackButtonClick} className="p-4">
+                        <BackIcon />
+                    </button>
+                    <p className="text-neutral-700 text-xl font-medium leading-tight tracking-wide mx-28">
+                        계획작성
+                    </p>
                 </div>
             </div>
-            {/* 작성공간 */}
-            <div className="w-[1248px] mx-auto">
-                <div
-                    className="flex flex-row justify-center p-[30px] mb-2 w-[1248px] mt-[-30px] bg-white z-100 gap-[30px] "
-                    style={{
-                        position: 'relative',
-                        borderRadius: '30px 30px 0px 0px',
-                    }}
-                >
-                    <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
-                        #식사🍚
-                    </p>
-                    <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
-                        #영화🎬
-                    </p>
-                    <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
-                        #문화/예술🎨
-                    </p>
-                    <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
-                        #스포츠🏀️
-                    </p>
-                    <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
-                        #힐링🌿
-                    </p>
-                    <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
-                        #활동⚙️
-                    </p>
-                    <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
-                        #일상🎧
-                    </p>
-                </div>
-                <div className="flex flex-col items-center w-[1248px] h-[70vh] relative">
-                    <div className="flex flex-col items-center p-4 w-full mb-8">
-                        <div className=" flex-col items-center p-4 w-full">
-                            {successMessage && (
-                                <div className="alert alert-success">
-                                    {successMessage}
-                                </div>
-                            )}
-                            <form onSubmit={handleSubmit}>
-                                <div className="flex flex-row w-full gap-[40px] mb-[36px]">
-                                    <div className="w-[574px]">
-                                        <label
-                                            htmlFor="title"
-                                            className="block text-gray-700 text-sm font-normal mb-2"
-                                        >
-                                            제목
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="title"
-                                            value={title}
-                                            onChange={handleTitleChange}
-                                            className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            placeholder="이목을 끄는 이름을 지어주세요!!"
-                                        />
-                                    </div>
-                                    <div className="w-[574px]">
-                                        <label
-                                            htmlFor="location"
-                                            className="block text-gray-700 text-sm font-normal mb-2"
-                                        >
-                                            위치
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="location"
-                                            value={location}
-                                            onChange={handleLocationChange}
-                                            className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            placeholder="어디서 만나실건가요?"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="w-[554px]">
-                                    <label
-                                        htmlFor="theme"
-                                        className="block text-gray-700 text-sm font-normal mb-2"
-                                    >
-                                        주제
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="theme"
-                                        value={theme}
-                                        onChange={handleThemeChange}
-                                        className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        placeholder="어떤 컨셉의 데이트인가요?"
-                                    />
-                                </div>
-                                <div className="absolute bottom-16 flex justify-center items-center w-full h-10 right-[10px]">
-                                    <button
-                                        className="w-[234px] h-[65px] bg-fuchsia-600 rounded-[30px] text-white text-[32px] font-semibold font-['SUITE'] leading-loose tracking-widest"
-                                        style={{
-                                            display:
-                                                authorId === datingAuthorId
-                                                    ? 'block'
-                                                    : 'none',
-                                        }}
-                                    >
-                                        작성완료
-                                    </button>
-                                </div>
-                            </form>
+            <div className="w-full h-[100vh] mx-auto sm:w-[393px]">
+                <div className="w-full flex flex-col items-center">
+                    <div className="w-full h-[248px] bg-write-bg sm:bg-none sm:h-10">
+                        <div className="pt-[67px] pl-[200px] leading-[48px] tracking-[3.60px] sm:p-0 sm:w-[393px] sm:h-10 sm:justify-center sm:items-center sm:gap-2.5 sm:inline-flex">
+                            <h1 className="text-[36px] text-white font-black sm:text-black sm:text-xl sm:font-semibold sm:leading-tight sm:tracking-wide">
+                                {isSmallScreen
+                                    ? '나만의 데이트 계획을 작성해 보세요!'
+                                    : '나만의 특별한 데이트 계획을 <br /> 작성해보세요!'}
+                            </h1>
                         </div>
                     </div>
-
-                    <div className="flex flex-row w-full mx-auto px-8 gap-10">
-                        <div className="w-[574px]">
-                            <p className="text-[30px] font-medium mb-4">
-                                데이트 활동을 작성해주세요 🖌
-                            </p>
-                            <p className="text-xl font-normal mb-2">
-                                데이트 활동
-                            </p>
-                            <div className="mb-4 flex justify-between items-center w-full">
-                                <input
-                                    type="text"
-                                    id="location"
-                                    value={activityContent}
-                                    onChange={handleActivityChange}
-                                    className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] w-[477px] border shadow appearance-none text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    style={{ height: '50px' }}
-                                    placeholder="활동을 입력하세요"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={handleAddActivity}
-                                    className="bg-[#DFDAEA] w-[77px] h-[55px] font-normal py-2 px-4 rounded-xl"
-                                >
-                                    추가
-                                </button>
-                            </div>
-                        </div>
-                        <div
-                            style={{
-                                display: 'grid',
-                                gridTemplateAreas: `
-                    "header . ."
-                    "first second third"
-                    "fourth fifth ."
-                `,
-                                gridTemplateColumns: '1fr 1fr 1fr',
-                                gap: '10px', // 간격을 조절하려면 이 값을 변경하세요.
-                            }}
-                        >
-                            <p
-                                style={{ gridArea: 'header' }}
-                                className="text-[30px] font-medium"
-                            >
-                                데이트 내용🎈
-                            </p>
-                            {activities.map((activity, index) => {
-                                console.log('activity:', activity);
-                                const gridArea =
-                                    index === 0
-                                        ? 'first'
-                                        : index === 1
-                                        ? 'second'
-                                        : index === 2
-                                        ? 'third'
-                                        : index === 3
-                                        ? 'fourth'
-                                        : 'fifth';
-                                return (
-                                    <div
-                                        key={index} // It's better to use unique value like activity.id as a key
-                                        style={{ gridArea }}
-                                        className="flex justify-between items-center border-[2px] border-activityDelete-button rounded-[30px] p-2 m-1"
-                                    >
-                                        {activity.content}
-                                        <button
-                                            type="button"
-                                            onClick={
-                                                () =>
-                                                    deleteActivity(activity.id) // Here, pass activity.id instead of index
-                                            }
+                </div>
+                {/* 작성공간 */}
+                <div className="w-[1248px] mx-auto sm:w-[393px]">
+                    <div
+                        className="flex flex-row justify-center p-[30px] mb-2 w-[1248px] mt-[-30px] bg-white z-100 gap-[30px] sm:hidden "
+                        style={{
+                            position: 'relative',
+                            borderRadius: '30px 30px 0px 0px',
+                        }}
+                    >
+                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                            #식사🍚
+                        </p>
+                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                            #영화🎬
+                        </p>
+                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                            #문화/예술🎨
+                        </p>
+                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                            #스포츠🏀️
+                        </p>
+                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                            #힐링🌿
+                        </p>
+                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                            #활동⚙️
+                        </p>
+                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                            #일상🎧
+                        </p>
+                    </div>
+                    <div
+                        className="flex flex-col items-center w-[1248px] h-[80vh] relative "
+                        style={{
+                            height: isSmallScreen
+                                ? `calc(70vh + ${activities.length * 6}vh)`
+                                : 'h-100vh',
+                        }}
+                    >
+                        <div className="flex flex-col items-center p-4 w-full mb-8">
+                            <div className=" flex-col items-center p-4 w-full">
+                                {successMessage && (
+                                    <div className="alert alert-success">
+                                        {successMessage}
+                                    </div>
+                                )}
+                                <form onSubmit={handleSubmit}>
+                                    <div className="flex flex-row w-full gap-[40px] mb-[36px] sm:flex-col sm:gap-4 sm:mb-4">
+                                        <div className="w-[574px]">
+                                            <label
+                                                htmlFor="title"
+                                                className="block text-gray-700 text-sm font-normal mb-2 sm:ml-2 sm:text-lg"
+                                            >
+                                                제목
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="title"
+                                                value={title}
+                                                onChange={handleTitleChange}
+                                                className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[345px] sm:h-[40px]"
+                                                placeholder="이목을 끄는 이름을 지어주세요!!"
+                                            />
+                                        </div>
+                                        <div className="w-[574px]">
+                                            <label
+                                                htmlFor="location"
+                                                className="block text-gray-700 text-sm font-normal mb-2 sm:ml-2 sm:text-lg"
+                                            >
+                                                위치
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="location"
+                                                value={location}
+                                                onChange={handleLocationChange}
+                                                className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[345px] sm:h-[40px]"
+                                                placeholder="어디서 만나실건가요?"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="w-[554px]">
+                                        <label
+                                            htmlFor="theme"
+                                            className="block text-gray-700 text-sm font-normal mb-2 sm:ml-2 sm:text-lg"
                                         >
-                                            <DeleteIcon />
+                                            주제
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="theme"
+                                            value={theme}
+                                            onChange={handleThemeChange}
+                                            className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[345px] sm:h-[40px]"
+                                            placeholder="어떤 컨셉의 데이트인가요?"
+                                        />
+                                    </div>
+                                    <div className="absolute bottom-0 flex justify-center items-center w-full h-10 right-[10px] sm:justify-normal sm: left-32">
+                                        <button
+                                            className="w-[234px] h-[65px] mr-[260px] mb-[100px] bg-fuchsia-600 rounded-[30px] text-white text-[32px] font-semibold font-['SUITE'] leading-loose tracking-widest sm:text-xl sm:w-[130px] sm:h-10"
+                                            style={{
+                                                display:
+                                                    authorId === datingAuthorId
+                                                        ? 'block'
+                                                        : 'none',
+                                            }}
+                                        >
+                                            작성완료
                                         </button>
                                     </div>
-                                );
-                            })}
+                                </form>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-row w-full mx-auto px-8 gap-10 sm:gap-0 sm:flex-col">
+                            <div className="w-[574px] sm:w-[393px]">
+                                <p className="text-[30px] font-medium mb-4 sm:text-xl">
+                                    데이트 활동을 작성해주세요 🖌
+                                </p>
+                                <p className="text-xl font-normal mb-2 sm:hidden">
+                                    데이트 활동
+                                </p>
+                                <div className="mb-4 flex justify-between items-center w-full sm:justify-normal">
+                                    <input
+                                        type="text"
+                                        id="location"
+                                        value={activityContent}
+                                        onChange={handleActivityChange}
+                                        className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[248px] sm:h-[40px] sm:py-0"
+                                        placeholder="활동을 입력하세요"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleAddActivity}
+                                        className="bg-[#DFDAEA] w-[77px] h-[55px] font-normal py-2 mx-2 rounded-xl sm:ml-2 sm:w-[82px] sm:h-[40px]"
+                                    >
+                                        추가
+                                    </button>
+                                </div>
+                            </div>
+                            <div
+                                className={`p-2 ${
+                                    isSmallScreen
+                                        ? 'grid grid-cols-1 gap-10'
+                                        : ''
+                                }`}
+                                style={{
+                                    display: 'grid',
+                                    gridTemplateAreas: isSmallScreen
+                                        ? `
+                                        "first"
+                                        "second"
+                                        "third"
+                                        "fourth"
+                                        "fifth"
+                                    `
+                                        : `
+                                        "header . ."
+                                        "first second third"
+                                        "fourth fifth ."
+                                    `,
+                                    gridTemplateColumns: isSmallScreen
+                                        ? '1fr'
+                                        : '1fr 1fr 1fr',
+                                    gap: '10px',
+                                }}
+                            >
+                                <p
+                                    style={{ gridArea: 'header' }}
+                                    className="text-[30px] font-medium sm:hidden"
+                                >
+                                    데이트 내용🎈
+                                </p>
+                                {activities.map((activity, index) => {
+                                    console.log('activity:', activity);
+                                    const gridArea =
+                                        index === 0
+                                            ? 'first'
+                                            : index === 1
+                                            ? 'second'
+                                            : index === 2
+                                            ? 'third'
+                                            : index === 3
+                                            ? 'fourth'
+                                            : 'fifth';
+                                    return (
+                                        <div
+                                            key={index}
+                                            style={{ gridArea }}
+                                            className="flex justify-between items-center border-[2px] border-activityDelete-button rounded-[30px] px-2 m-1 sm:text-sm sm:max-w-[300px] sm:py-1 "
+                                        >
+                                            {activity.content}
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    deleteActivity(activity.id)
+                                                }
+                                            >
+                                                <DeleteIcon />
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
