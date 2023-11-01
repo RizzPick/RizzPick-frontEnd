@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getCookie } from '@/utils/cookie';
 import { PlanAPI } from '@/features/plan/dating';
@@ -11,6 +12,8 @@ import { getUserProfileData } from '@/features/plan/dating';
 import Write from '@/components/plan/Write';
 import { getDateList } from '@/features/plan/dating';
 import Link from 'next/link';
+import BackIcon from '../../../../../../public/planIcon/back.svg';
+import Header from '@/components/common/Header';
 
 type Props = {
     params: {
@@ -40,6 +43,7 @@ export default function PostPage({ params: { slug } }: Props) {
     const [dateList, setDateList] = useState<DateItem[]>([]);
     const [activities, setActivities] = useState([]);
     const [activePage, setActivePage] = useState(slug);
+    const router = useRouter();
 
     useEffect(() => {
         axios
@@ -131,122 +135,182 @@ export default function PostPage({ params: { slug } }: Props) {
             });
     };
 
+    const handleBackButtonClick = () => {
+        history.back();
+    };
+
+    const handleImageClick = () => {
+        if (userProfile && userProfile.userId) {
+            const targetProfileUrl = `/user/profile/${userProfile.userId}`;
+            router.push(targetProfileUrl); // Navigate to the target profile page when the image is clicked
+        }
+    };
+
     return (
-        <div className=" w-full mx-auto">
-            {isEditing ? (
-                <Write
-                    initialData={dating}
-                    initialActivities={activities}
-                    onEditComplete={handleEditComplete}
-                />
-            ) : (
-                <>
-                    <div className="flex flex-row">
-                        <div className="w-[365px] my-auto">
-                            <ul>
-                                {dateList.map((date, index) => (
-                                    <li
-                                        key={index}
-                                        className={`flex flex-col border-2 border-rgba(172, 172, 172, 0.69) w-[332px] h-[74px] px-2 pt-2 ${
-                                            activePage ===
-                                            date.datingId.toString()
-                                                ? 'bg-[#F9ECFF]'
-                                                : ''
-                                        }`}
-                                        style={{
-                                            borderRadius: '4px 0px 0px 4px',
-                                        }}
-                                        onClick={() =>
-                                            setActivePage(
+        <>
+            <Header />
+            {!isEditing && (
+                <div className="hidden sm:block">
+                    <div
+                        className="flex flex-row h-20 mb-4 items-center"
+                        onClick={() => console.log('Parent clicked')}
+                    >
+                        <button onClick={handleBackButtonClick} className="p-4">
+                            <BackIcon />
+                        </button>
+                        <p className="text-neutral-700 text-xl font-medium leading-tight tracking-wide mx-auto">
+                            데이트 계획
+                        </p>
+                        <div
+                            className="h-[45px] w-[45px] rounded-full overflow-hidden mr-2 z-50 pointer-events-auto"
+                            onClick={handleImageClick}
+                            onTouchStart={handleImageClick}
+                        >
+                            {userProfile &&
+                            userProfile.profileImages &&
+                            userProfile.profileImages.length > 0 ? (
+                                <Image
+                                    src={
+                                        userProfile.profileImages[0].image || ''
+                                    }
+                                    alt="User profile image"
+                                    width={231}
+                                    height={231}
+                                    priority
+                                />
+                            ) : (
+                                <Image
+                                    src={profiledog}
+                                    alt="Default profile image"
+                                    width={231}
+                                    height={231}
+                                    priority
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            <div className="w-full mx-auto sm:p-0">
+                {isEditing ? (
+                    <Write
+                        initialData={dating}
+                        initialActivities={activities}
+                        onEditComplete={handleEditComplete}
+                    />
+                ) : (
+                    <>
+                        <div className="flex flex-row">
+                            <div className="w-[365px] my-auto ml-4 sm:hidden">
+                                <ul>
+                                    {dateList.map((date, index) => (
+                                        <li
+                                            key={index}
+                                            className={`flex flex-col border-2 border-rgba(172, 172, 172, 0.69) w-[332px] h-[74px] px-2 pt-2 ${
+                                                activePage ===
                                                 date.datingId.toString()
-                                            )
-                                        } // Convert date.datingId to string
-                                    >
-                                        <Link href={`${date.datingId}`}>
-                                            <div
-                                                className={`font-bold-500 text-[24px] ${
-                                                    activePage ===
+                                                    ? 'bg-[#F9ECFF]'
+                                                    : ''
+                                            }`}
+                                            style={{
+                                                borderRadius: '4px 0px 0px 4px',
+                                            }}
+                                            onClick={() =>
+                                                setActivePage(
                                                     date.datingId.toString()
-                                                        ? 'text-black'
-                                                        : ''
-                                                }`}
-                                            >
-                                                <span>{date.datingTitle}</span>
-                                            </div>
-                                            <div
-                                                className={`text-[#aaa] mt-2 text-xs text-end ${
-                                                    activePage ===
-                                                    date.datingId.toString()
-                                                        ? 'text-black'
-                                                        : ''
-                                                }`}
-                                            >
-                                                <span>
-                                                    데이트 계획을 생성한 날짜
-                                                </span>
-                                            </div>
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5]">
-                            <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5]">
-                                <div className="flex flex-col p-4">
-                                    <p className="text-[25px] text-[#666]">
-                                        {dating.datingLocation}
-                                    </p>
-                                    <p className="text-[36px] mt-1 mb-4 font-semibold">
-                                        {dating.datingTitle}
-                                    </p>
-                                    <p className="text-[25px]">
-                                        {dating.datingTheme}
-                                    </p>
-                                    <p className="text-[#aaa] mt-10 text-xs text-end">
-                                        작성시간
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex flex-col mx-auto p-4 w-5/6">
-                                <div className="flex-col items-center p-4 w-full">
-                                    <p className="flex justify-center mb-10 text-[30px]">
-                                        데이트 내용 🎈
-                                    </p>
-                                    {dating &&
-                                        dating.activities.map(
-                                            (
-                                                activity,
-                                                index // activities 배열을 매핑합니다.
-                                            ) => (
+                                                )
+                                            }
+                                        >
+                                            <Link href={`${date.datingId}`}>
                                                 <div
-                                                    key={index}
-                                                    className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg"
+                                                    className={`font-bold-500 text-[24px] ${
+                                                        activePage ===
+                                                        date.datingId.toString()
+                                                            ? 'text-black'
+                                                            : ''
+                                                    }`}
                                                 >
-                                                    {activity.activityContent}
+                                                    <span>
+                                                        {date.datingTitle}
+                                                    </span>
                                                 </div>
-                                            )
-                                        )}
+                                                <div
+                                                    className={`text-[#aaa] mt-2 text-xs text-end ${
+                                                        activePage ===
+                                                        date.datingId.toString()
+                                                            ? 'text-black'
+                                                            : ''
+                                                    }`}
+                                                >
+                                                    <span>
+                                                        데이트 계획을 생성한
+                                                        날짜
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5] sm:border-none">
+                                <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-dashed sm:border-b-2 sm:border-[#D57DFF] sm:max-w-[350px] sm:mt-0 sm:w-full">
+                                    <div className="flex flex-col p-4">
+                                        <p className="text-[25px] text-[#666666] sm:text-base sm:font-medium">
+                                            {dating.datingLocation}
+                                        </p>
+                                        <p className="text-[36px] mt-1 mb-4 font-semibold sm:text-xl sm:font-medium sm:my-4">
+                                            {dating.datingTitle}
+                                        </p>
+                                        <p className="text-[25px] sm:text-lg sm:font-medium">
+                                            {dating.datingTheme}
+                                        </p>
+                                        <p className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
+                                            작성시간
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col mx-auto p-4 w-5/6 sm:w-full ">
+                                    <div className="flex-col items-center p-4 w-full">
+                                        <p className="flex justify-center mb-10 text-[30px]">
+                                            데이트 내용 🎈
+                                        </p>
+                                        {dating &&
+                                            dating.activities.map(
+                                                (
+                                                    activity,
+                                                    index // activities 배열을 매핑합니다.
+                                                ) => (
+                                                    <div
+                                                        key={index}
+                                                        className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg sm:border-[2px] sm:w-[327px]"
+                                                    >
+                                                        {
+                                                            activity.activityContent
+                                                        }
+                                                    </div>
+                                                )
+                                            )}
+                                    </div>
+                                </div>
+                                <div className="flex flex-row justify-end w-5/6 gap-4  ml-10 text-[24px] sm:hidden">
+                                    <button
+                                        className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
+                                        onClick={handleEditClick}
+                                    >
+                                        수정
+                                    </button>
+                                    <button
+                                        className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
+                                        onClick={handleDeleteClick}
+                                    >
+                                        삭제
+                                    </button>
                                 </div>
                             </div>
-                            <div className="flex flex-row justify-end w-5/6 gap-4  ml-10 text-[24px]">
-                                <button
-                                    className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
-                                    onClick={handleEditClick}
-                                >
-                                    수정
-                                </button>
-                                <button
-                                    className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
-                                    onClick={handleDeleteClick}
-                                >
-                                    삭제
-                                </button>
-                            </div>
-                        </div>
-                        <div className="w-[394px]">
-                            <div className="h-screen w-[395px] flex flex-col items-center">
-                                <div className="h-[231px] w-[231px] rounded-full overflow-hidden mx-auto mt-[136px]">
-                                    {/* {userProfile &&
+                            <div className="w-[394px] sm:hidden">
+                                <div className="h-screen w-[395px] flex flex-col items-center">
+                                    <div className="h-[231px] w-[231px] rounded-full overflow-hidden mx-auto mt-[136px]">
+                                        {/* {userProfile &&
                                     userProfile.profileImages &&
                                     userProfile.profileImages.length > 0 ? (
                                         <Image
@@ -268,9 +332,9 @@ export default function PostPage({ params: { slug } }: Props) {
                                             priority
                                         />
                                     )} */}
-                                </div>
-                                <div>
-                                    {/* {userProfile && (
+                                    </div>
+                                    <div>
+                                        {/* {userProfile && (
                                         <div>
                                             <h2>{userProfile.nickname}</h2>
                                             <p>나이: {userProfile.age}</p>
@@ -281,12 +345,13 @@ export default function PostPage({ params: { slug } }: Props) {
                                             </p>
                                         </div>
                                     )} */}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </>
-            )}
-        </div>
+                    </>
+                )}
+            </div>
+        </>
     );
 }

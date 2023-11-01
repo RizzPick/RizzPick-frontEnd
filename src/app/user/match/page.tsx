@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import Match from '@/components/match/Match';
@@ -10,27 +10,27 @@ export default function MatchPage() {
     const [mobile, setMobile] = useState(false);
 
     const isMobile = useMediaQuery({
-        query : "(max-width:767px)"
+        query: '(max-width:767px)',
     });
-    
+
     useEffect(() => {
-        setMobile(isMobile)
-    }, [isMobile])
+        setMobile(isMobile);
+    }, [isMobile]);
 
     return (
         <div className="bg-white">
-            {mobile ? 
-            (<div>
-                <Header />
-                <MatchMobile />
-                <Footer />
-            </div>):
-            (<div>
-                <Header />
-                <Match />
-            </div>)
-            }
-            
+            {mobile ? (
+                <div>
+                    <Header />
+                    <MatchMobile />
+                    <Footer />
+                </div>
+            ) : (
+                <div>
+                    <Header />
+                    <Match />
+                </div>
+            )}
         </div>
     );
 }
