@@ -96,7 +96,7 @@ function UserProfileEdit({onNext} : any) {
           <label className="block text-gray-700 mb-2 px-1">닉네임</label>
           {errors.nickname && renderNicknameErrorMessages(errors.nickname)}
           </div>
-          <input {...register("nickname", {required : true, maxLength: 10,})} className="sm:w-full w-[311px] h-10 p-3 border rounded-3xl" placeholder="닉네임을 입력하세요" />
+          <input {...register("nickname", {required : true, maxLength: 6,})} className="sm:w-full w-[311px] h-10 p-3 border rounded-3xl" placeholder="닉네임을 입력하세요" />
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">나이</label>
           {errors.age && <p className="text-red-500 text-[10px]">✱ 나이는 필수입니다.</p>}

@@ -77,7 +77,16 @@ function LoginForm() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[600px] sm:w-[100vw] sm:h-[80vh] h-[100vh-200px]"
             >
-                <label className="font-bold text-xl">아이디</label>
+                <div className="w-[141px] h-[60px] relative mx-auto mt-10">
+                    <Image
+                        src={LogoColor}
+                        alt="로고"
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        priority
+                    />
+                </div>
+                <label className="font-bold text-xl mt-10">아이디</label>
                 <input
                     id="username"
                     type="text"

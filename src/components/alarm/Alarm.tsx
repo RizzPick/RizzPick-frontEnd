@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import axios from 'axios';
-import profile1 from '../../../public/images/profile1.jpeg';
 import { useEffect, useState } from 'react';
 import { AlarmProps } from '../../types/alarm/type';
 import UseChat, { CHAT_KEY } from '@/hooks/useChat';
@@ -60,7 +59,7 @@ export default function Alarm({ close }: AlarmProps) {
         };
 
         getChatRooms();
-        fetchLikesData(); // Call the fetchLikesData function
+        fetchLikesData();
     }, [initializeChats]);
 
     const onClick = () => {
@@ -71,13 +70,13 @@ export default function Alarm({ close }: AlarmProps) {
     return (
         <>
             {closeModal && (
-                <div className="absolute top-[100px] right-[60px] translate-[-50%] bg-white p-6 w-[20vw] h-[60vh] flex flex-col z-50 border border-zinc-800 rounded-3xl">
+                <div className="absolute top-[100px] right-[60px] translate-[-50%] bg-white p-6 w-[400px] h-[500px] flex flex-col z-50 border border-zinc-800 rounded-3xl">
                     <div className="h-[20vh]">
                         <h2 className="mb-2 cursor-pointer" onClick={()=>router.push('/user/notifications/liked')}>
                             좋아요 ({likesData.length})
                         </h2>
                         <div
-                            className="flex flex-row border-t-[1px] scrollbar-hide py-4 px-3 gap-3 overflow-x-auto"
+                            className="flex flex-row border-t-[1px] scrollbar-hide py-4 px-3 gap-3 flex-grow-0"
                             style={{
                                 borderColor: 'black',
                                 overflowX: 'auto', // 가로 스크롤을 활성화합니다.
@@ -86,7 +85,7 @@ export default function Alarm({ close }: AlarmProps) {
                         >
                             {likesData.map((like, index) => (
                                     <div onClick={()=>router.push('/user/notifications/liked')} className="rounded-full bg-[#A627A9] w-[70px] h-[70px] flex items-center justify-center cursor-pointer" key={like.userId}>
-                                        <div className="w-[60px] h-[60px] relative">
+                                        <div className="relative w-[60px] h-[60px]">
                                             <Image
                                                 src={like.profilePic.image}
                                                 alt={like.nickname}
@@ -123,7 +122,7 @@ export default function Alarm({ close }: AlarmProps) {
                                         </div>
                                         <div>
                                             <div>
-                                                <span className="font-bold">
+                                                <span className="text-2xl">
                                                     {chat.nickname}
                                                 </span>
                                                 &nbsp;

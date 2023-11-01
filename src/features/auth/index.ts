@@ -1,7 +1,6 @@
 import service from '@/features';
 
 import type { EmailVerifyReq, EmailVerifyRes, LoginReq, SignupReq, SignupRes } from '@/types/auth';
-import { UserInfo } from '@/types/user';
 import { AxiosResponse } from 'axios';
 
 const AuthAPI = {
