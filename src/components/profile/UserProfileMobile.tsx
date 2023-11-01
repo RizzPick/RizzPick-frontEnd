@@ -13,7 +13,6 @@ import AuthAPI from '@/features/auth';
 
 function UserProfileMobile() {
     const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
-    console.log(profile);
     const token = getCookie("Authorization");
     const { initializeProfile } = UseProfile();
     const [showLogoutModal, setShowLogoutModal] = useState(false);

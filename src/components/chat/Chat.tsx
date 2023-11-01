@@ -14,7 +14,6 @@ import Back from "../../../public/chatIcon/Button.svg"
 import { useRouter } from 'next/navigation';
 
 const Chat = () => {
-    const router = useRouter();
     const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
     const [messages, setMessages] = useState<MessagesRes[]>();
     const [isLoading, setIsLoading] = useState(true);

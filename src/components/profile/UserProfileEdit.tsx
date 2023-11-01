@@ -136,12 +136,12 @@ function UserProfileEdit({onNext} : any) {
 
           <label className="block text-gray-700 my-2">지역</label>
           <select {...register("location")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
-            <option value="NONE">선택</option>
-            <option value="SEOUL">서울특별시</option>
-            <option value="BUSAN">부산광역시</option>
-            <option value="INCHEON">인천광역시</option>
-            <option value="DAEGU">대구광역시</option>
-            <option value="DAEJEON">대전광역시</option>
+            <option value="없음">선택</option>
+            <option value="서울">서울특별시</option>
+            <option value="부산">부산광역시</option>
+            <option value="인천">인천광역시</option>
+            <option value="대구">대구광역시</option>
+            <option value="대전">대전광역시</option>
             <option value="광주">광주광역시</option>
             <option value="울산">울산광역시</option>
           </select>
@@ -169,7 +169,7 @@ function UserProfileEdit({onNext} : any) {
 
           <label className="block text-gray-700 my-2">종교</label>
           <select {...register("religion")} className="w-28 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
-            <option value="NONE">선택</option>
+            <option value="무교">선택</option>
             <option value="무교">무교</option>
             <option value="기독교">기독교</option>
             <option value="유대교">유대교</option>
@@ -178,6 +178,7 @@ function UserProfileEdit({onNext} : any) {
             <option value="힌두교">힌두교</option>
             <option value="불교">불교</option>
             <option value="유교">유교</option>
+            <option value="기타">기타</option>
           </select>
         </div>
         <div className='flex justify-end'>
