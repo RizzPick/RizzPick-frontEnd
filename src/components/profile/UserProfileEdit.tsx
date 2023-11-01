@@ -16,6 +16,7 @@ function UserProfileEdit({onNext} : any) {
 
   useEffect(() => {
     if (profile) {
+      console.log(profile);
       setLocalProfile(profile);
     }
   }, [profile]);
@@ -35,7 +36,7 @@ function UserProfileEdit({onNext} : any) {
         for (const key of profileFormKeys) {
           const currentValue = getValues(key); // getValues를 사용하여 현재 값 가져오기
           console.log(currentValue);
-          if (localProfile[key] !== undefined && !currentValue) {
+          if (localProfile[key] !== undefined && (currentValue === "없음" || !currentValue)) {
             console.log(localProfile[key]);
             setValue(key, localProfile[key]);
           }
@@ -44,6 +45,7 @@ function UserProfileEdit({onNext} : any) {
   }, [localProfile, setValue, getValues]);
 
   const onSubmit = async(data: ProfileForm) => {
+    console.log(data);
     try {
       const response = await ProfileAPI.updateProfile(data);
       if(response.status === 200) {
@@ -100,9 +102,9 @@ function UserProfileEdit({onNext} : any) {
           {errors.age && <p className="text-red-500 text-[10px]">✱ 나이는 필수입니다.</p>}
           </div>
           <select {...register("age", {required:true})} className="w-20 h-10 px-3 border rounded-3xl">
-            <option value="">나이</option>
+            <option value="">선택</option>
             {/* 예시로 18~30세까지 옵션 추가 (필요에 따라 수정) */}
-            {Array.from({ length: 13 }, (_, i) => i + 18).map((age) => (
+            {Array.from({ length: 30 }, (_, i) => i + 18).map((age) => (
               <option key={age} value={age}>{age}</option>
             ))}
           </select>
@@ -114,7 +116,7 @@ function UserProfileEdit({onNext} : any) {
             {/* <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">남성</button>
             <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">여성</button> */}
           <select {...register("gender", {required :true})} className="w-20 text-center border rounded-3xl px-2 py-2" >
-            <option value="">더보기</option>
+            <option value="">선택</option>
             <option value="MALE">남자</option>
             <option value="FEMALE">여자</option>
             <option value="TRANSGENDER">트랜스젠더</option>
@@ -148,7 +150,7 @@ function UserProfileEdit({onNext} : any) {
 
           <label className="block text-gray-700 my-2">MBTI</label>
           <select {...register("mbti")} className="w-24 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
-          <option value="">선택</option>
+          <option value="NONE">선택</option>
             <option value="ISTJ">ISTJ</option>
             <option value="ISFJ">ISFJ</option>
             <option value="INFJ">INFJ</option>
@@ -169,12 +171,12 @@ function UserProfileEdit({onNext} : any) {
 
           <label className="block text-gray-700 my-2">종교</label>
           <select {...register("religion")} className="w-28 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
-            <option value="무교">선택</option>
+            <option value="없음">선택</option>
             <option value="무교">무교</option>
             <option value="기독교">기독교</option>
             <option value="유대교">유대교</option>
-            <option value="이슬람">이슬람교</option>
-            <option value="천주교">천주교</option>
+            <option value="이슬람교">이슬람교</option>
+            <option value="가톨릭교">가톨릭교</option>
             <option value="힌두교">힌두교</option>
             <option value="불교">불교</option>
             <option value="유교">유교</option>

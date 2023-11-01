@@ -29,8 +29,7 @@ function OtherUserProfile({profile} : Props) {
                         <p className="text-center">작성된 내용이 없습니다.</p> 
                         : 
                         <>
-                            { profile.education ? <div className='flex items-center gap-4'><EducationIcon/>{profile.education}</div> : null }
-                            <hr/>
+                            { profile.education ? <><div className='flex items-center gap-4'><EducationIcon/>{profile.education}</div><hr/></> : null }
                             { profile.location ? <div className='flex items-center gap-4'><Home/>{profile.location}</div> : null }
                         </>
                     }

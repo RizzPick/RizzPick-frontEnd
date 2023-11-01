@@ -5,9 +5,8 @@ import Image from 'next/image';
 import { UserInfo } from '@/types/user';
 import { useEffect, useState } from 'react';
 import AuthAPI from '@/features/auth';
-import { eraseCookie, getCookie } from '@/utils/cookie';
+import { getCookie } from '@/utils/cookie';
 import Alarm from '@/components/alarm/Alarm';
-import { useRouter } from 'next/navigation';
 import Logo from '../../../public/Logo_color.png';
 
 export default function Header() {
@@ -15,7 +14,6 @@ export default function Header() {
     const [openChatModal, setOpenChatModal] = useState(false);
     const token = getCookie('Authorization');
     const [userInfo, setUserInfo] = useState<UserInfo>();
-    const router = useRouter();
     const Open = () => {
         setShowOverlay(true);
         setOpenChatModal(true);
@@ -24,15 +22,6 @@ export default function Header() {
     const close = () => {
         setShowOverlay(false);
         setOpenChatModal(false);
-    };
-
-    const logout = () => {
-        eraseCookie('Authorization');
-        eraseCookie('Authorization_Refresh');
-        eraseCookie('status');
-        alert('로그아웃 처리되었습니다.');
-        sessionStorage.clear();
-        router.push('/');
     };
 
     useEffect(() => {
@@ -79,9 +68,6 @@ export default function Header() {
                 {/* 다른 페이지에서 넘어갈때 404 나와서 경로 수정 필요 */}
                 {userInfo && (
                     <>
-                        <p onClick={logout} className="cursor-pointer">
-                            로그아웃
-                        </p>
                         <Link href="/profile">
                             <div className="w-10 h-10 rounded-full relative">
                                 <Image

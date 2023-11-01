@@ -253,7 +253,7 @@ function MatchMobile() {
                                         <p className='text-white text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
                                     </div>
                                     <button onClick={toggleDetailsVisibility} className='z-30 transition-all hover:scale-110 ease-in-out'>
-                                        <Image src={ReadMore} width={32} height={32} alt='ReadMore' />
+                                        <Image src={ReadMore} width={32} height={32} alt='ReadMore'/>
                                     </button>
                                 </div>
                                 <div className="text-white mt-2">{users[userIndex]?.intro}</div>

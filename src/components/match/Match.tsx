@@ -14,6 +14,7 @@ import axios from 'axios';
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
 import Home from "../../../public/profileIcon/Home.svg"
 import { getCookie } from '@/utils/cookie';
+import ReadMore from '../../../public/matchIcon/Intro.png';
 
 function Match() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
@@ -26,7 +27,6 @@ function Match() {
     //! 랜덤 매칭
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
-    console.log(users);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,30 +61,36 @@ function Match() {
     const [slideIndex, setSlideIndex] = useState(0);
 
     const nextSlide = () => {
-        if (!currentUser) return; // currentUser가 undefined인 경우 early return
-        setSlideIndex(
-            (prevIndex) => (prevIndex + 1) % currentUser.profileImages.length
-        );
-    };
-
-    const prevSlide = () => {
-        if (!currentUser) return; // currentUser가 undefined인 경우 early return
-        setSlideIndex(
-            (prevIndex) =>
-                (prevIndex - 1 + currentUser.profileImages.length) %
-                currentUser.profileImages.length
-        );
-    };
+        if (users[userIndex].profileImages.length === 2) {
+          setSlideIndex((prevSlideIndex) => (prevSlideIndex === 1 ? 0 : 1));
+        } else {
+          setSlideIndex((prevSlideIndex) => (prevSlideIndex + 1) % users[userIndex].profileImages.length);
+        }
+      };
+      
+      const prevSlide = () => {
+        if (users[userIndex].profileImages.length === 2) {
+          setSlideIndex((prevSlideIndex) => (prevSlideIndex === 0 ? 1 : 0));
+        } else {
+          setSlideIndex((prevSlideIndex) => (prevSlideIndex - 1 + users[userIndex].profileImages.length) % users[userIndex].profileImages.length);
+        }
+      };
 
     const getPrevImageIndex = () => {
+        if (currentUser.profileImages.length === 1) {
+            return 0;  // 1장일 경우 현재 인덱스 반환
+        }
         if (currentUser.profileImages.length === 2) {
             return slideIndex;  // 2장일 경우 현재 인덱스 반환
         }
         return (slideIndex - 1 + currentUser.profileImages.length) % currentUser.profileImages.length;
     };
-    
+        
     // 다음 이미지 표시 로직
     const getNextImageIndex = () => {
+        if (currentUser.profileImages.length === 1) {
+            return 0;  // 1장일 경우 현재 인덱스 반환
+        }
         if (currentUser.profileImages.length === 2) {
             return (slideIndex + 1) % 2;  // 2장일 경우 다음 인덱스 반환
         }
@@ -180,7 +186,7 @@ function Match() {
 
                         <div className='flex'>
                     {/* 무한 루프의 환상을 위한 이전 이미지 */}
-                    {!isDetailsVisible && currentUser && (
+                    {!isDetailsVisible && currentUser && currentUser.profileImages.length > 1 && (
                         <div className='relative w-[30vw] h-[70vh] -right-[15%]' onClick={prevSlide}>
                             <Image
                                 src={currentUser.profileImages[getPrevImageIndex()].image}
@@ -235,7 +241,7 @@ function Match() {
                     )}
 
                     {/* 다음 이미지 */}
-                    {!isDetailsVisible && currentUser && (
+                    {!isDetailsVisible && currentUser && currentUser.profileImages.length > 1 && (
                         <div className='relative w-[30vw] h-[70vh] -left-[15%]' onClick={nextSlide}>
                             <Image
                                 src={currentUser.profileImages[getNextImageIndex()].image}

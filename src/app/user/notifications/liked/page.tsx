@@ -18,10 +18,15 @@ async function Likedpage() {
     })
     const liked : LikeData[] = response.data.data;
   return (
-    <div>
+    <>
+    <div className='sm:hidden'>
       <Header />
       <LikeList liked={liked}/>
     </div>
+    <div className='hidden sm:block'>
+      <LikeList liked={liked}/>
+    </div>
+    </>
   )
 }
 

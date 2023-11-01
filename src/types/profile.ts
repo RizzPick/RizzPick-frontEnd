@@ -9,13 +9,13 @@ export enum Gender {
 
 export enum Location {
   NONE = "NONE",
-  SEOUL = "SEOUL",
-  BUSAN = "BUSAN",
-  DAEGU = "DAEGU",
-  INCHEON = "INCHEON",
-  DAEJEON = "DAEJEON",
-  GWANGJU = "GWANGJU",
-  ULSAN = "ULSAN"
+  서울 = "서울",
+  부산 = "부산",
+  대구 = "대구",
+  인천 = "인천",
+  대전 = "대전",
+  광주 = "광주",
+  울산 = "울산"
 }
 
 export enum Mbti {
@@ -62,9 +62,9 @@ export type ProfileForm = {
   education: string;
   userActiveStatus?: boolean;
   gender: Gender;
-  location: Location;
+  location: string;
   mbti: string;
-  religion: Religion;
+  religion: string;
   intro : string;
 };
 
@@ -81,10 +81,10 @@ export type MyProfileRes = {
   age: number;
   education: string;
   userActiveStatus: boolean;
-  gender: string;
-  location: Location;
+  gender: Gender;
+  location: string;
   mbti: string;
-  religion: Religion;
+  religion: string;
   dating? : Dating[];
   profileImages : ProfileImages[];
   intro : string;

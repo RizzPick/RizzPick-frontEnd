@@ -19,10 +19,10 @@ function ChatComp({data}:Props) {
         query : "(max-width:767px)"
     });
 
+    const { setCurrentChat } = UseChat();
     useEffect(() => {
         setMobile(isMobile)
     }, [isMobile])
-    const { setCurrentChat } = UseChat();
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
 
     const handleClick = () => {

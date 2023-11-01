@@ -1,18 +1,36 @@
 'use client'
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
 import { MyProfileRes } from '@/types/profile';
 import Home from "../../../public/profileIcon/Home.svg"
-import { eraseCookie } from '@/utils/cookie';
+import { eraseCookie, getCookie } from '@/utils/cookie';
 import Link from 'next/link';
+import useSWR from 'swr';
+import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
+import AuthAPI from '@/features/auth';
 
 
-type Props = {
-    profile : MyProfileRes
-}
-function UserProfile({profile} : Props) {
+function UserProfile() {
+
+  const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
+    const token = getCookie("Authorization");
+    const { initializeProfile } = UseProfile();
+  useEffect(()=>{
+    if(token){
+        const fetchData = async() => {
+            try {
+                const response = await AuthAPI.getUserInfo();
+                initializeProfile(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        } 
+        fetchData();
+    }
+},[initializeProfile, token])
+
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
     const logout = () => {
@@ -28,6 +46,9 @@ function UserProfile({profile} : Props) {
     event.stopPropagation();
     router.push('/profile/edit');
   }
+
+
+  if(!profile) return
 
   return (
     <div className='bg-profile-gradient h-[100vh] py-[67px]'>
@@ -80,15 +101,25 @@ function UserProfile({profile} : Props) {
                 </div>
               </div>
               </article>
-              <article>
-                <div className='grid grid-cols-3 gap-4'>
-                    <div className='w-[183px] h-[221px] border bg-white'></div>
-                    <div className='w-[183px] h-[221px] border bg-white'></div>
-                    <div className='w-[183px] h-[221px] border bg-white'></div>
-                    <div className='w-[183px] h-[221px] border bg-white'></div>
-                    <div className='w-[183px] h-[221px] border bg-white'></div>
-                    <div className='w-[183px] h-[221px] border bg-white'></div>
-                </div>
+              <article id='images'>
+                  <div className='grid grid-cols-3 gap-4'>
+                      {Array(6).fill(null).map((_, idx) => (
+                          <div key={idx} className='w-[183px] h-[221px] border bg-white relative'>
+                              {profile.profileImages && profile.profileImages[idx] ? (
+                                  <Image
+                                      src={profile.profileImages[idx].image}
+                                      alt={`Profile Image ${idx + 1}`}
+                                      layout="fill"
+                                      objectFit="cover"
+                                  />
+                              ) : (
+                                  <div className="absolute inset-0 bg-white flex items-center justify-center">
+                                      <span>No Image</span>
+                                  </div>
+                              )}
+                          </div>
+                      ))}
+                  </div>
               </article>
           </section>
   </div>

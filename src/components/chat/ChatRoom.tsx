@@ -4,7 +4,7 @@ import ChatAPI from '@/features/chat';
 import useSWR from 'swr';
 import { getCookie } from '@/utils/cookie';
 import { Client } from '@stomp/stompjs';
-import { CURRENT_CHAT_KEY } from '@/hooks/useChat';
+import UseChat, { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import { ChatData, MessagesRes } from '@/types/chat';
 import Image from 'next/image';
 import moment from 'moment';
@@ -24,6 +24,7 @@ const ChatRoom = () => {
     const MY_TOKEN = fullToken?.split(' ')[1];
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+    const { clearCurrentChat } = UseChat();
     
     const client = useRef(
       new Client({
@@ -138,11 +139,16 @@ const ChatRoom = () => {
   const userCallbackHandler = (message: any) => {
     console.log((JSON.parse(message.body)));
   };
+
+  const backBtnClick = () => {
+    clearCurrentChat();
+    router.back();
+  }
   
     return (
       <div>
         <header className='text-center text-neutral-700 text-xl font-medium leading-tight tracking-wide flex justify-center p-4 border-b-1'>
-                <button className='absolute left-[15px]' onClick={()=>router.back()}><Back/></button>
+                <button className='absolute left-[15px]' onClick={backBtnClick}><Back/></button>
                 <h1>{chat?.nickname}</h1>
         </header>
         {/* 채팅창 */}
