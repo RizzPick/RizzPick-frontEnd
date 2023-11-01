@@ -49,6 +49,8 @@ const config: Config = {
                     'linear-gradient(146deg, rgba(255, 184.88, 252.19, 0.17) 0%, rgba(175.84, 96.69, 255, 0.14) 51%, rgba(49.87, 45.69, 255, 0.11) 100%)',
                 'matchpage-date-gradient':
                     'linear-gradient(0deg, #CACFFF 0%, #CACFFF 100%)',
+                'likelist-gradient':
+                    'linear-gradient(114deg, rgba(200.81, 41, 146.48, 0.79) 0%, rgba(128.64, 47.97, 209.31, 0.66) 51%, rgba(33.93, 30.37, 208.25, 0.53) 100%)',
             },
         },
     },

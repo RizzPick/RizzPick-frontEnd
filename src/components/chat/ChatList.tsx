@@ -9,7 +9,6 @@ import useSWR from 'swr';
 function ChatList() {
   const { initializeChats } = UseChat();
   const {data:chats} = useSWR<ChatData[]>(CHAT_KEY);
-  console.log(chats);
 
   useEffect(()=>{
     const getChatRooms = async() => {
@@ -26,7 +25,7 @@ function ChatList() {
 },[initializeChats])
 
   return (
-    <div className="h-[100vh-100px] overflow-y-auto sm:h-[82vh] mt-[74px] border-t-[1px] mx-4">
+    <div className="h-[100vh-100px] overflow-y-auto sm:h-[82vh] mt-[74px] border-t-[1px] mx-4 sm:mt-0 sm:border-none sm:mx-0">
       {chats && chats.map((chat)=>{
         return <ChatComp data={chat} key={chat.chatRoomId}/>
       })}

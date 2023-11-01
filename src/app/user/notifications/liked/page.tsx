@@ -1,3 +1,4 @@
+import Header from '@/components/common/Header';
 import LikeList from '@/components/notifications/LikeList';
 import { LikeData } from '@/types/like';
 import axios from 'axios';
@@ -16,10 +17,10 @@ async function Likedpage() {
         }
     })
     const liked : LikeData[] = response.data.data;
-    console.log(liked);
   return (
     <div>
-    <LikeList liked={liked}/>
+      <Header />
+      <LikeList liked={liked}/>
     </div>
   )
 }
