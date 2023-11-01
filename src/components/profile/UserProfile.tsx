@@ -76,7 +76,7 @@ function UserProfile() {
                       <button className='px-4 py-2 bg-[#D67dff] mt-4 w-full rounded-3xl text-white font-bold hover:bg-pink-300'>정보수정</button>
                   </Link>
                 <div className='mt-4 w-full rounded-2xl bg-white p-6 h-20 flex flex-col items-start justify-center text-gray-400 gap-1'>
-                    <p className='cursor-pointer' onClick={()=>router.push('/')}>비밀번호 변경</p>
+                    <p className='cursor-pointer' onClick={()=>alert("구현예정입니당..")}>비밀번호 변경</p>
                     <hr className='w-full'/>
                     <p onClick={()=>setShowLogoutModal(true)} className='cursor-pointer'>로그아웃</p>
                 </div>
@@ -96,7 +96,7 @@ function UserProfile() {
                         </div>
                     </div>
                 )}
-                <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9]'>
+                <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9] cursor-pointer' onClick={()=>alert("구현예정입니당..")}>
                     회원탈퇴
                 </div>
               </div>

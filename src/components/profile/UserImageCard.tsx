@@ -23,7 +23,6 @@ function UserImageCard({ onAddImage, onDeleteImage,onImageClick, isModalVisible,
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
-   
     if (!fileList) {
       return;
     }

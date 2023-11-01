@@ -11,6 +11,7 @@ const AuthAPI = {
   emailAuth : (email:string) => service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/email`, { email }),
   emailAuthVerify : (data:EmailVerifyReq) : Promise<AxiosResponse<EmailVerifyRes>> => service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/email/verify`, data),
   getUserStatus: () => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/status`),
+  getUserisNew: () => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/is-new`),
   getUserInfo : () => service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/myProfile`),
   refresh : (token:string) => service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/refresh`, token),
 };

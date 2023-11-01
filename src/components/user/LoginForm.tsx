@@ -26,6 +26,7 @@ function LoginForm() {
     const onSubmit = async (data: LoginReq) => {
         try {
             const res = await AuthAPI.login(data);
+            console.log(res);
 
             if (res.status !== 200) {
                 alert('로그인에 실패했습니다. 다시 시도해주세요.');
@@ -42,6 +43,8 @@ function LoginForm() {
 
             const userInfoResponse = await AuthAPI.getUserInfo();
             initializeUserInfo(userInfoResponse.data);
+            const userIsNew = await AuthAPI.getUserisNew();
+            console.log(userIsNew);
 
             if (userStatusResponse.data.data.userActiveStatus) {
                 router.replace('/user/match');

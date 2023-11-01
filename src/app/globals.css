@@ -45,6 +45,14 @@ input:focus {
   outline: none;
 }
 
+textarea:focus {
+  outline: none;
+}
+
+select:focus {
+  outline: none;
+}
+
 .slider {
   position: relative;
   width: 100%;
@@ -69,17 +77,8 @@ button:last-of-type {
   right: 0;
 }
 
-.dot-item {
-  margin: 0 5px;
-}
-
-.carousel .react-multi-carousel-dot-list {
-  position: absolute;
-  bottom: -25px; /* 원하는 위치로 조절 */
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  list-style-type: none;
+@font-face {
+  font-family: "SUITE";
+  font-weight: 200;
+  src: url("/fonts/SUITE-Medium.ttf") format("opentype");
 }

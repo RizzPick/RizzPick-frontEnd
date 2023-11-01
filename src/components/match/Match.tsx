@@ -236,7 +236,7 @@ function Match() {
                                 currentUser &&
                                 currentUser.profileImages.length > 1 && (
                                     <div
-                                        className="relative w-[30vw] h-[70vh] -right-[15%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
+                                        className="relative w-[30vw] h-[70vh] -right-[20%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
                                         onClick={prevSlide}
                                     >
                                         <Image
@@ -271,38 +271,14 @@ function Match() {
                                             priority
                                         />
                                     </div>
-                                    {/* 간단한 정보, 설명란 */}
-                                    <div className="absolute w-full bottom-28 text-white flex flex-col p-6 z-30">
-                                        <div className="text-2xl flex items-center justify-between">
-                                            <div className="flex items-center gap-4 ">
-                                                <p className="font-bold text-3xl">
-                                                    {users[userIndex]
-                                                        ?.nickname ?? 'Unknown'}
-                                                </p>
-                                                <p className="text-white text-xl">
-                                                    {users[userIndex]?.age ??
-                                                        'Unknown'}
-                                                </p>
-                                            </div>
-                                            <button
-                                                onClick={
-                                                    toggleDetailsVisibility
-                                                }
-                                                className="z-30 transition-all hover:scale-110 ease-in-out"
-                                            >
-                                                <Image
-                                                    src={ReadMore}
-                                                    width={32}
-                                                    height={32}
-                                                    alt="ReadMore"
-                                                />
-                                            </button>
+                                    <div className="absolute w-[30vw] -bottom-5 flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer h-[110px]" onClick={toggleDetailsVisibility}>
+                                        <div className="text-2xl flex items-center justify-between w-full">
+                                                <div className='font-bold text-3xl'>{users[userIndex]?.nickname ??
+                                                    'Unknown'}</div>
+                                                <div className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</div>
                                         </div>
-                                        <div className="text-white mt-2">
-                                            {users[userIndex]?.intro}
-                                        </div>
+                                        <div className="mt-2">{users[userIndex]?.intro}</div>
                                     </div>
-
                                     {/* 좋아요, 싫어요 버튼 */}
                                     <div className="absolute text-white w-[30vw] flex justify-center -bottom-28 gap-48">
                                         <button
@@ -336,7 +312,7 @@ function Match() {
                                 currentUser &&
                                 currentUser.profileImages.length > 1 && (
                                     <div
-                                        className="relative w-[30vw] h-[70vh] -left-[15%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
+                                        className="relative w-[30vw] h-[70vh] -left-[20%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
                                         onClick={nextSlide}
                                     >
                                         <Image

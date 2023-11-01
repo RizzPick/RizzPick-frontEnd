@@ -41,7 +41,7 @@ export default function Header() {
 
     // 로딩 과정 중 보여질 이미지 처리
     return (
-        <header className="flex justify-between item-center px-8 py-4 border-b-2 border-[#D9D9D9] sm:border-none">
+        <header className="flex justify-between item-center px-8 py-4 border-b border-zinc-300 sm:border-none">
             <Link href="/user/match">
                 <div className='relative w-[95px] h-[40px]'>
                 <Image
@@ -53,7 +53,7 @@ export default function Header() {
                 />
                 </div>
             </Link>
-            <nav className="flex gap-4 items-center sm:hidden">
+            <nav className="flex gap-12 items-center sm:hidden text-2xl">
                 <Link href="/user/plan/board">게시판</Link>
                 <span onClick={Open} className="cursor-pointer">
                     알림
@@ -69,15 +69,8 @@ export default function Header() {
                 {userInfo && (
                     <>
                         <Link href="/profile">
-                            <div className="w-10 h-10 rounded-full relative">
-                                <Image
-                                    className="rounded-full"
-                                    src={userInfo.data.profileImages[0].image}
-                                    alt="Picture of the author"
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    priority
-                                />
+                            <div>
+                                프로필
                             </div>
                         </Link>
                     </>
