@@ -187,7 +187,7 @@ function Match() {
                         <div className='flex'>
                     {/* 무한 루프의 환상을 위한 이전 이미지 */}
                     {!isDetailsVisible && currentUser && currentUser.profileImages.length > 1 && (
-                        <div className='relative w-[30vw] h-[70vh] -right-[15%]' onClick={prevSlide}>
+                        <div className='relative w-[30vw] h-[70vh] -right-[15%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out' onClick={prevSlide}>
                             <Image
                                 src={currentUser.profileImages[getPrevImageIndex()].image}
                                 alt="Previous User"
@@ -225,13 +225,13 @@ function Match() {
                         {/* 좋아요, 싫어요 버튼 */}
                         <div className="absolute text-white w-[30vw] flex justify-center -bottom-28 gap-48">
                             <button
-                                className="hover:scale-110 transition-all ease-in-out z-20"
+                                className="hover:scale-110 transition-all ease-in-out z-20 duration-200"
                                 onClick={handleNope}
                             >
                                 <Image src={BadIcon} width={66} height={66} alt='싫어요' />
                             </button>
                             <button
-                                className="hover:scale-110 transition-all ease-in-out z-20"
+                                className="hover:scale-110 transition-all ease-in-out z-20 duration-200"
                                 onClick={handleLike}
                             >
                                 <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
@@ -242,7 +242,7 @@ function Match() {
 
                     {/* 다음 이미지 */}
                     {!isDetailsVisible && currentUser && currentUser.profileImages.length > 1 && (
-                        <div className='relative w-[30vw] h-[70vh] -left-[15%]' onClick={nextSlide}>
+                        <div className='relative w-[30vw] h-[70vh] -left-[15%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out' onClick={nextSlide}>
                             <Image
                                 src={currentUser.profileImages[getNextImageIndex()].image}
                                 alt="Next User"
@@ -315,7 +315,6 @@ function Match() {
                             </>
                             }
                         </div>
-                        {/* <div className="bubble-tail absolute top-5 left-0 transform -translate-x-full -translate-y-1/2 w-0 h-0"></div> */}
                     </div>
                 </div>
             </div>
