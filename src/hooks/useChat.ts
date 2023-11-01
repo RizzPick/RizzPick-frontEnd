@@ -16,9 +16,14 @@ const UseChat = () => {
         mutate(CURRENT_CHAT_KEY, chat);
     },[]);
 
+    const clearCurrentChat = useCallback(() => {
+        mutate(CURRENT_CHAT_KEY, null)
+    }, [])
+
     return {
         initializeChats,
-        setCurrentChat
+        setCurrentChat,
+        clearCurrentChat
     }
 }
 export default UseChat

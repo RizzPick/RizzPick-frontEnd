@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
-import {GoDotFill } from "react-icons/go"
 
 // ICON
 import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
@@ -75,6 +74,21 @@ function Match() {
                 (prevIndex - 1 + currentUser.profileImages.length) %
                 currentUser.profileImages.length
         );
+    };
+
+    const getPrevImageIndex = () => {
+        if (currentUser.profileImages.length === 2) {
+            return slideIndex;  // 2장일 경우 현재 인덱스 반환
+        }
+        return (slideIndex - 1 + currentUser.profileImages.length) % currentUser.profileImages.length;
+    };
+    
+    // 다음 이미지 표시 로직
+    const getNextImageIndex = () => {
+        if (currentUser.profileImages.length === 2) {
+            return (slideIndex + 1) % 2;  // 2장일 경우 다음 인덱스 반환
+        }
+        return (slideIndex + 1) % currentUser.profileImages.length;
     };
 
     if (!users) return;
@@ -155,7 +169,7 @@ function Match() {
                 {/*! 유저 정보 */}
                 <div>
                     {/* 유저 이미지 */}
-                    <div className="relative h-[60vh] w-full">
+                    <div className="relative h-[70vh] w-full">
                         {/* 페이지 이동 버튼 */}
                         <button
                             onClick={prevSlide}
@@ -167,13 +181,13 @@ function Match() {
                         <div className='flex'>
                     {/* 무한 루프의 환상을 위한 이전 이미지 */}
                     {!isDetailsVisible && currentUser && (
-                        <div className='relative w-[20vw] h-[60vh] -right-[5%]' onClick={prevSlide}>
+                        <div className='relative w-[30vw] h-[70vh] -right-[15%]' onClick={prevSlide}>
                             <Image
-                                src={currentUser.profileImages[(slideIndex - 1 + currentUser.profileImages.length) % currentUser.profileImages.length].image}
+                                src={currentUser.profileImages[getPrevImageIndex()].image}
                                 alt="Previous User"
                                 fill
                                 style={{objectFit:'cover'}}
-                                className="rounded-2xl scale-90 z-30"
+                                className="rounded-2xl scale-90 z-30 shadow-xl opacity-90"
                                 priority
                             />
                         </div>
@@ -182,7 +196,7 @@ function Match() {
                     {/* 현재 이미지 */}
                     {currentUser && (
                         <div>
-                            <div className='relative w-[20vw] h-[60vh]'>
+                            <div className='relative w-[30vw] h-[70vh]'>
                                 <Image
                                     src={currentUser.profileImages[slideIndex].image}
                                     alt="Current User"
@@ -193,19 +207,17 @@ function Match() {
                                 />
                             </div>
                         {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-[20vw] -bottom-5 flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer" onClick={toggleDetailsVisibility}>
-                        <div className="text-2xl flex items-center justify-between">
-                            <div className="flex items-center gap-4 ">
-                                <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
-                                    'Unknown'}</p>
-                                <p className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
-                            </div>
+                        <div className="absolute w-[30vw] -bottom-5 flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer h-[110px]" onClick={toggleDetailsVisibility}>
+                        <div className="text-2xl flex items-center justify-between w-full">
+                                <div className='font-bold text-3xl'>{users[userIndex]?.nickname ??
+                                    'Unknown'}</div>
+                                <div className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</div>
                         </div>
                         <div className="mt-2">{users[userIndex]?.intro}</div>
                         </div>
 
                         {/* 좋아요, 싫어요 버튼 */}
-                        <div className="absolute text-white w-[20vw] flex justify-center -bottom-28 gap-48">
+                        <div className="absolute text-white w-[30vw] flex justify-center -bottom-28 gap-48">
                             <button
                                 className="hover:scale-110 transition-all ease-in-out z-20"
                                 onClick={handleNope}
@@ -224,13 +236,13 @@ function Match() {
 
                     {/* 다음 이미지 */}
                     {!isDetailsVisible && currentUser && (
-                        <div className='relative w-[20vw] h-[60vh] -left-[5%]' onClick={nextSlide}>
+                        <div className='relative w-[30vw] h-[70vh] -left-[15%]' onClick={nextSlide}>
                             <Image
-                                src={currentUser.profileImages[(slideIndex + 1) % currentUser.profileImages.length].image}
+                                src={currentUser.profileImages[getNextImageIndex()].image}
                                 alt="Next User"
                                 fill
                                 style={{objectFit:'cover'}}
-                                className="rounded-2xl scale-90 z-30"
+                                className="rounded-2xl scale-90 z-30 shadow-xl opacity-90"
                                 priority
                             />
                         </div>

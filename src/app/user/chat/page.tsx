@@ -7,6 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import Back from "../../../../public/chatIcon/Button.svg"
 import { useRouter } from 'next/navigation';
 import Footer from '@/components/common/Footer';
+import Header from '@/components/common/Header';
 
 export default function ChatPage() {
     const router = useRouter();
@@ -31,11 +32,16 @@ export default function ChatPage() {
                 <Footer />
             </div>
         ):(
-            <div className="grid grid-cols-4 w-[100vw]">
-                <ChatList />
-                <Chat />
-                <ChatProfile />
-        </div>
+            <div>
+                <Header />
+                <div className="grid grid-cols-4 w-[100vw]">
+                    <ChatList />
+                    <div className='col-span-2 border-l-2 border-r-2'>
+                        <Chat />
+                    </div>
+                    <ChatProfile />
+                </div>
+            </div>
         )}
     </div>
     )

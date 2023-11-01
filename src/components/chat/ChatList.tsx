@@ -26,7 +26,7 @@ function ChatList() {
 },[initializeChats])
 
   return (
-    <div className="h-[800px] overflow-y-auto sm:h-[82vh]">
+    <div className="h-[100vh-100px] overflow-y-auto sm:h-[82vh] mt-[74px] border-t-[1px] mx-4">
       {chats && chats.map((chat)=>{
         return <ChatComp data={chat} key={chat.chatRoomId}/>
       })}
