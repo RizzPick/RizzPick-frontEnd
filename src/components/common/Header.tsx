@@ -41,7 +41,7 @@ export default function Header() {
 
     // 로딩 과정 중 보여질 이미지 처리
     return (
-        <header className="flex justify-between item-center px-8 py-4 border-b border-zinc-300 sm:border-none">
+        <header className="flex justify-between item-center px-8 sm:px-4 py-4 border-b border-zinc-300 sm:border-none">
             <Link href="/user/match">
                 <div className='relative w-[95px] h-[40px]'>
                 <Image

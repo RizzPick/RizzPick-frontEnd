@@ -52,7 +52,7 @@ function Footer() {
 
 
   return (
-    <footer className='sticky bottom-0 left-0 w-full hidden sm:block bg-white border-t-gray-400 rounded-t-3xl shadow-custom'>
+    <footer className='fixed bottom-0 left-0 w-full hidden sm:block bg-white border-t-gray-400 rounded-t-3xl shadow-custom'>
       <nav className='flex justify-around text-[50px] py-4 items-center'>
       <button onClick={() => handleIconClick('board')}>
           {selectedIcon === 'board' ? <ListSel /> : <List />}

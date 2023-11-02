@@ -15,6 +15,7 @@ import EducationIcon from '../../../public/profileIcon/graduationcap.fill.svg';
 import Home from '../../../public/profileIcon/Home.svg';
 import { getCookie } from '@/utils/cookie';
 import ReadMore from '../../../public/matchIcon/Intro.png';
+import { AiOutlineInfoCircle } from "react-icons/ai"
 
 function Match() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
@@ -27,6 +28,7 @@ function Match() {
     //! 랜덤 매칭
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
+    console.log(users);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,8 +48,10 @@ function Match() {
 
     const handleButtonClick = () => {
         // 처음에 몇명의 유저를 추천받는 지 확인하고, 마지막 유저의 index 가 넘어가게 되면 페이지네이션 로직과 동일하게 유저 추천 배열 늘리기 작업 필요
-        if (userIndex === users.length - 1) {
+        if (userIndex >= users.length - 1) {
             alert('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요 🥹');
+            setUsers([]);
+            setUserIndex(0);
         } else {
             setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
             setSlideIndex(0);
@@ -104,7 +108,7 @@ function Match() {
         return (slideIndex + 1) % imageCount;
     };
 
-    if (!users) return;
+    
 
     const sendLike = async (targetUserId: string) => {
         try {
@@ -173,12 +177,17 @@ function Match() {
         }
     };
 
+    if (!users) return;
     if (!users[userIndex]) return;
-
     return (
         <div className="relative flex bg-matchpage-gradient h-[100vh]">
             <div className="flex items-start p-10 mx-auto">
-                {/*! 유저 정보 */}
+                {users.length === 0 ? (
+                    <div>
+                        <h1 className='text-black'>오늘의 추천이 끝났습니다, 다음에 또 이용해주세요</h1>
+                    </div>
+                ):(
+                    <>
                 <div>
                     {/* 유저 이미지 */}
                     <div className="relative h-[70vh] w-full">
@@ -233,9 +242,16 @@ function Match() {
                                     </div>
                                     <div className="absolute w-[30vw] -bottom-5 flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer h-[110px]" onClick={toggleDetailsVisibility}>
                                         <div className="text-2xl flex items-center justify-between w-full">
-                                                <div className='font-bold text-3xl'>{users[userIndex]?.nickname ??
-                                                    'Unknown'}</div>
-                                                <div className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</div>
+                                                <div className='flex items-center gap-2'>
+                                                    <div className='font-bold text-3xl'>{users[userIndex]?.nickname ??
+                                                        'Unknown'}</div>
+                                                    <div className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</div>
+                                                </div>
+                                                <div>
+                                                    <button onClick={toggleDetailsVisibility} className='animate-bounce z-30 text-3xl transition-all hover:scale-110 ease-in-out '>
+                                                        <AiOutlineInfoCircle />
+                                                    </button>   
+                                                </div>
                                         </div>
                                         <div className="mt-2">{users[userIndex]?.intro}</div>
                                     </div>
@@ -253,7 +269,7 @@ function Match() {
                                             />
                                         </button>
                                         <button
-                                            className="hover:scale-110 transition-all ease-in-out z-20 duration-200"
+                                            className="animate-bounce hover:scale-110 transition-all ease-in-out z-20 duration-200"
                                             onClick={handleLike}
                                         >
                                             <Image
@@ -272,7 +288,7 @@ function Match() {
                                 currentUser &&
                                 currentUser.profileImages.length >= 2 && (
                                     <div
-                                        className="relative w-[30vw] h-[70vh] -left-[20%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
+                                        className={`relative w-[30vw] h-[70vh] ${currentUser.profileImages.length === 2 ? (''):('-left-[20%]') }  cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out`}
                                         onClick={nextSlide}
                                     >
                                         <Image
@@ -298,8 +314,6 @@ function Match() {
                         </button>
                     </div>
                 </div>
-
-                {/* 데이트 계획 및 상세 정보 */}
                 <div
                     className="flex-1 w-[20vw] h-[60vh] relative ml-12"
                     style={{ display: isDetailsVisible ? 'block' : 'none' }}
@@ -374,6 +388,8 @@ function Match() {
                         </div>
                     </div>
                 </div>
+                </>
+                )}
             </div>
         </div>
     );

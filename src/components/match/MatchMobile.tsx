@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
-import { sendLike, sendNope } from '@/features/thumbsUpDown/thumbsUpDown';
-import {GoDotFill } from "react-icons/go"
+import { GoDotFill } from "react-icons/go"
+import { MdKeyboardDoubleArrowDown } from "react-icons/md"
 
 // ICON
 import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
@@ -15,7 +15,10 @@ import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import EducationIcon from "../../../public/profileIcon/graduationcap.fill.small.svg"
+import Home from "../../../public/profileIcon/house.fill.small.svg"
 import { getCookie } from '@/utils/cookie';
+
 
 function MatchMobile() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
@@ -25,6 +28,9 @@ function MatchMobile() {
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
     };
+
+    const detailsStyle = isDetailsVisible ? 'translate-y-0' : 'translate-y-full';
+
 
     //! 랜덤 매칭
     const [users, setUsers] = useState<UserProfile[]>([]);
@@ -44,46 +50,10 @@ function MatchMobile() {
                 console.error('Error fetching data:', error);
             }
         };
-
-        // const fetchLikedUsers = async () => {
-        //     const response = await axios.get(
-        //         'https://willyouback.shop/api/like/status',
-        //         {
-        //             headers: {
-        //                 Authorization: getCookie('Authorization'),
-        //                 Authorization_Refresh: getCookie(
-        //                     'Authorization_Refresh'
-        //                 ),
-        //             },
-        //         }
-        //     );
-        //     console.log('like user : ', response.data.data);
-        //     return response.data.data; // 좋아요 상태 데이터 반환
-        // };
-
-        // const updateUsersArray = async () => {
-        //     try {
-        //         const likedUsers = await fetchLikedUsers(); // 좋아요 상태 가져오기
-                
-        //         // 기존 사용자 배열에서 좋아요를 보낸 사용자 제외
-        //         setUsers((prevUsers) =>
-        //             prevUsers.filter(
-        //                 (user) => !likedUsers.includes(user.userId)
-        //             )
-        //         );
-        //         console.log(users);
-        //     } catch (error) {
-        //         console.error('Error fetching liked users:', error);
-        //         // Optionally, inform the user that an error occurred
-        //     }
-        // };
-
         fetchData();
-        // updateUsersArray(); // 배열 업데이트 함수 호출
     }, []);
 
     const handleButtonClick = () => {
-        // 처음에 몇명의 유저를 추천받는 지 확인하고, 마지막 유저의 index 가 넘어가게 되면 페이지네이션 로직과 동일하게 유저 추천 배열 늘리기 작업 필요
         if (userIndex === users.length - 1) {
             alert("오늘의 추천이 끝났습니다")
             // setUserIndex(0);
@@ -114,6 +84,7 @@ function MatchMobile() {
     };
 
     if (!users) return;
+    if(!users[userIndex]) return;
 
     const sendLike = async (targetUserId: string) => {
         try {
@@ -182,8 +153,6 @@ function MatchMobile() {
             console.error('싫어요 보내기 오류:', error);
         }
     };
-
-    console.log(users);
     return (
         <div className="flex h-[calc(100vh - 100px)]">
             <div className="flex-1 flex justify-evenly items-start p-10 sm:p-2">
@@ -205,7 +174,7 @@ function MatchMobile() {
                         {/* 페이지 이동 버튼 */}
                         <button
                             onClick={prevSlide}
-                            className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 m-2"
+                            className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 m-2 hover:scale-125 transition-all duration-200 ease-in-out"
                         >
                             <LeftButton />
                         </button>
@@ -239,7 +208,7 @@ function MatchMobile() {
 
                         <button
                             onClick={nextSlide}
-                            className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 m-2"
+                            className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 m-2 hover:scale-125 transition-all duration-200 ease-in-out"
                         >
                             <RightButton />
                         </button>
@@ -252,7 +221,7 @@ function MatchMobile() {
                                             'Unknown'}</p>
                                         <p className='text-white text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
                                     </div>
-                                    <button onClick={toggleDetailsVisibility} className='z-30 transition-all hover:scale-110 ease-in-out'>
+                                    <button onClick={toggleDetailsVisibility} className={`${isDetailsVisible ? ("hidden") : ("animate-bounce")} z-30 transition-all hover:scale-110 ease-in-out`}>
                                         <Image src={ReadMore} width={32} height={32} alt='ReadMore'/>
                                     </button>
                                 </div>
@@ -260,7 +229,7 @@ function MatchMobile() {
                         </div>
 
                         {/* 좋아요, 싫어요 버튼 */}
-                        <div className="absolute sm:bottom-2 text-white w-full flex justify-between p-4 bottom-0">
+                        <div className="absolute text-white w-full flex justify-between p-4 bottom-0">
                             <button
                                 className="hover:scale-110 transition-all ease-in-out z-20"
                                 onClick={handleNope}
@@ -273,6 +242,32 @@ function MatchMobile() {
                             >
                                 <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
                             </button>
+                        </div>
+                        <div className={`absolute -bottom-1 w-full transform ${detailsStyle} transition-transform duration-300 ease-in-out p-6 bg-white z-40 rounded-t-3xl h-[170px]`}>
+                        <div className={`group ${!isDetailsVisible && "hidden"}`}>
+                                <div 
+                                    onClick={toggleDetailsVisibility} 
+                                    className="absolute -top-1 left-[50%] text-white animate-bounce px-2 py-2 bg-fuchsia-400 rounded-full cursor-pointer"
+                                >
+                                    <MdKeyboardDoubleArrowDown />
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-between">
+                            <div className='bg-white rounded-2xl flex flex-col gap-3 justify-center text-xs w-full'>
+                                {!users[userIndex].location && !users[userIndex].education && !users[userIndex].mbti && !users[userIndex].religion ? 
+                                        <p className="text-center">작성된 내용이 없습니다.</p> 
+                                        : 
+                                        <>
+                                            { users[userIndex].education ? <><div className='flex items-center gap-4'><EducationIcon/>{users[userIndex].education}</div><hr/></> : null }
+                                            { users[userIndex].location ? <><div className='flex items-center gap-4'><Home/>{users[userIndex].location}</div><hr/></> : null }
+                                            <div className='flex items-center gap-4'>
+                                            { users[userIndex].mbti ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].mbti}</div> : null }
+                                            { users[userIndex].religion ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].religion}</div> : null }
+                                            </div>
+                                        </>
+                                }
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
