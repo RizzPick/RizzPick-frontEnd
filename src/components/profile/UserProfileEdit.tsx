@@ -2,6 +2,7 @@
 import ProfileAPI from '@/features/profile';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import { MyProfileRes, ProfileForm } from '@/types/profile';
+import { setCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
@@ -16,7 +17,6 @@ function UserProfileEdit({onNext} : any) {
 
   useEffect(() => {
     if (profile) {
-      console.log(profile);
       setLocalProfile(profile);
     }
   }, [profile]);
@@ -34,10 +34,8 @@ function UserProfileEdit({onNext} : any) {
       ];
       if (localProfile) {
         for (const key of profileFormKeys) {
-          const currentValue = getValues(key); // getValues를 사용하여 현재 값 가져오기
-          console.log(currentValue);
-          if (localProfile[key] !== undefined && (currentValue === "없음" || !currentValue)) {
-            console.log(localProfile[key]);
+          const currentValue = getValues(key);
+          if (localProfile[key] !== undefined && !currentValue) {
             setValue(key, localProfile[key]);
           }
         }
@@ -45,13 +43,17 @@ function UserProfileEdit({onNext} : any) {
   }, [localProfile, setValue, getValues]);
 
   const onSubmit = async(data: ProfileForm) => {
-    console.log(data);
+    if(profile?.profileImages.length === 0) {
+      alert("이미지를 최소 1장 이상은 등록해야 합니다.");
+      return;
+    }
     try {
       const response = await ProfileAPI.updateProfile(data);
       if(response.status === 200) {
         setCurrentProfile(response.data.data);
         setLocalProfile(response.data.data);
         alert('프로필 등록이 완료되었습니다!');
+        setCookie("status", "true");
         router.push('/profile');
       }
       console.log(response);
@@ -138,19 +140,19 @@ function UserProfileEdit({onNext} : any) {
 
           <label className="block text-gray-700 my-2">지역</label>
           <select {...register("location")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
-            <option value="없음">선택</option>
-            <option value="서울">서울특별시</option>
-            <option value="부산">부산광역시</option>
-            <option value="인천">인천광역시</option>
-            <option value="대구">대구광역시</option>
-            <option value="대전">대전광역시</option>
-            <option value="광주">광주광역시</option>
-            <option value="울산">울산광역시</option>
+            <option value="">선택</option>
+            <option value="서울특별시">서울특별시</option>
+            <option value="부산광역시">부산광역시</option>
+            <option value="인천광역시">인천광역시</option>
+            <option value="대구광역시">대구광역시</option>
+            <option value="대전광역시">대전광역시</option>
+            <option value="광주광역시">광주광역시</option>
+            <option value="울산광역시">울산광역시</option>
           </select>
 
           <label className="block text-gray-700 my-2">MBTI</label>
           <select {...register("mbti")} className="w-24 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
-          <option value="NONE">선택</option>
+          <option value="">선택</option>
             <option value="ISTJ">ISTJ</option>
             <option value="ISFJ">ISFJ</option>
             <option value="INFJ">INFJ</option>
@@ -171,7 +173,7 @@ function UserProfileEdit({onNext} : any) {
 
           <label className="block text-gray-700 my-2">종교</label>
           <select {...register("religion")} className="w-28 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
-            <option value="없음">선택</option>
+            <option value="">선택</option>
             <option value="무교">무교</option>
             <option value="기독교">기독교</option>
             <option value="유대교">유대교</option>

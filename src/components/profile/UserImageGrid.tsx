@@ -52,10 +52,20 @@ function UserImageGrid({onPrev} : any) {
         ...currentData,
         profileImages: currentData.profileImages.filter((image:any) => image.id !== imageId)
       }), false);
-    } catch (error) {
+    } catch (error:any) {
+      alert(error.response.data.message);
       console.error("Image delete failed:", error);
     }
   };
+
+  const onComplete = () => {
+    if(profile?.profileImages.length === 0) {
+      alert("이미지를 최소 1장 이상은 등록해야 합니다.");
+      return;
+    } 
+    router.push('/profile');
+    alert("프로필 등록이 완료되었습니다.")
+  }
 
   return (
     <div>
@@ -85,7 +95,7 @@ function UserImageGrid({onPrev} : any) {
         </div>
         <div className='mt-10'>
           <button onClick={onPrev} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-left hover:bg-neutral-200 hover:shadow shadow-inner">이전</button>
-          <button onClick={()=>{router.push('/profile'), alert('프로필 등록이 완료되었습니다!')}} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-right hover:bg-neutral-200 hover:shadow shadow-inner">완료</button>
+          <button onClick={onComplete} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-right hover:bg-neutral-200 hover:shadow shadow-inner">완료</button>
         </div>
       </div>
     </div>

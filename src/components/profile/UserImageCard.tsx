@@ -62,7 +62,7 @@ const handleImageDelete = async (imageId : number) => {
     {image && 
       <div className='relative border-gray-500 rounded sm:w-24 sm:h-36 w-[142px] h-[172px]'>
         <Image src={image.image} alt="Profile Image" fill style={{objectFit : 'cover'}} className='rounded-lg'/> 
-        <button 
+        <button
           className='absolute bottom-0 right-0 -mr-2 -mb-2 text-3xl rounded-full bg-[#D57DFF] transform transition-transform duration-500 hover:scale-110' 
           onClick={()=>handleImageDelete(image.id)}
         >
@@ -82,7 +82,7 @@ const handleImageDelete = async (imageId : number) => {
     }
       <input
         type="file"
-        accept="image/*"
+        accept="image/gif, image/jpeg, image/jpg, image/png, image/heif, image/heic, image/webp"
         ref={imageInput}
         onChange={handleImageChange}
         className='hidden'
@@ -93,7 +93,7 @@ const handleImageDelete = async (imageId : number) => {
               onClick={() => {setModalVisible(false), setCameraVisible(false)}} // 여기서 모달 밖을 클릭했을 때 모달을 닫습니다.
           >
               <div 
-                  className="bg-white p-5 rounded-lg flex flex-col gap-4 relative w-96 h-96"
+                  className="bg-white p-5 rounded-lg flex flex-col gap-4 relative w-96 h-96 sm:justify-center"
                   onClick={e => e.stopPropagation()} // 모달 안을 클릭하면 이벤트 전파를 막아서 모달이 닫히지 않게 합니다.
               >
                   <p className='font-bold text-2xl'>새 미디어 콘텐츠 만들기</p>
@@ -106,7 +106,7 @@ const handleImageDelete = async (imageId : number) => {
                   </button>
                   <button 
                       onClick={() => setCameraVisible(true)} 
-                      className='bg-blue-300 h-24 rounded-lg text-white transition-transform duration-300 transform hover:scale-105'
+                      className='bg-blue-300 h-24 rounded-lg text-white transition-transform duration-300 transform hover:scale-105 sm:hidden'
                   >
                       카메라로 사진 촬영
                   </button>

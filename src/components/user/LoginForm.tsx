@@ -77,7 +77,7 @@ function LoginForm() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[600px] sm:w-[100vw] sm:h-[80vh] h-[100vh-200px]"
             >
-                <div className="w-[141px] h-[60px] relative mx-auto mt-10">
+                <div className="w-[141px] h-[60px] relative mx-auto mt-10 sm:hidden">
                     <Image
                         src={LogoColor}
                         alt="로고"

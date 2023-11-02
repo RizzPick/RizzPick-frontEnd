@@ -33,7 +33,6 @@ function Match() {
             try {
                 const response = await MatchAPI.fetchRandomUser();
                 const usersData = response.data.data;
-
                 // users 상태를 usersData로 설정합니다.
                 setUsers(usersData);
                 console.log('usersData', usersData);
@@ -42,48 +41,13 @@ function Match() {
                 console.error('Error fetching data:', error);
             }
         };
-
-        // const fetchLikedUsers = async () => {
-        //     const response = await axios.get(
-        //         'https://willyouback.shop/api/like/status',
-        //         {
-        //             headers: {
-        //                 Authorization: getCookie('Authorization'),
-        //                 Authorization_Refresh: getCookie(
-        //                     'Authorization_Refresh'
-        //                 ),
-        //             },
-        //         }
-        //     );
-        //     console.log('like user : ', response.data.data);
-        //     return response.data.data; // 좋아요 상태 데이터 반환
-        // };
-
-        // const updateUsersArray = async () => {
-        //     try {
-        //         const likedUsers = await fetchLikedUsers(); // 좋아요 상태 가져오기
-
-        //         // 기존 사용자 배열에서 좋아요를 보낸 사용자 제외
-        //         setUsers((prevUsers) =>
-        //             prevUsers.filter(
-        //                 (user) => !likedUsers.includes(user.userId)
-        //             )
-        //         );
-        //         console.log(users);
-        //     } catch (error) {
-        //         console.error('Error fetching liked users:', error);
-        //         // Optionally, inform the user that an error occurred
-        //     }
-        // };
-
         fetchData();
     }, []);
 
     const handleButtonClick = () => {
         // 처음에 몇명의 유저를 추천받는 지 확인하고, 마지막 유저의 index 가 넘어가게 되면 페이지네이션 로직과 동일하게 유저 추천 배열 늘리기 작업 필요
         if (userIndex === users.length - 1) {
-            alert('오늘의 추천이 끝났습니다');
-            // setUserIndex(0);
+            alert('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요 🥹');
         } else {
             setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
             setSlideIndex(0);
@@ -120,27 +84,24 @@ function Match() {
     };
 
     const getPrevImageIndex = () => {
-        if (currentUser.profileImages.length === 1) {
-            return 0; // 1장일 경우 현재 인덱스 반환
+        const imageCount = currentUser.profileImages.length;
+        if (imageCount < 3) {
+            // 3장 미만일 경우 현재 인덱스 반환
+            return slideIndex;
         }
-        if (currentUser.profileImages.length === 2) {
-            return slideIndex; // 2장일 경우 현재 인덱스 반환
-        }
-        return (
-            (slideIndex - 1 + currentUser.profileImages.length) %
-            currentUser.profileImages.length
-        );
+        // 기존 로직
+        return (slideIndex - 1 + imageCount) % imageCount;
     };
 
     // 다음 이미지 표시 로직
     const getNextImageIndex = () => {
-        if (currentUser.profileImages.length === 1) {
-            return 0; // 1장일 경우 현재 인덱스 반환
+        const imageCount = currentUser.profileImages.length;
+        if (imageCount < 3) {
+            // 3장 미만일 경우 현재 인덱스 반환
+            return (slideIndex + 1) % imageCount;
         }
-        if (currentUser.profileImages.length === 2) {
-            return (slideIndex + 1) % 2; // 2장일 경우 다음 인덱스 반환
-        }
-        return (slideIndex + 1) % currentUser.profileImages.length;
+        // 기존 로직
+        return (slideIndex + 1) % imageCount;
     };
 
     if (!users) return;
@@ -160,7 +121,6 @@ function Match() {
                     },
                 }
             );
-            // handleButtonClick();
             return response;
         } catch (error) {
             console.error(error);
@@ -225,7 +185,7 @@ function Match() {
                         {/* 페이지 이동 버튼 */}
                         <button
                             onClick={prevSlide}
-                            className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 m-2"
+                            className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 m-2 hidden sm:block"
                         >
                             <LeftButton />
                         </button>
@@ -234,7 +194,7 @@ function Match() {
                             {/* 무한 루프의 환상을 위한 이전 이미지 */}
                             {!isDetailsVisible &&
                                 currentUser &&
-                                currentUser.profileImages.length > 1 && (
+                                currentUser.profileImages.length >= 3 && (
                                     <div
                                         className="relative w-[30vw] h-[70vh] -right-[20%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
                                         onClick={prevSlide}
@@ -310,7 +270,7 @@ function Match() {
                             {/* 다음 이미지 */}
                             {!isDetailsVisible &&
                                 currentUser &&
-                                currentUser.profileImages.length > 1 && (
+                                currentUser.profileImages.length >= 2 && (
                                     <div
                                         className="relative w-[30vw] h-[70vh] -left-[20%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
                                         onClick={nextSlide}
@@ -332,7 +292,7 @@ function Match() {
                         </div>
                         <button
                             onClick={nextSlide}
-                            className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 m-2"
+                            className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 m-2 hidden sm:block"
                         >
                             <RightButton />
                         </button>
