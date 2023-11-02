@@ -13,7 +13,7 @@ export default async function ProfilePage() {
         <UserProfile />
       </div>
 
-      <div className='sm:block hidden'>
+      <div className='sm:block hidden height-screen-vh'>
         <Header />
         <UserProfileMobile />
         <Footer />
