@@ -51,7 +51,6 @@ export default function Alarm({ close }: AlarmProps) {
                         },
                     }
                 );
-                console.log('asdasd', response.data.data);
                 return setLikesData(response.data.data); // Set the likes data
             } catch (error) {
                 console.error(error);
@@ -76,7 +75,7 @@ export default function Alarm({ close }: AlarmProps) {
                             좋아요 ({likesData.length})
                         </h2>
                         <div
-                            className="flex flex-row border-t-[1px] scrollbar-hide py-4 px-3 gap-3 flex-grow-0"
+                            className="flex flex-row border-t-[1px] py-4 px-3 gap-5 flex-grow-0"
                             style={{
                                 borderColor: 'black',
                                 overflowX: 'auto', // 가로 스크롤을 활성화합니다.
@@ -84,7 +83,7 @@ export default function Alarm({ close }: AlarmProps) {
                             }}
                         >
                             {likesData.map((like, index) => (
-                                    <div onClick={()=>router.push('/user/notifications/liked')} className="rounded-full bg-[#A627A9] w-[70px] h-[70px] flex items-center justify-center cursor-pointer" key={like.userId}>
+                                    <div onClick={()=>router.push('/user/notifications/liked')} className="rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer" key={like.userId}>
                                         <div className="relative w-[60px] h-[60px]">
                                             <Image
                                                 src={like.profilePic.image}
@@ -101,7 +100,7 @@ export default function Alarm({ close }: AlarmProps) {
                             ))}
                         </div>
                     </div>
-                    <h2 className="mb-2 font-bold text-2xl">메시지</h2>
+                    <h2 className="mb-2 font-bold text-2xl mt-4">메시지</h2>
                     <div className="h-full overflow-y-auto scrollbar-hide">
                         <div className="h-[calc(70vh-36px)] border-t-[1px] border-black">
                             {chats?.map((chat) => {

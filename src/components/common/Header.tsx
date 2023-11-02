@@ -30,7 +30,6 @@ export default function Header() {
                 try {
                     const response = await AuthAPI.getUserInfo();
                     setUserInfo(response.data);
-                    console.log(response);
                 } catch (error) {
                     console.log(error);
                 }
@@ -41,7 +40,7 @@ export default function Header() {
 
     // 로딩 과정 중 보여질 이미지 처리
     return (
-        <header className="flex justify-between item-center px-8 py-4 border-b border-zinc-300 sm:border-none">
+        <header className="flex justify-between item-center px-8 sm:px-4 py-4 border-b border-zinc-300 sm:border-none">
             <Link href="/user/match">
                 <div className='relative w-[95px] h-[40px]'>
                 <Image
@@ -54,7 +53,7 @@ export default function Header() {
                 </div>
             </Link>
             <nav className="flex gap-12 items-center sm:hidden text-2xl">
-                <Link href="/user/plan/board">게시판</Link>
+                <Link href="/user/plan/board">데이트</Link>
                 <span onClick={Open} className="cursor-pointer">
                     알림
                 </span>

@@ -15,6 +15,8 @@ import EducationIcon from '../../../public/profileIcon/graduationcap.fill.svg';
 import Home from '../../../public/profileIcon/Home.svg';
 import { getCookie } from '@/utils/cookie';
 import ReadMore from '../../../public/matchIcon/Intro.png';
+import { AiOutlineInfoCircle } from "react-icons/ai"
+import toast from 'react-hot-toast';
 
 function Match() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
@@ -33,7 +35,6 @@ function Match() {
             try {
                 const response = await MatchAPI.fetchRandomUser();
                 const usersData = response.data.data;
-
                 // users 상태를 usersData로 설정합니다.
                 setUsers(usersData);
                 console.log('usersData', usersData);
@@ -42,48 +43,15 @@ function Match() {
                 console.error('Error fetching data:', error);
             }
         };
-
-        // const fetchLikedUsers = async () => {
-        //     const response = await axios.get(
-        //         'https://willyouback.shop/api/like/status',
-        //         {
-        //             headers: {
-        //                 Authorization: getCookie('Authorization'),
-        //                 Authorization_Refresh: getCookie(
-        //                     'Authorization_Refresh'
-        //                 ),
-        //             },
-        //         }
-        //     );
-        //     console.log('like user : ', response.data.data);
-        //     return response.data.data; // 좋아요 상태 데이터 반환
-        // };
-
-        // const updateUsersArray = async () => {
-        //     try {
-        //         const likedUsers = await fetchLikedUsers(); // 좋아요 상태 가져오기
-
-        //         // 기존 사용자 배열에서 좋아요를 보낸 사용자 제외
-        //         setUsers((prevUsers) =>
-        //             prevUsers.filter(
-        //                 (user) => !likedUsers.includes(user.userId)
-        //             )
-        //         );
-        //         console.log(users);
-        //     } catch (error) {
-        //         console.error('Error fetching liked users:', error);
-        //         // Optionally, inform the user that an error occurred
-        //     }
-        // };
-
         fetchData();
     }, []);
 
     const handleButtonClick = () => {
         // 처음에 몇명의 유저를 추천받는 지 확인하고, 마지막 유저의 index 가 넘어가게 되면 페이지네이션 로직과 동일하게 유저 추천 배열 늘리기 작업 필요
-        if (userIndex === users.length - 1) {
-            alert('오늘의 추천이 끝났습니다');
-            // setUserIndex(0);
+        if (userIndex >= users.length - 1) {
+            toast('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요', {icon : '🥹'})
+            setUsers([]);
+            setUserIndex(0);
         } else {
             setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
             setSlideIndex(0);
@@ -120,30 +88,27 @@ function Match() {
     };
 
     const getPrevImageIndex = () => {
-        if (currentUser.profileImages.length === 1) {
-            return 0; // 1장일 경우 현재 인덱스 반환
+        const imageCount = currentUser.profileImages.length;
+        if (imageCount < 3) {
+            // 3장 미만일 경우 현재 인덱스 반환
+            return slideIndex;
         }
-        if (currentUser.profileImages.length === 2) {
-            return slideIndex; // 2장일 경우 현재 인덱스 반환
-        }
-        return (
-            (slideIndex - 1 + currentUser.profileImages.length) %
-            currentUser.profileImages.length
-        );
+        // 기존 로직
+        return (slideIndex - 1 + imageCount) % imageCount;
     };
 
     // 다음 이미지 표시 로직
     const getNextImageIndex = () => {
-        if (currentUser.profileImages.length === 1) {
-            return 0; // 1장일 경우 현재 인덱스 반환
+        const imageCount = currentUser.profileImages.length;
+        if (imageCount < 3) {
+            // 3장 미만일 경우 현재 인덱스 반환
+            return (slideIndex + 1) % imageCount;
         }
-        if (currentUser.profileImages.length === 2) {
-            return (slideIndex + 1) % 2; // 2장일 경우 다음 인덱스 반환
-        }
-        return (slideIndex + 1) % currentUser.profileImages.length;
+        // 기존 로직
+        return (slideIndex + 1) % imageCount;
     };
 
-    if (!users) return;
+    
 
     const sendLike = async (targetUserId: string) => {
         try {
@@ -160,7 +125,6 @@ function Match() {
                     },
                 }
             );
-            // handleButtonClick();
             return response;
         } catch (error) {
             console.error(error);
@@ -172,8 +136,7 @@ function Match() {
     const handleLike = async () => {
         try {
             const response = await sendLike(users[userIndex].userId);
-            console.log(response);
-            alert(response.data.message);
+            toast(response.data.message, {icon: '❤️',});
             handleButtonClick(); // 좋아요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
         } catch (error) {
             console.error('좋아요 보내기 오류:', error);
@@ -206,26 +169,30 @@ function Match() {
     const handleNope = async () => {
         try {
             const response = await sendNope(users[userIndex].userId);
-            console.log(response);
             handleButtonClick(); // 싫어요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
         } catch (error) {
             console.error('싫어요 보내기 오류:', error);
         }
     };
 
+    if (!users) return;
     if (!users[userIndex]) return;
-
     return (
         <div className="relative flex bg-matchpage-gradient h-[100vh]">
             <div className="flex items-start p-10 mx-auto">
-                {/*! 유저 정보 */}
+                {users.length === 0 ? (
+                    <div>
+                        <h1 className='text-black'>오늘의 추천이 끝났습니다, 다음에 또 이용해주세요</h1>
+                    </div>
+                ):(
+                    <>
                 <div>
                     {/* 유저 이미지 */}
                     <div className="relative h-[70vh] w-full">
                         {/* 페이지 이동 버튼 */}
                         <button
                             onClick={prevSlide}
-                            className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 m-2"
+                            className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 m-2 hidden sm:block"
                         >
                             <LeftButton />
                         </button>
@@ -234,7 +201,7 @@ function Match() {
                             {/* 무한 루프의 환상을 위한 이전 이미지 */}
                             {!isDetailsVisible &&
                                 currentUser &&
-                                currentUser.profileImages.length > 1 && (
+                                currentUser.profileImages.length >= 3 && (
                                     <div
                                         className="relative w-[30vw] h-[70vh] -right-[20%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
                                         onClick={prevSlide}
@@ -273,16 +240,23 @@ function Match() {
                                     </div>
                                     <div className="absolute w-[30vw] -bottom-5 flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer h-[110px]" onClick={toggleDetailsVisibility}>
                                         <div className="text-2xl flex items-center justify-between w-full">
-                                                <div className='font-bold text-3xl'>{users[userIndex]?.nickname ??
-                                                    'Unknown'}</div>
-                                                <div className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</div>
+                                                <div className='flex items-center gap-2'>
+                                                    <div className='font-bold text-3xl'>{users[userIndex]?.nickname ??
+                                                        'Unknown'}</div>
+                                                    <div className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</div>
+                                                </div>
+                                                <div>
+                                                    <button onClick={toggleDetailsVisibility} className='animate-bounce z-30 text-3xl transition-all hover:scale-110 ease-in-out '>
+                                                        <AiOutlineInfoCircle />
+                                                    </button>   
+                                                </div>
                                         </div>
                                         <div className="mt-2">{users[userIndex]?.intro}</div>
                                     </div>
                                     {/* 좋아요, 싫어요 버튼 */}
                                     <div className="absolute text-white w-[30vw] flex justify-center -bottom-28 gap-48">
                                         <button
-                                            className="hover:scale-110 transition-all ease-in-out z-20 duration-200"
+                                            className="transform transition-transform duration-500 hover:rotate-90"
                                             onClick={handleNope}
                                         >
                                             <Image
@@ -293,7 +267,7 @@ function Match() {
                                             />
                                         </button>
                                         <button
-                                            className="hover:scale-110 transition-all ease-in-out z-20 duration-200"
+                                            className="animate-pulse animate-twice animate-ease-in-out"
                                             onClick={handleLike}
                                         >
                                             <Image
@@ -310,9 +284,9 @@ function Match() {
                             {/* 다음 이미지 */}
                             {!isDetailsVisible &&
                                 currentUser &&
-                                currentUser.profileImages.length > 1 && (
+                                currentUser.profileImages.length >= 2 && (
                                     <div
-                                        className="relative w-[30vw] h-[70vh] -left-[20%] cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out"
+                                        className={`relative w-[30vw] h-[70vh] ${currentUser.profileImages.length === 2 ? (''):('-left-[20%]') }  cursor-pointer hover:scale-105 transition-all duration-200 ease-in-out`}
                                         onClick={nextSlide}
                                     >
                                         <Image
@@ -332,14 +306,12 @@ function Match() {
                         </div>
                         <button
                             onClick={nextSlide}
-                            className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 m-2"
+                            className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 m-2 hidden sm:block"
                         >
                             <RightButton />
                         </button>
                     </div>
                 </div>
-
-                {/* 데이트 계획 및 상세 정보 */}
                 <div
                     className="flex-1 w-[20vw] h-[60vh] relative ml-12"
                     style={{ display: isDetailsVisible ? 'block' : 'none' }}
@@ -414,6 +386,8 @@ function Match() {
                         </div>
                     </div>
                 </div>
+                </>
+                )}
             </div>
         </div>
     );

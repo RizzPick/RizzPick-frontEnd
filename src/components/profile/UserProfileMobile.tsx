@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
+import toast from 'react-hot-toast';
 
 function UserProfileMobile() {
     const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
@@ -22,7 +23,7 @@ function UserProfileMobile() {
         eraseCookie('Authorization_Refresh');
         eraseCookie('status');
         sessionStorage.clear();
-        alert('로그아웃 처리되었습니다.');
+        toast.success('로그아웃 처리되었습니다');
         router.push('/');
     };
 

@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { SyncLoader } from 'react-spinners';
 import Logo from "../../../public/Logo.png"
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 function SignupComponent() {
     const {
@@ -34,12 +35,12 @@ function SignupComponent() {
       try {
         const email = watch('email');
         if(!email) {
-          alert("이메일을 입력해주세요.");
+          toast('이메일을 입력해주세요', {icon: '📧',});
           return;
         } else {
           const res = await AuthAPI.emailAuth(email);
           if(res.status === 200) {
-            alert('인증번호가 전송되었습니다.');
+            toast.success("인증번호가 전송되었습니다");
             setVerify({...verify, email});
             setEmailVerified(true);
             setShowTimer(true);
@@ -58,7 +59,7 @@ function SignupComponent() {
       } catch(error:any) {
         if (error.response) {
           const errorMessage = error.response.data.message;
-          alert(errorMessage);
+          toast.error(errorMessage);
         }
       } finally {
         setIsLoading(false);
@@ -67,20 +68,20 @@ function SignupComponent() {
 
     const onCheckEmailVerify = async() => {
       if(!verify.authKey) {
-        alert("인증번호를 입력해주세요!");
+        toast('인증번호를 입력해주세요', {icon: '👀',});
         return;
       } 
       try {
         const response = await AuthAPI.emailAuthVerify(verify);
         if(response.status === 200) {
-          alert(response.data.message);
+          toast.success(response.data.message);
           setVerificationSuccessful(true);
         }
       } catch(error:any) {
         console.log(error);
         if (error.response) {
           const errorMessage = error.response.data.message;
-          alert(errorMessage);
+          toast.error(errorMessage);
         }
       }
     }
@@ -90,14 +91,13 @@ function SignupComponent() {
     try{
         const res = await AuthAPI.join(formData);
           if(res.status === 201){
-            alert(res.data.message);
+            toast.success(res.data.message);
             router.push('/signin');
           }
         } catch (error) {
           const errorMessage = (error as SignupErrorRes).response?.data.message;
         if (errorMessage) {
-            console.log(errorMessage);
-            alert(errorMessage);
+            toast.error(errorMessage);
         } else {
             console.log(error);
         }
@@ -189,7 +189,7 @@ function SignupComponent() {
             <label className="font-bold text-xl">이메일</label>
         </div>
         <div className='flex gap-2 mb-2 w-full'>
-          <div className='relative flex justify-between w-full sm:w-[60vw]'>
+          <div className='relative flex justify-between w-full sm:w-[220px]'>
           <input
               id="email"
               type="email"
@@ -207,7 +207,7 @@ function SignupComponent() {
               <button onClick={onCheckEmail} type="button" className="bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 hidden sm:block">인증하기</button>
             </div>
         <div className='flex gap-2 w-full'>
-            <div className='relative flex justify-between w-full sm:w-[60vw]'>
+            <div className='relative flex justify-between w-full sm:w-[220px]'>
                 <input type='text' name='verify' onChange={handleChange} value={verify?.authKey} placeholder='인증번호를 입력하세요' className="w-[286px] border rounded-3xl py-2 px-3 text-sm" required/>
                 {showTimer && <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-red-500 font-bold">{Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</span>}
             </div>

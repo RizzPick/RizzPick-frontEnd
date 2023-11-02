@@ -20,7 +20,7 @@ export default function MatchPage() {
     return (
         <div className="bg-white">
             {mobile ? (
-                <div>
+                <div className='height-screen-vh'>
                     <Header />
                     <MatchMobile />
                     <Footer />

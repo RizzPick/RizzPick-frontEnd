@@ -7,6 +7,7 @@ import { PROFILE_KEY } from '@/hooks/useProfile';
 import ProfileAPI from '@/features/profile';
 import { useRouter } from 'next/navigation';
 import { SyncLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
 
 function UserImageGrid({onPrev} : any) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -21,6 +22,7 @@ function UserImageGrid({onPrev} : any) {
   };
 
   const addImage = async (file: File) => {
+    console.log(file);
     setIsLoading(true);
     const formData = new FormData();
     formData.append('action', "ADD");
@@ -28,15 +30,15 @@ function UserImageGrid({onPrev} : any) {
     try {
       const response = await ProfileAPI.updateImage(formData);
       if(response.status === 200) {
-        alert("이미지 추가 완료");
+        toast.success("추가 완료");
       }
       mutate(PROFILE_KEY, (currentData:any) => ({
         ...currentData,
         profileImages: [...currentData.profileImages, response.data.data]
       }), false);
     } catch (error) {
-      console.error("Image upload failed:", error);
-      alert("이미지 추가 실패");
+      console.log(error);
+      toast.error("이미지 추가 실패");
     } finally {
       setIsLoading(false);
     }
@@ -47,15 +49,27 @@ function UserImageGrid({onPrev} : any) {
     formData.append('action', "DELETE");
     formData.append('id', imageId.toString());
     try {
-      await ProfileAPI.updateImage(formData);
-      mutate(PROFILE_KEY, (currentData:any) => ({
-        ...currentData,
-        profileImages: currentData.profileImages.filter((image:any) => image.id !== imageId)
-      }), false);
-    } catch (error) {
-      console.error("Image delete failed:", error);
+      const response = await ProfileAPI.updateImage(formData);
+      if(response.status === 200) {
+        mutate(PROFILE_KEY, (currentData:any) => ({
+          ...currentData,
+          profileImages: currentData.profileImages.filter((image:any) => image.id !== imageId)
+        }), false);
+        toast.success('삭제되었습니다');
+      }
+    } catch (error:any) {
+      toast.error(error.response.data.message);
     }
   };
+
+  const onComplete = () => {
+    if(profile?.profileImages.length === 0) {
+      toast("이미지를 최소 1장 이상은 등록해야 합니다", {icon : '⚠️'})
+      return;
+    } 
+    router.push('/profile');
+    toast.success("프로필 등록이 완료되었습니다")
+  }
 
   return (
     <div>
@@ -85,7 +99,7 @@ function UserImageGrid({onPrev} : any) {
         </div>
         <div className='mt-10'>
           <button onClick={onPrev} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-left hover:bg-neutral-200 hover:shadow shadow-inner">이전</button>
-          <button onClick={()=>{router.push('/profile'), alert('프로필 등록이 완료되었습니다!')}} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-right hover:bg-neutral-200 hover:shadow shadow-inner">완료</button>
+          <button onClick={onComplete} className="m-[14px] text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block sm:float-right hover:bg-neutral-200 hover:shadow shadow-inner">완료</button>
         </div>
       </div>
     </div>
