@@ -86,50 +86,54 @@ export default function Board() {
     };
 
     return (
-        <div className="min-h-screen w-full mx-auto bg-board-bg sm:bg-none sm:mb-20">
-            <div className="relative z-0 inset-x-0 top-[0px] h-[80px] mb-[-50px] min-w-full bg-white sm:hidden"></div>
-            <div className="flex flex-col items-center mt-auto">
-                <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-50 sm:text-3xl">
-                    <h1 className="text-3xl font-bold ">
-                        💜나랑 이런 데이트 어때요?💜
-                    </h1>
+        <div className="overflow-x-hidden">
+            <div className="min-h-screen w-full mx-auto bg-board-bg sm:bg-none sm:mb-5 sm:p-0">
+                <div className="relative z-0 inset-x-0 top-[0rem] h-[5rem] mb-[-3.125rem] min-w-full bg-white sm:hidden"></div>
+                <div className="flex flex-col items-center mt-auto">
+                    <div className="w-[39.375rem] h-[5rem] p-[0.625rem] flex justify-center items-center gap-2.5 rounded-[2.5rem] bg-white z-50 sm:text-3xl">
+                        <h1 className="text-3xl font-bold ">
+                            💜나랑 이런 데이트 어때요?💜
+                        </h1>
+                    </div>
+                    <div className="flex flex-row p-4 gap-4 items-center sm:mt-[-0.625rem] sm:h-full">
+                        <button
+                            type="button"
+                            onClick={handleButtonClick}
+                            className="bg-button-bg text-white text-2xl font-semibold font-['SUITE'] leading-normal w-[17.9375rem] h-11 p-2.5 rounded shadow justify-center items-center gap-2.5 inline-flex sm:w-[5.8125rem] sm:h-[26px] sm:text-base sm:p-[0.625rem]"
+                        >
+                            {isSmallScreen
+                                ? '작성하기'
+                                : '데이트 계획 작성하러가기!'}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={myPlanHandleClick}
+                            className="bg-button-bg text-white text-2xl font-semibold font-['SUITE'] leading-normal w-[11.25rem] h-11 p-2.5 rounded shadow justify-center items-center gap-2.5 inline-flex sm:w-[5.8125rem] sm:h-[26px] sm:text-base sm:p-[0.625rem]"
+                        >
+                            {isSmallScreen ? '내 글 보기' : '내 글 보러가기!'}
+                        </button>
+                    </div>
                 </div>
-                <div className="flex flex-row p-4 gap-4 items-center sm:mt-[-10px] sm:h-full">
-                    <button
-                        type="button"
-                        onClick={handleButtonClick}
-                        className="bg-button-bg text-white text-2xl font-semibold font-['SUITE'] leading-normal w-[287px] h-11 p-2.5 rounded shadow justify-center items-center gap-2.5 inline-flex sm:w-[93px] sm:h-[26px] sm:text-base sm:p-[10px]"
-                    >
-                        {isSmallScreen
-                            ? '작성하기'
-                            : '데이트 계획 작성하러가기!'}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={myPlanHandleClick}
-                        className="bg-button-bg text-white text-2xl font-semibold font-['SUITE'] leading-normal w-[180px] h-11 p-2.5 rounded shadow justify-center items-center gap-2.5 inline-flex sm:w-[93px] sm:h-[26px] sm:text-base sm:p-[10px]"
-                    >
-                        {isSmallScreen ? '내 글 보기' : '내 글 보러가기!'}
-                    </button>
+                <div className="ml-[11.375rem] mr-[7.625rem] sm:mt-0 sm:ml-6 sm:mr-1">
+                    <DatingGrid datings={currentPageData} />
                 </div>
-            </div>
-            <div className="ml-[182px] mr-[122px] sm:mt-0 sm:ml-6 sm:mr-1">
-                <DatingGrid datings={currentPageData} />
-            </div>
-            <div className="pagination flex justify-center sm:mt-6">
-                {[...Array(totalPages)].map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handlePageClick(index + 1)}
-                        style={{
-                            fontWeight:
-                                currentPage === index + 1 ? 'bold' : 'normal',
-                        }}
-                        className="px-4 py-2"
-                    >
-                        {index + 1}
-                    </button>
-                ))}
+                <div className="pagination flex justify-center sm:mt-6">
+                    {[...Array(totalPages)].map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handlePageClick(index + 1)}
+                            style={{
+                                fontWeight:
+                                    currentPage === index + 1
+                                        ? 'bold'
+                                        : 'normal',
+                            }}
+                            className="px-4 py-2"
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     );

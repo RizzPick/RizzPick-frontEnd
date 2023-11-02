@@ -4,6 +4,7 @@ export interface MyDating {
     datingTitle: string;
     datingLocation: string;
     datingTheme: string;
+    createdAt: string;
 }
 
 export interface MyAllDatingResponse {
