@@ -5,6 +5,7 @@ import { AiOutlinePlus, AiOutlineClose,AiOutlineMinus } from 'react-icons/ai';
 import UserImageCamera from './UserImageCamera';
 import { ProfileImages } from '@/types/profile';
 import { PuffLoader } from "react-spinners"
+import toast from 'react-hot-toast';
 
 interface Props {
     onImageClick: () => void;
@@ -29,7 +30,7 @@ function UserImageCard({ onAddImage, onDeleteImage,onImageClick, isModalVisible,
       const file = fileList[0];
       if(file.size > FILE_SIZE_MAX_LIMIT) {
         e.target.value = "";
-        alert("업로드 가능한 최대 용량은 20MB입니다.");
+        toast.error("업로드 가능한 최대 용량은 20MB입니다.");
         return;
       }
       onAddImage(file);
@@ -41,13 +42,21 @@ const onGallerySelect = () => {
 };
 
 const handleImageDelete = async (imageId : number) => {
-  const ys = window.confirm('정말 삭제하시겠습니까?');
-  if(ys) {
-    onDeleteImage(imageId);
-  } else {
-    alert("취소되었습니다.")
-    return;
-  }
+  toast((t) => (
+    <span className='flex flex-col gap-4'>
+      <div className='text-2xl flex'>
+        🗑️ <p className='text-red-500'>삭제</p>하시겠습니까?
+      </div>
+      <div className='flex justify-between'>
+        <button onClick={() => {toast('취소되었습니다', {icon:"👨‍💻"}), toast.dismiss(t.id)}} className='hover:scale-110 transition-all duration-200 ease-in-out'>
+          취소
+        </button>
+        <button onClick={() => {onDeleteImage(imageId), toast.dismiss(t.id)}} className='hover:scale-110 transition-all duration-200 ease-in-out'>
+          삭제하기
+        </button>
+      </div>
+    </span>
+  ));
 }
   if(isLoading) {
     return (

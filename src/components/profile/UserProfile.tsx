@@ -10,6 +10,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
+import toast from 'react-hot-toast';
 
 
 function UserProfile() {
@@ -38,14 +39,9 @@ function UserProfile() {
         eraseCookie('Authorization_Refresh');
         eraseCookie('status');
         sessionStorage.clear();
-        alert('로그아웃 처리되었습니다.');
+        toast.success('로그아웃 처리되었습니다');
         router.push('/');
     };
-
-  const onClick = (event : any) => {
-    event.stopPropagation();
-    router.push('/profile/edit');
-  }
 
 
   if(!profile) return
@@ -55,7 +51,10 @@ function UserProfile() {
         <div className='relative w-[169px] h-[169px] mx-auto'>
           <Image src={profile.profileImages[0].image} alt='프로필 이미지' fill style={{objectFit:'cover'}} className='rounded-full'/>
         </div>
-        <section className='flex items-start justify-center flex-row gap-9 mt-[67px]'>
+        <div className='flex items-center justify-center mt-6 text-3xl'>
+            {profile.nickname},{profile.age}
+        </div>
+        <section className='flex items-start justify-center flex-row gap-9 mt-[57px]'>
           <article className='w-[424px] h-[428px]'>
             <div className='flex flex-col w-full items-center'>
                 <div className='p-4 bg-white h-[200px] w-full rounded-2xl flex flex-col gap-3 justify-center'>
@@ -76,7 +75,7 @@ function UserProfile() {
                       <button className='px-4 py-2 bg-[#D67dff] mt-4 w-full rounded-3xl text-white font-bold hover:bg-pink-300'>정보수정</button>
                   </Link>
                 <div className='mt-4 w-full rounded-2xl bg-white p-6 h-20 flex flex-col items-start justify-center text-gray-400 gap-1'>
-                    <p className='cursor-pointer' onClick={()=>alert("구현예정입니당..")}>비밀번호 변경</p>
+                    <p className='cursor-pointer' onClick={()=>toast("구현예정입니ㄷr..", {icon : '🥹'})}>비밀번호 변경</p>
                     <hr className='w-full'/>
                     <p onClick={()=>setShowLogoutModal(true)} className='cursor-pointer'>로그아웃</p>
                 </div>
@@ -96,7 +95,7 @@ function UserProfile() {
                         </div>
                     </div>
                 )}
-                <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9] cursor-pointer' onClick={()=>alert("구현예정입니당..")}>
+                <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9] cursor-pointer' onClick={()=>toast("구현예정입니ㄷr..", {icon : '🥹'})}>
                     회원탈퇴
                 </div>
               </div>
@@ -114,7 +113,7 @@ function UserProfile() {
                                   />
                               ) : (
                                   <div className="absolute inset-0 bg-white flex items-center justify-center">
-                                      <span>No Image</span>
+                                      <span></span>
                                   </div>
                               )}
                           </div>

@@ -10,8 +10,8 @@ export type SignupReq = {
 }
 
 export type SignupRes = {
-  data? : string
-  message? : string;
+  data : string
+  message : string;
   status : string;
 }
 
@@ -29,8 +29,8 @@ export type EmailVerifyReq = {
 }
 
 export type EmailVerifyRes = {
-  data? : string
-  message? : string;
+  data : string
+  message : string;
   status : string;
 }
 

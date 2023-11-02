@@ -10,6 +10,7 @@ import kakaoLoginLogo from '../../../public/images/kakaoLogo.png';
 import UseProfile from '@/hooks/useProfile';
 import Logo from '../../../public/Logo.png';
 import LogoColor from '../../../public/Logo_color.png';
+import toast from 'react-hot-toast';
 
 function LoginForm() {
     const { register, handleSubmit } = useForm<LoginReq>();
@@ -29,7 +30,7 @@ function LoginForm() {
             console.log(res);
 
             if (res.status !== 200) {
-                alert('로그인에 실패했습니다. 다시 시도해주세요.');
+                toast.error('로그인에 실패했습니다. 다시 시도해주세요.');
                 return;
             }
 
@@ -47,19 +48,19 @@ function LoginForm() {
             console.log(userIsNew);
 
             if (userStatusResponse.data.data.userActiveStatus) {
+                toast.success("로그인 성공")
                 router.replace('/user/match');
             } else {
-                alert('프로필 등록 페이지로 이동합니다');
+                toast('프로필 등록이 필요합니다', {icon : '✏️'});
                 router.replace('/profile/edit');
             }
         } catch (error: any) {
-            console.log(error);
-            alert('아이디 또는 비밀번호가 틀렸습니다.');
+            toast.error('아이디 또는 비밀번호가 틀렸습니다.');
         }
     };
 
     useEffect(() => {
-        message && alert('잘못된 접근입니다, 로그인이 필요합니다.');
+        message && toast.error('잘못된 접근입니다, 로그인이 필요합니다');
     }, [message]);
 
     return (

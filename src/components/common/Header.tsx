@@ -30,7 +30,6 @@ export default function Header() {
                 try {
                     const response = await AuthAPI.getUserInfo();
                     setUserInfo(response.data);
-                    console.log(response);
                 } catch (error) {
                     console.log(error);
                 }
@@ -54,7 +53,7 @@ export default function Header() {
                 </div>
             </Link>
             <nav className="flex gap-12 items-center sm:hidden text-2xl">
-                <Link href="/user/plan/board">게시판</Link>
+                <Link href="/user/plan/board">데이트</Link>
                 <span onClick={Open} className="cursor-pointer">
                     알림
                 </span>

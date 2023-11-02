@@ -18,6 +18,7 @@ import WhiteHeartIcon from '../../../../../public/matchIcon/Like.png';
 import BadIcon from '../../../../../public/matchIcon/Nope.png';
 import BackIcon from '../../../../../public/planIcon/back.svg';
 import Header from '@/components/common/Header';
+import toast from 'react-hot-toast';
 
 type Props = {
     params: {
@@ -142,7 +143,7 @@ export default function PostPage({ params: { slug } }: Props) {
     const handleLike = async () => {
         try {
             const response = await sendLike(userId, targetUserId); // userId와 targetUserId 값을 제공하세요
-            alert(response.data.message);
+            toast(response.data.message, {icon: '❤️',});
         } catch (error) {
             console.error('좋아요 보내기 오류:', error);
         }

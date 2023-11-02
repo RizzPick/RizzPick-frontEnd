@@ -8,6 +8,7 @@ import UserSkeleton from '../common/UserSkeleton';
 import Home from "../../../public/profileIcon/Home.svg"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
 import ChatAPI from '@/features/chat';
+import toast from 'react-hot-toast';
 
 function ChatProfile() {
   const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
@@ -21,7 +22,7 @@ function ChatProfile() {
       console.log(response);
       if(response.status === 200) {
         clearCurrentChat();
-        alert(response.data.message);
+        toast.success(response.data.message);
         window.location.reload();
       }
     } catch (error) {

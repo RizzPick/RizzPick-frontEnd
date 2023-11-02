@@ -6,6 +6,7 @@ import { setCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
 function UserProfileEdit({onNext} : any) {
@@ -44,7 +45,7 @@ function UserProfileEdit({onNext} : any) {
 
   const onSubmit = async(data: ProfileForm) => {
     if(profile?.profileImages.length === 0) {
-      alert("이미지를 최소 1장 이상은 등록해야 합니다.");
+      toast("이미지는 최소 1장 필요합니다", {icon : '📸'});
       return;
     }
     try {
@@ -52,11 +53,10 @@ function UserProfileEdit({onNext} : any) {
       if(response.status === 200) {
         setCurrentProfile(response.data.data);
         setLocalProfile(response.data.data);
-        alert('프로필 등록이 완료되었습니다!');
+        toast.success('프로필 등록이 완료되었습니다!');
         setCookie("status", "true");
         router.push('/profile');
       }
-      console.log(response);
     } catch(error) {
       console.log(error);
     }

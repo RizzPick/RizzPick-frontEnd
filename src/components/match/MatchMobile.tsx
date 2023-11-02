@@ -18,6 +18,7 @@ import axios from 'axios';
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.small.svg"
 import Home from "../../../public/profileIcon/house.fill.small.svg"
 import { getCookie } from '@/utils/cookie';
+import toast from 'react-hot-toast';
 
 
 function MatchMobile() {
@@ -55,8 +56,7 @@ function MatchMobile() {
 
     const handleButtonClick = () => {
         if (userIndex === users.length - 1) {
-            alert("오늘의 추천이 끝났습니다")
-            // setUserIndex(0);
+            toast('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요', {icon : '🥹'})
         } else {
             setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
             setSlideIndex(0);
@@ -113,8 +113,7 @@ function MatchMobile() {
     const handleLike = async () => {
         try {
             const response = await sendLike(users[userIndex].userId);
-            console.log(response);
-            alert(response.data.message);
+            toast(response.data.message, {icon: '❤️',});
             handleButtonClick(); // 좋아요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
         } catch (error) {
             console.error('좋아요 보내기 오류:', error);
@@ -231,13 +230,13 @@ function MatchMobile() {
                         {/* 좋아요, 싫어요 버튼 */}
                         <div className="absolute text-white w-full flex justify-between p-4 bottom-0">
                             <button
-                                className="hover:scale-110 transition-all ease-in-out z-20"
+                                className="transform transition-transform duration-500 hover:rotate-90 z-20"
                                 onClick={handleNope}
                             >
                                 <Image src={BadIcon} width={66} height={66} alt='싫어요' />
                             </button>
                             <button
-                                className="hover:scale-110 transition-all ease-in-out z-20"
+                                className="animate-pulse animate-twice animate-ease-in-out z-20"
                                 onClick={handleLike}
                             >
                                 <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />

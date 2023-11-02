@@ -16,6 +16,7 @@ import Home from '../../../public/profileIcon/Home.svg';
 import { getCookie } from '@/utils/cookie';
 import ReadMore from '../../../public/matchIcon/Intro.png';
 import { AiOutlineInfoCircle } from "react-icons/ai"
+import toast from 'react-hot-toast';
 
 function Match() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
@@ -49,7 +50,7 @@ function Match() {
     const handleButtonClick = () => {
         // 처음에 몇명의 유저를 추천받는 지 확인하고, 마지막 유저의 index 가 넘어가게 되면 페이지네이션 로직과 동일하게 유저 추천 배열 늘리기 작업 필요
         if (userIndex >= users.length - 1) {
-            alert('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요 🥹');
+            toast('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요', {icon : '🥹'})
             setUsers([]);
             setUserIndex(0);
         } else {
@@ -136,8 +137,7 @@ function Match() {
     const handleLike = async () => {
         try {
             const response = await sendLike(users[userIndex].userId);
-            console.log(response);
-            alert(response.data.message);
+            toast(response.data.message, {icon: '❤️',});
             handleButtonClick(); // 좋아요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
         } catch (error) {
             console.error('좋아요 보내기 오류:', error);
@@ -170,7 +170,6 @@ function Match() {
     const handleNope = async () => {
         try {
             const response = await sendNope(users[userIndex].userId);
-            console.log(response);
             handleButtonClick(); // 싫어요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
         } catch (error) {
             console.error('싫어요 보내기 오류:', error);
@@ -258,7 +257,7 @@ function Match() {
                                     {/* 좋아요, 싫어요 버튼 */}
                                     <div className="absolute text-white w-[30vw] flex justify-center -bottom-28 gap-48">
                                         <button
-                                            className="hover:scale-110 transition-all ease-in-out z-20 duration-200"
+                                            className="transform transition-transform duration-500 hover:rotate-90"
                                             onClick={handleNope}
                                         >
                                             <Image
@@ -269,7 +268,7 @@ function Match() {
                                             />
                                         </button>
                                         <button
-                                            className="animate-bounce hover:scale-110 transition-all ease-in-out z-20 duration-200"
+                                            className="animate-pulse animate-twice animate-ease-in-out"
                                             onClick={handleLike}
                                         >
                                             <Image
