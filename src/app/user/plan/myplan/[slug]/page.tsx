@@ -27,13 +27,15 @@ interface DateItem {
     datingTitle: string;
     datingLocation: string;
     datingTheme: string;
+    createdAt: string;
 }
 
 interface DatingInfo {
     datingTitle: string;
     datingLocation: string;
     datingTheme: string;
-    activities: { activityContent: string }[]; // activities 배열을 추가합니다.
+    createdAt: string;
+    activities: { activityContent: string }[];
 }
 
 export default function PostPage({ params: { slug } }: Props) {
@@ -44,6 +46,30 @@ export default function PostPage({ params: { slug } }: Props) {
     const [activities, setActivities] = useState([]);
     const [activePage, setActivePage] = useState(slug);
     const router = useRouter();
+
+    function timeAgo(createdAt: string): string {
+        const date = new Date(createdAt);
+        if (isNaN(date.getTime())) {
+            console.error('Invalid date:', createdAt);
+            return '';
+        }
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffSecs = diffMs / 1000;
+        const diffMins = diffSecs / 60;
+        const diffHours = diffMins / 60;
+        const diffDays = diffHours / 24;
+
+        if (diffDays >= 1) {
+            return `${Math.floor(diffDays)}일 전`;
+        } else if (diffHours >= 1) {
+            return `${Math.floor(diffHours)}시간 ${Math.floor(
+                diffMins % 60
+            )}분 전`;
+        } else {
+            return `${Math.floor(diffMins)}분 전`;
+        }
+    }
 
     useEffect(() => {
         axios
@@ -59,7 +85,8 @@ export default function PostPage({ params: { slug } }: Props) {
                     datingTitle: datingData.datingTitle,
                     datingLocation: datingData.datingLocation,
                     datingTheme: datingData.datingTheme,
-                    activities: datingData.activityResponseDtoList,
+                    createdAt: datingData.createdAt, // 수정된 부분
+                    activities: datingData.activityResponseDtoList || [],
                 });
                 setActivities(datingData.activityResponseDtoList); // activities 상태 업데이트
                 // 데이트를 작성한 사용자의 ID를 가져와서 프로필 정보를 불러옵니다.
@@ -104,6 +131,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     datingLocation: datingData.data.datingLocation,
                     datingTheme: datingData.data.datingTheme,
                     activities: datingData.data.activityResponseDtoList,
+                    createdAt: datingData.createdAt,
                 });
                 setIsEditing(false); // 그리고 isEditing 상태를 false로 설정합니다.
             })
@@ -243,8 +271,9 @@ export default function PostPage({ params: { slug } }: Props) {
                                                     }`}
                                                 >
                                                     <span>
-                                                        데이트 계획을 생성한
-                                                        날짜
+                                                        {timeAgo(
+                                                            date.createdAt
+                                                        )}
                                                     </span>
                                                 </div>
                                             </Link>
@@ -264,9 +293,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                         <p className="text-[25px] sm:text-lg sm:font-medium">
                                             {dating.datingTheme}
                                         </p>
-                                        <p className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
-                                            작성시간
-                                        </p>
+                                        <p className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0"></p>
                                     </div>
                                 </div>
                                 <div className="flex flex-col mx-auto p-4 w-5/6 sm:w-full ">
@@ -292,7 +319,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                             )}
                                     </div>
                                 </div>
-                                <div className="flex flex-row justify-end w-5/6 gap-4  ml-10 text-[24px] sm:hidden">
+                                <div className="flex flex-row justify-end w-5/6 gap-4  ml-10 text-[24px] sm:mb-2 sm:justify-center">
                                     <button
                                         className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
                                         onClick={handleEditClick}

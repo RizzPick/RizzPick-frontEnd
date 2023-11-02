@@ -31,12 +31,14 @@ interface DateItem {
     datingTitle: string;
     datingLocation: string;
     datingTheme: string;
+    createdAt: string;
 }
 
 interface DatingInfo {
     datingTitle: string;
     datingLocation: string;
     datingTheme: string;
+    createdAt: string;
     activities: { activityContent: string }[]; // activities 배열을 추가합니다.
 }
 
@@ -48,6 +50,30 @@ export default function PostPage({ params: { slug } }: Props) {
     const targetUserId = userProfile?.userId as string;
     const userId = getCookie('userId') as string;
     const router = useRouter();
+
+    function timeAgo(createdAt: string): string {
+        const date = new Date(createdAt);
+        if (isNaN(date.getTime())) {
+            console.error('Invalid date:', createdAt);
+            return '';
+        }
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffSecs = diffMs / 1000;
+        const diffMins = diffSecs / 60;
+        const diffHours = diffMins / 60;
+        const diffDays = diffHours / 24;
+
+        if (diffDays >= 1) {
+            return `${Math.floor(diffDays)}일 전`;
+        } else if (diffHours >= 1) {
+            return `${Math.floor(diffHours)}시간 ${Math.floor(
+                diffMins % 60
+            )}분 전`;
+        } else {
+            return `${Math.floor(diffMins)}분 전`;
+        }
+    }
 
     useEffect(() => {
         axios
@@ -64,13 +90,13 @@ export default function PostPage({ params: { slug } }: Props) {
                     datingLocation: datingData.data.datingLocation,
                     datingTheme: datingData.data.datingTheme,
                     activities: datingData.data.activityResponseDtoList,
+                    createdAt: datingData.data.createdAt,
                 });
                 // 데이트를 작성한 사용자의 ID를 가져와서 프로필 정보를 불러옵니다.
                 return getUserProfileData(datingData.data.userId);
             })
             .then((userData) => {
                 setUserProfile(userData); // 프로필 데이터를 상태에 설정합니다.
-                // 여기서 userId를 사용하여 getDateList를 호출합니다.
                 return getDateList(userData.userId);
             })
             .then((dateListData) => {
@@ -240,7 +266,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                             }`}
                                         >
                                             <span>
-                                                데이트 계획을 생성한 날짜
+                                                {timeAgo(date.createdAt)}
                                             </span>
                                         </div>
                                     </Link>
@@ -261,7 +287,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                     {dating.datingTheme}
                                 </p>
                                 <p className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
-                                    작성시간
+                                    {timeAgo(dating.createdAt)}
                                 </p>
                             </div>
                         </div>

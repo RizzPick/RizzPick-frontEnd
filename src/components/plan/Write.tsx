@@ -198,7 +198,7 @@ export default function Write({
     console.log('null?', activityId);
 
     return (
-        <>
+        <div className="overflow-x-hidden">
             <div className="hidden sm:block">
                 <div className="flex flex-row h-20 items-center">
                     <button onClick={handleBackButtonClick} className="p-4">
@@ -222,7 +222,7 @@ export default function Write({
                     </div>
                 </div>
                 {/* 작성공간 */}
-                <div className="w-[1248px] mx-auto sm:w-[393px]">
+                <div className="max-w-[1248px] mx-auto sm:w-[393px]">
                     <div
                         className="flex flex-row justify-center p-[30px] mb-2 w-[1248px] mt-[-30px] bg-white z-100 gap-[30px] sm:hidden "
                         style={{
@@ -429,6 +429,6 @@ export default function Write({
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
