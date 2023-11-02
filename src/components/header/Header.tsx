@@ -31,7 +31,6 @@ export default function Header() {
                 try {
                     const response = await AuthAPI.getUserInfo();
                     setUserInfo(response.data);
-                    console.log(response);
                 } catch (error) {
                     console.log(error);
                 }

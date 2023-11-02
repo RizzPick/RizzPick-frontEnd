@@ -153,7 +153,6 @@ export default function PostPage({ params: { slug } }: Props) {
     const handleNope = async () => {
         try {
             const response = await sendNope(userId, targetUserId); // userId와 targetUserId 값을 제공하세요
-            console.log(response);
         } catch (error) {
             console.error('싫어요 보내기 오류:', error);
         }

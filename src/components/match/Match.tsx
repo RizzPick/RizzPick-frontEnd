@@ -29,7 +29,6 @@ function Match() {
     //! 랜덤 매칭
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
-    console.log(users);
 
     useEffect(() => {
         const fetchData = async () => {

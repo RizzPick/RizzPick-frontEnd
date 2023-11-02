@@ -13,6 +13,9 @@ const config: Config = {
             lg: { min: '1080px' },
         },
         extend: {
+            height: {
+                'screen-vh': 'calc(var(--vh, 1vh) * 100)',
+            },
             colors: {
                 'gradient-start': '#cb17f9',
                 'gradient-end': '#ee9abc',

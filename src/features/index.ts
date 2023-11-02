@@ -45,7 +45,6 @@ service.interceptors.response.use(
       if(!token) return;
       const { headers } = await AuthAPI.refresh(token);
       const accessToken = headers.authorization;
-      console.log(accessToken);
 
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;

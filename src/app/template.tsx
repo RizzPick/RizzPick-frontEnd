@@ -1,6 +1,7 @@
 'use client'
 import { TransitionGroup, Transition } from "react-transition-group";
 import { usePathname } from 'next/navigation';
+import { useEffect } from "react";
 const TIMEOUT = 150;
 export const getTransitionStyles : any = {
 	entering: {
@@ -19,13 +20,21 @@ export const getTransitionStyles : any = {
 
 
 export default function Template({ children }: { children: React.ReactNode }) {
+    function setScreenSize() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
+      }
+      useEffect(() => {
+        setScreenSize();
+      });
+
     const router = usePathname();
     return <div>
         <TransitionGroup style={{position:'relative'}}>
                     <Transition key={router} timeout={{enter:TIMEOUT, exit:TIMEOUT}}>
                         {(status) => (
                             <div style={{...getTransitionStyles[status]}}>
-                            {children}
+                                {children}
                             </div>
                         )}
                     </Transition>

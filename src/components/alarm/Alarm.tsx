@@ -51,7 +51,6 @@ export default function Alarm({ close }: AlarmProps) {
                         },
                     }
                 );
-                console.log('asdasd', response.data.data);
                 return setLikesData(response.data.data); // Set the likes data
             } catch (error) {
                 console.error(error);
