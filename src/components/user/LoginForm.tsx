@@ -44,8 +44,6 @@ function LoginForm() {
 
             const userInfoResponse = await AuthAPI.getUserInfo();
             initializeUserInfo(userInfoResponse.data);
-            const userIsNew = await AuthAPI.getUserisNew();
-            console.log(userIsNew);
 
             if (userStatusResponse.data.data.userActiveStatus) {
                 toast.success("로그인 성공")

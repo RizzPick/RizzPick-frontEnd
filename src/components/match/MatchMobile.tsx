@@ -153,8 +153,8 @@ function MatchMobile() {
         }
     };
     return (
-        <div className="flex height-screen-vh">
-            <div className="flex-1 flex justify-evenly items-start p-10 sm:p-2">
+        <div className="flex h-[100%-70px]">
+            <div className="flex-1 flex justify-evenly items-start px-2">
                 {/*! 유저 정보 */}
                 <div className="flex-1 max-w-md rounded-full">
                     {/* 유저 이미지 */}

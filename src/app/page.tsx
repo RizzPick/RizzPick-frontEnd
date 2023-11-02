@@ -1,30 +1,48 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import MainImage from '../../public/images/mainPage.png';
 import { useRouter } from 'next/navigation';
+import Logo from '../../public/Logo.png';
 
 export default function Home() {
     const router = useRouter();
     const [loaded, setLoaded] = useState(false);
 
-    useEffect(() => {
-        setLoaded(true);
-    }, []);
+    const LoadingIndicator = () => (
+        <div className="fixed inset-0 flex items-center justify-center z-20 bg-sendbtn-gradient">
+            <div className="w-[95px] h-[40px] relative animate-pulse animate-once animate-ease-in-out">
+                    <Image
+                        src={Logo}
+                        alt="로고"
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        onLoadingComplete={() => setTimeout(() => setLoaded(true), 2000)}
+                    />
+                </div>
+        </div>
+    );
 
     return (
         <div
-            className={`w-full bg-sendbtn-gradient h-[100vh] flex flex-col items-center overflow-hidden relative ${
+            className={`w-full bg-sendbtn-gradient height-screen-vh flex flex-col items-center overflow-hidden relative ${
                 loaded ? 'animate-fadeIn' : ''
             }`}
         >
             <header className="flex justify-between w-full p-4 sm:hidden">
                 <h2
-                    className={`text-3xl font-bold text-white transform transition-transform duration-1000 ${
+                    className={`text-white transform transition-transform duration-1000 ${
                         loaded ? 'translate-y-0' : '-translate-y-full'
                     }`}
                 >
-                    Will you
+                    <div className="w-[95px] h-[40px] relative">
+                    <Image
+                        src={Logo}
+                        alt="로고"
+                        fill
+                        style={{ objectFit: 'cover' }}
+                    />
+                </div>
                 </h2>
                 <h2
                     className={`text-3xl font-bold text-white cursor-pointer transform transition-transform duration-1000 ${
@@ -35,23 +53,24 @@ export default function Home() {
                     로그인
                 </h2>
             </header>
+            {!loaded && <LoadingIndicator />}
             <Image
                 src={MainImage}
                 alt="메인페이지"
-                layout="fill"
-                objectPosition="center"
-                className={`absolute z-0 sm:hidden transform transition-transform duration-1000 ${
-                    loaded ? 'translate-y-0' : 'translate-y-full'
-                }`}
+                fill
+                priority
+                className={`absolute z-0 sm:hidden transform transition-transform duration-1000`}
                 style={{
                     top: '450px',
                     left: '-160px',
                     objectFit: 'cover',
                     scale: 1.6,
+                    objectPosition:"center"
                 }}
+                onLoadingComplete={() => setTimeout(() => setLoaded(true), 2000)}
             />
-            <div className="flex flex-col items-end w-full mt-5 sm:items-center mr-[400px] sm:mr-0">
-                <div className="flex items-baseline sm:flex-col sm:items-center sm:py-20 gap-20">
+            <div className="flex flex-col items-end w-full mt-5 sm:items-center mr-[400px] sm:mr-0 h-[100vh]">
+                <div className="flex items-baseline sm:flex-col sm:items-center sm:py-10 gap-20 sm:gap-10">
                     <h1
                         className={`text-white text-4xl sm:text-[28px] font-bold sm:mt-5 sm:mb-4 transform transition-transform duration-1000 ${
                             loaded ? 'translate-y-0' : '-translate-y-full'
@@ -60,14 +79,14 @@ export default function Home() {
                         나만의 데이트 아이디어,
                     </h1>
                     <h1
-                        className={`text-white font-bold text-[100px] sm:mt-10 sm:text-[68px] transform transition-transform duration-1000 ${
+                        className={`text-white font-bold text-[100px] sm:text-[68px] transform transition-transform duration-1000 ${
                             loaded ? 'translate-y-0' : '-translate-y-full'
                         }`}
                     >
                         Will You
                     </h1>
                 </div>
-                <div className="flex justify-end sm:justify-center">
+                <div className="flex justify-end">
                     <h2
                         className={`text-white text-3xl sm:text-[28px] mb-4 font-bold transform transition-transform duration-1000 ${
                             loaded ? 'translate-y-0' : '-translate-y-full'

@@ -129,8 +129,8 @@ function SignupComponent() {
   }
 
   return (
-    <section  className='flex justify-center items-center'>
-      <div className='w-[141px] h-[60px] absolute top-[60px] sm:block hidden'>
+    <section  className='flex justify-center h-[100vh]'>
+      <div className='w-[141px] h-[60px] absolute top-[40px] sm:block hidden'>
             <Image src={Logo} alt='로고' fill style={{objectFit:"cover"}} priority/>
       </div>
     <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-[80px] sm:p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[580px] sm:w-full sm:h-[80vh] h-[730px] sm:rounded-none sm:rounded-tl-[56px] justify-center">
