@@ -6,6 +6,11 @@ import Back from "../../../public/chatIcon/Button.svg"
 import Image from 'next/image'
 import Home from "../../../public/profileIcon/Home.svg"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
+import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
+import BadIcon from '../../../public/matchIcon/Nope.png';
+import axios from 'axios'
+import { getCookie } from '@/utils/cookie'
+import toast from 'react-hot-toast'
 
 type Props = {
     profile : MyProfileRes
@@ -13,6 +18,69 @@ type Props = {
 
 function OtherUserProfile({profile} : Props) {
     const router = useRouter();
+    const sendLike = async (targetUserId: any) => {
+        try {
+            const url = `https://willyouback.shop/api/like/${targetUserId}`;
+            const response = await axios.post(
+                url,
+                {},
+                {
+                    headers: {
+                        Authorization: getCookie('Authorization'),
+                        Authorization_Refresh: getCookie(
+                            'Authorization_Refresh'
+                        ),
+                    },
+                }
+            );
+            return response;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const handleLike = async () => {
+        try {
+            const response = await sendLike(profile.userId);
+            toast(response.data.message, {icon: '❤️',});
+            router.push('/user/match');
+        } catch (error) {
+            console.error('좋아요 보내기 오류:', error);
+        }
+    };
+
+    const sendNope = async (targetUserId: any) => {
+        try {
+            const url = `https://willyouback.shop/api/nope/${targetUserId}`;
+            const response = await axios.post(
+                url,
+                {},
+                {
+                    headers: {
+                        Authorization: getCookie('Authorization'),
+                        Authorization_Refresh: getCookie(
+                            'Authorization_Refresh'
+                        ),
+                    },
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const handleNope = async () => {
+        try {
+            const response = await sendNope(profile.userId);
+            router.push('/user/match');
+        } catch (error) {
+            console.error('싫어요 보내기 오류:', error);
+        }
+    };
+
   return (
     <div className='w-full h-[100vh]'>
         <header className='text-center text-neutral-700 text-xl font-medium leading-tight tracking-wide flex justify-center p-4'>
@@ -31,13 +99,38 @@ function OtherUserProfile({profile} : Props) {
                         <>
                             { profile.education ? <><div className='flex items-center gap-4'><EducationIcon/>{profile.education}</div><hr/></> : null }
                             { profile.location ? <div className='flex items-center gap-4'><Home/>{profile.location}</div> : null }
+                            <div className='flex items-center gap-4 justify-center mt-3'>
+                                { profile.mbti ? <div className='px-3 py-1 border border-fuchsia-400 text-fuchsia-400 rounded-3xl'>#{profile.mbti}</div> : null }
+                                { profile.religion ? <div className='px-3 py-1 border border-fuchsia-400 text-fuchsia-400 rounded-3xl'>#{profile.religion}</div> : null }
+                            </div>
                         </>
                     }
             </div>
-            <div className='flex items-center gap-4 justify-center mt-6'>
-                { profile.mbti ? <div className='px-3 py-1 border border-fuchsia-400 text-fuchsia-400 rounded-3xl'>#{profile.mbti}</div> : null }
-                { profile.religion ? <div className='px-3 py-1 border border-fuchsia-400 text-fuchsia-400 rounded-3xl'>#{profile.religion}</div> : null }
-            </div>
+            {/* 좋아요, 싫어요 버튼 */}
+            <div className="text-white w-[30vw] flex justify-center items-center mx-auto sm:gap-10 mt-6 gap-80">
+                    <button
+                        className="transform transition-transform duration-500 hover:rotate-90"
+                        onClick={handleNope}
+                    >
+                        <Image
+                            src={BadIcon}
+                            width={80}
+                            height={80}
+                            alt="싫어요"
+                        />
+                    </button>
+                    <button
+                        className="animate-pulse animate-twice animate-ease-in-out"
+                        onClick={handleLike}
+                    >
+                        <Image
+                            src={WhiteHeartIcon}
+                            width={80}
+                            height={80}
+                            alt="좋아요"
+                        />
+                    </button>
+                </div>
         </div>
     </div>
   )

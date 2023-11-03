@@ -19,6 +19,7 @@ function SignupComponent() {
       const router = useRouter();
       const [showTimer, setShowTimer] = useState(false);
       const [timer, setTimer] = useState(300); // 5분은 300초
+      const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
       const [isEmailVerified, setEmailVerified] = useState(false);
       const [isLoading, setIsLoading] = useState(false);
       const [verify, setVerify] = useState<EmailVerifyReq>({email:"", authKey:""});
@@ -54,6 +55,7 @@ function SignupComponent() {
                 return prevTimer - 1;
               });
             }, 1000);
+            setIntervalId(interval);
           }
         }
       } catch(error:any) {
@@ -76,6 +78,8 @@ function SignupComponent() {
         if(response.status === 200) {
           toast.success(response.data.message);
           setVerificationSuccessful(true);
+          if (intervalId) clearInterval(intervalId); // 인증이 성공하면 타이머를 멈춤
+          setShowTimer(false);
         }
       } catch(error:any) {
         console.log(error);
@@ -189,12 +193,12 @@ function SignupComponent() {
             <label className="font-bold text-xl">이메일</label>
         </div>
         <div className='flex gap-2 mb-2 w-full'>
-          <div className='relative flex justify-between w-full sm:w-[220px]'>
+          <div className='relative flex justify-between w-full sm:w-[50vw]'>
           <input
               id="email"
               type="email"
               disabled={isEmailVerified}
-              className="border rounded-3xl py-2 px-3 text-sm w-[286px]"
+              className="border rounded-3xl py-2 px-3 text-sm w-[286px] sm:w-[50vw]"
               placeholder='이메일을 입력하세요'
               required
               {...register("email", {
@@ -203,16 +207,16 @@ function SignupComponent() {
               })}
           />
           </div>
-              <button onClick={onCheckEmail} type="button" className="bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 sm:hidden">인증번호 전송</button>
-              <button onClick={onCheckEmail} type="button" className="bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 hidden sm:block">인증하기</button>
+              <button onClick={onCheckEmail} disabled={isVerificationSuccessful} type="button" className="bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 sm:hidden">인증번호 전송</button>
+              <button onClick={onCheckEmail} disabled={isVerificationSuccessful} type="button" className="bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 hidden sm:block">인증하기</button>
             </div>
         <div className='flex gap-2 w-full'>
-            <div className='relative flex justify-between w-full sm:w-[220px]'>
-                <input type='text' name='verify' onChange={handleChange} value={verify?.authKey} placeholder='인증번호를 입력하세요' className="w-[286px] border rounded-3xl py-2 px-3 text-sm" required/>
+            <div className='relative flex justify-between w-full sm:w-[50vw]'>
+                <input type='text' name='verify' onChange={handleChange} value={verify?.authKey} placeholder='인증번호를 입력하세요' className="w-[286px] sm:w-[50vw] border rounded-3xl py-2 px-3 text-sm" required/>
                 {showTimer && <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-red-500 font-bold">{Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</span>}
             </div>
-            <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 ${!isEmailVerified && 'bg-opacity-30'} sm:hidden`}>인증하기</button>
-            <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 ${!isEmailVerified && 'bg-opacity-30'} hidden sm:block`}>확인</button>
+            <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified || isVerificationSuccessful} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 ${!isEmailVerified && 'bg-opacity-30'} sm:hidden`}>인증하기</button>
+            <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified || isVerificationSuccessful} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 ${!isEmailVerified && 'bg-opacity-30'} hidden sm:block`}>확인</button>
         </div>
         <button className={`bg-gradient-start text-white p-2 font-bold text-xl rounded-3xl mt-8 transition duration-200 ease-in-out ${!isVerificationSuccessful && 'bg-opacity-30'}`} disabled={!isVerificationSuccessful}>가입하기</button>
     </form>
