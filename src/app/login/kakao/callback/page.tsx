@@ -14,6 +14,7 @@ export default function KakaoCallback() {
         const kakaoLogin = async() => {
             try{
                 const response = await AuthAPI.kakaoLogin(kakaoOuthCodeRef.current);
+                console.log(response);
                 if(response.status === 200) {
                     const token = response.headers['authorization'];
                     const refreshToken = response.headers['authorization_refresh'];

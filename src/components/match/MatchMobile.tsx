@@ -26,7 +26,6 @@ function MatchMobile() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
     const router = useRouter();
 
-    //! 상세 정보 보이기/숨기기 토글 함수
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
     };

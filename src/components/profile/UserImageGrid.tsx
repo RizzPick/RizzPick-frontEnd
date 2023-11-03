@@ -8,6 +8,7 @@ import ProfileAPI from '@/features/profile';
 import { useRouter } from 'next/navigation';
 import { SyncLoader } from 'react-spinners';
 import toast from 'react-hot-toast';
+import { setCookie } from '@/utils/cookie';
 
 function UserImageGrid({onPrev} : any) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -65,7 +66,8 @@ function UserImageGrid({onPrev} : any) {
     if(profile?.profileImages.length === 0) {
       toast("이미지를 최소 1장 이상은 등록해야 합니다", {icon : '⚠️'})
       return;
-    } 
+    }
+    setCookie("status", "true");
     router.push('/profile');
     toast.success("프로필 등록이 완료되었습니다")
   }
