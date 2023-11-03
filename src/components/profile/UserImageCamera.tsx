@@ -1,13 +1,12 @@
 'use client'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 import {AiOutlineCloseCircle,AiFillCheckCircle} from "react-icons/ai"
 import {FcCancel} from "react-icons/fc"
 
 const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    const [error, setError] = useState<string | null>(null);
     const [CanvasState, setCanvasState] = useState<string>('none');
     const [CameraState, setCameraState] = useState<string>('');
     const [isConfirmVisible, setConfirmVisible] = useState<boolean>(false);
@@ -32,7 +31,7 @@ const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
                 tracks.forEach(track => track.stop());
             }
         };
-    }, [startWebcam]);  // 종속성 배열에 startWebcam 추가
+    }, [startWebcam]);
     
 
     const addImage = () => {
@@ -62,7 +61,9 @@ const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
         .then(callback)
         .catch(err => {
             console.error("The following error occurred: " + err);
-            setError("카메라에 접근할 수 없습니다. 카메라가 연결되어 있고, 웹사이트에서 카메라 사용이 허용되어 있는지 확인해주세요.");
+            toast.error("카메라에 접근할 수 없습니다. 카메라가 연결되어 있고, 웹사이트에서 카메라 사용이 허용되어 있는지 확인해주세요.")
+            setModalVisible(false);
+            setCameraVisible(false);
         });
     }
 
@@ -100,11 +101,6 @@ const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
     return (
         <div className={`fixed z-50 top-0 left-0 w-full h-full flex justify-center items-center`}>
         <div className={`relative z-20 bg-white w-[400px] ${isConfirmVisible ? ('p-4 rounded-lg'):('')}`}>
-        {error && (
-            <div className="absolute z-30 w-full p-4 text-center text-red-600">
-                {error}
-            </div>
-        )}
         <video 
             id="videoCam" 
             ref={videoRef} 
@@ -116,7 +112,6 @@ const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
             }} 
             className='h-[500px] w-full'
         />
-        
             <canvas 
                 id="canvas" 
                 ref={canvasRef} 
@@ -124,7 +119,7 @@ const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
                 height="500px"  // 이 부분을 video와 동일하게 수정
                 style={{ display: CanvasState }} 
                 className='w-full'
-            ></canvas>
+            />
             {CanvasState === 'none' ?
             <>
             <div className='absolute top-2 left-2 z-30'>

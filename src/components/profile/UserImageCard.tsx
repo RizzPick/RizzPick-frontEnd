@@ -37,15 +37,15 @@ function UserImageCard({ onAddImage, onDeleteImage,onImageClick, isModalVisible,
   };
 
 const onGallerySelect = () => {
-    setModalVisible(false);  // 모달을 숨깁니다.
-    imageInput.current?.click();  // 이미지 입력을 클릭하여 파일 선택기를 연다.
+    setModalVisible(false);
+    imageInput.current?.click();  
 };
 
 const handleImageDelete = async (imageId : number) => {
   toast((t) => (
     <span className='flex flex-col gap-4'>
       <div className='text-2xl flex'>
-        🗑️ <p className='text-red-500'>삭제</p>하시겠습니까?
+        🗑️&nbsp;<p className='text-red-500'>삭제</p>하시겠습니까?
       </div>
       <div className='flex justify-between'>
         <button onClick={() => {toast('취소되었습니다', {icon:"👨‍💻"}), toast.dismiss(t.id)}} className='hover:scale-110 transition-all duration-200 ease-in-out'>

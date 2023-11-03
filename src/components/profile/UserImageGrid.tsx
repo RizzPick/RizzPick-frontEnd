@@ -22,7 +22,6 @@ function UserImageGrid({onPrev} : any) {
   };
 
   const addImage = async (file: File) => {
-    console.log(file);
     setIsLoading(true);
     const formData = new FormData();
     formData.append('action', "ADD");
