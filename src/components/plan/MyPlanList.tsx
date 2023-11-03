@@ -61,7 +61,7 @@ export default function MyPlanList() {
             <div className="min-h-screen w-full mx-auto bg-board-bg sm:bg-none sm:mb-20">
                 <div className="relative z-0 inset-x-0 top-[0px] h-[80px] mb-[-50px] min-w-full bg-white sm:hidden"></div>
                 <div className="flex flex-col items-center mt-auto">
-                    <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-50 sm:text-3xl">
+                    <div className="w-[630px] h-[80px] p-[10px] flex justify-center items-center gap-2.5 rounded-[40px] bg-white z-0 sm:text-3xl">
                         <h1 className="text-3xl font-bold ">
                             🎈 나의 데이트 계획 🎈
                         </h1>

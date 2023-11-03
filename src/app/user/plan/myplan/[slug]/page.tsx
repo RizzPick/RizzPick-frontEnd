@@ -14,6 +14,7 @@ import { getDateList } from '@/features/plan/dating';
 import Link from 'next/link';
 import BackIcon from '../../../../../../public/planIcon/back.svg';
 import Header from '@/components/common/Header';
+import toast from 'react-hot-toast';
 
 type Props = {
     params: {
@@ -163,6 +164,35 @@ export default function PostPage({ params: { slug } }: Props) {
             });
     };
 
+    const handlePlanDelete = async () => {
+        toast((t) => (
+            <span className="flex flex-col gap-4">
+                <div className="text-2xl flex">
+                    🗑️ <p className="text-red-500">삭제</p>하시겠습니까?
+                </div>
+                <div className="flex justify-between">
+                    <button
+                        onClick={() => {
+                            toast('취소되었습니다', { icon: '👨‍💻' }),
+                                toast.dismiss(t.id);
+                        }}
+                        className="hover:scale-110 transition-all duration-200 ease-in-out"
+                    >
+                        취소
+                    </button>
+                    <button
+                        onClick={() => {
+                            handleDeleteClick(), toast.dismiss(t.id);
+                        }}
+                        className="hover:scale-110 transition-all duration-200 ease-in-out"
+                    >
+                        삭제하기
+                    </button>
+                </div>
+            </span>
+        ));
+    };
+
     const handleBackButtonClick = () => {
         history.back();
     };
@@ -222,7 +252,16 @@ export default function PostPage({ params: { slug } }: Props) {
             <div className="w-full mx-auto sm:p-0">
                 {isEditing ? (
                     <Write
-                        initialData={dating}
+                        initialData={
+                            isEditing
+                                ? dating
+                                : {
+                                      datingTitle: '',
+                                      datingLocation: '',
+                                      datingTheme: '',
+                                      activities: [],
+                                  }
+                        }
                         initialActivities={activities}
                         onEditComplete={handleEditComplete}
                     />
@@ -282,7 +321,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                 </ul>
                             </div>
                             <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5] sm:border-none">
-                                <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-dashed sm:border-b-2 sm:border-[#D57DFF] sm:max-w-[350px] sm:mt-0 sm:w-full">
+                                <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-b-2 sm:max-w-[350px] sm:mt-0 sm:w-full">
                                     <div className="flex flex-col p-4">
                                         <p className="text-[25px] text-[#666666] sm:text-base sm:font-medium">
                                             {dating.datingLocation}
@@ -328,7 +367,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                     </button>
                                     <button
                                         className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
-                                        onClick={handleDeleteClick}
+                                        onClick={handlePlanDelete}
                                     >
                                         삭제
                                     </button>

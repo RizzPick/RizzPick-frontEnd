@@ -169,7 +169,7 @@ export default function PostPage({ params: { slug } }: Props) {
     const handleLike = async () => {
         try {
             const response = await sendLike(userId, targetUserId); // userId와 targetUserId 값을 제공하세요
-            toast(response.data.message, {icon: '❤️',});
+            toast(response.data.message, { icon: '❤️' });
         } catch (error) {
             console.error('좋아요 보내기 오류:', error);
         }
@@ -275,7 +275,7 @@ export default function PostPage({ params: { slug } }: Props) {
                         </ul>
                     </div>
                     <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5] sm:border-none">
-                        <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-dashed sm:border-b-2 sm:border-[#D57DFF] sm:max-w-[350px] sm:mt-0 sm:w-full">
+                        <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-b-2 sm:border-[#CECECE] sm:max-w-[350px] sm:mt-0 sm:w-full">
                             <div className="flex flex-col p-4">
                                 <p className="text-[25px] text-[#666666] sm:text-base sm:font-medium">
                                     {dating.datingLocation}

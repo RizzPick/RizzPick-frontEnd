@@ -6,6 +6,7 @@ export interface Dating {
     datingLocation: string;
     datingTheme: string;
     createdAt: string;
+    userProfilePic: { image: string };
 }
 
 export interface AllDatingResponse {
