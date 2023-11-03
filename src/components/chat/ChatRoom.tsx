@@ -145,19 +145,19 @@ const ChatRoom = () => {
   
     return (
       <div className='relative'>
-        <header className='text-center text-neutral-700 text-xl font-medium leading-tight tracking-wide flex justify-center p-4 border-b-1'>
+        <header className='header-sticky text-center text-neutral-700 text-xl font-medium leading-tight tracking-wide flex justify-center p-4 border-b-1'>
                 <button className='absolute left-[15px]' onClick={backBtnClick}><Back/></button>
                 <h1>{chat?.nickname}</h1>
         </header>
         {/* 채팅창 */}
-        <div className='w-full relative h-[90vh] rounded-3xl px-3'>
+        <div className='w-full relative h-[82vh] rounded-3xl px-3'>
           {/* 메시지 출력 부분 */}
           {isLoading ? (
             <ChatSkeleton />
           ):
           (
             <>
-            <div className="h-[calc(800px-100px)] overflow-y-auto pb-4 scrollbar-hide">
+            <div className="h-full overflow-y-auto pb-4 scrollbar-hide">
             {messages && (() => {
               const groupedByDate: Record<string, MessagesRes[]> = {};
               messages.forEach(mes => {
@@ -199,7 +199,7 @@ const ChatRoom = () => {
               ));
             })()}
           </div>
-          <div className="absolute inset-x-0 bottom-0 flex justify-between items-center rounded-2xl bg-gray-100 px-4 py-1 mx-4 h-[44px]">
+          <div className="textarea-sticky absolute inset-x-0 bottom-0 flex justify-between items-center rounded-2xl bg-gray-100 px-4 py-1 mx-4 h-[44px]">
             <textarea
                 className="bg-gray-100 w-full resize-none"
                 rows={1}

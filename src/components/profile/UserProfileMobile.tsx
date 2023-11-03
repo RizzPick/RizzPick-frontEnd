@@ -46,7 +46,7 @@ function UserProfileMobile() {
 
   return (
     <div>
-        <div className='h-[80vh] bg-profile-gradient rounded-3xl p-4 relative mt-20 w-full flex justify-center'>
+        <div className='h-[100vh] bg-profile-gradient rounded-3xl p-4 relative mt-20 w-full flex justify-center'>
             <div className='absolute -top-0 -mt-20'>
             {/* 유저 이미지 태그 */}
                 <div className='relative h-[146px] w-[146px]'>

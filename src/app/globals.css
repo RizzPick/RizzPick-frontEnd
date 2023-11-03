@@ -85,6 +85,19 @@ button:last-of-type {
   right: 0;
 }
 
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* 필요에 따라 다른 요소들보다 상위에 위치하도록 z-index 설정 */
+  background: white; /* 스크롤 시 내용이 헤더 아래로 가려지도록 배경색 지정 */
+}
+
+.textarea-sticky {
+  position: sticky;
+  bottom: 10px;
+  z-index: 10; /* 필요에 따라 다른 요소들보다 상위에 위치하도록 z-index 설정 */
+}
+
 @font-face {
   font-family: "SUITE";
   font-weight: 200;
