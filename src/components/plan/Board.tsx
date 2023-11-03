@@ -128,7 +128,7 @@ export default function Board() {
                                         ? 'bold'
                                         : 'normal',
                             }}
-                            className="px-4 py-2"
+                            className="px-4 py-2 my-4 sm:mt-2 sm:mb-20"
                         >
                             {index + 1}
                         </button>
