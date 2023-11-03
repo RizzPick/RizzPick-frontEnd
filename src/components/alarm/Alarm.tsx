@@ -102,7 +102,7 @@ export default function Alarm({ close }: AlarmProps) {
                     </div>
                     <h2 className="mb-2 font-bold text-2xl mt-4">메시지</h2>
                     <div className="h-full overflow-y-auto scrollbar-hide">
-                        <div className="h-[calc(70vh-36px)] border-t-[1px] border-black">
+                        <div className="border-t-[1px] border-black">
                             {chats?.map((chat) => {
                                 return (
                                     <div

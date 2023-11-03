@@ -11,7 +11,6 @@ import moment from 'moment';
 import ChatSkeleton from './ChatSkeleton';
 import {FiArrowUp} from "react-icons/fi"
 import Back from "../../../public/chatIcon/Button.svg"
-import { useRouter } from 'next/navigation';
 
 const Chat = () => {
     const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
@@ -82,7 +81,6 @@ const Chat = () => {
     
     const currentClient = client.current;
     currentClient.onConnect = () => {
-      console.log("소켓 연결완료✅");
       console.log("채팅방 아이디 : ", chat.chatRoomId);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
@@ -105,7 +103,6 @@ const Chat = () => {
   }, [MY_TOKEN, chat?.chatRoomId]);  
 
   const onClick = () => {
-    console.log("메시지 전송!");
     if (message.trim()) { // 메시지가 비어있지 않을 때만 전송
       stompSendFn("/app/message", {
         token : MY_TOKEN,

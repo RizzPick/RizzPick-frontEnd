@@ -3,7 +3,7 @@ import React from 'react'
 
 function ChatRoomPage() {
   return (
-        <div className='grid grid-cols-1 w-full'>
+        <div className='w-full height-screen-vh'>
             <ChatRoom />
         </div>
   )

@@ -19,7 +19,6 @@ const ChatRoom = () => {
     const [messages, setMessages] = useState<MessagesRes[]>();
     const [isLoading, setIsLoading] = useState(false);
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
-    console.log(chat);
     const fullToken = getCookie('Authorization');
     const MY_TOKEN = fullToken?.split(' ')[1];
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -87,7 +86,6 @@ const ChatRoom = () => {
     
     const currentClient = client.current;
     currentClient.onConnect = () => {
-      console.log("소켓 연결완료✅");
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);
@@ -146,7 +144,7 @@ const ChatRoom = () => {
   }
   
     return (
-      <div>
+      <div className='relative'>
         <header className='text-center text-neutral-700 text-xl font-medium leading-tight tracking-wide flex justify-center p-4 border-b-1'>
                 <button className='absolute left-[15px]' onClick={backBtnClick}><Back/></button>
                 <h1>{chat?.nickname}</h1>
@@ -201,7 +199,7 @@ const ChatRoom = () => {
               ));
             })()}
           </div>
-          <div className="flex justify-between items-center rounded-2xl bg-gray-100 px-4 py-1 mx-4 absolute inset-x-0 bottom-0 h-[44px]">
+          <div className="absolute inset-x-0 bottom-0 flex justify-between items-center rounded-2xl bg-gray-100 px-2 py-2 mx-4">
             <textarea
                 className="bg-gray-100 w-full resize-none"
                 rows={1}

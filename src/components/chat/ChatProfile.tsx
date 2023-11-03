@@ -19,10 +19,9 @@ function ChatProfile() {
     if(!chat) return;
     try {
       const response = await ChatAPI.deleteChat(chat?.chatRoomId);
-      console.log(response);
       if(response.status === 200) {
         clearCurrentChat();
-        toast.success(response.data.message);
+        // toast.success(response.data.message);
         window.location.reload();
       }
     } catch (error) {
