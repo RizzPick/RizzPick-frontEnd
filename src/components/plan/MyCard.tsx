@@ -6,7 +6,14 @@ import { useEffect, useState } from 'react';
 
 type Props = { myDating: MyDating };
 export default function MyCard({
-    myDating: { datingTitle, datingTheme, datingId, createdAt },
+    myDating: {
+        datingTitle,
+        datingTheme,
+        datingId,
+        createdAt,
+        userNickname,
+        userProfilePic,
+    },
 }: Props) {
     const timeAgo = (createdAt: string) => {
         const now = new Date().getTime();
@@ -52,7 +59,7 @@ export default function MyCard({
                 <div className="relative w-full h-[260px]">
                     <Image
                         className="w-full h-full"
-                        src={profile}
+                        src={userProfilePic.image}
                         alt={datingTitle}
                         width={233}
                         height={260}
@@ -73,7 +80,7 @@ export default function MyCard({
                         {datingTitle}
                     </h3>
                     <div className="flex flex-row mt-2 items-center justify-between">
-                        <span className="text-sm">{datingId} 닉네임</span>
+                        <span className="text-sm">{userNickname}</span>
                         <span className="text-xs text-end mt-1 text-[#999999]">
                             {timeDifferenceString}
                         </span>

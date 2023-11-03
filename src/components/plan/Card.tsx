@@ -6,7 +6,14 @@ import { useEffect, useState } from 'react';
 
 type Props = { dating: Dating };
 export default function DatingCard({
-    dating: { datingTitle, datingTheme, datingId, userNickname, createdAt },
+    dating: {
+        datingTitle,
+        datingTheme,
+        datingId,
+        userNickname,
+        createdAt,
+        userProfilePic,
+    },
 }: Props) {
     const timeAgo = (createdAt: string) => {
         const now = new Date().getTime();
@@ -23,18 +30,20 @@ export default function DatingCard({
             (differenceInMilliseconds % (1000 * 3600)) / (1000 * 60)
         );
 
+        let result = '';
         if (daysDifference > 0) {
-            return `${daysDifference}일 전`;
+            result = `${daysDifference}일 전`;
         } else {
-            let result = '';
             if (hoursDifference > 0) {
                 result += `${hoursDifference}시간 `;
             }
-            if (minutesDifference > 0) {
+            if (minutesDifference > 0 || hoursDifference > 0) {
+                // Update this line to include hours
                 result += `${minutesDifference}분 `;
             }
-            return result + '전';
+            result += '전';
         }
+        return result;
     };
 
     const [timeDifferenceString, setTimeDifferenceString] =
@@ -52,7 +61,7 @@ export default function DatingCard({
                 <div className="relative w-full h-[260px]">
                     <Image
                         className="w-full h-full"
-                        src={profile}
+                        src={userProfilePic.image}
                         alt={datingTitle}
                         width={233}
                         height={260}
@@ -73,7 +82,7 @@ export default function DatingCard({
                         {datingTitle}
                     </h3>
                     <div className="flex flex-row mt-2 items-center justify-between">
-                        <span className="text-sm">{userNickname} 닉네임</span>
+                        <span className="text-sm">{userNickname}</span>
                         <span className="text-xs text-end mt-1 text-[#999999]">
                             {timeDifferenceString}
                         </span>
