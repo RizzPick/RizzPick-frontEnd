@@ -18,6 +18,7 @@ import DeleteIcon from '../../../public/planIcon/delete.svg';
 // import { deleteActivity } from '../../features/plan/dating';
 import { Activity } from '../../types/plan/activity/type';
 import BackIcon from '../../../public/planIcon/back.svg';
+import toast from 'react-hot-toast';
 
 interface WriteProps {
     initialData: DatingInfo;
@@ -111,6 +112,13 @@ export default function Write({
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         console.log('Form Submit');
         e.preventDefault();
+        if (activities.length < 1) {
+            setResponseMessage(
+                'Please add at least one activity before submitting.'
+            );
+            toast.error('1개 이상의 활동을 추가해주세요');
+            return;
+        }
         try {
             const id = Number(param.slug);
             const response = await axios.put(
@@ -262,7 +270,7 @@ export default function Write({
                         className="flex flex-col items-center w-[1248px] h-[80vh] relative "
                         style={{
                             height: isSmallScreen
-                                ? `calc(70vh + ${activities.length * 6}vh)`
+                                ? `calc(70vh + ${activities.length * 10}vh)`
                                 : 'h-100vh',
                         }}
                     >

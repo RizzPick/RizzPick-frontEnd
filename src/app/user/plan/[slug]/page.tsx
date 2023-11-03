@@ -53,13 +53,18 @@ export default function PostPage({ params: { slug } }: Props) {
     const router = useRouter();
 
     function timeAgo(createdAt: string): string {
+        // 영국 시간을 해석합니다.
         const date = new Date(createdAt);
         if (isNaN(date.getTime())) {
             console.error('Invalid date:', createdAt);
             return '';
         }
+        // 영국 시간을 서울 시간으로 변환합니다.
+        const seoulDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+
         const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
+        // 서울 시간 기준으로 시간 차이를 계산합니다.
+        const diffMs = now.getTime() - seoulDate.getTime();
         const diffSecs = diffMs / 1000;
         const diffMins = diffSecs / 60;
         const diffHours = diffMins / 60;
@@ -241,7 +246,11 @@ export default function PostPage({ params: { slug } }: Props) {
                                             ? 'bg-[#F9ECFF]'
                                             : ''
                                     }`}
-                                    style={{ borderRadius: '4px 0px 0px 4px' }}
+                                    style={{
+                                        borderRadius: '4px 0px 0px 4px',
+                                        overflow: 'hidden',
+                                        whiteSpace: 'nowrap',
+                                    }}
                                     onClick={() =>
                                         setActivePage(date.datingId.toString())
                                     }
