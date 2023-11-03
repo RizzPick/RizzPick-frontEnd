@@ -149,7 +149,7 @@ function MatchMobile() {
         }
     };
     return (
-        <div className="flex h-[100%-70px]">
+        <div className="flex h-[100%-70px] flex-grow">
             <div className="flex-1 flex justify-evenly items-start px-2">
                 {!currentUser ? (
                     <div className='flex items-center flex-col justify-center h-[100vh]'>
@@ -165,7 +165,7 @@ function MatchMobile() {
                 ):(
                     <div className="flex-1 max-w-md rounded-full">
                     {/* 유저 이미지 */}
-                    <div className="relative h-[75vh] w-full rounded-2xl overflow-hidden mt-4">
+                    <div className="relative h-[70vh] w-full rounded-2xl overflow-hidden mt-4">
                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20"/>
                         {/* 이미지 개수, 현재 페이지 보여주기 */}
                         <div className="flex justify-center mt-4">
@@ -220,7 +220,7 @@ function MatchMobile() {
                         </button>
 
                         {/* 간단한 정보, 설명란 */}
-                        <div className="absolute w-full bottom-28 text-white flex flex-col p-6 z-30">
+                        <div className="absolute w-full bottom-16 text-white flex flex-col p-6 z-30">
                                 <div className="text-2xl flex items-center justify-between">
                                     <div className="flex items-center gap-4 ">
                                         <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
