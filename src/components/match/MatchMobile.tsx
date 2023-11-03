@@ -15,6 +15,7 @@ import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import apologize from "../../../public/images/사과.gif"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.small.svg"
 import Home from "../../../public/profileIcon/house.fill.small.svg"
 import { getCookie } from '@/utils/cookie';
@@ -42,11 +43,7 @@ function MatchMobile() {
             try {
                 const response = await MatchAPI.fetchRandomUser();
                 const usersData = response.data.data;
-
-                // users 상태를 usersData로 설정합니다.
                 setUsers(usersData);
-                console.log('usersData', usersData);
-                console.log('responseData', response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -55,8 +52,10 @@ function MatchMobile() {
     }, []);
 
     const handleButtonClick = () => {
-        if (userIndex === users.length - 1) {
+        if (userIndex >= users.length - 1) {
             toast('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요', {icon : '🥹'})
+            setUsers([]);
+            setUserIndex(0);
         } else {
             setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
             setSlideIndex(0);
@@ -65,6 +64,7 @@ function MatchMobile() {
 
     //! 사진 슬라이드
     const currentUser = users[userIndex];
+    console.log(currentUser);
     const [slideIndex, setSlideIndex] = useState(0);
 
     const nextSlide = () => {
@@ -82,9 +82,6 @@ function MatchMobile() {
                 currentUser.profileImages.length
         );
     };
-
-    if (!users) return;
-    if(!users[userIndex]) return;
 
     const sendLike = async (targetUserId: string) => {
         try {
@@ -155,8 +152,19 @@ function MatchMobile() {
     return (
         <div className="flex h-[100%-70px]">
             <div className="flex-1 flex justify-evenly items-start px-2">
-                {/*! 유저 정보 */}
-                <div className="flex-1 max-w-md rounded-full">
+                {!currentUser ? (
+                    <div className='flex items-center flex-col justify-center h-[100vh]'>
+                        <div className='flex items-center flex-col gap-2 mb-10'>
+                            <h1 className='text-xl'>현재 등록한 모든 유저의 추천이 끝났습니다</h1>
+                            <h1 className='text-3xl'>다음에 또 이용해주세요</h1>
+                            <h1 className='text-xs'>Please.. 😭</h1>
+                        </div>
+                        <div className='relative w-[50px] h-[50px]'>
+                            <Image src={apologize} alt='apologize' fill style={{objectFit:"cover"}} />
+                        </div>
+                </div>
+                ):(
+                    <div className="flex-1 max-w-md rounded-full">
                     {/* 유저 이미지 */}
                     <div className="relative h-[75vh] w-full rounded-2xl overflow-hidden mt-4">
                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-zinc-300 via-neutral-400 to-black rounded-[20px] z-10 opacity-20"/>
@@ -164,10 +172,10 @@ function MatchMobile() {
                         <div className="flex justify-center mt-4">
                             {currentUser // currentUser가 정의된 경우에만 map 함수를 호출
                                 ? currentUser.profileImages.map((_, index) => (
-                                      <div key={index} className={`mx-1 z-10 text-2xl ${index === slideIndex ? ('text-white'):('text-gray-500')}`}>
+                                    <div key={index} className={`mx-1 z-10 text-2xl ${index === slideIndex ? ('text-white'):('text-gray-500')}`}>
                                         <GoDotFill />
-                                      </div>
-                                  ))
+                                    </div>
+                                ))
                                 : null}
                         </div>
                         {/* 페이지 이동 버튼 */}
@@ -181,28 +189,28 @@ function MatchMobile() {
                         {/* 이미지 가져오기 */}
                         {currentUser
                             ? currentUser.profileImages.map(
-                                  (imageObj, index) => (
-                                      <div
-                                          className={
-                                              index === slideIndex
-                                                  ? 'slide active'
-                                                  : 'slide'
-                                          }
-                                          key={index}
-                                      >
-                                          {index === slideIndex && (
-                                              <Image
-                                                  src={imageObj.image}
-                                                  alt="User"
-                                                  layout="fill"
-                                                  objectFit="cover"
-                                                  className="absolute"
-                                                  priority
-                                              />
-                                          )}
-                                      </div>
-                                  )
-                              )
+                                (imageObj, index) => (
+                                    <div
+                                        className={
+                                            index === slideIndex
+                                                ? 'slide active'
+                                                : 'slide'
+                                        }
+                                        key={index}
+                                    >
+                                        {index === slideIndex && (
+                                            <Image
+                                                src={imageObj.image}
+                                                alt="User"
+                                                layout="fill"
+                                                objectFit="cover"
+                                                className="absolute"
+                                                priority
+                                            />
+                                        )}
+                                    </div>
+                                )
+                            )
                             : null}
 
                         <button
@@ -269,7 +277,9 @@ function MatchMobile() {
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
+                )}
+                
             </div>
         </div>
     );

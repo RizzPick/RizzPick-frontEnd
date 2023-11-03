@@ -199,7 +199,7 @@ const ChatRoom = () => {
               ));
             })()}
           </div>
-          <div className="absolute inset-x-0 bottom-0 flex justify-between items-center rounded-2xl bg-gray-100 px-2 py-2 mx-4">
+          <div className="absolute inset-x-0 bottom-0 flex justify-between items-center rounded-2xl bg-gray-100 px-4 py-1 mx-4 h-[44px]">
             <textarea
                 className="bg-gray-100 w-full resize-none"
                 rows={1}

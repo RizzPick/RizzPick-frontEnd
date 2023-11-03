@@ -13,13 +13,14 @@ import RightButton from '../../../public/matchIcon/right.svg';
 import axios from 'axios';
 import EducationIcon from '../../../public/profileIcon/graduationcap.fill.svg';
 import Home from '../../../public/profileIcon/Home.svg';
+import apologize from "../../../public/images/사과.gif"
 import { getCookie } from '@/utils/cookie';
-import ReadMore from '../../../public/matchIcon/Intro.png';
 import { AiOutlineInfoCircle } from "react-icons/ai"
 import toast from 'react-hot-toast';
 
 function Match() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     //! 상세 정보 보이기/숨기기 토글 함수
     const toggleDetailsVisibility = () => {
@@ -35,10 +36,7 @@ function Match() {
             try {
                 const response = await MatchAPI.fetchRandomUser();
                 const usersData = response.data.data;
-                // users 상태를 usersData로 설정합니다.
                 setUsers(usersData);
-                console.log('usersData', usersData);
-                console.log('responseData', response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -174,15 +172,20 @@ function Match() {
             console.error('싫어요 보내기 오류:', error);
         }
     };
-
-    if (!users) return;
-    if (!users[userIndex]) return;
+    
     return (
         <div className="relative flex bg-matchpage-gradient h-[100vh]">
             <div className="flex items-start p-10 mx-auto">
-                {users.length === 0 ? (
-                    <div>
-                        <h1 className='text-black'>오늘의 추천이 끝났습니다, 다음에 또 이용해주세요</h1>
+                {!currentUser ? (
+                    <div className='flex items-center flex-col justify-center h-full'>
+                        <div className='flex items-center flex-col gap-2 mb-10'>
+                            <h1 className='text-xl'>현재 등록한 모든 유저의 추천이 끝났습니다</h1>
+                            <h1 className='text-3xl'>다음에 또 이용해주세요</h1>
+                            <h1 className='text-xs'>Please.. 😭</h1>
+                        </div>
+                        <div className='relative w-[300px] h-[300px]'>
+                            <Image src={apologize} alt='apologize' fill style={{objectFit:"cover"}} />
+                        </div>
                     </div>
                 ):(
                     <>

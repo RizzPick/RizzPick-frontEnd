@@ -73,14 +73,13 @@ function UserProfileMobile() {
                 <button className='mx-auto px-4 py-2 bg-[#D67dff] mt-4 w-20 rounded-3xl text-white font-bold hover:bg-pink-300'>수정</button>
             </Link>
             <div className='mt-4 w-full rounded-2xl bg-white p-6 h-20 flex flex-col items-start justify-center text-gray-400 gap-1'>
-                <p className='cursor-pointer' onClick={()=>router.push('/')}>비밀번호 변경</p>
+                <p className='cursor-pointer' onClick={()=>toast("구현예정입니ㄷr..", {icon : '🥹'})}>비밀번호 변경</p>
                 <hr className='w-full'/>
                 <p onClick={()=>setShowLogoutModal(true)} className='cursor-pointer'>로그아웃</p>
             </div>
 
             {showLogoutModal && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
-                    {/* 모달 외부 배경 (그레이 오버레이) */}
                     <div className="absolute inset-0 bg-gray-500 opacity-50" onClick={() => setShowLogoutModal(false)}></div>
                     
                     {/* 모달 창 */}
@@ -93,7 +92,7 @@ function UserProfileMobile() {
                     </div>
                 </div>
             )}
-            <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9]'>
+            <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9] cursor-pointer' onClick={()=>toast("구현예정입니ㄷr..", {icon : '🥹'})}>
                 회원탈퇴
             </div>
           </div>
