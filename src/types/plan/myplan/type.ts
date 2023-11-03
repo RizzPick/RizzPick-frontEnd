@@ -5,6 +5,8 @@ export interface MyDating {
     datingLocation: string;
     datingTheme: string;
     createdAt: string;
+    userNickname: string;
+    userProfilePic: { image: string };
 }
 
 export interface MyAllDatingResponse {

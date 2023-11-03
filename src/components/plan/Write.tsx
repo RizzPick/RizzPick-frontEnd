@@ -30,16 +30,21 @@ export default function Write({
     initialActivities,
     onEditComplete,
 }: WriteProps) {
-    const [title, setTitle] = useState('');
-    const [location, setLocation] = useState('');
+    const [title, setTitle] = useState<string>(initialData.datingTitle);
+    const [location, setLocation] = useState<string>(
+        initialData.datingLocation
+    );
+    const [theme, setTheme] = useState<string>(initialData.datingTheme);
+
     const [activityContent, setActivityContent] = useState('');
-    const [theme, setTheme] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [responseMessage, setResponseMessage] = useState('');
     const [activityId, setActivityId] = useState<number | null>(null);
     const [authorId, setAuthorId] = useState<number | null>(null);
     const [datingAuthorId, setDatingAuthorId] = useState<number | null>(null);
+
+    const [successMessage, setSuccessMessage] = useState('');
+    const [responseMessage, setResponseMessage] = useState('');
+
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const transformedActivities = initialActivities
         ? initialActivities.map((activity) => ({
@@ -97,13 +102,7 @@ export default function Write({
             );
             const data = response.data.data;
             console.log('Received data:', data);
-            if (data) {
-                setTitle(data.datingTitle);
-                setLocation(data.datingLocation);
-                setTheme(data.datingTheme);
-            } else {
-                console.error('No data received');
-            }
+            // 더미 데이터를 가져오되, 상태를 업데이트하지 않습니다.
         } catch (error) {
             console.error('Failed to fetch dating data:', error);
         }
@@ -128,6 +127,7 @@ export default function Write({
             );
             console.log(response);
             onEditComplete();
+            handleBackButtonClick();
         } catch (error) {
             console.log('catch:', error);
             setResponseMessage('An error occurred. Please try again.');
@@ -214,9 +214,15 @@ export default function Write({
                     <div className="w-full h-[248px] bg-write-bg sm:bg-none sm:h-10">
                         <div className="pt-[67px] pl-[200px] leading-[48px] tracking-[3.60px] sm:p-0 sm:w-[393px] sm:h-10 sm:justify-center sm:items-center sm:gap-2.5 sm:inline-flex">
                             <h1 className="text-[36px] text-white font-black sm:text-black sm:text-xl sm:font-semibold sm:leading-tight sm:tracking-wide">
-                                {isSmallScreen
-                                    ? '나만의 데이트 계획을 작성해 보세요!'
-                                    : '나만의 특별한 데이트 계획을 <br /> 작성해보세요!'}
+                                {isSmallScreen ? (
+                                    '나만의 데이트 계획을 작성해 보세요!'
+                                ) : (
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: '나만의 특별한 데이트 계획을 <br /> 작성해보세요!',
+                                        }}
+                                    />
+                                )}
                             </h1>
                         </div>
                     </div>

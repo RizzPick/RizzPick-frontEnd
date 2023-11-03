@@ -90,7 +90,7 @@ export default function Board() {
             <div className="min-h-screen w-full mx-auto bg-board-bg sm:bg-none sm:mb-5 sm:p-0">
                 <div className="relative z-0 inset-x-0 top-[0rem] h-[5rem] mb-[-3.125rem] min-w-full bg-white sm:hidden"></div>
                 <div className="flex flex-col items-center mt-auto">
-                    <div className="w-[39.375rem] h-[5rem] p-[0.625rem] flex justify-center items-center gap-2.5 rounded-[2.5rem] bg-white z-50 sm:text-3xl">
+                    <div className="w-[39.375rem] h-[5rem] p-[0.625rem] flex justify-center items-center gap-2.5 rounded-[2.5rem] bg-white z-0 sm:text-3xl">
                         <h1 className="text-3xl font-bold ">
                             💜나랑 이런 데이트 어때요?💜
                         </h1>
