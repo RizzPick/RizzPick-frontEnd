@@ -1,6 +1,7 @@
 import OtherUserProfile from '@/components/profile/OtherUserProfile';
 import { MyProfileRes } from '@/types/profile';
 import axios from 'axios';
+import { cookies } from 'next/headers';
 import React from 'react'
 
 type Props = {
@@ -10,7 +11,15 @@ type Props = {
 };
 
 async function OtherUserProfilepage({ params: { slug } }: Props) {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/userProfile/${slug}`)
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get('Authorization');
+  const token = accessToken?.value;
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/userProfile/${slug}`,{
+      headers : {
+        "Authorization" : token
+      }
+    })
+    console.log(response.data);
     const profile : MyProfileRes = response.data.data;
   return (
     <div><OtherUserProfile profile={profile}/></div>

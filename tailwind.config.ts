@@ -54,6 +54,8 @@ const config: Config = {
                     'linear-gradient(0deg, #CACFFF 0%, #CACFFF 100%)',
                 'likelist-gradient':
                     'linear-gradient(114deg, rgba(200.81, 41, 146.48, 0.79) 0%, rgba(128.64, 47.97, 209.31, 0.66) 51%, rgba(33.93, 30.37, 208.25, 0.53) 100%)',
+                'aboutpage-gradient':
+                    'linear-gradient(180deg, rgba(166.35, 39.42, 168.94, 0.55) 0%, rgba(143.67, 20.98, 218.88, 0.21) 23%, rgba(176.62, 34.28, 199.80, 0.29) 47%, rgba(103.30, 33.08, 192.67, 0.22) 80%, rgba(38.36, 45.44, 109.23, 0.45) 100%'
             },
         },
     },

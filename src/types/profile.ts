@@ -88,6 +88,7 @@ export type MyProfileRes = {
   dating? : Dating[];
   profileImages : ProfileImages[];
   intro : string;
+  matchId? : number;
 }
 
 export type ProfileImages = {
