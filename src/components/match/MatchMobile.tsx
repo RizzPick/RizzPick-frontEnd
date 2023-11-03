@@ -15,7 +15,7 @@ import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import apologize from "../../../public/images/사과.gif"
+import apologize from "../../../public/images/apologize.gif"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.small.svg"
 import Home from "../../../public/profileIcon/house.fill.small.svg"
 import { getCookie } from '@/utils/cookie';

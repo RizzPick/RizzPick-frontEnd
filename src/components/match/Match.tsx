@@ -13,7 +13,7 @@ import RightButton from '../../../public/matchIcon/right.svg';
 import axios from 'axios';
 import EducationIcon from '../../../public/profileIcon/graduationcap.fill.svg';
 import Home from '../../../public/profileIcon/Home.svg';
-import apologize from "../../../public/images/사과.gif"
+import apologize from "../../../public/images/apologize.gif"
 import { getCookie } from '@/utils/cookie';
 import { AiOutlineInfoCircle } from "react-icons/ai"
 import toast from 'react-hot-toast';
