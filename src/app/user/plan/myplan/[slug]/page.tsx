@@ -40,7 +40,14 @@ interface DatingInfo {
 }
 
 export default function PostPage({ params: { slug } }: Props) {
-    const [dating, setDating] = useState<DatingInfo>();
+    const [dating, setDating] = useState<DatingInfo>({
+        datingTitle: '',
+        datingLocation: '',
+        datingTheme: '',
+        createdAt: new Date().toISOString(),
+        activities: [],
+    });
+    const [createdAt, setCreatedAt] = useState(null);
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const [isEditing, setIsEditing] = useState(false);
     const [dateList, setDateList] = useState<DateItem[]>([]);
@@ -49,13 +56,18 @@ export default function PostPage({ params: { slug } }: Props) {
     const router = useRouter();
 
     function timeAgo(createdAt: string): string {
+        // 영국 시간을 해석합니다.
         const date = new Date(createdAt);
         if (isNaN(date.getTime())) {
             console.error('Invalid date:', createdAt);
             return '';
         }
+        // 영국 시간을 서울 시간으로 변환합니다.
+        const seoulDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+
         const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
+        // 서울 시간 기준으로 시간 차이를 계산합니다.
+        const diffMs = now.getTime() - seoulDate.getTime();
         const diffSecs = diffMs / 1000;
         const diffMins = diffSecs / 60;
         const diffHours = diffMins / 60;
@@ -73,6 +85,10 @@ export default function PostPage({ params: { slug } }: Props) {
     }
 
     useEffect(() => {
+        console.log('timeAgo:', timeAgo(dating.createdAt));
+    }, [dating]);
+
+    useEffect(() => {
         axios
             .get(`https://willyouback.shop/api/dating/${slug}`, {
                 headers: {
@@ -81,12 +97,14 @@ export default function PostPage({ params: { slug } }: Props) {
                 },
             })
             .then((response) => {
+                console.log(response.data);
+
                 const datingData = response.data.data;
                 setDating({
                     datingTitle: datingData.datingTitle,
                     datingLocation: datingData.datingLocation,
                     datingTheme: datingData.datingTheme,
-                    createdAt: datingData.createdAt, // 수정된 부분
+                    createdAt: datingData.createdAt,
                     activities: datingData.activityResponseDtoList || [],
                 });
                 setActivities(datingData.activityResponseDtoList); // activities 상태 업데이트
@@ -281,6 +299,8 @@ export default function PostPage({ params: { slug } }: Props) {
                                             }`}
                                             style={{
                                                 borderRadius: '4px 0px 0px 4px',
+                                                overflow: 'hidden',
+                                                whiteSpace: 'nowrap',
                                             }}
                                             onClick={() =>
                                                 setActivePage(
@@ -332,7 +352,9 @@ export default function PostPage({ params: { slug } }: Props) {
                                         <p className="text-[25px] sm:text-lg sm:font-medium">
                                             {dating.datingTheme}
                                         </p>
-                                        <p className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0"></p>
+                                        <span className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
+                                            {timeAgo(dating.createdAt)}
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="flex flex-col mx-auto p-4 w-5/6 sm:w-full ">
