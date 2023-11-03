@@ -30,20 +30,23 @@ export default function Home() {
             }`}
         >
             <header className="flex justify-between w-full p-4 sm:hidden">
-                <h2
-                    className={`text-white transform transition-transform duration-1000 ${
+                <div
+                    className={`text-white transform transition-transform duration-1000 flex flex-row items-center${
                         loaded ? 'translate-y-0' : '-translate-y-full'
                     }`}
                 >
-                    <div className="w-[95px] h-[40px] relative">
-                    <Image
-                        src={Logo}
-                        alt="로고"
-                        fill
-                        style={{ objectFit: 'cover' }}
-                    />
+                    <div className="w-[95px] h-[40px] relative cursor-pointer">
+                        <Image
+                            src={Logo}
+                            alt="로고"
+                            fill
+                            style={{ objectFit: 'cover' }}
+                        />
+                    </div>
+                    <div className='text-3xl text-white font-bold ml-10 cursor-pointer' onClick={()=>router.push('/about')}>
+                        소개
+                    </div>
                 </div>
-                </h2>
                 <h2
                     className={`text-3xl font-bold text-white cursor-pointer transform transition-transform duration-1000 ${
                         loaded ? 'translate-y-0' : '-translate-y-full'
