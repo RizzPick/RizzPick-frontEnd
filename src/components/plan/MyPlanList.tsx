@@ -1,8 +1,9 @@
 'use client';
 
+import { PlanAPI } from '../../features/plan/dating';
+import { createDate } from '@/types/dating';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createDating, getMyDatingData } from '@/features/plan/dating';
 import MyPlan from './MyPlan';
 import { MyDating } from '@/types/plan/myplan/type';
 
@@ -34,8 +35,8 @@ export default function MyPlanList() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const data = await getMyDatingData();
-                setMyDatings(data);
+                const response = await PlanAPI.getMyDatingData();
+                setMyDatings(response.data.data); // 이 부분을 수정하였습니다.
             } catch (error) {
                 console.error('Error fetching my dating data:', error);
             }
@@ -44,13 +45,27 @@ export default function MyPlanList() {
     }, []);
 
     //? 작성하기 버튼 (더미 데이터 생성)
-    const handleButtonClick = async () => {
+    const handleButtonClick = async (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        event.preventDefault();
+        const data: createDate = {
+            title: title,
+            location: location,
+            theme: theme,
+        };
         try {
-            // 데이터 생성 요청
-            const response = await createDating(title, location, theme);
-            // 생성된 데이터의 ID를 저장
-            const createdDatingId = response.data.datingId;
-            router.push(`write/${createdDatingId}`);
+            const response = await PlanAPI.createDating(data);
+            if (
+                response.data &&
+                response.data.data &&
+                response.data.data.datingId
+            ) {
+                const createdDatingId = response.data.data.datingId;
+                router.push(`write/${createdDatingId}`);
+            } else {
+                console.error('datingId를 받지 못했습니다:', response);
+            }
         } catch (error) {
             console.error('데이터 생성 오류:', error);
         }

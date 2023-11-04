@@ -1,19 +1,11 @@
 import { Dating } from '@/types/plan/board/type';
 import Link from 'next/link';
 import Image from 'next/image';
-import profile from '../../../public/images/girlprofile.jpeg';
 import { useEffect, useState } from 'react';
 
 type Props = { dating: Dating };
 export default function DatingCard({
-    dating: {
-        datingTitle,
-        datingTheme,
-        datingId,
-        userNickname,
-        createdAt,
-        userProfilePic,
-    },
+    dating: { datingTitle, datingId, userNickname, createdAt, userProfilePic },
 }: Props) {
     function timeAgo(createdAt: string): string {
         // 영국 시간을 해석합니다.
@@ -48,7 +40,6 @@ export default function DatingCard({
         useState<string>('');
 
     useEffect(() => {
-        // createdAt 변수는 서버에서 가져온 데이터라고 가정합니다.
         const differenceString = timeAgo(createdAt);
         setTimeDifferenceString(differenceString);
     }, [createdAt]);

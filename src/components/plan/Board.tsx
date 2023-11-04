@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createDating } from '../../features/plan/dating';
+import { PlanAPI } from '../../features/plan/dating';
 import { Dating } from '@/types/plan/board/type';
 import DatingGrid from './Grid';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { getDatings } from '../../features/plan/dating';
+import { createDate } from '@/types/dating';
 
 export default function Board() {
     const [datings, setDatings] = useState<Dating[]>([]);
@@ -38,11 +38,12 @@ export default function Board() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const datingData = await getDatings();
+                const response = await PlanAPI.getDatings();
+                const datingData = response.data.data; // 이 부분을 수정하였습니다.
                 // datingId를 기준으로 내림차순 정렬
                 const sortedData = datingData.sort(
                     (a: any, b: any) =>
-                        parseInt(b.datingId, 8) - parseInt(a.datingId, 8)
+                        parseInt(b.datingId, 10) - parseInt(a.datingId, 10)
                 );
                 setDatings(sortedData);
             } catch (error) {
@@ -53,13 +54,27 @@ export default function Board() {
     }, []);
 
     //? 작성하기 버튼 (더미 데이터 생성)
-    const handleButtonClick = async () => {
+    const handleButtonClick = async (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        event.preventDefault();
+        const data: createDate = {
+            title: title,
+            location: location,
+            theme: theme,
+        };
         try {
-            // 데이터 생성 요청
-            const response = await createDating(title, location, theme);
-            // 생성된 데이터의 ID를 저장
-            const createdDatingId = response.data.datingId;
-            router.push(`write/${createdDatingId}`);
+            const response = await PlanAPI.createDating(data);
+            if (
+                response.data &&
+                response.data.data &&
+                response.data.data.datingId
+            ) {
+                const createdDatingId = response.data.data.datingId;
+                router.push(`write/${createdDatingId}`);
+            } else {
+                console.error('datingId를 받지 못했습니다:', response);
+            }
         } catch (error) {
             console.error('데이터 생성 오류:', error);
         }
