@@ -2,14 +2,9 @@
 
 import axios from 'axios';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import {
-    createDating,
-    updateDating,
-    getDatingAuthorId,
-    getDatingData,
-    createActivity,
-} from '../../features/plan/dating';
+// import { createActivity } from '../../features/plan/dating';
 import { getCookie } from '@/utils/cookie';
+import { PlanAPI } from '../../features/plan/dating';
 import { useParams, useSearchParams } from 'next/navigation';
 import { ActivityResponse } from '@/types/plan/activity/type';
 import { AllDatingResponse } from '@/types/plan/board/type';
@@ -45,8 +40,6 @@ export default function Write({
     const [successMessage, setSuccessMessage] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
 
-    const inputRef = useRef<HTMLInputElement>(null);
-
     const transformedActivities = initialActivities
         ? initialActivities.map((activity) => ({
               id: activity.activityId,
@@ -56,7 +49,6 @@ export default function Write({
     const [activities, setActivities] = useState(transformedActivities);
 
     const param = useParams();
-    console.log(param);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
@@ -97,21 +89,20 @@ export default function Write({
 
     //? 더미 데이터를 받아요
     const fetchDatingData = useCallback(async () => {
+        const slug = Array.isArray(param.slug) ? param.slug[0] : param.slug;
         try {
-            const response = await axios.get(
-                `https://willyouback.shop/api/dating/${param.slug}`
-            );
-            const data = response.data.data;
+            const data = await PlanAPI.fetchDatingData(slug);
             console.log('Received data:', data);
-            // 더미 데이터를 가져오되, 상태를 업데이트하지 않습니다.
         } catch (error) {
             console.error('Failed to fetch dating data:', error);
         }
     }, [param.slug]);
 
+    //? 더미 데이터 수정하기 (유저 = 작성하기)
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         console.log('Form Submit');
         e.preventDefault();
+        //! activity는  1개 이상 추가 되어야 합니다.
         if (activities.length < 1) {
             setResponseMessage(
                 'Please add at least one activity before submitting.'
@@ -121,18 +112,11 @@ export default function Write({
         }
         try {
             const id = Number(param.slug);
-            const response = await axios.put(
-                `https://willyouback.shop/api/dating/${id}`,
-                { title, location, theme },
-                {
-                    headers: {
-                        Authorization: getCookie('Authorization'),
-                        Authorization_Refresh: getCookie(
-                            'Authorization_Refresh'
-                        ),
-                    },
-                }
-            );
+            const response = await PlanAPI.updateDatingData(id.toString(), {
+                title,
+                location,
+                theme,
+            });
             console.log(response);
             onEditComplete();
             handleBackButtonClick();
@@ -152,7 +136,7 @@ export default function Write({
         if (activityContent) {
             const id = Number(param.slug);
             try {
-                const activityResponse = await createActivity(
+                const activityResponse = await PlanAPI.createActivity(
                     id,
                     activityContent
                 );
@@ -175,23 +159,13 @@ export default function Write({
         }
     };
 
-    async function deleteActivity(activityId: number) {
-        console.log('activityId', activityId);
+    const deleteActivity = async (id: number) => {
         try {
-            const response = await axios.delete(
-                `https://willyouback.shop/api/activity/${activityId}`,
-                {
-                    headers: {
-                        Authorization: getCookie('Authorization'),
-                        Authorization_Refresh: getCookie(
-                            'Authorization_Refresh'
-                        ),
-                    },
-                }
-            );
-            if (response.data.status === 'success') {
+            const response = await PlanAPI.deleteActivity(id);
+            if (response.status === 200) {
+                // response.data.status를 response.status로 변경
                 setActivities(
-                    activities.filter((activity) => activity.id !== activityId)
+                    activities.filter((activity) => activity.id !== id) // activityId를 id로 변경
                 );
             } else {
                 console.error(
@@ -202,8 +176,8 @@ export default function Write({
         } catch (error) {
             console.error('Failed to delete activity:', error);
         }
-    }
-    console.log('null?', activityId);
+        console.log('null?', id);
+    };
 
     return (
         <div className="overflow-x-hidden">

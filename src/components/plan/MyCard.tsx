@@ -1,14 +1,12 @@
 import { MyDating } from '@/types/plan/myplan/type';
 import Link from 'next/link';
 import Image from 'next/image';
-import profile from '../../../public/images/girlprofile.jpeg';
 import { useEffect, useState } from 'react';
 
 type Props = { myDating: MyDating };
 export default function MyCard({
     myDating: {
         datingTitle,
-        datingTheme,
         datingId,
         createdAt,
         userNickname,
@@ -48,7 +46,6 @@ export default function MyCard({
         useState<string>('');
 
     useEffect(() => {
-        // createdAt 변수는 서버에서 가져온 데이터라고 가정합니다.
         const differenceString = timeAgo(createdAt);
         setTimeDifferenceString(differenceString);
     }, [createdAt]);

@@ -46,10 +46,10 @@ function LoginForm() {
             initializeUserInfo(userInfoResponse.data);
 
             if (userStatusResponse.data.data.userActiveStatus) {
-                toast.success("로그인 성공")
+                toast.success('로그인 성공');
                 router.replace('/user/match');
             } else {
-                toast('프로필 등록이 필요합니다', {icon : '✏️'});
+                toast('프로필 등록이 필요합니다', { icon: '✏️' });
                 router.replace('/profile/edit');
             }
         } catch (error: any) {
