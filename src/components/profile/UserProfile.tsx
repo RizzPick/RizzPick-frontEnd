@@ -11,13 +11,15 @@ import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
 import toast from 'react-hot-toast';
+import UseChat from '@/hooks/useChat';
 
 
 function UserProfile() {
 
   const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
     const token = getCookie("Authorization");
-    const { initializeProfile } = UseProfile();
+    const { initializeProfile, clearCurrentProfile } = UseProfile();
+    const { clearCurrentChat } = UseChat();
   useEffect(()=>{
     if(token){
         const fetchData = async() => {
@@ -39,6 +41,8 @@ function UserProfile() {
         eraseCookie('Authorization_Refresh');
         eraseCookie('status');
         sessionStorage.clear();
+        clearCurrentProfile();
+        clearCurrentChat();
         toast.success('로그아웃 처리되었습니다');
         router.push('/');
     };

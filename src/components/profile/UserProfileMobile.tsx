@@ -11,6 +11,7 @@ import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
 import toast from 'react-hot-toast';
+import UseChat from '@/hooks/useChat';
 
 function UserProfileMobile() {
     const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
@@ -18,11 +19,16 @@ function UserProfileMobile() {
     const { initializeProfile } = UseProfile();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const router = useRouter();
+    const {clearCurrentProfile} = UseProfile();
+    const {clearCurrentChat} = UseChat();
+
     const logout = () => {
         eraseCookie('Authorization');
         eraseCookie('Authorization_Refresh');
         eraseCookie('status');
         sessionStorage.clear();
+        clearCurrentProfile();
+        clearCurrentChat();
         toast.success('로그아웃 처리되었습니다');
         router.push('/');
     };

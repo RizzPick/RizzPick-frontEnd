@@ -34,11 +34,16 @@ const UseProfile = () => {
         mutate(PROFILE_KEY, profile);
     },[]);
 
+    const clearCurrentProfile = useCallback(() => {
+        mutate(PROFILE_KEY, null)
+    },[]);
+
     return {
         initializeProfile,
         setCurrentProfile,
         initializeUserActiveStatus,
-        initializeUserInfo
+        initializeUserInfo,
+        clearCurrentProfile
     }
 }
 export default UseProfile

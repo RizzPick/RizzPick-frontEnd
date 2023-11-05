@@ -15,6 +15,16 @@ function UserProfileEdit({onNext} : any) {
   const { register, handleSubmit, setValue, formState: {errors}, getValues } = useForm<ProfileForm>();
   const [localProfile, setLocalProfile] = useState<MyProfileRes | null>(null);
   const router = useRouter();
+  const [introLength, setIntroLength] = useState(0);
+  const [educationLength, setEducationLength] = useState(0);
+
+  const handleIntroChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setIntroLength(event.target.value.length);
+  };
+
+  const handleEducationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEducationLength(event.target.value.length);
+  };
 
   useEffect(() => {
     if (profile) {
@@ -34,6 +44,8 @@ function UserProfileEdit({onNext} : any) {
         'intro',
       ];
       if (localProfile) {
+        setIntroLength(localProfile.intro?.length || 0);
+        setEducationLength(localProfile.education?.length || 0);
         for (const key of profileFormKeys) {
           const currentValue = getValues(key);
           if (localProfile[key] !== undefined && !currentValue) {
@@ -114,8 +126,6 @@ function UserProfileEdit({onNext} : any) {
           {errors.gender && <p className="text-red-500 text-[10px]">✱ 성별은 필수입니다.</p>}
           </div>
           <div className='flex gap-4'>
-            {/* <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">남성</button>
-            <button type='button' className="w-16 h-10 bg-white rounded-3xl border border-neutral-400">여성</button> */}
           <select {...register("gender", {required :true})} className="w-20 text-center border rounded-3xl px-2 py-2" >
             <option value="">선택</option>
             <option value="MALE">남자</option>
@@ -125,18 +135,22 @@ function UserProfileEdit({onNext} : any) {
           </div>
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">한줄 소개</label>
+          {errors.intro && <p className="text-red-500 text-[10px]">✱ 소개글은 30자 내외로 작성부탁드립니다!</p>}
           </div>
-          <textarea {...register("intro")} rows={2} className='text-sm w-full px-2 py-1 h-16 bg-white rounded-2xl border border-neutral-400' placeholder='나는 어떤 사람 인가요?'/>
+          <textarea {...register("intro", { maxLength: 30,})} rows={2} onChange={handleIntroChange} className='text-sm w-full px-2 py-1 h-16 bg-white rounded-2xl border border-neutral-400' placeholder='나는 어떤 사람 인가요?'/>
+          <p className="text-right text-xs text-gray-600">{introLength}/30</p>
           <div className="relative flex py-5 items-center">
             <div className="flex-grow border-t border-gray-400"></div>
             <span className="flex-shrink mx-4 text-stone-600 text-base font-medium font-['SUITE'] leading-none tracking-wide">선택 사항</span>
             <div className="flex-grow border-t border-gray-400"></div>
           </div>
 
+          <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">학교</label>
-          <input {...register("education")} className="w-44 h-10 bg-white rounded-3xl border border-neutral-400 text-center" placeholder="학교를 입력하세요" />
-
-
+          {errors.intro && <p className="text-red-500 text-[10px]">✱ 학교는 20자 내외로 작성부탁드립니다!</p>}
+          </div>
+          <input {...register("education", {maxLength:20})} onChange={handleEducationChange} className="w-44 h-10 bg-white rounded-3xl border border-neutral-400 text-center" placeholder="학교를 입력하세요" />
+          <p className="text-right text-xs text-gray-600">{educationLength}/20</p>
           <label className="block text-gray-700 my-2">지역</label>
           <select {...register("location")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
             <option value="">선택</option>
