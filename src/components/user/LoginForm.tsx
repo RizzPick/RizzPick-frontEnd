@@ -27,8 +27,6 @@ function LoginForm() {
     const onSubmit = async (data: LoginReq) => {
         try {
             const res = await AuthAPI.login(data);
-            console.log(res);
-
             if (res.status !== 200) {
                 toast.error('로그인에 실패했습니다. 다시 시도해주세요.');
                 return;

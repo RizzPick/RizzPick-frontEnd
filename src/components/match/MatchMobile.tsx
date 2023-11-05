@@ -63,7 +63,6 @@ function MatchMobile() {
 
     //! 사진 슬라이드
     const currentUser = users[userIndex];
-    console.log(currentUser);
     const [slideIndex, setSlideIndex] = useState(0);
 
     const nextSlide = () => {
@@ -142,7 +141,6 @@ function MatchMobile() {
     const handleNope = async () => {
         try {
             const response = await sendNope(users[userIndex].userId);
-            console.log(response);
             handleButtonClick(); // 싫어요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
         } catch (error) {
             console.error('싫어요 보내기 오류:', error);

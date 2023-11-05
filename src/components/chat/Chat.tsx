@@ -13,7 +13,7 @@ import {FiArrowUp} from "react-icons/fi"
 import Back from "../../../public/chatIcon/Button.svg"
 
 const Chat = () => {
-    const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
+    const [message, setMessage] = useState("");
     const [messages, setMessages] = useState<MessagesRes[]>();
     const [isLoading, setIsLoading] = useState(true);
     const { data:chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
@@ -75,13 +75,11 @@ const Chat = () => {
         sender: msgData.sender,
         time : msgData.time
       };
-      console.log(newData);
       setMessages(prevMessages => [...(prevMessages || []), newData]);
     };
     
     const currentClient = client.current;
     currentClient.onConnect = () => {
-      console.log("채팅방 아이디 : ", chat.chatRoomId);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
       // currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);

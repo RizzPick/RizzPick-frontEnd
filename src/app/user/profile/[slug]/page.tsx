@@ -19,7 +19,6 @@ async function OtherUserProfilepage({ params: { slug } }: Props) {
         "Authorization" : token
       }
     })
-    console.log(response.data);
     const profile : MyProfileRes = response.data.data;
   return (
     <div><OtherUserProfile profile={profile}/></div>

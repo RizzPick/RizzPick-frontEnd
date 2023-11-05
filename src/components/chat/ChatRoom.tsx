@@ -80,7 +80,6 @@ const ChatRoom = () => {
         sender: msgData.sender,
         time : msgData.time
       };
-      console.log(newData);
       setMessages(prevMessages => [...(prevMessages || []), newData]);
     };
     
@@ -107,7 +106,6 @@ const ChatRoom = () => {
   }, [MY_TOKEN, chat]);  
 
   const onClick = () => {
-    console.log("메시지 전송!");
     if (message.trim()) { // 메시지가 비어있지 않을 때만 전송
       stompSendFn("/app/message", {
         token : MY_TOKEN,

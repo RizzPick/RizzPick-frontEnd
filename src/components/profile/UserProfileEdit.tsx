@@ -72,7 +72,6 @@ function UserProfileEdit({onNext} : any) {
         setLocalProfile(response.data.data);
         onNext();
       }
-      console.log(response);
     } catch(error) {
       console.log(error);
     }

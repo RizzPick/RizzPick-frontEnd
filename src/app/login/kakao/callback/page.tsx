@@ -2,12 +2,12 @@
 import AuthAPI from "@/features/auth";
 import { setCookie } from "@/utils/cookie";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react"; // useRef 추가
+import { useEffect, useRef } from "react";
 import { SyncLoader } from 'react-spinners';
 
 export default function KakaoCallback() {
     const router = useRouter();
-    const kakaoOuthCodeRef = useRef<any>(null); // useRef로 변수를 초기화
+    const kakaoOuthCodeRef = useRef<any>(null);
 
     useEffect(()=>{
         kakaoOuthCodeRef.current = new URL(window.location.href).searchParams.get("code");
@@ -35,7 +35,7 @@ export default function KakaoCallback() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '100vh'  // 화면의 전체 높이를 사용합니다.
+            height: '100vh'
         }}>
             <SyncLoader/>
         </div>
