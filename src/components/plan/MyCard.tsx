@@ -52,7 +52,7 @@ export default function MyCard({
 
     return (
         <Link href={`myplan/${datingId}`}>
-            <article className=" flex flex-col justify-between rounded-md overflow-hidden shadow-lg hover:shadow-xl w-[233px] h-[349px] bg-white sm:w-[153px] sm:h-[218]">
+            <article className=" flex flex-col justify-between rounded-md overflow-hidden shadow-lg hover:shadow-xl w-[233px] h-[349px] bg-white sm:w-[306px] sm:h-[218]">
                 <div className="relative w-full h-[260px]">
                     <Image
                         className="w-full h-full"

@@ -31,6 +31,7 @@ export default function Write({
         initialData.datingLocation
     );
     const [theme, setTheme] = useState<string>(initialData.datingTheme);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const [activityContent, setActivityContent] = useState('');
     const [activityId, setActivityId] = useState<number | null>(null);
@@ -132,7 +133,29 @@ export default function Write({
         }
     }, [param.slug, fetchDatingData]);
 
+    const handleThemeTagClick = (themeTag: string) => {
+        const tagWithoutHash = themeTag.replace('#', '.');
+        if (selectedTags.includes(tagWithoutHash)) {
+            // 이미 선택된 태그라면 제거합니다.
+            setSelectedTags(
+                selectedTags.filter((tag) => tag !== tagWithoutHash)
+            );
+            // 주제에서도 해당 태그를 제거합니다.
+            setTheme(theme.replace(`${tagWithoutHash} `, ''));
+        } else {
+            // 새로운 태그라면 추가합니다.
+            setSelectedTags([...selectedTags, tagWithoutHash]);
+            // 주제에도 해당 태그를 추가합니다.
+            setTheme(theme ? `${theme} ${tagWithoutHash}` : tagWithoutHash);
+        }
+    };
+
     const handleAddActivity = async () => {
+        if (activities.length >= 5) {
+            // 활동이 5개까지만 추가 가능
+            toast.error('활동은 최대 5개까지만 가능합니다❗️');
+            return;
+        }
         if (activityContent) {
             const id = Number(param.slug);
             try {
@@ -194,7 +217,7 @@ export default function Write({
             <div className="w-full h-[100vh] mx-auto sm:w-[393px]">
                 <div className="w-full flex flex-col items-center">
                     <div className="w-full h-[248px] bg-write-bg sm:bg-none sm:h-10">
-                        <div className="pt-[67px] pl-[200px] leading-[48px] tracking-[3.60px] sm:p-0 sm:w-[393px] sm:h-10 sm:justify-center sm:items-center sm:gap-2.5 sm:inline-flex">
+                        <div className="pt-[67px] pl-[200px] leading-[48px] tracking-[3.60px] sm:p-0 sm:w-[363px] sm:h-10 sm:justify-center sm:items-center sm:gap-2.5 sm:inline-flex">
                             <h1 className="text-[36px] text-white font-black sm:text-black sm:text-xl sm:font-semibold sm:leading-tight sm:tracking-wide">
                                 {isSmallScreen ? (
                                     '나만의 데이트 계획을 작성해 보세요!'
@@ -218,34 +241,57 @@ export default function Write({
                             borderRadius: '30px 30px 0px 0px',
                         }}
                     >
-                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                        <div
+                            className={`border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px] hover:cursor-pointer`}
+                            onClick={() => handleThemeTagClick('#식사🍚')}
+                        >
                             #식사🍚
-                        </p>
-                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                        </div>
+                        <p
+                            className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px] hover:cursor-pointer"
+                            onClick={() => handleThemeTagClick('#영화🎬')}
+                        >
                             #영화🎬
                         </p>
-                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                        <p
+                            className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px] hover:cursor-pointer"
+                            onClick={() => handleThemeTagClick('#문화/예술🎨')}
+                        >
                             #문화/예술🎨
                         </p>
-                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                        <p
+                            className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px] hover:cursor-pointer"
+                            onClick={() => handleThemeTagClick('#스포츠🏀️')}
+                        >
                             #스포츠🏀️
                         </p>
-                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                        <p
+                            className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px] hover:cursor-pointer"
+                            onClick={() => handleThemeTagClick('#힐링🌿')}
+                        >
                             #힐링🌿
                         </p>
-                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                        <p
+                            className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px] hover:cursor-pointer"
+                            onClick={() => handleThemeTagClick('#활동⚙️')}
+                        >
                             #활동⚙️
                         </p>
-                        <p className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px]">
+                        <p
+                            className="border-[1px] border-[#A627A9] rounded-full py-[6px] px-[30px] hover:cursor-pointer"
+                            onClick={() => handleThemeTagClick('#일상🎧')}
+                        >
                             #일상🎧
                         </p>
                     </div>
                     <div
-                        className="flex flex-col items-center w-[1248px] h-[80vh] relative "
+                        className="flex flex-col items-center w-[1248px] relative "
                         style={{
                             height: isSmallScreen
-                                ? `calc(70vh + ${activities.length * 10}vh)`
-                                : 'h-100vh',
+                                ? `calc(70vh + ${
+                                      Math.min(activities.length, 5) * 9
+                                  }vh)`
+                                : '80vh',
                         }}
                     >
                         <div className="flex flex-col items-center p-4 w-full mb-8">
@@ -269,7 +315,7 @@ export default function Write({
                                                 id="title"
                                                 value={title}
                                                 onChange={handleTitleChange}
-                                                className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[345px] sm:h-[40px]"
+                                                className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[300px] sm:h-[40px]"
                                                 placeholder="이목을 끄는 이름을 지어주세요!!"
                                             />
                                         </div>
@@ -285,7 +331,7 @@ export default function Write({
                                                 id="location"
                                                 value={location}
                                                 onChange={handleLocationChange}
-                                                className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[345px] sm:h-[40px]"
+                                                className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[300px] sm:h-[40px]"
                                                 placeholder="어디서 만나실건가요?"
                                             />
                                         </div>
@@ -302,13 +348,13 @@ export default function Write({
                                             id="theme"
                                             value={theme}
                                             onChange={handleThemeChange}
-                                            className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[345px] sm:h-[40px]"
+                                            className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[300px] sm:h-[40px]"
                                             placeholder="어떤 컨셉의 데이트인가요?"
                                         />
                                     </div>
                                     <div className="absolute bottom-0 flex justify-center items-center w-full h-10 right-[10px] sm:justify-normal sm: left-32">
                                         <button
-                                            className="w-[234px] h-[65px] mr-[260px] mb-[100px] bg-fuchsia-600 rounded-[30px] text-white text-[32px] font-semibold font-['SUITE'] leading-loose tracking-widest sm:text-xl sm:w-[130px] sm:h-10"
+                                            className="w-[234px] h-[65px] mr-[260px] mb-[100px] bg-fuchsia-600 rounded-[30px] text-white text-[32px] font-semibold font-['SUITE'] leading-loose tracking-widest sm:text-xl sm:w-[130px] sm:h-10 sm:mt-12"
                                             style={{
                                                 display:
                                                     authorId === datingAuthorId
@@ -324,7 +370,7 @@ export default function Write({
                         </div>
 
                         <div className="flex flex-row w-full mx-auto px-8 gap-10 sm:gap-0 sm:flex-col">
-                            <div className="w-[574px] sm:w-[393px]">
+                            <div className="w-[374px] sm:w-[393px]">
                                 <p className="text-[30px] font-medium mb-4 sm:text-xl">
                                     데이트 활동을 작성해주세요 🖌
                                 </p>
@@ -337,7 +383,7 @@ export default function Write({
                                         id="location"
                                         value={activityContent}
                                         onChange={handleActivityChange}
-                                        className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[248px] sm:h-[40px] sm:py-0"
+                                        className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[220px] sm:h-[40px] sm:py-0"
                                         placeholder="활동을 입력하세요"
                                     />
                                     <button
@@ -398,7 +444,7 @@ export default function Write({
                                         <div
                                             key={index}
                                             style={{ gridArea }}
-                                            className="flex justify-between items-center border-[2px] border-activityDelete-button rounded-[30px] px-2 m-1 sm:text-sm sm:max-w-[300px] sm:py-1 "
+                                            className="flex justify-between items-center border-[2px] border-activityDelete-button rounded-[30px] px-2 m-1 sm:text-sm sm:max-w-[280px] sm:py-1 "
                                         >
                                             {activity.content}
                                             <button
