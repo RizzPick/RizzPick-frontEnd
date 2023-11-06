@@ -33,7 +33,7 @@ const Chat = () => {
         heartbeatOutgoing: 4000,
       })
     );
-
+    
     const stompSendFn = (des: any, body: any) => {
       if (client.current.connected) {
         client.current.publish({
@@ -77,7 +77,6 @@ const Chat = () => {
       };
       setMessages(prevMessages => [...(prevMessages || []), newData]);
     };
-    
     const currentClient = client.current;
     currentClient.onConnect = () => {
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
