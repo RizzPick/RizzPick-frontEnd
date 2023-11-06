@@ -110,7 +110,7 @@ function UserProfileEdit({onNext} : any) {
           <label className="block text-gray-700 mb-2 px-1">닉네임</label>
           {errors.nickname && renderNicknameErrorMessages(errors.nickname)}
           </div>
-          <input {...register("nickname", {required : true, maxLength: 6,})} className="sm:w-full w-[311px] h-10 p-3 border rounded-3xl" placeholder="닉네임을 입력하세요" />
+          <input {...register("nickname", {required : true, maxLength: 6,})} className="sm:w-full w-[311px] h-10 p-3 border rounded-3xl" placeholder="닉네임은 최대 6자까지 가능합니다." />
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">나이</label>
           {errors.age && <p className="text-red-500 text-[10px]">✱ 나이는 필수입니다.</p>}
@@ -127,7 +127,7 @@ function UserProfileEdit({onNext} : any) {
           {errors.gender && <p className="text-red-500 text-[10px]">✱ 성별은 필수입니다.</p>}
           </div>
           <div className='flex gap-4'>
-          <select {...register("gender", {required :true})} className="w-20 text-center border rounded-3xl px-2 py-2" >
+          <select {...register("gender", {required :true})} className="w-40 text-center border rounded-3xl px-2 py-2" >
             <option value="">선택</option>
             <option value="MALE">남자</option>
             <option value="FEMALE">여자</option>
@@ -138,7 +138,7 @@ function UserProfileEdit({onNext} : any) {
           <label className="block text-gray-700 mb-2">한줄 소개</label>
           {errors.intro && <p className="text-red-500 text-[10px]">✱ 소개글은 30자 내외로 작성부탁드립니다!</p>}
           </div>
-          <textarea {...register("intro", { maxLength: 30,})} rows={2} onChange={handleIntroChange} className='text-sm w-full px-2 py-1 h-16 bg-white rounded-2xl border border-neutral-400' placeholder='나는 어떤 사람 인가요?'/>
+          <textarea {...register("intro", { maxLength: 30,})} rows={2} onChange={handleIntroChange} className='text-sm w-full px-2 py-1 h-16 bg-white rounded-2xl border border-neutral-400' placeholder='취미, 관심사를 작성하면 매칭률이 높아져요!'/>
           <p className="text-right text-xs text-gray-600">{introLength}/30</p>
           <div className="relative flex py-5 items-center">
             <div className="flex-grow border-t border-gray-400"></div>
@@ -150,7 +150,7 @@ function UserProfileEdit({onNext} : any) {
           <label className="block text-gray-700 mb-2">학교</label>
           {errors.intro && <p className="text-red-500 text-[10px]">✱ 학교는 20자 내외로 작성부탁드립니다!</p>}
           </div>
-          <input {...register("education", {maxLength:20})} onChange={handleEducationChange} className="w-44 h-10 bg-white rounded-3xl border border-neutral-400 text-center" placeholder="학교를 입력하세요" />
+          <input {...register("education", {maxLength:20})} onChange={handleEducationChange} className="w-full h-10 bg-white rounded-3xl border border-neutral-400 text-center" placeholder="학교를 입력하세요" />
           <p className="text-right text-xs text-gray-600">{educationLength}/20</p>
           <label className="block text-gray-700 my-2">지역</label>
           <select {...register("location")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">

@@ -5,47 +5,30 @@ import React, { useEffect, useState } from 'react'
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
 import Home from "../../../public/profileIcon/Home.svg"
 import Link from 'next/link';
-import { eraseCookie, getCookie } from '@/utils/cookie';
-import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
 import toast from 'react-hot-toast';
-import UseChat from '@/hooks/useChat';
+import useAuth from '@/hooks/useAuth';
 
 function UserProfileMobile() {
     const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
-    const token = getCookie("Authorization");
     const { initializeProfile } = UseProfile();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
-    const router = useRouter();
-    const {clearCurrentProfile} = UseProfile();
-    const {clearCurrentChat} = UseChat();
 
-    const logout = () => {
-        eraseCookie('Authorization');
-        eraseCookie('Authorization_Refresh');
-        eraseCookie('status');
-        sessionStorage.clear();
-        clearCurrentProfile();
-        clearCurrentChat();
-        toast.success('로그아웃 처리되었습니다');
-        router.push('/');
-    };
+    const {logout} = useAuth();
 
     useEffect(()=>{
-        if(token){
-            const fetchData = async() => {
-                try {
-                    const response = await AuthAPI.getUserInfo();
-                    initializeProfile(response.data.data);
-                } catch (error) {
-                    console.log(error);
-                }
-            } 
-            fetchData();
-        }
-    },[initializeProfile, token])
+        const fetchData = async() => {
+            try {
+                const response = await AuthAPI.getUserInfo();
+                initializeProfile(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        } 
+        fetchData();
+    },[initializeProfile])
 
     if(!profile) return
 

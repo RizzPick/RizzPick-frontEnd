@@ -10,6 +10,7 @@ import Image from 'next/image';
 import moment from 'moment';
 import ChatSkeleton from './ChatSkeleton';
 import {FiArrowUp} from "react-icons/fi"
+import {FcInfo} from "react-icons/fc"
 import Back from "../../../public/chatIcon/Button.svg"
 
 const Chat = () => {
@@ -139,6 +140,7 @@ const Chat = () => {
     return (
       <div className='relative'>
         <header className='text-center text-neutral-700 text-xl font-medium leading-tight tracking-wide flex justify- items-center p-4 border-b-[1px] h-[74px]'>
+            {!chat && <p className='flex items-center gap-4 ml-4'><FcInfo/>왼쪽의 채팅방을 선택해주세요.</p>}
             {chat && <button className='absolute left-[15px]' onClick={backBtnClick}><Back/></button>}
             <h1 className='ml-10 text-3xl font-bold'>{chat?.nickname}</h1>
             <p className='px-2 bg-[#AB62E5] rounded-full text-xs text-white ml-3'>{chat?.age}</p>

@@ -1,6 +1,7 @@
 import service from '@/features';
 
 import type {
+    ChangePasswordReq,
     EmailVerifyReq,
     EmailVerifyRes,
     LoginReq,
@@ -46,6 +47,8 @@ const AuthAPI = {
             `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/refresh`,
             token
         ),
+    changePassword: (data: ChangePasswordReq) => 
+        service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/`)
 };
 
 export default AuthAPI;
