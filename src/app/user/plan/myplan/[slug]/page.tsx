@@ -370,7 +370,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                                 ) => (
                                                     <div
                                                         key={index}
-                                                        className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg sm:border-[2px] sm:w-[327px]"
+                                                        className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg sm:border-[2px] sm:w-[300px]"
                                                     >
                                                         {
                                                             activity.activityContent
@@ -380,7 +380,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                             )}
                                     </div>
                                 </div>
-                                <div className="flex flex-row justify-end w-5/6 gap-4  ml-10 text-[24px] sm:mb-2 sm:justify-center">
+                                <div className="flex flex-row justify-end w-5/6 gap-4 mb-2 ml-10 text-[24px] sm:mb-2 sm:justify-center sm:w-full sm:mx-auto">
                                     <button
                                         className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
                                         onClick={handleEditClick}

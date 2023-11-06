@@ -91,7 +91,7 @@ export default function MyPlanList() {
                             : '데이트 계획 작성하러가기!'}
                     </button>
                 </div>
-                <div className="ml-[182px] mr-[122px] sm:mt-0 sm:ml-6 sm:mr-1">
+                <div className="ml-[182px] mr-[122px] sm:mt-0 sm:ml-7 sm:mr-6">
                     <MyPlan myDatings={myDatings} />
                 </div>
             </div>

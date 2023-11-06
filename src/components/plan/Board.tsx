@@ -129,7 +129,7 @@ export default function Board() {
                         </button>
                     </div>
                 </div>
-                <div className="ml-[11.375rem] mr-[7.625rem] sm:mt-0 sm:ml-6 sm:mr-1">
+                <div className="ml-[11.375rem] mr-[7.625rem] sm:mt-0 sm:ml-7 sm:mr-6">
                     <DatingGrid datings={currentPageData} />
                 </div>
                 <div className="pagination flex justify-center sm:mt-6">
