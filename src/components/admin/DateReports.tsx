@@ -1,6 +1,26 @@
-import React from 'react'
+import AdminAPI from '@/features/admin';
+import React, { useEffect, useState } from 'react'
 
 function DateReports() {
+  const [reports, setReports] = useState();
+
+  useEffect(()=>{
+    const getReports = async () => {
+
+      try {
+        const response = await AdminAPI.getDateReports();
+        if(response.status === 200) {
+          setReports(response.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getReports();
+  },[])
+
+  console.log(reports);
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

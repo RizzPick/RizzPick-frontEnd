@@ -16,6 +16,7 @@ type ChangePasswd = {
 }
 
 function ViewChangePasswd() {
+  console.log("비밀번호 변경 컴포넌트 렌더링");
     const {
         watch,
         register,
@@ -38,18 +39,23 @@ function ViewChangePasswd() {
     },[initializeProfile])
 
     const onSubmit = async (data:ChangePasswd) => {
+      console.log("실행");
         const { newPwd_confirm, ...formData } = data;
         try{
-            const res = await AuthAPI.changePassword(formData);
-              if(res.status === 201){
-                router.push('/profile');
-                toast.success(res.data.message);
-              }
-            } catch (error) {
-                console.log(error);
-                toast.error('비밀번호가 올바르지 않습니다')
-            }
-        };
+            const verifyPassword = await AuthAPI.verifyPassword({password : data.currentPwd});
+            console.log(verifyPassword);
+            if(verifyPassword.status === 200) {
+              const res = await AuthAPI.changePassword(formData);
+                if(res.status === 201){
+                  router.push('/profile');
+                  toast.success(res.data.message);
+              }  
+            } 
+        } catch (error) {
+          console.log(error);
+          toast.error('비밀번호가 올바르지 않습니다')
+      }
+    }
 
     function renderPasswordErrorMessages(error: any) {
         switch (error.type) {
@@ -92,6 +98,7 @@ function ViewChangePasswd() {
             </div>
             <input
                 id='newPwd'
+                type='password'
                 className="border rounded-3xl py-2 px-3 w-full text-sm mb-4"
                 placeholder='영어 대소문자,숫자,특수문자 포함 6자 이상'
                 required
@@ -103,15 +110,16 @@ function ViewChangePasswd() {
                 />
 
                 <input
-                id='newPwd_confirm'
-                className="border rounded-3xl py-2 px-3 w-full text-sm"
-                placeholder='비밀번호를 한번 더 입력해주세요'
-                required
-                {...register("newPwd_confirm", {
-                    required: true,
-                    validate: (value) => value === watch('newPwd'),
-                })}
-                />
+                  id='newPwd_confirm'
+                  type='password'
+                  className="border rounded-3xl py-2 px-3 w-full text-sm"
+                  placeholder='비밀번호를 한번 더 입력해주세요'
+                  required
+                  {...register("newPwd_confirm", {
+                      required: true,
+                      validate: (value) => value === watch('newPwd'),
+                  })}
+                  />
                 {errors.newPwd_confirm && <p className="text-red-500 text-[10px]">✱ 비밀번호가 일치하지 않습니다.</p>}
                 <div className='flex justify-center gap-4 sm:justify-end'>
                     <button type='button' className="bg-fuchsia-400 text-white px-2 py-1 w-28 font-semibold text-lg rounded-3xl mt-8" onClick={()=>router.push("/profile")}>취소</button>

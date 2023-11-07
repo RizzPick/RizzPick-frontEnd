@@ -7,6 +7,7 @@ import UseChat, { CHAT_KEY } from '@/hooks/useChat';
 import useSWR from 'swr';
 
 function ChatList() {
+  console.log("채팅 리스트 컴포넌트 렌더링");
   const { initializeChats } = UseChat();
   const {data:chats} = useSWR<ChatData[]>(CHAT_KEY);
 

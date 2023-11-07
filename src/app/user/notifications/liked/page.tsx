@@ -7,25 +7,24 @@ import React from 'react'
 
 async function Likedpage() {
   const cookieStore = cookies();
-    const accessToken = cookieStore.get('Authorization');
-    const token = accessToken?.value;
+  const accessToken = cookieStore.get('Authorization');
+  const token = accessToken?.value;
 
-    if(!token) return;
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/likedby/status`, {
-        headers : {
-            "Authorization" : token
-        }
-    })
-    const liked : LikeData[] = response.data.data;
+  if(!token) return;
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/likedby/status`, {
+      headers : {
+          "Authorization" : token
+      }
+  })
+  const liked : LikeData[] = response.data.data;
   return (
     <>
-    <div className='sm:hidden'>
-      <Header />
-      <LikeList liked={liked}/>
-    </div>
-    <div className='hidden sm:block'>
-      <LikeList liked={liked}/>
-    </div>
+      <div>
+        <div className='sm:block hidden'>
+          <Header />
+        </div>
+        <LikeList liked={liked}/>
+      </div>
     </>
   )
 }

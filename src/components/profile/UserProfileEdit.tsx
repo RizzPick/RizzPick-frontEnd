@@ -112,6 +112,17 @@ function UserProfileEdit({onNext} : any) {
           {errors.nickname && renderNicknameErrorMessages(errors.nickname)}
           </div>
           <input {...register("nickname", {required : true, maxLength: 6,})} className="sm:w-full w-[311px] h-10 p-3 border rounded-3xl" placeholder="닉네임은 최대 6자까지 가능합니다." />
+          {/* <div className='flex justify-between mt-2'>
+          <label className="block text-gray-700 mb-2">생년월일</label>
+          {errors.age && <p className="text-red-500 text-[10px]">✱ 생년월일은 필수입니다.</p>}
+          </div>
+          <input
+            type="date" // 타입을 'date'로 설정합니다.
+            {...register('age', { required: true })}
+            className="border rounded-3xl py-2 px-3 w-[150px] text-sm"
+            placeholder="YYYYMMDD"
+          /> */}
+          
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">나이</label>
           {errors.age && <p className="text-red-500 text-[10px]">✱ 나이는 필수입니다.</p>}
