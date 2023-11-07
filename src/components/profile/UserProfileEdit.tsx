@@ -81,7 +81,6 @@ function UserProfileEdit({onNext} : any) {
     const data = getValues();
     try {
       const response = await ProfileAPI.updateProfile(data);
-      console.log(response);
       if(response.status === 200) {
         setCurrentProfile(response.data.data);
         setLocalProfile(response.data.data);

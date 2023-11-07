@@ -50,7 +50,9 @@ const AuthAPI = {
     changePassword: (data: ChangePasswordReq) => 
         service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/`),
     deActiveUser: (userId:number) => 
-        service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/deactivate/${userId}`,null)
+        service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/deactivate/${userId}`,null),
+    activateUser: () => 
+        service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/activate-status`,null)
 };
 
 export default AuthAPI;

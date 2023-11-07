@@ -11,14 +11,14 @@ export default function useAuth() {
   const { clearCurrentChat } = UseChat();
 
   const logout = () => {
+    router.push('/');
+    toast.success('로그아웃 처리되었습니다');
     eraseCookie('Authorization');
     eraseCookie('Authorization_Refresh');
     eraseCookie('status');
     sessionStorage.clear();
     clearCurrentProfile();
     clearCurrentChat();
-    toast.success('로그아웃 처리되었습니다');
-    router.push('/');
   };
 
   const deActiveUser = async (userId : number) => {
@@ -26,7 +26,14 @@ export default function useAuth() {
       const response = await AuthAPI.deActiveUser(userId)
       console.log(response);
       if(response.status === 200) {
-        logout();
+        router.push('/');
+        toast.success('비활성화 처리되었습니다');
+        eraseCookie('Authorization');
+        eraseCookie('Authorization_Refresh');
+        eraseCookie('status');
+        sessionStorage.clear();
+        clearCurrentProfile();
+        clearCurrentChat();
       }
     } catch (error) {
       console.log(error);

@@ -17,7 +17,7 @@ function UserProfileMobile() {
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [showResignModal, setResignModal] = useState(false);
     const router = useRouter();
-    const {logout} = useAuth();
+    const {logout, deActiveUser } = useAuth();
 
     useEffect(()=>{
         const fetchData = async() => {
@@ -97,7 +97,7 @@ function UserProfileMobile() {
                             <p className='mt-4 text-stone-500 text-sm'>정말로 탈퇴하시겠습니까?</p>
                             <div className="flex justify-between mt-4 w-full px-6">
                                 <button onClick={() => setResignModal(false)} className="mr-2 px-4 py-2 rounded">취소</button>
-                                <button onClick={() => setResignModal(false)} className="px-4 py-2rounded-lg transition-all hover:scale-125 text-red-500">탈퇴</button>
+                                <button onClick={() => { deActiveUser(profile.userId),setResignModal(false)}} className="px-4 py-2rounded-lg transition-all hover:scale-125 text-red-500">탈퇴</button>
                             </div>
                         </div>
                     </div>
