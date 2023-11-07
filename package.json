@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "analyze" : "ANALYZE=true next build",
+    "analyze": "ANALYZE=true next build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@stomp/stompjs": "^7.0.0",
+    "@types/jwt-decode": "^3.1.0",
     "@types/react-transition-group": "^4.4.8",
     "axios": "^1.5.1",
+    "jwt-decode": "^4.0.0",
     "moment": "^2.29.4",
     "next": "13.5.4",
     "react": "^18",

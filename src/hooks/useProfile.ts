@@ -21,9 +21,9 @@ const UseProfile = () => {
     },[])
 
     // 로그인 한 유저의 프로필 등록 상태를 저장하는 함수
-    const initializeUserActiveStatus = useCallback((userAcitiveStatus : UserActiveStatus) => {
+    const initializeUserActiveStatus = useCallback((userAcitiveStatus : boolean) => {
         mutate(USER_STATUS_KEY,userAcitiveStatus);
-        if(userAcitiveStatus && userAcitiveStatus.userActiveStatus) {
+        if(userAcitiveStatus) {
             setCookie('status', 'true')
         } else {
             setCookie('status', 'false')

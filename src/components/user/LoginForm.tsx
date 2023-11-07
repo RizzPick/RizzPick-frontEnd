@@ -11,6 +11,7 @@ import UseProfile from '@/hooks/useProfile';
 import Logo from '../../../public/Logo.png';
 import LogoColor from '../../../public/Logo_color.png';
 import toast from 'react-hot-toast';
+import { JwtPayload, jwtDecode } from "jwt-decode";
 
 function LoginForm() {
     const { register, handleSubmit } = useForm<LoginReq>();
@@ -34,25 +35,24 @@ function LoginForm() {
             }
 
             const token = res.headers['authorization'];
+            const {auth}: JwtPayload = jwtDecode<JwtPayload>(token);
+            console.log(auth);
             const refreshToken = res.headers['authorization_refresh'];
             setCookie('Authorization', token);
             setCookie('Authorization_Refresh', refreshToken);
 
-            // 1. 로그인 한 유저의 ActiveStatus 불러오는 API
-            const userStatusResponse = await AuthAPI.getUserStatus();
-            console.log(userStatusResponse);
-            initializeUserActiveStatus(userStatusResponse.data.data);
-
-            // 2. 로그인 한 유저의 유저 프로필 불러오는 API
             const userInfoResponse = await AuthAPI.getUserInfo();
-            console.log(userInfoResponse);
+            initializeUserActiveStatus(userInfoResponse.data.data.userActiveStatus);
             initializeUserInfo(userInfoResponse.data);
+            const isNew = userInfoResponse.data.data.new;
 
-            // 3. 로그인 한 유저의 신규인지 비활성화 인지를 구분하는 API
-            const userIsNew = await AuthAPI.getUserisNew();
-            console.log(userIsNew);
+            if( auth === "ADMIN" ) {
+                toast.success("관리자 계정으로 접속하였습니다.")
+                router.push('/admin');
+                return;
+            } 
 
-            if (userStatusResponse.data.data.userActiveStatus) {
+            if (userInfoResponse.data.data.userActiveStatus) {
                 toast.success('로그인 성공');
                 router.replace('/user/match');
             } else {
