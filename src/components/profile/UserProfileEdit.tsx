@@ -61,7 +61,9 @@ function UserProfileEdit({onNext} : any) {
       return;
     }
     try {
+      console.log(data);
       const response = await ProfileAPI.updateProfile(data);
+      console.log(response);
       if(response.status === 200) {
         setCurrentProfile(response.data.data);
         setLocalProfile(response.data.data);
@@ -165,7 +167,7 @@ function UserProfileEdit({onNext} : any) {
           </select>
 
           <label className="block text-gray-700 my-2">MBTI</label>
-          <select {...register("mbti")} className="w-24 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
+          <select {...register("mbti")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
           <option value="">선택</option>
             <option value="ISTJ">ISTJ</option>
             <option value="ISFJ">ISFJ</option>
@@ -186,7 +188,7 @@ function UserProfileEdit({onNext} : any) {
           </select>
 
           <label className="block text-gray-700 my-2">종교</label>
-          <select {...register("religion")} className="w-28 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
+          <select {...register("religion")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
             <option value="">선택</option>
             <option value="무교">무교</option>
             <option value="기독교">기독교</option>
@@ -200,7 +202,7 @@ function UserProfileEdit({onNext} : any) {
           </select>
         </div>
         <div className='flex justify-end'>
-        <button className="w-56 h-16 bg-fuchsia-600 rounded-3xl shadow-inner justify-center items-center absolute bottom-32 right-[24%] sm:hidden text-white text-3xl">저장하기</button>
+        <button className="w-56 h-16 bg-fuchsia-600 rounded-full shadow-inner justify-center items-center absolute bottom-32 right-[24%] sm:hidden text-white text-3xl">저장하기</button>
         <button type='button' onClick={handleSubmit(onPrev)} className="text-stone-500 text-base font-medium font-['SUITE'] leading-none tracking-wide relative bottom-0 w-24 h-10 bg-white rounded-3xl transition duration-200 hidden sm:block hover:bg-neutral-200 hover:shadow shadow-inner">다음</button>
         </div>
       </form>

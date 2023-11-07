@@ -7,7 +7,7 @@ function NotFound() {
   return (
     <div>
         <Header />
-            <div className='flex items-center flex-col justify-center bg-matchpage-gradient h-[100vh]'>
+            <div className='flex items-center flex-col justify-center bg-matchpage-gradient h-[100vh] w-full sm:h-[60vh] sm:px-2 sm:rounded-3xl'>
                 <div className='flex items-center flex-col'>
                     <div className='font-bold text-[47px] mb-4'><GoAlert color="#cb17f9"/></div>
                     <h1 className='text-4xl font-black mb-[48px]'>sorry</h1>

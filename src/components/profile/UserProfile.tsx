@@ -17,7 +17,7 @@ function UserProfile() {
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [showResignModal, setResignModal] = useState(false);
     const { initializeProfile } = UseProfile();
-    const { logout } = useAuth();
+    const { logout, deActiveUser } = useAuth();
     const router = useRouter();
 
     useEffect(()=>{
@@ -31,8 +31,6 @@ function UserProfile() {
         } 
         fetchData();
     },[initializeProfile])
-  
-
 
     if(!profile) return
 
@@ -42,7 +40,7 @@ function UserProfile() {
           <Image src={profile.profileImages[0].image} alt='프로필 이미지' fill style={{objectFit:'cover'}} className='rounded-full'/>
         </div>
         <div className='flex items-center justify-center mt-6 text-3xl'>
-            {profile.nickname},{profile.age}
+            {profile.nickname}, {profile.age}
         </div>
         <section className='flex items-start justify-center flex-row gap-9 mt-[57px]'>
           <article className='w-[424px] h-[428px]'>
@@ -100,7 +98,7 @@ function UserProfile() {
                             <p className='mt-4 text-stone-500 text-lg'>정말로 탈퇴하시겠습니까?</p>
                             <div className="flex justify-between mt-4 w-full px-6">
                                 <button onClick={() => setResignModal(false)} className="mr-2 px-4 py-2 rounded">취소</button>
-                                <button onClick={() => setResignModal(false)} className="px-4 py-2rounded-lg transition-all hover:scale-125 text-red-500">탈퇴</button>
+                                <button onClick={() => { deActiveUser(profile.userId); setResignModal(false)}} className="px-4 py-2rounded-lg transition-all hover:scale-125 text-red-500">탈퇴</button>
                             </div>
                         </div>
                     </div>

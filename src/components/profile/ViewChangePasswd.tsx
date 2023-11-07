@@ -65,15 +65,15 @@ function ViewChangePasswd() {
 
     if(!profile) return
   return (
-    <div className='bg-profile-gradient h-[100vh] py-[67px]'>
-        <div className='relative w-[169px] h-[169px] mx-auto'>
+    <div className='bg-profile-gradient h-[100vh] py-[67px] sm:rounded-3xl sm:py-6'>
+        <div className='relative w-[169px] h-[169px] mx-auto sm:hidden'>
           <Image src={profile.profileImages[0].image} alt='프로필 이미지' fill style={{objectFit:'cover'}} className='rounded-full'/>
         </div>
-        <div className='flex items-center justify-center mt-6 text-2xl font-semibold'>
+        <div className='flex items-center justify-center mt-6 text-2xl font-semibold sm:mt-0'>
             비밀번호 변경
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className='flex justify-center mt-[57px]'>
-          <article className='w-[660px] h-[50vh] bg-white rounded-3xl p-10 flex flex-col'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex justify-center mt-[57px] sm:mt-8'>
+          <article className='w-[660px] h-[50vh] bg-white rounded-3xl p-10 flex flex-col sm:bg-profile-gradient'>
             <label className='font-bold text-neutral-600 mb-4'>현재 비밀번호</label>
             <input
                 id='currentPwd'
@@ -113,9 +113,9 @@ function ViewChangePasswd() {
                 })}
                 />
                 {errors.newPwd_confirm && <p className="text-red-500 text-[10px]">✱ 비밀번호가 일치하지 않습니다.</p>}
-                <div className='flex justify-center gap-4'>
-                    <button type='button' className="bg-gradient-start text-white px-2 py-1 w-28 font-semibold text-xl rounded-3xl mt-8 transition duration-200 ease-in-out" onClick={()=>router.push("/profile")}>취소</button>
-                    <button className="bg-gradient-start text-white px-2 py-1 w-28 font-semibold text-xl rounded-3xl mt-8 transition duration-200 ease-in-out">완료</button>
+                <div className='flex justify-center gap-4 sm:justify-end'>
+                    <button type='button' className="bg-fuchsia-400 text-white px-2 py-1 w-28 font-semibold text-lg rounded-3xl mt-8" onClick={()=>router.push("/profile")}>취소</button>
+                    <button className="bg-fuchsia-400 text-white px-2 py-1 w-28 font-semibold text-lg rounded-3xl mt-8">완료</button>
                 </div>
             </article>
         </form>

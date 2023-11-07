@@ -44,7 +44,7 @@ function ChatProfile() {
           <div className='flex flex-col items-center gap-4 mt-[31px]'>
             {chat && 
               <div>
-                <p className='text-3xl font-semibold'>{chat.nickname},{chat.age}</p>
+                <p className='text-3xl font-semibold'>{chat.nickname}, {chat.age}</p>
               </div>
             }
             <div className='mt-[33px] px-4 py-1 h-[142px] w-[300px] flex flex-col gap-3 bg-neutral-100 rounded-2xl justify-center'>

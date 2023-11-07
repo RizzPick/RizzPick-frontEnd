@@ -48,7 +48,9 @@ const AuthAPI = {
             token
         ),
     changePassword: (data: ChangePasswordReq) => 
-        service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/`)
+        service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/`),
+    deActiveUser: (userId:number) => 
+        service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/deactivate/${userId}`,null)
 };
 
 export default AuthAPI;

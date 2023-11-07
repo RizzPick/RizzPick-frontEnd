@@ -27,6 +27,7 @@ function LoginForm() {
     const onSubmit = async (data: LoginReq) => {
         try {
             const res = await AuthAPI.login(data);
+            console.log(res);
             if (res.status !== 200) {
                 toast.error('로그인에 실패했습니다. 다시 시도해주세요.');
                 return;
@@ -37,11 +38,19 @@ function LoginForm() {
             setCookie('Authorization', token);
             setCookie('Authorization_Refresh', refreshToken);
 
+            // 1. 로그인 한 유저의 ActiveStatus 불러오는 API
             const userStatusResponse = await AuthAPI.getUserStatus();
+            console.log(userStatusResponse);
             initializeUserActiveStatus(userStatusResponse.data.data);
 
+            // 2. 로그인 한 유저의 유저 프로필 불러오는 API
             const userInfoResponse = await AuthAPI.getUserInfo();
+            console.log(userInfoResponse);
             initializeUserInfo(userInfoResponse.data);
+
+            // 3. 로그인 한 유저의 신규인지 비활성화 인지를 구분하는 API
+            const userIsNew = await AuthAPI.getUserisNew();
+            console.log(userIsNew);
 
             if (userStatusResponse.data.data.userActiveStatus) {
                 toast.success('로그인 성공');

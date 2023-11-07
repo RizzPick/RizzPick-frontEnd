@@ -8,14 +8,15 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
-import toast from 'react-hot-toast';
 import useAuth from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 function UserProfileMobile() {
     const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
     const { initializeProfile } = UseProfile();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
-
+    const [showResignModal, setResignModal] = useState(false);
+    const router = useRouter();
     const {logout} = useAuth();
 
     useEffect(()=>{
@@ -62,7 +63,7 @@ function UserProfileMobile() {
                 <button className='mx-auto px-4 py-2 bg-[#D67dff] mt-4 w-20 rounded-3xl text-white font-bold hover:bg-pink-300'>수정</button>
             </Link>
             <div className='mt-4 w-full rounded-2xl bg-white p-6 h-20 flex flex-col items-start justify-center text-gray-400 gap-1'>
-                <p className='cursor-pointer' onClick={()=>toast("구현예정입니ㄷr..", {icon : '🥹'})}>비밀번호 변경</p>
+                <p className='cursor-pointer' onClick={()=> router.push("profile/viewChangePasswd")}>비밀번호 변경</p>
                 <hr className='w-full'/>
                 <p onClick={()=>setShowLogoutModal(true)} className='cursor-pointer'>로그아웃</p>
             </div>
@@ -81,9 +82,26 @@ function UserProfileMobile() {
                     </div>
                 </div>
             )}
-            <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9] cursor-pointer' onClick={()=>toast("구현예정입니ㄷr..", {icon : '🥹'})}>
+            <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9] cursor-pointer' onClick={()=>setResignModal(true)}>
                 회원탈퇴
             </div>
+            {showResignModal && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        {/* 모달 외부 배경 (그레이 오버레이) */}
+                        <div className="absolute inset-0 bg-gray-500 opacity-50" onClick={() => setShowLogoutModal(false)}></div>
+                        
+                        {/* 모달 창 */}
+                        <div className="bg-white p-2 rounded-xl shadow-lg w-[70vw] z-10 h-60 flex flex-col items-center justify-center">
+                            <div className='text-lg font-normal mb-4'>회원 탈퇴</div>
+                            <p className='px-8 text-stone-500 text-sm'>계정을 탈퇴 시에 사용자 정보가 함께 삭제되며, 삭제 후에는 다시 되돌릴 수 없습니다.</p>
+                            <p className='mt-4 text-stone-500 text-sm'>정말로 탈퇴하시겠습니까?</p>
+                            <div className="flex justify-between mt-4 w-full px-6">
+                                <button onClick={() => setResignModal(false)} className="mr-2 px-4 py-2 rounded">취소</button>
+                                <button onClick={() => setResignModal(false)} className="px-4 py-2rounded-lg transition-all hover:scale-125 text-red-500">탈퇴</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
           </div>
         </div>
     </div>

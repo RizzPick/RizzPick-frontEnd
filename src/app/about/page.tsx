@@ -8,7 +8,9 @@ import { useRouter } from 'next/navigation';
 function AboutPage() {
     const router = useRouter();
   return (
-    <div className='height-screen-vh w-full bg-sendbtn-gradient'>
+    <div className='height-screen-vh w-full bg-[#062643]'>
+        <div className='absolute inset-0 bg-gradient-to-b from-[#a627a9]/50 via-[#9015db]/38 via-[#b122c8]/53 via-[#6721c1]/40 to-[#262d6d]/30'/>
+        <div className='relative z-10'>
         <header className="flex justify-between w-full p-4">
                 <div
                     className={`text-white flex flex-row items-center`}
@@ -227,6 +229,7 @@ function AboutPage() {
                     </div>
                 </div>
             </div>
+        </div>
     </div>
   )
 }

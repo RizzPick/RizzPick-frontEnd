@@ -10,7 +10,8 @@ export default function Home() {
     const [loaded, setLoaded] = useState(false);
 
     const LoadingIndicator = () => (
-        <div className="fixed inset-0 flex items-center justify-center z-20 bg-sendbtn-gradient">
+        <div className="fixed inset-0 flex items-center justify-center z-20 bg-[#062643]">
+            <div className='absolute inset-0 bg-gradient-to-b from-[#a627a9]/50 via-[#9015db]/38 via-[#b122c8]/53 via-[#6721c1]/40 to-[#262d6d]/30'/>
             <div className="w-[95px] h-[40px] relative animate-pulse animate-once animate-ease-in-out">
                     <Image
                         src={Logo}
@@ -25,10 +26,11 @@ export default function Home() {
 
     return (
         <div
-            className={`w-full bg-sendbtn-gradient height-screen-vh flex flex-col items-center overflow-hidden relative ${
+            className={`w-full height-screen-vh flex flex-col bg-[#062643] items-center overflow-hidden relative ${
                 loaded ? 'animate-fadeIn' : ''
             }`}
         >
+            <div className='absolute inset-0 bg-gradient-to-b from-[#a627a9]/50 via-[#9015db]/38 via-[#b122c8]/53 via-[#6721c1]/40 to-[#262d6d]/30'/>
             <header className="flex justify-between w-full p-4 sm:hidden">
                 <div
                     className={`text-white transform transition-transform duration-1000 flex flex-row items-center${
@@ -107,7 +109,7 @@ export default function Home() {
                     </button>
                     <button
                         onClick={() => router.push('/signup')}
-                        className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full hidden sm:block sm:text-[32px]"
+                        className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full hidden sm:block sm:text-[32px] z-10"
                     >
                         회원가입
                     </button>
