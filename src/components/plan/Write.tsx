@@ -1,13 +1,13 @@
 'use client';
 
-import axios from 'axios';
+// import axios from 'axios';
 import { useState, useEffect, useRef, useCallback } from 'react';
 // import { createActivity } from '../../features/plan/dating';
-import { getCookie } from '@/utils/cookie';
+// import { getCookie } from '@/utils/cookie';
 import { PlanAPI } from '../../features/plan/dating';
 import { useParams, useSearchParams } from 'next/navigation';
-import { ActivityResponse } from '@/types/plan/activity/type';
-import { AllDatingResponse } from '@/types/plan/board/type';
+// import { ActivityResponse } from '@/types/plan/activity/type';
+// import { AllDatingResponse } from '@/types/plan/board/type';
 import { DatingInfo } from '@/types/plan/myplan/type';
 import DeleteIcon from '../../../public/planIcon/delete.svg';
 // import { deleteActivity } from '../../features/plan/dating';
@@ -288,10 +288,10 @@ export default function Write({
                         className="flex flex-col items-center w-[1248px] relative "
                         style={{
                             height: isSmallScreen
-                                ? `calc(70vh + ${
+                                ? `calc(78cvh + ${
                                       Math.min(activities.length, 5) * 9
                                   }vh)`
-                                : '80vh',
+                                : '100vh',
                         }}
                     >
                         <div className="flex flex-col items-center p-4 w-full mb-8">
@@ -336,7 +336,7 @@ export default function Write({
                                             />
                                         </div>
                                     </div>
-                                    <div className="w-[554px]">
+                                    <div className="w-[574px]">
                                         <label
                                             htmlFor="theme"
                                             className="block text-gray-700 text-sm font-normal mb-2 sm:ml-2 sm:text-lg"
@@ -370,94 +370,52 @@ export default function Write({
                         </div>
 
                         <div className="flex flex-row w-full mx-auto px-8 gap-10 sm:gap-0 sm:flex-col">
-                            <div className="w-[374px] sm:w-[393px]">
+                            <div className="w-[574px] sm:w-[393px]">
                                 <p className="text-[30px] font-medium mb-4 sm:text-xl">
                                     데이트 활동을 작성해주세요 🖌
                                 </p>
-                                <p className="text-xl font-normal mb-2 sm:hidden">
-                                    데이트 활동
-                                </p>
-                                <div className="mb-4 flex justify-between items-center w-full sm:justify-normal">
+                                <div className="flex justify-between items-center mb-4 w-full">
                                     <input
                                         type="text"
-                                        id="location"
+                                        id="activity"
                                         value={activityContent}
                                         onChange={handleActivityChange}
-                                        className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[220px] sm:h-[40px] sm:py-0"
+                                        className="w-full h-14 py-2 px-4 rounded-lg border shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-600 sm:w-3/5"
                                         placeholder="활동을 입력하세요"
                                     />
                                     <button
                                         type="button"
                                         onClick={handleAddActivity}
-                                        className="bg-[#DFDAEA] w-[77px] h-[55px] font-normal py-2 mx-2 rounded-xl sm:ml-2 sm:w-[82px] sm:h-[40px]"
+                                        className="ml-2 bg-[#DFDAEA] w-20 h-14 rounded-lg text-base font-medium sm:mr-20"
                                     >
                                         추가
                                     </button>
                                 </div>
                             </div>
-                            <div
-                                className={`p-2 ${
-                                    isSmallScreen
-                                        ? 'grid grid-cols-1 gap-10'
-                                        : ''
-                                }`}
-                                style={{
-                                    display: 'grid',
-                                    gridTemplateAreas: isSmallScreen
-                                        ? `
-                                        "first"
-                                        "second"
-                                        "third"
-                                        "fourth"
-                                        "fifth"
-                                    `
-                                        : `
-                                        "header . ."
-                                        "first second third"
-                                        "fourth fifth ."
-                                    `,
-                                    gridTemplateColumns: isSmallScreen
-                                        ? '1fr'
-                                        : '1fr 1fr 1fr',
-                                    gap: '10px',
-                                }}
-                            >
-                                <p
-                                    style={{ gridArea: 'header' }}
-                                    className="text-[30px] font-medium sm:hidden"
-                                >
+                            <div className="w-2/3 sm:w-1/3">
+                                <p className="text-[30px] font-medium mb-4 sm:text-xl">
                                     데이트 내용🎈
                                 </p>
-                                {activities.map((activity, index) => {
-                                    console.log('activity:', activity);
-                                    const gridArea =
-                                        index === 0
-                                            ? 'first'
-                                            : index === 1
-                                            ? 'second'
-                                            : index === 2
-                                            ? 'third'
-                                            : index === 3
-                                            ? 'fourth'
-                                            : 'fifth';
-                                    return (
+                                <div className="space-y-2">
+                                    {activities.map((activity, index) => (
                                         <div
-                                            key={index}
-                                            style={{ gridArea }}
-                                            className="flex justify-between items-center border-[2px] border-activityDelete-button rounded-[30px] px-2 m-1 sm:text-sm sm:max-w-[280px] sm:py-1 "
+                                            key={activity.id}
+                                            className="flex justify-between items-center p-2 border-2 border-[#A627A9] rounded-full sm:w-4/5"
                                         >
-                                            {activity.content}
+                                            <p className="break-words overflow-hidden">
+                                                {activity.content}
+                                            </p>
                                             <button
                                                 type="button"
                                                 onClick={() =>
                                                     deleteActivity(activity.id)
                                                 }
                                             >
-                                                <DeleteIcon />
+                                                <DeleteIcon className="fill-current text-[#A627A9]" />
                                             </button>
                                         </div>
-                                    );
-                                })}
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>

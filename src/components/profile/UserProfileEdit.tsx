@@ -64,6 +64,25 @@ function UserProfileEdit({ onNext }: any) {
         }
     };
 
+    const onSubmit = async (data: ProfileForm) => {
+        if (profile?.profileImages.length === 0) {
+            toast('이미지는 최소 1장 필요합니다', { icon: '📸' });
+            return;
+        }
+        try {
+            const response = await ProfileAPI.updateProfile(data);
+            if (response.status === 200) {
+                setCurrentProfile(response.data.data);
+                setLocalProfile(response.data.data);
+                toast.success('프로필 등록이 완료되었습니다!');
+                setCookie('status', 'true');
+                router.push('/profile');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     function renderNicknameErrorMessages(error: any) {
         switch (error.type) {
             case 'required':
