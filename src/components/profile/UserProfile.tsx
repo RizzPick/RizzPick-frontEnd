@@ -43,6 +43,9 @@ function UserProfile() {
         <div className='flex items-center justify-center mt-6 text-3xl'>
             {profile.nickname}, {calculateAge(profile.birthday)}
         </div>
+        <div className='flex items-center justify-center mt-6 text-xl px-2 bg-white py-1 rounded-3xl max-w-[400px] mx-auto' style={{ whiteSpace: 'pre-wrap' }}>
+            &quot;{profile.intro}&quot;
+        </div>
         <section className='flex items-start justify-center flex-row gap-9 mt-[57px]'>
           <article className='w-[424px] h-[428px]'>
             <div className='flex flex-col w-full items-center'>

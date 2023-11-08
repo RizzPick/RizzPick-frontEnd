@@ -48,9 +48,9 @@ const AuthAPI = {
             token
         ),
     verifyPassword: (data:{password : string}) => 
-            service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/verify-password`, data),
-    changePassword: (data: ChangePasswordReq) => 
-        service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/`),
+        service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/verify-password`, data),
+    changePassword: (data:{newPassword : string}) => 
+        service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/reset-password`, data),
     deActiveUser: (userId:number) => 
         service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/deactivate/${userId}`,null),
     activateUser: () => 
