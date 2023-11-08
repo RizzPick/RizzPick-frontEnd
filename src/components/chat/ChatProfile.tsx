@@ -1,16 +1,33 @@
 'use client'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import useSWR from 'swr';
 import { ChatData } from '@/types/chat';
-import { CURRENT_CHAT_KEY } from '@/hooks/useChat';
+import UseChat, { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import UserSkeleton from '../common/UserSkeleton';
-import { AiOutlineClose } from "react-icons/ai"
-import { BsFillSearchHeartFill } from "react-icons/bs"
+import Home from "../../../public/profileIcon/Home.svg"
+import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
+import ChatAPI from '@/features/chat';
+import toast from 'react-hot-toast';
 
 function ChatProfile() {
   const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
-  console.log(chat);
+  const { clearCurrentChat } = UseChat();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  
+  const cancelMatch = async() => {
+    if(!chat) return;
+    try {
+      const response = await ChatAPI.deleteChat(chat?.chatRoomId);
+      if(response.status === 200) {
+        clearCurrentChat();
+        // toast.success(response.data.message);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="w-full p-4">
       {chat ? (
@@ -24,25 +41,46 @@ function ChatProfile() {
               priority
           />
           </div>
-          <hr className='my-4' />
-          <div className='flex flex-col items-center gap-4'>
+          <div className='flex flex-col items-center gap-4 mt-[31px]'>
             {chat && 
-              <div className='flex items-center gap-2 justify-start'>
-                <p className='text-2xl font-bold'>{chat.nickname}</p>
-                <p className='text-lg font-bold text-gray-400'>{chat.age}</p>
-                </div>
+              <div>
+                <p className='text-3xl font-semibold'>{chat.nickname},{chat.age}</p>
+              </div>
             }
-            {chat.intro && <div>{chat.intro}</div>}
-            <div className='flex items-center gap-4'>
-              {chat.mbti && <div className='border-[#d67dff] border rounded-2xl px-2 py-1'>{chat.mbti}</div>}
-              {chat.religion && <div className='border-[#d67dff] border rounded-2xl px-2 py-1'>{chat.religion === "NONE" ? ("종교 없음"):(chat.religion)}</div>}
+            <div className='mt-[33px] px-4 py-1 h-[142px] w-[300px] flex flex-col gap-3 bg-neutral-100 rounded-2xl justify-center'>
+                    {!chat.location && !chat.education ? 
+                        <p className="text-center">작성된 내용이 없습니다.</p> 
+                        : 
+                        <>
+                            { chat.education ? <><div className='flex items-center gap-4'><EducationIcon/>{chat.education}</div><hr/></>: null }
+                            { chat.location ? <div className='flex items-center gap-4'><Home/>{chat.location}</div> : null }
+                        </>
+                    }
+            </div>
+            <div className='flex items-center gap-4 mt-[15px]'>
+              {chat.mbti && <div className='text-fuchsia-400 text-xl border border-fuchsia-400 rounded-2xl px-2 py-1'>#{chat.mbti}</div>}
+              {chat.religion && <div className='border border-fuchsia-400 text-fuchsia-400 text-xl rounded-2xl px-2 py-1'>{chat.religion === "NONE" ? ("종교 없음"):(`#${chat.religion}`)}</div>}
             </div>
           </div>
-            <hr className='my-4' />
-            <div className='mx-auto flex justify-center items-center gap-10'>
-              <button className='flex justify-center items-center border-exit-mark border-2 rounded-full w-20 h-20 text-exit-mark font-bold text-3xl'><AiOutlineClose/></button>
-              <button className='flex justify-center items-center border-gradient-start border-2 rounded-full w-20 h-20 text-gradient-start font-bold text-3xl'><BsFillSearchHeartFill/></button>
+            <div className='mx-auto flex justify-center items-center w-[207px] bg-rose-100 rounded-full h-[45px] mt-10 hover:scale-110 transition-all duration-200' onClick={()=>setShowLogoutModal(true)}>
+              <button className='text-red-600 text-xl'>채팅방 나가기</button>
             </div>
+            {showLogoutModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    {/* 모달 외부 배경 (그레이 오버레이) */}
+                    <div className="absolute inset-0 bg-gray-500 opacity-50" onClick={() => setShowLogoutModal(false)}></div>
+                    
+                    {/* 모달 창 */}
+                    <div className="bg-white p-2 rounded-xl shadow-lg w-[400px] z-10 h-[320px] flex flex-col items-center justify-center">
+                        <div className='font-bold text-2xl mb-10'>⚠️ 채팅방을 나가시겠습니까?</div>
+                        <div className='text-gray-500'>채팅방을 나가면 대화내용이 모두 삭제되고<br/> 채팅목록에서도 사라집니다.</div>
+                        <div className="flex justify-between mt-6 w-full px-10">
+                            <button onClick={() => setShowLogoutModal(false)} className="mr-2 px-4 py-2 rounded">취소</button>
+                            <button onClick={() => { cancelMatch(); setShowLogoutModal(false); }} className="px-4 py-2rounded-lg transition-all hover:scale-125">나가기</button>
+                        </div>
+                    </div>
+                </div>
+            )}
        </>
       ) : (
         <><UserSkeleton/></>

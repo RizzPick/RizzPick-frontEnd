@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { UserProfile } from '../../types/match/type';
 import service from '@/features';
 
 let fetchedUserIds: number[] = [];

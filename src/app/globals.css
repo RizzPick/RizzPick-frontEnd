@@ -4,8 +4,16 @@
 
 html,
 body {
+  margin: 0;
   height: 100vh;
-  overflow-y: auto;
+}
+:root {
+  --vh: 100%;
+}
+
+#__next {
+  height: 100%;
+  min-height: 100%;
 }
 
 .bubble-tail {
@@ -25,6 +33,16 @@ body {
   -webkit-line-clamp: 2;
 }
 
+footer {
+  border-top-left-radius: 20px; /* 위쪽 좌측 모서리 라운드 처리 */
+  border-top-right-radius: 20px; /* 위쪽 우측 모서리 라운드 처리 */
+  box-shadow: 0 -2px 3px rgba(155, 110, 250, 0.2); /* Drop Shadow 스타일 적용 */
+}
+
+.shadow-custom {
+  box-shadow: 0 -2px 3px rgba(155, 110, 250, 0.2);
+}
+
 *,
 *::before,
 *::after {
@@ -32,6 +50,14 @@ body {
 }
 
 input:focus {
+  outline: none;
+}
+
+textarea:focus {
+  outline: none;
+}
+
+select:focus {
   outline: none;
 }
 
@@ -59,28 +85,21 @@ button:last-of-type {
   right: 0;
 }
 
-.custom-dot-list-style {
-  position: absolute;
-  bottom: 90%; /* 이 값을 조절하여 원하는 위치로 이동시키면 됩니다. */
-  left: 50%;
-  transform: translateX(-50%);
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  width: 100%;
-  z-index: 10;
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* 필요에 따라 다른 요소들보다 상위에 위치하도록 z-index 설정 */
+  background: white; /* 스크롤 시 내용이 헤더 아래로 가려지도록 배경색 지정 */
 }
 
-.custom-dot-list-style li {
-  display: inline-block;
-  margin: 0 5px; /* 원하는 마진 값을 설정하여 간격 조절 가능합니다. */
+.textarea-sticky {
+  position: sticky;
+  bottom: 10px;
+  z-index: 10; /* 필요에 따라 다른 요소들보다 상위에 위치하도록 z-index 설정 */
 }
 
-.custom-dot-list-style .active {
-  color: #333; /* 활성화된 Dot의 색상입니다. 원하는 색상으로 변경 가능합니다. */
-}
-
-.custom-dot-list-style .inactive {
-  color: #ddd; /* 비활성화된 Dot의 색상입니다. 원하는 색상으로 변경 가능합니다. */
+@font-face {
+  font-family: "SUITE";
+  font-weight: 200;
+  src: url("/fonts/SUITE-Medium.ttf") format("opentype");
 }

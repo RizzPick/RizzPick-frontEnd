@@ -16,7 +16,8 @@ export type UserProfile = {
     mbti?: string;
     religion?: string;
     profileImages: ImageObject[];
-    dating: Dating;
+    dating?: Dating[];
+    intro? :string;
 };
 
 export type ImageObject = {

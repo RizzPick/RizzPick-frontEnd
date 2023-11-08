@@ -1,11 +1,16 @@
 import axios from 'axios';
+import { getCookie } from '@/utils/cookie';
 
 export const sendLike = async (userId: string, targetUserId: string) => {
     try {
-        const response = await axios.post(
-            `https://willyouback.shop/api/like/${userId}`
-        );
-        return response.data;
+        const url = `https://willyouback.shop/api/like/${targetUserId}`;
+        const response = await axios.post(url, {
+            headers: {
+                Authorization: getCookie('Authorization'),
+                Authorization_Refresh: getCookie('Authorization_Refresh'),
+            },
+        });
+        return response;
     } catch (error) {
         console.error(error);
         throw error;
@@ -14,8 +19,15 @@ export const sendLike = async (userId: string, targetUserId: string) => {
 
 export const sendNope = async (userId: string, targetUserId: string) => {
     try {
+        const url = `https://willyouback.shop/api/like/${targetUserId}`;
         const response = await axios.post(
-            `https://willyouback.shop/api/nope/${userId}`
+            url, // userId를 URL에 삽입합니다.
+            {
+                headers: {
+                    Authorization: getCookie('Authorization'),
+                    Authorization_Refresh: getCookie('Authorization_Refresh'),
+                },
+            }
         );
         return response.data;
     } catch (error) {

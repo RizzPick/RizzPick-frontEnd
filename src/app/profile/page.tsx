@@ -1,20 +1,23 @@
+import Footer from '@/components/common/Footer';
+import Header from '@/components/common/Header';
 import UserProfile from '@/components/profile/UserProfile';
-import { UserInfo } from '@/types/user';
-import axios from 'axios';
-import { cookies } from 'next/headers';
+import UserProfileMobile from '@/components/profile/UserProfileMobile';
 import React from 'react'
 
 export default async function ProfilePage() {
-    const cookieStore = cookies();
-    const accessToken = cookieStore.get('Authorization');
-    const token = accessToken?.value;
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/myProfile`, {
-        headers : {
-            "Authorization" : token
-        }
-    })
-    const profile : UserInfo = response.data;
+    
   return (
-    <div><UserProfile profile={profile}/></div>
+    <div>
+      <div className='sm:hidden'>
+        <Header />
+        <UserProfile />
+      </div>
+
+      <div className='sm:block hidden height-screen-vh'>
+        <Header />
+        <UserProfileMobile />
+        <Footer />
+      </div>
+    </div>
   )
 }

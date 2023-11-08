@@ -12,17 +12,19 @@ export type UserInfo = {
         mbti : string;
         religion : string;
         profileImages : UserProfileImages[],
-        dating : {
-            datingId: number,
-      userId: number,
-      datingTitle: string,
-      datingLocation: string,
-      datingTheme: string
-        }
+        dating : UserDating[]
     }
 }
 
 type UserProfileImages = {
     id : number
     image : string;
+}
+
+type UserDating = {
+    datingId: number,
+            userId: number,
+            datingTitle: string,
+            datingLocation: string,
+            datingTheme: string
 }
