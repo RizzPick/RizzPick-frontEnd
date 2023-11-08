@@ -9,6 +9,7 @@ import ChatAPI from '@/features/chat';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/utils/cookie';
 import Like from "../../../public/notificationsIcon/Like.svg"
+import { calculateAge } from '@/utils/dateUtils';
 
 interface LikeData {
     nickname: string;
@@ -122,10 +123,10 @@ export default function Alarm({ close }: AlarmProps) {
                                     <div>
                                         <div>
                                             <span className="text-2xl">
-                                                {chat.nickname}
+                                                {chat.nickname},
                                             </span>
                                             &nbsp;
-                                            <span>{chat.age}</span>
+                                            <span>{calculateAge(chat.birthday)}</span>
                                         </div>
                                         <p className="w-full text-ellipsis overflow-hidden break-words line-clamp-2 text-sm text-gray-600 font-bold">
                                             {chat.latestMessage}

@@ -20,6 +20,7 @@ import Home from "../../../public/profileIcon/house.fill.small.svg"
 import { getCookie } from '@/utils/cookie';
 import toast from 'react-hot-toast';
 import { SyncLoader } from 'react-spinners';
+import { calculateAge } from '@/utils/dateUtils';
 
 
 function MatchMobile() {
@@ -230,7 +231,7 @@ function MatchMobile() {
                                     <div className="flex items-center gap-4 ">
                                         <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
                                             'Unknown'}</p>
-                                        <p className='text-white text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
+                                        <p className='text-white text-xl'>{calculateAge(users[userIndex]?.birthday) ?? 'Unknown'}</p>
                                     </div>
                                     <button onClick={toggleDetailsVisibility} className={`${isDetailsVisible ? ("hidden") : ("animate-bounce")} z-30 transition-all hover:scale-110 ease-in-out`}>
                                         <Image src={ReadMore} width={32} height={32} alt='ReadMore'/>

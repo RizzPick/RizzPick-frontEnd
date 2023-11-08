@@ -18,6 +18,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai"
 import {GoAlert} from "react-icons/go";
 import toast from 'react-hot-toast';
 import { SyncLoader } from 'react-spinners';
+import { calculateAge } from '@/utils/dateUtils';
 
 function Match() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
@@ -248,7 +249,7 @@ function Match() {
                                                         <div className='flex items-center gap-2'>
                                                             <div className='font-bold text-3xl'>{users[userIndex]?.nickname ??
                                                                 'Unknown'}</div>
-                                                            <div className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</div>
+                                                            <div className='text-xl'>{calculateAge(users[userIndex]?.birthday) ?? 'Unknown'}</div>
                                                         </div>
                                                         <div>
                                                             <button onClick={toggleDetailsVisibility} className='animate-bounce z-30 text-3xl transition-all hover:scale-110 ease-in-out '>

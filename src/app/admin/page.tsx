@@ -7,7 +7,6 @@ import useAuth from '@/hooks/useAuth';
 const AdminReportPage = () => {
   const [selectedMenu, setSelectedMenu] = useState('account');
 
-  // 선택된 메뉴에 따라 렌더링할 컴포넌트를 결정합니다.
   const renderContent = () => {
     switch (selectedMenu) {
       case 'account':
