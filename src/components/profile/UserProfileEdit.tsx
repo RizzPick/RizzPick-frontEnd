@@ -6,6 +6,7 @@ import { setCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
+import { isAdult } from '@/utils/dateUtils';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
@@ -35,7 +36,7 @@ function UserProfileEdit({onNext} : any) {
   useEffect(() => {
     const profileFormKeys: (keyof ProfileForm)[] = [
         'nickname',
-        'age',
+        'birthday',
         'education',
         'gender',
         'location',
@@ -56,12 +57,16 @@ function UserProfileEdit({onNext} : any) {
   }, [localProfile, setValue, getValues]);
 
   const onSubmit = async(data: ProfileForm) => {
+    if (!isAdult(data.birthday)) {
+      toast.error('18세 미만은 이 서비스를 사용할 수 없습니다.');
+      return;
+    }
+  
     if(profile?.profileImages.length === 0) {
       toast("이미지는 최소 1장 필요합니다", {icon : '📸'});
       return;
     }
     try {
-      console.log(data);
       const response = await ProfileAPI.updateProfile(data);
       console.log(response);
       if(response.status === 200) {
@@ -98,7 +103,7 @@ function UserProfileEdit({onNext} : any) {
       case 'maxLength':
         return <p className="text-red-500 text-[10px]">✱ 닉네임은 최대 6자까지 가능합니다.</p>;
       default:
-        return null;
+        return "";
     }
   }
 
@@ -112,28 +117,26 @@ function UserProfileEdit({onNext} : any) {
           {errors.nickname && renderNicknameErrorMessages(errors.nickname)}
           </div>
           <input {...register("nickname", {required : true, maxLength: 6,})} className="sm:w-full w-[311px] h-10 p-3 border rounded-3xl" placeholder="닉네임은 최대 6자까지 가능합니다." />
-          {/* <div className='flex justify-between mt-2'>
+          <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">생년월일</label>
-          {errors.age && <p className="text-red-500 text-[10px]">✱ 생년월일은 필수입니다.</p>}
+          {errors.birthday && <p className="text-red-500 text-[10px]">✱ 생년월일은 필수입니다.</p>}
           </div>
           <input
             type="date" // 타입을 'date'로 설정합니다.
-            {...register('age', { required: true })}
+            {...register('birthday', { required: true })}
             className="border rounded-3xl py-2 px-3 w-[150px] text-sm"
-            placeholder="YYYYMMDD"
-          /> */}
+          />
           
-          <div className='flex justify-between mt-2'>
+          {/* <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">나이</label>
-          {errors.age && <p className="text-red-500 text-[10px]">✱ 나이는 필수입니다.</p>}
+          {errors.birthday && <p className="text-red-500 text-[10px]">✱ 나이는 필수입니다.</p>}
           </div>
-          <select {...register("age", {required:true})} className="w-20 h-10 px-3 border rounded-3xl">
+          <select {...register("birthday", {required:true})} className="w-20 h-10 px-3 border rounded-3xl">
             <option value="">선택</option>
-            {/* 예시로 18~30세까지 옵션 추가 (필요에 따라 수정) */}
             {Array.from({ length: 30 }, (_, i) => i + 18).map((age) => (
               <option key={age} value={age}>{age}</option>
             ))}
-          </select>
+          </select> */}
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">성별</label>
           {errors.gender && <p className="text-red-500 text-[10px]">✱ 성별은 필수입니다.</p>}

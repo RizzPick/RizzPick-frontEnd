@@ -13,6 +13,7 @@ import { getCookie } from '@/utils/cookie'
 import toast from 'react-hot-toast'
 import UseChat from '@/hooks/useChat'
 import ChatAPI from '@/features/chat'
+import { calculateAge } from '@/utils/dateUtils'
 
 type Props = {
     profile : MyProfileRes
@@ -110,7 +111,7 @@ function OtherUserProfile({profile} : Props) {
         <div className='relative w-[187px] h-[187px] mx-auto mt-[41px]'>
             <Image src={profile.profileImages[0].image} alt='프로필 이미지' fill className='rounded-full' style={{objectFit:"cover"}} priority />
         </div>
-        <div className='flex items-center justify-center mt-[33px] text-zinc-800 text-2xl'>{profile.nickname}, {profile.age}</div>
+        <div className='flex items-center justify-center mt-[33px] text-zinc-800 text-2xl'>{profile.nickname}, {calculateAge(profile.birthday)}</div>
         <div className='p-4'>
             <div className='mt-[33px] px-4 py-2 h-[150px] gap-1 flex flex-col bg-neutral-100 rounded-2xl justify-center'>
                     {!profile.location && !profile.education && !profile.mbti && !profile.religion ? 

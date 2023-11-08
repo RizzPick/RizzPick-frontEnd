@@ -10,6 +10,7 @@ import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
 import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import { calculateAge } from '@/utils/dateUtils';
 
 function UserProfileMobile() {
     const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
@@ -44,7 +45,7 @@ function UserProfileMobile() {
                 </div>
             </div>
         <div className='flex flex-col mt-16 w-full items-center'>
-          <div className='text-zinc-800 text-2xl font-semibold'>{profile.nickname}, {profile.age}</div>
+          <div className='text-zinc-800 text-2xl font-semibold'>{profile.nickname}, {calculateAge(profile.birthday)}</div>
             <div className='p-4 bg-white h-[200px] w-full mt-10 rounded-2xl flex flex-col gap-3 justify-center'>
                 {!profile.location && !profile.education && !profile.mbti && !profile.religion ? 
                     <p className="text-center">작성된 내용이 없습니다.</p> 

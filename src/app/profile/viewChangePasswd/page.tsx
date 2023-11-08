@@ -6,15 +6,12 @@ import React from 'react'
 function ViewChangePasswdPage() {
   return (
     <div>
-      <div className='sm:hidden block'>
+      <div className='height-screen-vh'>
         <Header />
         <ViewChangePasswd />
-      </div>
-
-      <div className='sm:block hidden height-screen-vh'>
-        <Header />
-        <ViewChangePasswd />
-        <Footer />
+        <div className='sm:block hidden'>
+          <Footer />
+        </div>
       </div>
     </div>
   )

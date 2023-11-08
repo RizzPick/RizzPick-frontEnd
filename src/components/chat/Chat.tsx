@@ -14,7 +14,6 @@ import {FcInfo} from "react-icons/fc"
 import Back from "../../../public/chatIcon/Button.svg"
 
 const Chat = () => {
-  console.log("채팅방 컴포넌트 렌더링");
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState<MessagesRes[]>();
     const [isLoading, setIsLoading] = useState(true);

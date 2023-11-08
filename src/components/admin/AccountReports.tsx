@@ -9,6 +9,7 @@ function AccountReports() {
 
       try {
         const response = await AdminAPI.getUserReports();
+        console.log(response)
         if(response.status === 200) {
           setReports(response.data.data);
         }

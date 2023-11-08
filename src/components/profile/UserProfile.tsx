@@ -10,6 +10,7 @@ import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
 import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import { calculateAge } from '@/utils/dateUtils';
 
 
 function UserProfile() {
@@ -40,7 +41,7 @@ function UserProfile() {
           <Image src={profile.profileImages[0].image} alt='프로필 이미지' fill style={{objectFit:'cover'}} className='rounded-full'/>
         </div>
         <div className='flex items-center justify-center mt-6 text-3xl'>
-            {profile.nickname}, {profile.age}
+            {profile.nickname}, {calculateAge(profile.birthday)}
         </div>
         <section className='flex items-start justify-center flex-row gap-9 mt-[57px]'>
           <article className='w-[424px] h-[428px]'>

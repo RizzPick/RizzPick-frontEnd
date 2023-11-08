@@ -16,7 +16,6 @@ type ChangePasswd = {
 }
 
 function ViewChangePasswd() {
-  console.log("비밀번호 변경 컴포넌트 렌더링");
     const {
         watch,
         register,
