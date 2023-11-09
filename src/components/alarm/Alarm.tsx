@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import ChatAPI from '@/features/chat';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/utils/cookie';
-import Like from "../../../public/notificationsIcon/Like.svg"
+import Like from '../../../public/notificationsIcon/Like.svg';
 
 interface LikeData {
     nickname: string;
@@ -71,7 +71,12 @@ export default function Alarm({ close }: AlarmProps) {
             {closeModal && (
                 <div className="absolute top-[100px] right-[60px] translate-[-50%] bg-white p-6 w-[400px] h-[500px] flex flex-col z-50 border border-zinc-800 rounded-3xl">
                     <div className="h-[20vh]">
-                        <h2 className="mb-2 cursor-pointer" onClick={()=>router.push('/user/notifications/liked')}>
+                        <h2
+                            className="mb-2 cursor-pointer"
+                            onClick={() =>
+                                router.push('/user/notifications/liked')
+                            }
+                        >
                             좋아요 ({likesData.length})
                         </h2>
                         <div
@@ -83,20 +88,26 @@ export default function Alarm({ close }: AlarmProps) {
                             }}
                         >
                             {likesData.map((like, index) => (
-                                    <div onClick={()=>router.push('/user/notifications/liked')} className="rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer" key={like.userId}>
-                                        <div className="relative w-[60px] h-[60px]">
-                                            <Image
-                                                src={like.profilePic.image}
-                                                alt={like.nickname}
-                                                fill
-                                                style={{objectFit:'cover'}}
-                                                className='rounded-full'
-                                            />
-                                            <div className='absolute -bottom-2 right-0 -mr-3'>
-                                                <Like />
-                                            </div>
+                                <div
+                                    onClick={() =>
+                                        router.push('/user/notifications/liked')
+                                    }
+                                    className="rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer"
+                                    key={like.userId}
+                                >
+                                    <div className="relative w-[60px] h-[60px]">
+                                        <Image
+                                            src={like.profilePic.image}
+                                            alt={like.nickname}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                            className="rounded-full"
+                                        />
+                                        <div className="absolute -bottom-2 right-0 -mr-3">
+                                            <Like />
                                         </div>
                                     </div>
+                                </div>
                             ))}
                         </div>
                     </div>

@@ -5,6 +5,7 @@ import Match from '@/components/match/Match';
 import MatchMobile from '@/components/match/MatchMobile';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+// import RealTime from '@/components/alarm/RealTime';
 
 export default function MatchPage() {
     const [mobile, setMobile] = useState(false);
@@ -20,8 +21,9 @@ export default function MatchPage() {
     return (
         <div className="bg-white">
             {mobile ? (
-                <div className='height-screen-vh'>
+                <div className="height-screen-vh">
                     <Header />
+                    {/* <RealTime /> */}
                     <MatchMobile />
                     <Footer />
                 </div>
