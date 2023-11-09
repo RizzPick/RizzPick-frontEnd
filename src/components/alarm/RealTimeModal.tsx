@@ -16,6 +16,7 @@ type Alert = {
     message: string;
     content: string;
     url: string;
+    time: string;
     readStatus: boolean;
 };
 
@@ -28,6 +29,17 @@ const RealTimeModal = ({ close }: RealTimeModalProps) => {
     const EventSource = EventSourcePolyfill || NativeEventSource;
     const [sse, setSse] = useState<EventSourcePolyfill | null>(null);
     const [processedEventIds, setProcessedEventIds] = useState<string[]>([]);
+
+    const formatDate = (isoString: any) => {
+        const date = new Date(isoString);
+        const year = date.getFullYear().toString().substr(-2);
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+    };
 
     const reconnectSSE = useCallback((retries = 3, delay = 5000) => {
         setTimeout(() => {
@@ -192,7 +204,7 @@ const RealTimeModal = ({ close }: RealTimeModalProps) => {
                                             {alert.message}
                                         </p>
                                         <p className="text-[#aaa] text-xs ml-3 mr-5">
-                                            알림을 받은 시간..??
+                                            {formatDate(alert.time)}
                                         </p>
                                         <button
                                             onClick={() => markAsRead(alert.id)}
