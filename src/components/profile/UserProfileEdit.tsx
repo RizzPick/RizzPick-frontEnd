@@ -4,7 +4,7 @@ import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import { MyProfileRes, ProfileForm } from '@/types/profile';
 import { setCookie } from '@/utils/cookie';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { isAdult } from '@/utils/dateUtils';
 import toast from 'react-hot-toast';
@@ -14,26 +14,21 @@ function UserProfileEdit({onNext} : any) {
   const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
   const { setCurrentProfile } = UseProfile();
   const { register, handleSubmit, setValue, formState: {errors}, getValues } = useForm<ProfileForm>();
-  const [localProfile, setLocalProfile] = useState<MyProfileRes | null>(null);
+  const [localProfile, setLocalProfile] = useState<MyProfileRes | null>(profile || null);
   const router = useRouter();
   const [introLength, setIntroLength] = useState(0);
-  const [educationLength, setEducationLength] = useState(0);
 
-  const handleIntroChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleIntroChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIntroLength(event.target.value.length);
-  };
+    setValue('intro', event.target.value);
+  }, [setValue]);
 
-  const handleEducationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEducationLength(event.target.value.length);
-  };
 
   useEffect(() => {
     if (profile) {
       setLocalProfile(profile);
     }
-  }, [profile]);
 
-  useEffect(() => {
     const profileFormKeys: (keyof ProfileForm)[] = [
         'nickname',
         'birthday',
@@ -46,7 +41,6 @@ function UserProfileEdit({onNext} : any) {
       ];
       if (localProfile) {
         setIntroLength(localProfile.intro?.length || 0);
-        setEducationLength(localProfile.education?.length || 0);
         for (const key of profileFormKeys) {
           const currentValue = getValues(key);
           if (localProfile[key] !== undefined && !currentValue) {
@@ -56,7 +50,7 @@ function UserProfileEdit({onNext} : any) {
      } 
   },[getValues, localProfile, profile, setValue]);
 
-  const onSubmit = async(data: ProfileForm) => {
+  const onSubmit = useCallback(async(data: ProfileForm) => {
     if (!isAdult(data.birthday)) {
       toast.error('18세 미만은 이 서비스를 사용할 수 없습니다.');
       return;
@@ -68,7 +62,6 @@ function UserProfileEdit({onNext} : any) {
     }
     try {
       const response = await ProfileAPI.updateProfile(data);
-      console.log(response);
       if(response.status === 200) {
         setCurrentProfile(response.data.data);
         setLocalProfile(response.data.data);
@@ -79,9 +72,9 @@ function UserProfileEdit({onNext} : any) {
     } catch(error) {
       console.log(error);
     }
-  };
+  },[profile, setCurrentProfile, router]);
 
-  const onPrev = async(event: any) => {
+  const onPrev = useCallback(async(event: any) => {
     const data = getValues();
     try {
       const response = await ProfileAPI.updateProfile(data);
@@ -93,23 +86,23 @@ function UserProfileEdit({onNext} : any) {
     } catch(error) {
       console.log(error);
     }
-  };
+  },[getValues, onNext, setCurrentProfile]);
 
-  function renderNicknameErrorMessages(error: any) {
+  const renderNicknameErrorMessages = useCallback((error: any) => {
     switch (error.type) {
       case 'required':
         return <p className="text-red-500 text-[10px]">✱ 닉네임은 필수입니다.</p>;
       case 'maxLength':
         return <p className="text-red-500 text-[10px]">✱ 닉네임은 최대 6자까지 가능합니다.</p>;
       default:
-        return "";
+        return null;
     }
-  }
+  }, []);
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className='w-[605px] h-full sm:ml-0 sm:bg-profile-gradient md:bg-white lg:bg-white px-8 py-4 rounded-xl sm:rounded-3xl border border-black sm:border-none sm:mt-4 sm:w-[100vw] sm:h-full'>
-      <h1 className='justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3 hidden sm:flex'>프로필 등록</h1>
+      <h1 className='justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3 hidden sm:flex'>{`${profile?.userActiveStatus ? ("프로필 수정"): ("프로필 등록")}`}</h1>
         <div className="mb-4">
           <div className='flex justify-between'>
           <label className="block text-gray-700 mb-2 px-1">닉네임</label>

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import AuthAPI from '@/features/auth';
 import { getCookie } from '@/utils/cookie';
 import Alarm from '@/components/alarm/Alarm';
-import Logo from '../../../public/Logo_color.png';
+import Logo from '../../../public/RizzPick_color.png';
 import RealTimeModal from '../alarm/RealTimeModal';
 
 export default function Header() {
@@ -53,20 +53,24 @@ export default function Header() {
 
     return (
         <header className="flex justify-between item-center px-8 sm:px-4 py-4 border-b border-zinc-300 sm:border-none">
-            <Link
-                href="/user/match"
-                onClick={() => sessionStorage.setItem('selectedIcon', 'home')}
-            >
-                <div className="relative w-[95px] h-[40px]">
-                    <Image
-                        src={Logo}
-                        priority
-                        alt="로고"
-                        fill
-                        style={{ objectFit: 'cover' }}
-                    />
-                </div>
-            </Link>
+            <nav className='flex items-center text-2xl gap-12'>
+                <Link
+                    href="/user/match"
+                    onClick={() => sessionStorage.setItem('selectedIcon', 'home')}
+                >
+                    <div className="relative w-[71px] h-[45px]">
+                        <Image
+                            src={Logo}
+                            priority
+                            alt="로고"
+                            fill={true}
+                            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 350px"
+                            object-fit='cover'
+                        />
+                    </div>
+                </Link>
+                <Link href="/user/plan/board" className='sm:hidden'>데이트</Link>
+            </nav>
             <nav className="flex gap-12 items-center sm:hidden text-2xl">
                 <span onClick={openRealTimeModal} className="cursor-pointer">
                     실시간
@@ -74,7 +78,6 @@ export default function Header() {
                 {showRealTimeModal && (
                     <RealTimeModal close={closeRealTimeModal} />
                 )}
-                <Link href="/user/plan/board">데이트</Link>
                 <span onClick={Open} className="cursor-pointer">
                     알림
                 </span>

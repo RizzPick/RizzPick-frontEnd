@@ -103,3 +103,9 @@ button:last-of-type {
   font-weight: 200;
   src: url("/fonts/SUITE-Medium.ttf") format("opentype");
 }
+
+@font-face {
+  font-family: "SUITE-ExtraBold";
+  font-weight: ExtraBold;
+  src: url("/fonts/SUITE-ExtraBold.ttf") format("opentype");
+}

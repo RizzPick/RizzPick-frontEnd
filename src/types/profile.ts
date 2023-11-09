@@ -81,7 +81,7 @@ export type MyProfileRes = {
   birthday: string;
   education: string;
   userActiveStatus: boolean;
-  gender: Gender;
+  gender: string;
   location: string;
   mbti: string;
   religion: string;

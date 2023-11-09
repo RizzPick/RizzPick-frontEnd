@@ -14,6 +14,7 @@ import { calculateAge } from '@/utils/dateUtils';
 
 
 function UserProfile() {
+    console.log("UserProfile 컴포넌트 렌더링");
     const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [showResignModal, setResignModal] = useState(false);
@@ -38,7 +39,7 @@ function UserProfile() {
   return (
     <div className='bg-profile-gradient h-[100vh] py-[67px]'>
         <div className='relative w-[169px] h-[169px] mx-auto'>
-          <Image src={profile.profileImages[0].image} alt='프로필 이미지' fill style={{objectFit:'cover'}} className='rounded-full'/>
+          <Image src={profile.profileImages[0].image} alt='프로필 이미지' sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 350px" fill={true} object-fit='cover' className='rounded-full'/>
         </div>
         <div className='flex items-center justify-center mt-6 text-3xl'>
             {profile.nickname}, {calculateAge(profile.birthday)}
@@ -117,8 +118,10 @@ function UserProfile() {
                                   <Image
                                       src={profile.profileImages[idx].image}
                                       alt={`Profile Image ${idx + 1}`}
-                                      layout="fill"
-                                      objectFit="cover"
+                                      loading="lazy"
+                                      sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 350px"
+                                      fill={true}
+                                      object-fit="cover"
                                   />
                               ) : (
                                   <div className="absolute inset-0 bg-white flex items-center justify-center">

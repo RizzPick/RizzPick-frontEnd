@@ -37,13 +37,14 @@ function ViewChangePasswd() {
 
     try {
       const verifyPassword = await AuthAPI.verifyPassword({ password: currentPwd });
+      console.log(verifyPassword);
       if (verifyPassword.status === 200) {
         const res = await AuthAPI.changePassword({ newPassword : newPwd });
         if (res.status === 200) {
           router.push('/profile');
           toast.success(res.data.message);
         }
-      }
+      } 
     } catch (error) {
       console.error(error);
       toast.error('비밀번호가 일치하지 않습니다');

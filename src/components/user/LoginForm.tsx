@@ -14,7 +14,6 @@ import toast from 'react-hot-toast';
 import { jwtDecode } from "jwt-decode";
 import { AiOutlineUnlock } from 'react-icons/ai';
 
-
 type JwtPayload  = {
   iss?: string;
   sub?: string;
@@ -139,7 +138,7 @@ function LoginForm() {
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[600px] sm:w-[100vw] sm:h-[80vh] h-[100vh-200px]"
+                className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[600px] sm:w-[100vw] sm:h-[70vh] h-[100vh-200px]"
             >
                 <div className="w-[188px] h-[120px] relative mx-auto mt-10 sm:hidden">
                     <Image
@@ -168,10 +167,10 @@ function LoginForm() {
                     required
                     {...register('password', { required: true })}
                 />
-                <button className="bg-gradient-start text-white p-2 rounded-3xl w-full mt-4 sm:mt-[47px] h-[60px] sm:h-[44px]">
+                <button className="bg-gradient-start text-white p-2 rounded-3xl w-full mt-4 sm:mt-[20px] h-[60px] sm:h-[44px]">
                     로그인
                 </button>
-                <div className="mt-6 cursor-pointer mx-auto">
+                <div className="mt-6 sm:mt-2 cursor-pointer mx-auto">
                     <Image
                         src={kakaoLoginLogo}
                         priority
@@ -183,7 +182,7 @@ function LoginForm() {
                 </div>
                 <button
                     type="button"
-                    className="text-gray-400 mt-8 font-medium text-sm"
+                    className="text-gray-400 mt-8 sm:mt-2 font-medium text-sm"
                     onClick={() => router.push('/signup')}
                 >
                     회원가입하기
