@@ -17,7 +17,7 @@ import RightBtnIcon from "../../../public/matchIcon/right.svg";
 
 
 function Match() {
-    console.log("Match 컴포넌트 렌더링");
+
     const [isDetailsVisible, setDetailsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState<UserProfile[]>([]);
