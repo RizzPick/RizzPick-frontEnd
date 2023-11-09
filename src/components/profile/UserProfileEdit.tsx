@@ -10,7 +10,11 @@ import { isAdult } from '@/utils/dateUtils';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
-function UserProfileEdit({onNext} : any) {
+type Props = {
+  onNext? : () => void;
+}
+
+function UserProfileEdit({onNext} : Props) {
   const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
   const { setCurrentProfile } = UseProfile();
   const { register, handleSubmit, setValue, formState: {errors}, getValues } = useForm<ProfileForm>();
@@ -74,21 +78,21 @@ function UserProfileEdit({onNext} : any) {
     }
   },[profile, setCurrentProfile, router]);
 
-  const onPrev = useCallback(async(event: any) => {
+  const onPrev = useCallback(async() => {
     const data = getValues();
     try {
       const response = await ProfileAPI.updateProfile(data);
       if(response.status === 200) {
         setCurrentProfile(response.data.data);
         setLocalProfile(response.data.data);
-        onNext();
+        onNext?.();
       }
     } catch(error) {
       console.log(error);
     }
   },[getValues, onNext, setCurrentProfile]);
 
-  const renderNicknameErrorMessages = useCallback((error: any) => {
+  const renderNicknameErrorMessages = useCallback((error: { type: string }): JSX.Element | null => {
     switch (error.type) {
       case 'required':
         return <p className="text-red-500 text-[10px]">✱ 닉네임은 필수입니다.</p>;

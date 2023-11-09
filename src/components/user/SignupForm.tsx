@@ -8,6 +8,7 @@ import { SyncLoader } from 'react-spinners';
 import Logo from "../../../public/RizzPickLogo.png"
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import axios from "axios"
 
 function SignupComponent() {
     const {
@@ -58,10 +59,11 @@ function SignupComponent() {
             setIntervalId(interval);
           }
         }
-      } catch(error:any) {
-        if (error.response) {
-          const errorMessage = error.response.data.message;
-          toast.error(errorMessage);
+      } catch(error:unknown) {
+        if (axios.isAxiosError(error)) {
+          toast.error(error.response?.data.message || "An error occurred");
+        } else {
+          console.error("An unexpected error occurred:", error);
         }
       } finally {
         setIsLoading(false);
@@ -81,7 +83,7 @@ function SignupComponent() {
           if (intervalId) clearInterval(intervalId);
           setShowTimer(false);
         }
-      } catch(error:any) {
+      } catch(error) {
         console.log(error);
         toast.error("잘못된 인증 번호입니다.")
       }
@@ -105,7 +107,7 @@ function SignupComponent() {
         }
     };
 
-    function renderPasswordErrorMessages(error: any) {
+    function renderPasswordErrorMessages(error: { type: string }): JSX.Element | null {
       switch (error.type) {
         case 'pattern':
           return <p className="text-red-500 text-[10px]">✱ 알파벳 대소문자, 숫자, 특수문자를 포함해야 합니다.</p>;
@@ -118,7 +120,7 @@ function SignupComponent() {
       }
     }
 
-  function renderUsernameErrorMessages(error: any) {
+  function renderUsernameErrorMessages(error: { type: string }): JSX.Element | null {
     switch (error.type) {
       case 'pattern':
         return <p className="text-red-500 text-[10px]">✱ 아이디는 소문자와 숫자만 포함해야 합니다.</p>;

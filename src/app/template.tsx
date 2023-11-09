@@ -2,8 +2,12 @@
 import { TransitionGroup, Transition } from "react-transition-group";
 import { usePathname } from 'next/navigation';
 import { useEffect } from "react";
+
 const TIMEOUT = 150;
-export const getTransitionStyles : any = {
+type TransitionStyles = {
+    [key: string]: React.CSSProperties;
+  };
+export const getTransitionStyles : TransitionStyles = {
 	entering: {
 		position: 'absolute',
 		opacity: 0
@@ -19,7 +23,7 @@ export const getTransitionStyles : any = {
 };
 
 
-export default function Template({ children }: { children: React.ReactNode }) {
+export default function Template({ children }: React.PropsWithChildren<{}>) {
     function setScreenSize() {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty("--vh", `${vh}px`);

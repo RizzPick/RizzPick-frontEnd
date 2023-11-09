@@ -116,7 +116,7 @@ function LoginForm() {
                 toast('프로필 등록이 필요합니다', { icon: '✏️' });
                 router.replace('/profile/edit');
             }
-        } catch (error: any) {
+        } catch (error) {
             toast.error('아이디 또는 비밀번호가 틀렸습니다.');
         }
     };

@@ -7,13 +7,13 @@ import { ProfileImages } from '@/types/profile';
 import { PuffLoader } from 'react-spinners';
 import toast from 'react-hot-toast';
 
-interface Props {
+type Props = {
     onImageClick: () => void;
     isModalVisible: boolean;
     setModalVisible: (visible: boolean) => void;
     image: ProfileImages | null;
-    onAddImage: any;
-    onDeleteImage: any;
+    onAddImage: (file: File) => Promise<void>; // 여기에 프로미스를 반환하는 함수 타입을 지정합니다.
+    onDeleteImage: (imageId: number) => Promise<void>; // 여기에 프로미스를 반환하는 함수 타입을 지정합니다.
     isLoading: boolean;
 }
 
@@ -27,7 +27,7 @@ function UserImageCard({
     isLoading,
 }: Props) {
     const [isCameraVisible, setCameraVisible] = useState<boolean>(false);
-    const imageInput = useRef<HTMLInputElement | null>(null);
+    const imageInput = useRef<HTMLInputElement>(null);
     const FILE_SIZE_MAX_LIMIT = 20 * 1024 * 1024;
 
     const handleImageChange = async (

@@ -7,7 +7,7 @@ import { SyncLoader } from 'react-spinners';
 
 export default function KakaoCallback() {
     const router = useRouter();
-    const kakaoOuthCodeRef = useRef<any>(null);
+    const kakaoOuthCodeRef = useRef<string | null>(null);
 
     useEffect(()=>{
         kakaoOuthCodeRef.current = new URL(window.location.href).searchParams.get("code");

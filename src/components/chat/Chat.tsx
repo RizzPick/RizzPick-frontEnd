@@ -13,6 +13,18 @@ import {FiArrowUp} from "react-icons/fi"
 import Back from "../../../public/chatIcon/Button.svg"
 import { calculateAge } from '@/utils/dateUtils';
 
+type StompMessage = {
+  body: string; 
+}
+
+type MessageData  = {
+  chatRoomId: number;
+  message: string;
+  sender: string;
+  time: string;
+}
+
+
 const Chat = () => {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState<MessagesRes[]>();
@@ -23,10 +35,10 @@ const Chat = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const { clearCurrentChat } = UseChat();
 
-    const client = useRef(
+    const client = useRef<Client>(
       new Client({
         brokerURL: "wss://willyouback.shop/chatroom",
-        debug: function (str) {
+        debug: function (str: string) {
           console.log(str);
         },
         reconnectDelay: 5000,
@@ -35,7 +47,7 @@ const Chat = () => {
       })
     );
     
-    const stompSendFn = (des: any, body: any) => {
+    const stompSendFn = (des: string, body: Record<string, unknown>) => {
       if (client.current.connected) {
         client.current.publish({
           destination: des,
@@ -68,8 +80,8 @@ const Chat = () => {
             console.log(error);
         }
     }
-    const messageCallbackHandler = (message: any) => {
-      const msgData = JSON.parse(message.body);
+    const messageCallbackHandler = (message: StompMessage) => {
+      const msgData:MessageData = JSON.parse(message.body);
       const newData = {
         chatRoomId : msgData.chatRoomId,
         message: msgData.message,
@@ -82,7 +94,6 @@ const Chat = () => {
     currentClient.onConnect = () => {
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
-      // currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);
       stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId:chat?.chatRoomId, message: "채팅방에 입장하셨습니다" });
     };
     currentClient.activate();
@@ -119,15 +130,12 @@ const Chat = () => {
       onClick();
     }
   }
-  const readMessageCallbackHandler = (message : any) => {
-    console.log((JSON.parse(message.body)));
-  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block:"end" });
   };
 
-  const userCallbackHandler = (message: any) => {
+  const userCallbackHandler = (message: StompMessage) => {
     console.log((JSON.parse(message.body)));
   };
 

@@ -28,7 +28,7 @@ function ViewChangePasswd() {
     fetchData();
   }, [initializeProfile]);
 
-  const onSubmit = async (e:any) => {
+  const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newPwd !== newPwdConfirm) {
       toast.error('일치하지 않습니다!');
