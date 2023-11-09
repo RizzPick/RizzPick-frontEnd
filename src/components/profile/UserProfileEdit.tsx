@@ -82,7 +82,6 @@ function UserProfileEdit({onNext} : any) {
   };
 
   const onPrev = async(event: any) => {
-    // event.preventDefault();
     const data = getValues();
     try {
       const response = await ProfileAPI.updateProfile(data);
@@ -122,21 +121,10 @@ function UserProfileEdit({onNext} : any) {
           {errors.birthday && <p className="text-red-500 text-[10px]">✱ 생년월일은 필수입니다.</p>}
           </div>
           <input
-            type="date" // 타입을 'date'로 설정합니다.
+            type="date"
             {...register('birthday', { required: true })}
             className="border rounded-3xl py-2 px-3 w-[150px] text-sm"
           />
-          
-          {/* <div className='flex justify-between mt-2'>
-          <label className="block text-gray-700 mb-2">나이</label>
-          {errors.birthday && <p className="text-red-500 text-[10px]">✱ 나이는 필수입니다.</p>}
-          </div>
-          <select {...register("birthday", {required:true})} className="w-20 h-10 px-3 border rounded-3xl">
-            <option value="">선택</option>
-            {Array.from({ length: 30 }, (_, i) => i + 18).map((age) => (
-              <option key={age} value={age}>{age}</option>
-            ))}
-          </select> */}
           <div className='flex justify-between mt-2'>
           <label className="block text-gray-700 mb-2">성별</label>
           {errors.gender && <p className="text-red-500 text-[10px]">✱ 성별은 필수입니다.</p>}
@@ -160,13 +148,6 @@ function UserProfileEdit({onNext} : any) {
             <span className="flex-shrink mx-4 text-stone-600 text-base font-medium font-['SUITE'] leading-none tracking-wide">선택 사항</span>
             <div className="flex-grow border-t border-gray-400"></div>
           </div>
-
-          <div className='flex justify-between mt-2'>
-          <label className="block text-gray-700 mb-2">학교</label>
-          {errors.intro && <p className="text-red-500 text-[10px]">✱ 학교는 20자 내외로 작성부탁드립니다!</p>}
-          </div>
-          <input {...register("education", {maxLength:20})} onChange={handleEducationChange} className="w-full h-10 bg-white rounded-3xl border border-neutral-400 text-center" placeholder="학교를 입력하세요" />
-          <p className="text-right text-xs text-gray-600">{educationLength}/20</p>
           <label className="block text-gray-700 my-2">지역</label>
           <select {...register("location")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
             <option value="">선택</option>
@@ -177,6 +158,16 @@ function UserProfileEdit({onNext} : any) {
             <option value="대전광역시">대전광역시</option>
             <option value="광주광역시">광주광역시</option>
             <option value="울산광역시">울산광역시</option>
+            <option value="세종시">세종시</option>
+            <option value="경기도">경기도</option>
+            <option value="강원도">강원도</option>
+            <option value="충청북도">충청북도</option>
+            <option value="충청남도">충청남도</option>
+            <option value="전라북도">전라북도</option>
+            <option value="전라남도">전라남도</option>
+            <option value="경상북도">경상북도</option>
+            <option value="경상남도">경상남도</option>
+            <option value="제주도">제주도</option>
           </select>
 
           <label className="block text-gray-700 my-2">MBTI</label>
@@ -199,7 +190,6 @@ function UserProfileEdit({onNext} : any) {
             <option value="ENFJ">ENFJ</option>
             <option value="ENTJ">ENTJ</option>
           </select>
-
           <label className="block text-gray-700 my-2">종교</label>
           <select {...register("religion")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
             <option value="">선택</option>
@@ -213,6 +203,15 @@ function UserProfileEdit({onNext} : any) {
             <option value="유교">유교</option>
             <option value="기타">기타</option>
           </select>
+
+          {/* <label className="block text-gray-700 my-2">취미</label>
+          <select {...register("religion")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
+            <option value="">선택</option>
+          </select>
+          <label className="block text-gray-700 my-2">관심사</label>
+          <select {...register("religion")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
+            <option value="">선택</option>
+          </select> */}
         </div>
         <div className='flex justify-end'>
         <button className="w-56 h-16 bg-fuchsia-600 rounded-full shadow-inner justify-center items-center absolute bottom-32 right-[24%] sm:hidden text-white text-3xl">저장하기</button>

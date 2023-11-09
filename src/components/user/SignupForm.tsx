@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { SyncLoader } from 'react-spinners';
-import Logo from "../../../public/Logo.png"
+import Logo from "../../../public/RizzPickLogo.png"
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 
@@ -131,7 +131,7 @@ function SignupComponent() {
 
   return (
     <section  className='flex justify-center h-[100vh]'>
-      <div className='w-[141px] h-[60px] absolute top-[40px] sm:block hidden'>
+      <div className='w-32 h-20 absolute top-[40px] sm:block hidden'>
             <Image src={Logo} alt='로고' fill style={{objectFit:"cover"}} priority/>
       </div>
     <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-[80px] sm:p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[580px] sm:w-full sm:h-[80vh] h-[730px] sm:rounded-none sm:rounded-tl-[56px] justify-center">

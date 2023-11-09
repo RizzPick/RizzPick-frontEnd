@@ -8,8 +8,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from '../../../public/images/kakaoLogo.png';
 import UseProfile from '@/hooks/useProfile';
-import Logo from '../../../public/Logo.png';
-import LogoColor from '../../../public/Logo_color.png';
+import Logo from '../../../public/RizzPickLogo.png';
+import LogoSvg from '../../../public/RizzPickLogo.svg';
+import LogoColor from '../../../public/RizzPick_color.png';
 import toast from 'react-hot-toast';
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { AiOutlineUnlock } from 'react-icons/ai';
@@ -116,7 +117,7 @@ function LoginForm() {
 
     return (
         <section className={`h-[100vh] flex justify-center items-center`}>
-            <div className="w-[141px] h-[60px] absolute top-[70px] sm:block hidden">
+            <div className="w-32 h-20 absolute top-[70px] sm:block hidden">
                 <Image
                     src={Logo}
                     alt="로고"
@@ -129,7 +130,7 @@ function LoginForm() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="sm:absolute sm:bottom-0 p-8 flex flex-col gap-2 bg-white rounded-xl shadow-xl sm:rounded-none sm:rounded-tl-[56px] w-[600px] sm:w-[100vw] sm:h-[80vh] h-[100vh-200px]"
             >
-                <div className="w-[141px] h-[60px] relative mx-auto mt-10 sm:hidden">
+                <div className="w-[188px] h-[120px] relative mx-auto mt-10 sm:hidden">
                     <Image
                         src={LogoColor}
                         alt="로고"
