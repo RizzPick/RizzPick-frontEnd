@@ -9,11 +9,22 @@ import { useForm } from 'react-hook-form';
 import kakaoLoginLogo from '../../../public/images/kakaoLogo.png';
 import UseProfile from '@/hooks/useProfile';
 import Logo from '../../../public/RizzPickLogo.png';
-import LogoSvg from '../../../public/RizzPickLogo.svg';
 import LogoColor from '../../../public/RizzPick_color.png';
 import toast from 'react-hot-toast';
-import { JwtPayload, jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { AiOutlineUnlock } from 'react-icons/ai';
+
+
+type JwtPayload  = {
+  iss?: string;
+  sub?: string;
+  aud?: string[] | string;
+  exp?: number;
+  nbf?: number;
+  iat?: number;
+  jti?: string;
+  auth? : string;
+}
 
 function LoginForm() {
     const { register, handleSubmit } = useForm<LoginReq>();
@@ -51,8 +62,7 @@ function LoginForm() {
             }
 
             const token = res.headers['authorization'];
-            const response: JwtPayload = jwtDecode<JwtPayload>(token);
-            const auth = response?.auth;
+            const { auth }: JwtPayload = jwtDecode<JwtPayload>(token);
             const refreshToken = res.headers['authorization_refresh'];
             setCookie('Authorization', token);
             setCookie('Authorization_Refresh', refreshToken);
