@@ -51,7 +51,8 @@ function LoginForm() {
             }
 
             const token = res.headers['authorization'];
-            const {auth}: JwtPayload = jwtDecode<JwtPayload>(token);
+            const response: JwtPayload = jwtDecode<JwtPayload>(token);
+            const auth = response?.auth;
             const refreshToken = res.headers['authorization_refresh'];
             setCookie('Authorization', token);
             setCookie('Authorization_Refresh', refreshToken);

@@ -7,11 +7,11 @@ export function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.startsWith('/user') || request.nextUrl.pathname.startsWith('/profile')) {
         if (!authToken) {
             return NextResponse.redirect(
-                'https://will-you-front-end-fawn.vercel.app/signin?message=login_required'
+                'https://rizzpick.com/signin?message=login_required'
             );
         } else if (status?.value === 'false' && request.nextUrl.pathname !== '/profile/edit') {
             return NextResponse.redirect(
-                'https://will-you-front-end-fawn.vercel.app/profile/edit'
+                'https://rizzpick.com/profile/edit'
             );
         }
     }
