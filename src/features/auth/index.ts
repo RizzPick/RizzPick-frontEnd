@@ -1,7 +1,6 @@
 import service from '@/features';
 
 import type {
-    ChangePasswordReq,
     EmailVerifyReq,
     EmailVerifyRes,
     LoginReq,

@@ -6,13 +6,10 @@ import MatchMobile from '@/components/match/MatchMobile';
 import useGeolocation from '@/hooks/useGeolocation';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-// import RealTime from '@/components/alarm/RealTime';
 
 export default function MatchPage() {
     const [mobile, setMobile] = useState(false);
     const location = useGeolocation();
-
-    console.log(location);
 
     const isMobile = useMediaQuery({
         query: '(max-width:767px)',
@@ -27,7 +24,6 @@ export default function MatchPage() {
             {mobile ? (
                 <div className="height-screen-vh">
                     <Header />
-                    {/* <RealTime /> */}
                     <MatchMobile />
                     <Footer />
                 </div>

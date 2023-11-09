@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MatchAPI } from '../../features/match/match';
+import { MatchAPI } from '../../features/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
 import { GoAlert, GoDotFill } from "react-icons/go"
