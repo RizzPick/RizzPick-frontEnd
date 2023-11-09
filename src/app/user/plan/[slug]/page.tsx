@@ -19,6 +19,7 @@ import BadIcon from '../../../../../public/matchIcon/Nope.png';
 import BackIcon from '../../../../../public/planIcon/back.svg';
 import Header from '@/components/common/Header';
 import toast from 'react-hot-toast';
+import { calculateAge } from '@/utils/dateUtils';
 
 type Props = {
     params: {
@@ -354,7 +355,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                         {/* 이름, 나이 */}
                                         <div className="flex flex-row w-full h-16 border-b-2 border-[#C5C5C5] items-center justify-center text-[28px]">
                                             <h2>{userProfile.nickname}</h2>
-                                            <p>{userProfile.age}</p>
+                                            <p>{calculateAge(userProfile.birthday)}</p>
                                         </div>
 
                                         {/* 지역, 학력 */}

@@ -20,6 +20,7 @@ async function OtherUserProfilepage({ params: { slug } }: Props) {
       }
     })
     const profile : MyProfileRes = response.data.data;
+    console.log(profile);
   return (
     <div><OtherUserProfile profile={profile}/></div>
   )

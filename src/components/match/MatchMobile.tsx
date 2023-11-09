@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { MatchAPI } from '../../features/match/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
-import { GoDotFill } from "react-icons/go"
+import { GoAlert, GoDotFill } from "react-icons/go"
 import { MdKeyboardDoubleArrowDown } from "react-icons/md"
 
 // ICON
@@ -13,18 +13,19 @@ import BadIcon from '../../../public/matchIcon/Nope.png';
 import ReadMore from '../../../public/matchIcon/Intro.png';
 import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import apologize from "../../../public/images/apologize.gif"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.small.svg"
 import Home from "../../../public/profileIcon/house.fill.small.svg"
 import { getCookie } from '@/utils/cookie';
 import toast from 'react-hot-toast';
+import { SyncLoader } from 'react-spinners';
+import { calculateAge } from '@/utils/dateUtils';
 
 
 function MatchMobile() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
-    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
@@ -40,11 +41,14 @@ function MatchMobile() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true);
                 const response = await MatchAPI.fetchRandomUser();
                 const usersData = response.data.data;
                 setUsers(usersData);
             } catch (error) {
                 console.error('Error fetching data:', error);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchData();
@@ -149,18 +153,22 @@ function MatchMobile() {
     return (
         <div className="flex h-[100%-70px] flex-grow">
             <div className="flex-1 flex justify-evenly items-start px-2">
-                {!currentUser ? (
-                    <div className='flex items-center flex-col justify-center h-[100vh]'>
-                        <div className='flex items-center flex-col gap-2 mb-10'>
-                            <h1 className='text-xl'>현재 등록한 모든 유저의 추천이 끝났습니다</h1>
-                            <h1 className='text-3xl'>다음에 또 이용해주세요</h1>
-                            <h1 className='text-xs'>Please.. 😭</h1>
-                        </div>
-                        <div className='relative w-[50px] h-[50px]'>
-                            <Image src={apologize} alt='apologize' fill style={{objectFit:"cover"}} />
+                {isLoading &&
+                    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+                        <SyncLoader />
+                    </div>}
+                {!isLoading && users.length === 0 && (
+                    <div className='flex items-center flex-col justify-center h-[60vh] w-full bg-matchpage-gradient rounded-3xl shadow'>
+                        <div className='flex items-center flex-col'>
+                        <div className='font-bold text-[39px]'><GoAlert color="#cb17f9"/></div>
+                        <h1 className='text-3xl font-black mb-[48px]'>sorry</h1>
+                        <h1 className='text-base'>앗! 추천할 유저가 없네요.</h1>
+                        <h1 className='text-xs'>다른 유저가 나타날 때까지 조금만 기다려 주세요.</h1>
                         </div>
                 </div>
-                ):(
+                )}
+
+                {users.length > 0 && (
                     <div className="flex-1 max-w-md rounded-full">
                     {/* 유저 이미지 */}
                     <div className="relative h-[60vh] w-full rounded-2xl overflow-hidden mt-4">
@@ -223,7 +231,7 @@ function MatchMobile() {
                                     <div className="flex items-center gap-4 ">
                                         <p className='font-bold text-3xl'>{users[userIndex]?.nickname ??
                                             'Unknown'}</p>
-                                        <p className='text-white text-xl'>{users[userIndex]?.age ?? 'Unknown'}</p>
+                                        <p className='text-white text-xl'>{calculateAge(users[userIndex]?.birthday) ?? 'Unknown'}</p>
                                     </div>
                                     <button onClick={toggleDetailsVisibility} className={`${isDetailsVisible ? ("hidden") : ("animate-bounce")} z-30 transition-all hover:scale-110 ease-in-out`}>
                                         <Image src={ReadMore} width={32} height={32} alt='ReadMore'/>

@@ -14,9 +14,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en">
-            <body style={{ fontFamily: 'SUITE' }}>
-                <Toaster position="top-center" />
+        <html lang="ko">
+            <body style={{fontFamily:'SUITE'}}>
+                <Toaster position='top-center' toastOptions={{duration:1500}}/>
                 {children}
             </body>
         </html>

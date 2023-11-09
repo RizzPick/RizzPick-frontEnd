@@ -6,13 +6,13 @@ import UseChat, { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import useSWR from 'swr';
 import { useMediaQuery } from 'react-responsive';
 import { useRouter } from 'next/navigation';
+import { calculateAge } from '@/utils/dateUtils';
 
 type Props = {
     data : ChatData;
 }
 
 function ChatComp({data}:Props) {
-
     const [mobile, setMobile] = useState(false);
     const router = useRouter();
     const isMobile = useMediaQuery({
@@ -48,7 +48,10 @@ function ChatComp({data}:Props) {
             <div className='h-full flex flex-col items-start justify-center gap-2'>
                 <div className='flex justify-between items-center'>
                     <div className='font-bold text-xl'>
-                        {data.nickname}
+                        {data.nickname},&nbsp;
+                    </div>
+                    <div className='font-bold text-xl'>
+                        {calculateAge(data.birthday)}
                     </div>
                 </div>
                 <p className="w-[180px] text-ellipsis overflow-hidden break-words line-clamp-2 text-md text-gray-600">

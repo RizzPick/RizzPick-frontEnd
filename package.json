@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "analyze": "ANALYZE=true next build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -14,6 +15,8 @@
     "@types/react-transition-group": "^4.4.8",
     "axios": "^1.5.1",
     "event-source-polyfill": "^1.0.31",
+    "@types/jwt-decode": "^3.1.0",
+    "jwt-decode": "^4.0.0",
     "moment": "^2.29.4",
     "next": "13.5.4",
     "react": "^18",
@@ -36,6 +39,7 @@
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.0.1",
     "@svgr/webpack": "^8.1.0",
     "@types/event-source-polyfill": "^1.0.4",
     "@types/node": "^20",

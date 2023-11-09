@@ -3,17 +3,19 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import MainImage from '../../public/images/mainPage.png';
 import { useRouter } from 'next/navigation';
-import Logo from '../../public/Logo.png';
+import RizzPickLogo from '../../public/RizzPickLogo.png';
+
 
 export default function Home() {
     const router = useRouter();
     const [loaded, setLoaded] = useState(false);
 
     const LoadingIndicator = () => (
-        <div className="fixed inset-0 flex items-center justify-center z-20 bg-sendbtn-gradient">
-            <div className="w-[95px] h-[40px] relative animate-pulse animate-once animate-ease-in-out">
+        <div className="fixed inset-0 flex items-center justify-center z-20 bg-[#062643]">
+            <div className='absolute inset-0 bg-gradient-to-b from-[#a627a9]/50 via-[#9015db]/38 via-[#b122c8]/53 via-[#6721c1]/40 to-[#262d6d]/30'/>
+            <div className="w-[132px] h-[85px] relative animate-pulse animate-once animate-ease-in-out">
                     <Image
-                        src={Logo}
+                        src={RizzPickLogo}
                         alt="로고"
                         fill
                         style={{ objectFit: 'cover' }}
@@ -25,10 +27,11 @@ export default function Home() {
 
     return (
         <div
-            className={`w-full bg-sendbtn-gradient height-screen-vh flex flex-col items-center overflow-hidden relative ${
+            className={`w-full height-screen-vh flex flex-col bg-[#062643] items-center overflow-hidden relative ${
                 loaded ? 'animate-fadeIn' : ''
             }`}
         >
+            <div className='absolute inset-0 bg-gradient-to-b from-[#a627a9]/50 via-[#9015db]/38 via-[#b122c8]/53 via-[#6721c1]/40 to-[#262d6d]/30'/>
             <header className="flex justify-between w-full p-4 sm:hidden">
                 <div
                     className={`text-white transform transition-transform duration-1000 flex flex-row items-center${
@@ -37,7 +40,7 @@ export default function Home() {
                 >
                     <div className="w-[95px] h-[40px] relative cursor-pointer">
                         <Image
-                            src={Logo}
+                            src={RizzPickLogo}
                             alt="로고"
                             fill
                             style={{ objectFit: 'cover' }}
@@ -73,7 +76,7 @@ export default function Home() {
                 onLoadingComplete={() => setTimeout(() => setLoaded(true), 2000)}
             />
             <div className="flex flex-col items-end w-full mt-5 sm:items-center mr-[400px] sm:mr-0 h-[100vh]">
-                <div className="flex items-baseline sm:flex-col sm:items-center sm:py-10 gap-20 sm:gap-10">
+                <div className="flex items-baseline sm:flex-col sm:items-center sm:py-10 gap-20 sm:gap-10 sm:hidden">
                     <h1
                         className={`text-white text-4xl sm:text-[28px] font-bold sm:mt-5 sm:mb-4 transform transition-transform duration-1000 ${
                             loaded ? 'translate-y-0' : '-translate-y-full'
@@ -89,7 +92,7 @@ export default function Home() {
                         Will You
                     </h1>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end sm:hidden">
                     <h2
                         className={`text-white text-3xl sm:text-[28px] mb-4 font-bold transform transition-transform duration-1000 ${
                             loaded ? 'translate-y-0' : '-translate-y-full'
@@ -97,6 +100,9 @@ export default function Home() {
                     >
                         같이 공유하실래요?
                     </h2>
+                </div>
+                <div className='relative w-[132px] h-[85px] sm:block hidden sm:top-[45%]'>
+                    <Image src={RizzPickLogo} alt='리즈픽 로고' fill style={{objectFit : 'cover'}} />
                 </div>
                 <div className="flex justify-end mb-5 sm:justify-center sm:w-[224px] sm:mx-auto sm:flex-col sm:mt-10 sm:gap-5">
                     <button
@@ -107,7 +113,7 @@ export default function Home() {
                     </button>
                     <button
                         onClick={() => router.push('/signup')}
-                        className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full hidden sm:block sm:text-[32px]"
+                        className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-10 rounded-full hidden sm:block sm:text-[32px] z-10"
                     >
                         회원가입
                     </button>

@@ -13,22 +13,21 @@ import RightButton from '../../../public/matchIcon/right.svg';
 import axios from 'axios';
 import EducationIcon from '../../../public/profileIcon/graduationcap.fill.svg';
 import Home from '../../../public/profileIcon/Home.svg';
-import apologize from "../../../public/images/apologize.gif"
 import { getCookie } from '@/utils/cookie';
 import { AiOutlineInfoCircle } from "react-icons/ai"
+import {GoAlert} from "react-icons/go";
 import toast from 'react-hot-toast';
 import { SyncLoader } from 'react-spinners';
+import { calculateAge } from '@/utils/dateUtils';
 
 function Match() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    //! 상세 정보 보이기/숨기기 토글 함수
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
     };
 
-    //! 랜덤 매칭
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
 
@@ -182,13 +181,11 @@ function Match() {
                 </div>}
                 {!isLoading && users.length === 0 && (
                     <div className='flex items-center flex-col justify-center h-full'>
-                    <div className='flex items-center flex-col gap-2 mb-10'>
-                        <h1 className='text-xl'>현재 등록한 모든 유저의 추천이 끝났습니다</h1>
-                        <h1 className='text-3xl'>다음에 또 이용해주세요</h1>
-                        <h1 className='text-xs'>Please.. 😭</h1>
-                    </div>
-                    <div className='relative w-[300px] h-[300px]'>
-                        <Image src={apologize} alt='apologize' fill style={{objectFit:"cover"}} />
+                    <div className='flex items-center flex-col'>
+                        <div className='font-bold text-[47px] mb-4'><GoAlert color="#cb17f9"/></div>
+                        <h1 className='text-4xl font-black mb-[48px]'>sorry</h1>
+                        <h1 className='text-2xl mb-8'>앗! 추천할 유저가 없네요.</h1>
+                        <h1 className='text-2xl'>다른 유저가 나타날 때까지 조금만 기다려 주세요.</h1>
                     </div>
                 </div>
                 )}
@@ -252,7 +249,7 @@ function Match() {
                                                         <div className='flex items-center gap-2'>
                                                             <div className='font-bold text-3xl'>{users[userIndex]?.nickname ??
                                                                 'Unknown'}</div>
-                                                            <div className='text-xl'>{users[userIndex]?.age ?? 'Unknown'}</div>
+                                                            <div className='text-xl'>{calculateAge(users[userIndex]?.birthday) ?? 'Unknown'}</div>
                                                         </div>
                                                         <div>
                                                             <button onClick={toggleDetailsVisibility} className='animate-bounce z-30 text-3xl transition-all hover:scale-110 ease-in-out '>

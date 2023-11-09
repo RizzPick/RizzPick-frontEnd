@@ -8,12 +8,13 @@ import UserSkeleton from '../common/UserSkeleton';
 import Home from "../../../public/profileIcon/Home.svg"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
 import ChatAPI from '@/features/chat';
-import toast from 'react-hot-toast';
+import { calculateAge } from '@/utils/dateUtils';
 
 function ChatProfile() {
   const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
   const { clearCurrentChat } = UseChat();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   
   const cancelMatch = async() => {
     if(!chat) return;
@@ -28,6 +29,8 @@ function ChatProfile() {
       console.log(error)
     }
   }
+
+  
   return (
     <div className="w-full p-4">
       {chat ? (
@@ -44,7 +47,7 @@ function ChatProfile() {
           <div className='flex flex-col items-center gap-4 mt-[31px]'>
             {chat && 
               <div>
-                <p className='text-3xl font-semibold'>{chat.nickname},{chat.age}</p>
+                <p className='text-3xl font-semibold'>{chat.nickname}, {calculateAge(chat.birthday)}</p>
               </div>
             }
             <div className='mt-[33px] px-4 py-1 h-[142px] w-[300px] flex flex-col gap-3 bg-neutral-100 rounded-2xl justify-center'>

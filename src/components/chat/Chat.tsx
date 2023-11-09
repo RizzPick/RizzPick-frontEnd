@@ -11,6 +11,7 @@ import moment from 'moment';
 import ChatSkeleton from './ChatSkeleton';
 import {FiArrowUp} from "react-icons/fi"
 import Back from "../../../public/chatIcon/Button.svg"
+import { calculateAge } from '@/utils/dateUtils';
 
 const Chat = () => {
     const [message, setMessage] = useState("");
@@ -33,7 +34,7 @@ const Chat = () => {
         heartbeatOutgoing: 4000,
       })
     );
-
+    
     const stompSendFn = (des: any, body: any) => {
       if (client.current.connected) {
         client.current.publish({
@@ -77,7 +78,6 @@ const Chat = () => {
       };
       setMessages(prevMessages => [...(prevMessages || []), newData]);
     };
-    
     const currentClient = client.current;
     currentClient.onConnect = () => {
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
@@ -136,13 +136,20 @@ const Chat = () => {
     setMessages([]);
     setIsLoading(true);
   }
+
   
     return (
       <div className='relative'>
         <header className='text-center text-neutral-700 text-xl font-medium leading-tight tracking-wide flex justify- items-center p-4 border-b-[1px] h-[74px]'>
-            {chat && <button className='absolute left-[15px]' onClick={backBtnClick}><Back/></button>}
-            <h1 className='ml-10 text-3xl font-bold'>{chat?.nickname}</h1>
-            <p className='px-2 bg-[#AB62E5] rounded-full text-xs text-white ml-3'>{chat?.age}</p>
+            {/* {!chat && <p className='flex items-center gap-4 ml-4'><FcInfo/>왼쪽의 채팅방을 선택해주세요.</p>} */}
+            {chat && 
+            (
+            <>
+              <button className='absolute left-[15px]' onClick={backBtnClick}><Back/></button>
+              <h1 className='ml-10 text-3xl font-bold'>{chat.nickname}</h1>
+              <p className='px-2 bg-[#AB62E5] rounded-full text-xs text-white ml-3'>{calculateAge(chat.birthday)}</p>
+            </>
+            )}
         </header>
         {/* 채팅창 */}
         <div className='w-full relative h-[700px] rounded-3xl p-4'>

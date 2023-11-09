@@ -1,6 +1,7 @@
 import service from '@/features';
 
 import type {
+    ChangePasswordReq,
     EmailVerifyReq,
     EmailVerifyRes,
     LoginReq,
@@ -46,6 +47,14 @@ const AuthAPI = {
             `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/refresh`,
             token
         ),
+    verifyPassword: (data:{password : string}) => 
+        service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/verify-password`, data),
+    changePassword: (data:{newPassword : string}) => 
+        service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/reset-password`, data),
+    deActiveUser: (userId:number) => 
+        service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/deactivate/${userId}`,null),
+    activateUser: () => 
+        service.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/activate-status`,null)
 };
 
 export default AuthAPI;

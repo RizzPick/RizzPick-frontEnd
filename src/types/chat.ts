@@ -4,7 +4,7 @@ export type ChatData = {
     latestMessage? : string;
     nickname : string;
     users : string[];
-    age? :number;
+    birthday: string;
     education? : string;
     intro? : string;
     latestMessageTime? : string;

@@ -61,3 +61,7 @@ export type UserActiveStatus = {
     userActiveStatus: boolean;
     userId: number;
 };
+
+export type ChangePasswordReq = {
+    
+}
