@@ -11,7 +11,6 @@ import { calculateAge } from '@/utils/dateUtils';
 import LogoutModal from '../common/LogoutModal';
 import ResignModal from '../common/ResignModal';
 
-const EducationIcon = dynamic(() => import("../../../public/profileIcon/graduationcap.fill.svg"));
 const HomeIcon = dynamic(() => import("../../../public/profileIcon/Home.svg"));
 
 function UserProfile() {
@@ -49,16 +48,19 @@ function UserProfile() {
         <section className='flex items-start justify-center flex-row gap-9 mt-[57px]'>
           <article className='w-[424px] h-[463px]'>
             <div className='flex flex-col w-full items-center'>
-                <div className='p-4 bg-white h-[189px] w-full rounded-2xl flex flex-col gap-3 justify-center border border-neutral-400 border-opacity-80'>
-                    {!profile.location && !profile.education && !profile.mbti && !profile.religion ? 
+                <div className='p-4 bg-white h-[189px] w-full rounded-2xl flex flex-col justify-center border border-neutral-400 border-opacity-80'>
+                    {!profile.location && !profile.mbti && !profile.religion ? 
                         <p className="text-center">작성된 내용이 없습니다.</p> 
                         : 
                         <>
-                            { profile.education ? <div className='flex items-center gap-4 border-b py-2'><EducationIcon/>{profile.education}</div> : null }
                             { profile.location ? <div className='flex items-center gap-4 border-b py-2'><HomeIcon/>{profile.location}</div> : null }
-                            <div className='flex items-center gap-4'>
+                            <div className='flex items-center gap-4 border-b py-2'>
                             { profile.mbti ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.mbti}</div> : null }
                             { profile.religion ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.religion}</div> : null }
+                            </div>
+                            <div className='flex items-center gap-4 py-2'>
+                            { profile.hobby ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.hobby}</div> : null }
+                            { profile.interest ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.interest}</div> : null }
                             </div>
                         </>
                     }

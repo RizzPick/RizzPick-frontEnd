@@ -10,7 +10,8 @@ export type UserProfile = {
     userId: string;
     nickname: string;
     birthday: string;
-    education?: string;
+    hobby : string;
+    interest : string;
     gender?: string;
     location?: string;
     mbti?: string;

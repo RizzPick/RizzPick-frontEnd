@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { MatchAPI } from '../../features/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
@@ -21,38 +21,44 @@ import { getCookie } from '@/utils/cookie';
 import toast from 'react-hot-toast';
 import { SyncLoader } from 'react-spinners';
 import { calculateAge } from '@/utils/dateUtils';
+import Loader from '../common/Loader';
+import NoUserAlert from './NoUserAlert';
+import ReportModal from '../common/ReportModal';
+import MatchControls from './MatchControls';
 
 
 function MatchMobile() {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [users, setUsers] = useState<UserProfile[]>([]);
+    const [userIndex, setUserIndex] = useState(0);
+    const [isReportModalVisible, setReportModalVisible] = useState(false);
 
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
     };
 
     const detailsStyle = isDetailsVisible ? 'translate-y-0' : 'translate-y-full';
+    
 
-
-    //! 랜덤 매칭
-    const [users, setUsers] = useState<UserProfile[]>([]);
-    const [userIndex, setUserIndex] = useState(0);
+    const fetchUsers = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const response = await MatchAPI.fetchRandomUser();
+            setUsers(response.data.data);
+            setUserIndex(0);
+            setSlideIndex(0);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            toast.error('데이터를 가져오는 중 오류가 발생했습니다.');
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true);
-                const response = await MatchAPI.fetchRandomUser();
-                const usersData = response.data.data;
-                setUsers(usersData);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
+        fetchUsers();
+    }, [fetchUsers]);
 
     const handleButtonClick = () => {
         if (userIndex >= users.length - 1) {
@@ -85,89 +91,51 @@ function MatchMobile() {
         );
     };
 
-    const sendLike = async (targetUserId: string) => {
-        try {
-            const url = `https://willyouback.shop/api/like/${targetUserId}`;
-            const response = await axios.post(
-                url,
-                {},
-                {
-                    headers: {
-                        Authorization: getCookie('Authorization'),
-                        Authorization_Refresh: getCookie(
-                            'Authorization_Refresh'
-                        ),
-                    },
-                }
-            );
-            // handleButtonClick();
-            return response;
-        } catch (error) {
-            console.error(error);
-            throw error;
+    const handleUserChange = (increment:any) => {
+        if (increment && userIndex >= users.length - 1) {
+            toast('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요', { icon: '🥹' });
+            setUsers([]);
+        } else {
+            setUserIndex(i => i + (increment ? 1 : -1));
+            setSlideIndex(0);
         }
     };
 
-    // 에러 처리 필요 : 좋아요가 실패해도 handleButtonClick() 함수가 동작할 것으로 보임
-    const handleLike = async () => {
+    const handleUserReaction = async (reaction: 'like' | 'nope') => {
         try {
-            const response = await sendLike(users[userIndex].userId);
-            toast(response.data.message, {icon: '❤️',});
-            handleButtonClick(); // 좋아요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
+            const userId = currentUser.userId;
+            const response = await (reaction === 'like' ? MatchAPI.sendLike(userId) : MatchAPI.sendNope(userId));
+
+            if (response.status === 200) {
+                toast(response.data.message, { icon: reaction === 'like' ? '❤️' : '👎', });
+                handleUserChange(true);
+            }
         } catch (error) {
-            console.error('좋아요 보내기 오류:', error);
+            console.error(reaction === 'like' ? '좋아요 보내기 오류:' : '싫어요 보내기 오류:', error);
         }
     };
 
-    const sendNope = async (targetUserId: string) => {
-        try {
-            const url = `https://willyouback.shop/api/nope/${targetUserId}`;
-            const response = await axios.post(
-                url,
-                {},
-                {
-                    headers: {
-                        Authorization: getCookie('Authorization'),
-                        Authorization_Refresh: getCookie(
-                            'Authorization_Refresh'
-                        ),
-                    },
-                }
-            );
-            return response.data;
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    };
+    if (isLoading) return <Loader />;
+    
 
-    // 에러 처리 필요 : 싫어요가 실패해도 handleButtonClick() 함수가 동작할 것으로 보임
-    const handleNope = async () => {
-        try {
-            const response = await sendNope(users[userIndex].userId);
-            handleButtonClick(); // 싫어요를 보낸 후에 다음 사용자의 프로필을 표시합니다.
-        } catch (error) {
-            console.error('싫어요 보내기 오류:', error);
-        }
-    };
     return (
         <div className="flex h-[100%-70px] flex-grow">
             <div className="flex-1 flex justify-evenly items-start px-2">
-                {isLoading &&
-                    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-                        <SyncLoader />
-                    </div>}
-                {!isLoading && users.length === 0 && (
-                    <div className='flex items-center flex-col justify-center h-[60vh] w-full bg-matchpage-gradient rounded-3xl shadow'>
-                        <div className='flex items-center flex-col'>
+            <ReportModal
+                    isOpen={isReportModalVisible}
+                    onClose={() => setReportModalVisible(false)}
+                    userId={users[userIndex]?.userId}
+                />
+            {users.length === 0 && 
+                <div className='flex items-center flex-col justify-center h-[60vh] w-full bg-matchpage-gradient rounded-3xl shadow'>
+                    <div className='flex items-center flex-col'>
                         <div className='font-bold text-[39px]'><GoAlert color="#cb17f9"/></div>
                         <h1 className='text-3xl font-black mb-[48px]'>sorry</h1>
                         <h1 className='text-base'>앗! 추천할 유저가 없네요.</h1>
                         <h1 className='text-xs'>다른 유저가 나타날 때까지 조금만 기다려 주세요.</h1>
-                        </div>
+                    </div>
                 </div>
-                )}
-
+            }
                 {users.length > 0 && (
                     <div className="flex-1 max-w-md rounded-full">
                     {/* 유저 이미지 */}
@@ -240,21 +208,7 @@ function MatchMobile() {
                                 <div className="text-white mt-2">{users[userIndex]?.intro}</div>
                         </div>
 
-                        {/* 좋아요, 싫어요 버튼 */}
-                        <div className="absolute text-white w-full flex justify-between p-4 bottom-0">
-                            <button
-                                className="transform transition-transform duration-500 hover:rotate-90 z-20"
-                                onClick={handleNope}
-                            >
-                                <Image src={BadIcon} width={66} height={66} alt='싫어요' />
-                            </button>
-                            <button
-                                className="animate-pulse animate-twice animate-ease-in-out z-20"
-                                onClick={handleLike}
-                            >
-                                <Image src={WhiteHeartIcon} width={66} height={66} alt='좋아요' />
-                            </button>
-                        </div>
+                        <MatchControls onReaction={handleUserReaction} />
                         <div className={`absolute -bottom-1 w-full transform ${detailsStyle} transition-transform duration-300 ease-in-out p-6 bg-white z-40 rounded-t-3xl h-[170px]`}>
                         <div className={`group ${!isDetailsVisible && "hidden"}`}>
                                 <div 

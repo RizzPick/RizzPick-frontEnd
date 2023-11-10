@@ -88,32 +88,37 @@ export default function Home() {
                     top: '-100px',
                     left: '-400px',
                     objectFit: 'cover',
-                    scale: 1.4,
-                    objectPosition:"top"
+                    scale: 1.6,
+                    objectPosition:"top",
+                    opacity: "60%"
                 }}
                 onLoadingComplete={() => setTimeout(() => setLoaded(true), 2000)}
             />
-            <div className="flex flex-col mt-20 sm:items-center h-[100vh] w-full z-10 px-20 sm:px-0">
-                <div className="ml-[359px]">
+            <div className="flex flex-col items-center mt-20 h-[100vh] w-full z-10 gap-4">
+                <div>
                     <h1 className={`text-white text-4xl font-bold`}>
                         매력적인 데이트,
                     </h1>
                 </div>
-                <div className="flex items-baseline justify-end mr-60 gap-x-10">
-                    <h2 className={`text-white text-3xl mb-4 font-bold mr-10`}>
-                        맞춤형 매치 _
-                    </h2>
+                <div>
                     <h2 className={`text-white text-3xl mb-4 font-bold`}>
-                        그 시작은
+                        맞춤형 매치
                     </h2>
-                    <h2 className={`text-white text-[96px] mb-4 font-extrabold`}>
+                </div>
+                <div className='mt-10'>
+                    <h2 className={`text-white text-3xl font-bold`}>
+                            그 시작은&nbsp;_
+                    </h2>
+                </div>
+                <div>
+                    <h2 className={`text-white text-[96px] mb-4 font-black`}>
                         RizzPick!
                     </h2>
                 </div>
-                <div className='flex justify-end mr-[330px]'>
+                <div className='flex bg-fuchsia-600 rounded-3xl shadow-inner'>
                     <button
                         onClick={() => router.push('/signin')}
-                        className="shadow-inner cursor-pointer bg-white text-fuchsia-600 font-bold py-3 px-20 rounded-full z-10"
+                        className="text-3xl cursor-pointer text-white font-semibold py-3 px-20 rounded-full z-10"
                     >
                         시작하기
                     </button>
