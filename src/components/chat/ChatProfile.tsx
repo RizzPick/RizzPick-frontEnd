@@ -7,13 +7,17 @@ import UseChat, { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import UserSkeleton from '../common/UserSkeleton';
 import Home from "../../../public/profileIcon/Home.svg"
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
+import ReportIcon from "../../../public/profileIcon/Report.svg";
 import ChatAPI from '@/features/chat';
 import { calculateAge } from '@/utils/dateUtils';
+import toast from 'react-hot-toast';
+import ReportModal from '../common/ReportModal';
 
 function ChatProfile() {
   const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
   const { clearCurrentChat } = UseChat();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isReportModalVisible, setReportModalVisible] = useState(false);
 
   
   const cancelMatch = async() => {
@@ -22,7 +26,7 @@ function ChatProfile() {
       const response = await ChatAPI.deleteChat(chat?.chatRoomId);
       if(response.status === 200) {
         clearCurrentChat();
-        // toast.success(response.data.message);
+        toast.success(response.data.message);
         window.location.reload();
       }
     } catch (error) {
@@ -33,6 +37,11 @@ function ChatProfile() {
   
   return (
     <div className="w-full p-4">
+      <ReportModal
+                    isOpen={isReportModalVisible}
+                    onClose={() => setReportModalVisible(false)}
+                    userId={chat?.userId}
+        />
       {chat ? (
         <>
           <div className="h-[231px] w-[231px] rounded-full overflow-hidden mx-auto mt-5">
@@ -64,7 +73,18 @@ function ChatProfile() {
               {chat.mbti && <div className='text-fuchsia-400 text-xl border border-fuchsia-400 rounded-2xl px-2 py-1'>#{chat.mbti}</div>}
               {chat.religion && <div className='border border-fuchsia-400 text-fuchsia-400 text-xl rounded-2xl px-2 py-1'>{chat.religion === "NONE" ? ("종교 없음"):(`#${chat.religion}`)}</div>}
             </div>
+            <div className='flex items-center justify-center w-28 h-7 p-2.5 bg-neutral-100 rounded-3xl shadow mt-[29px] cursor-pointer' onClick={() => setReportModalVisible(true)}>
+              <div className='flex items-center justify-center gap-2 text-neutral-400 text-base font-semibold'>
+                <div>
+                  <ReportIcon/>
+                </div>
+                <div>
+                  신고하기
+                </div>
+              </div>
+            </div>
           </div>
+            
             <div className='mx-auto flex justify-center items-center w-[207px] bg-rose-100 rounded-full h-[45px] mt-10 hover:scale-110 transition-all duration-200' onClick={()=>setShowLogoutModal(true)}>
               <button className='text-red-600 text-xl'>채팅방 나가기</button>
             </div>

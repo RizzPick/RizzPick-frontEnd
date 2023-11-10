@@ -24,3 +24,8 @@ export type ImageObject = {
     id: number;
     image: string;
 };
+
+export type reportReq = {
+    reportedUserId : number;
+    content : string;
+}

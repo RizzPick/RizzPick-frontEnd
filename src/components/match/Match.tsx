@@ -12,8 +12,10 @@ import MatchControls from './MatchControls';
 
 import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg";
 import HomeIcon from "../../../public/profileIcon/Home.svg";
+import ReportIcon from "../../../public/profileIcon/Report.svg";
 import LeftBtnIcon from "../../../public/matchIcon/left.svg";
 import RightBtnIcon from "../../../public/matchIcon/right.svg";
+import ReportModal from '../common/ReportModal';
 
 
 function Match() {
@@ -23,6 +25,7 @@ function Match() {
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
     const [slideIndex, setSlideIndex] = useState(0);
+    const [isReportModalVisible, setReportModalVisible] = useState(false);
 
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
@@ -121,6 +124,11 @@ function Match() {
 
     return (
         <div className="relative flex bg-matchpage-gradient h-[100vh]">
+            <ReportModal
+                    isOpen={isReportModalVisible}
+                    onClose={() => setReportModalVisible(false)}
+                    userId={users[userIndex]?.userId}
+                />
             <div className="flex items-start p-10 mx-auto">
                 <div>
                     <div className="relative h-[70vh] w-full">
@@ -253,7 +261,7 @@ function Match() {
                             isDetailsVisible ? '' : 'hidden'
                         }`}
                     >
-                        <div className="p-4 bg-white rounded-3xl h-[25vh] w-full flex flex-col justify-center gap-3">
+                        <div className="p-4 bg-white rounded-3xl h-[25vh] w-full flex flex-col justify-center gap-3 relative">
                             {!users[userIndex].location &&
                             !users[userIndex].education &&
                             !users[userIndex].mbti &&
@@ -286,6 +294,9 @@ function Match() {
                                                 #{users[userIndex].religion}
                                             </div>
                                         ) : null}
+                                        <div className='cursor-pointer absolute bottom-4 right-4' onClick={() => setReportModalVisible(true)}>
+                                            <ReportIcon />
+                                        </div>
                                     </div>
                                 </>
                             )}
