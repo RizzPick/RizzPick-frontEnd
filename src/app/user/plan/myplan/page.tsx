@@ -5,7 +5,7 @@ import MyPlanList from '@/components/plan/MyPlanList';
 export default function matchPage() {
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <MyPlanList />
             <Footer />
         </>

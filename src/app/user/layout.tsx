@@ -1,4 +1,5 @@
 import RealTime from '@/components/alarm/RealTime';
+import RealTimeModal from '@/components/alarm/RealTimeModal';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
@@ -17,9 +18,9 @@ export default function UserLayout({
 }) {
     return (
         <section>
-            <div>
+            {/* <div>
                 <RealTime />
-            </div>
+            </div> */}
             {children}
         </section>
     );

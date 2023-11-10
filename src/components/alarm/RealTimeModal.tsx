@@ -7,12 +7,23 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { getCookie } from '@/utils/cookie';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-import { RealTimeModalProps } from '@/types/alarm/type';
+// import { RealTimeModalProps } from '@/types/alarm/type';
+import { Dispatch, SetStateAction } from 'react';
+
+type ProfileImage = {
+    id: number;
+    image: string;
+};
+
+type UserProfile = {
+    id: number;
+    profileImages: ProfileImage[];
+};
 
 type Alert = {
     id: number;
-    receiver: { id: number };
-    sender: { id: number };
+    receiver: UserProfile;
+    sender: UserProfile;
     message: string;
     content: string;
     url: string;
@@ -20,7 +31,12 @@ type Alert = {
     readStatus: boolean;
 };
 
-const RealTimeModal = ({ close }: RealTimeModalProps) => {
+export interface RealTimeModalProps {
+    close: () => void;
+    setUnreadAlertCount: Dispatch<SetStateAction<number>>;
+}
+
+const RealTimeModal = ({ close, setUnreadAlertCount }: RealTimeModalProps) => {
     const [closeModal] = useState(true);
     const [alerts, setAlerts] = useState<Alert[]>([]);
     const [messages, setMessages] = useState<string[]>([]);
@@ -30,101 +46,25 @@ const RealTimeModal = ({ close }: RealTimeModalProps) => {
     const [sse, setSse] = useState<EventSourcePolyfill | null>(null);
     const [processedEventIds, setProcessedEventIds] = useState<string[]>([]);
 
-    const formatDate = (isoString: any) => {
+    const formatDate = (isoString: string) => {
         const date = new Date(isoString);
-        const year = date.getFullYear().toString().substr(-2);
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
+        if (isNaN(date.getTime())) {
+            // 여기서 getTime() 메소드를 사용하여 날짜가 유효한지 확인
+            return 'Invalid Date';
+        }
+
+        const year = date.getFullYear(); // 올바른 메소드 사용
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 올바른 메소드 사용
+        const day = date.getDate().toString().padStart(2, '0'); // 올바른 메소드 사용
+        const hours = date.getHours().toString().padStart(2, '0'); // 올바른 메소드 사용
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // 올바른 메소드 사용
 
         return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
 
-    const reconnectSSE = useCallback((retries = 3, delay = 5000) => {
-        setTimeout(() => {
-            if (retries > 0) {
-                console.log(`재연결 시도 중... 남은 시도 횟수: ${retries}`);
-                initializeSSE();
-            }
-        }, delay);
-    }, []);
-
-    // 실시간 알림을 받았을 때 처리하는 함수
-    const handleNewAlert = useCallback(
-        (newAlert: string) => {
-            // 새로운 알림 메시지를 화면에 표시
-            setMessages((currentMessages) => [...currentMessages, newAlert]);
-        },
-        [setMessages]
-    );
-
-    const initializeSSE = useCallback(() => {
-        const newSSE = new EventSource('https://willyouback.shop/subscribe', {
-            headers: {
-                Authorization: `${token}`,
-                'Content-Type': 'text/event-stream',
-                Connection: 'keep-alive',
-                'Cache-Control': 'no-cache',
-            },
-            heartbeatTimeout: 3600000,
-        });
-
-        newSSE.onopen = () => {
-            console.log('SSE 연결됨');
-        };
-
-        newSSE.onmessage = (event) => {
-            console.log('알림 메시지 전달받음');
-            console.log(event);
-            console.log(event.data);
-
-            // 데이터를 JSON으로 파싱
-            try {
-                if (event.data.startsWith('{')) {
-                    const jsonData = JSON.parse(event.data);
-                    if (Array.isArray(jsonData)) {
-                        // 데이터가 배열로 온 경우, 각 메시지를 처리
-                        jsonData.forEach((newAlert) => {
-                            if (newAlert && newAlert.message) {
-                                handleNewAlert(newAlert.message);
-                            }
-                        });
-                    } else if (jsonData && jsonData.message) {
-                        // 데이터가 개별 메시지인 경우, 해당 메시지를 처리
-                        handleNewAlert(jsonData.message);
-                    }
-                }
-            } catch (error) {
-                console.error('Parsing JSON failed:', error);
-            }
-        };
-
-        newSSE.onerror = (e) => {
-            console.error('EventSource error:', e);
-            newSSE.close();
-        };
-
-        setSse(newSSE);
-    }, [token, handleNewAlert]);
-
-    const fetchAlerts = useCallback(async () => {
-        try {
-            const response = await fetch('https://willyouback.shop/alerts', {
-                method: 'GET',
-                headers: {
-                    Authorization: `${token}`,
-                },
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            setAlerts(data.data); // 모든 알림 데이터를 저장
-        } catch (error) {
-            console.error('Fetching alerts failed:', error);
-        }
-    }, [token]);
+    useEffect(() => {
+        setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
+    }, [alerts]);
 
     const markAsRead = async (id: number) => {
         try {
@@ -176,14 +116,115 @@ const RealTimeModal = ({ close }: RealTimeModalProps) => {
         }
     };
 
-    // 컴포넌트가 마운트될 때 EventSource 초기화
+    const handleNewAlert = useCallback(
+        (newAlert: string) => {
+            // 새로운 알림 메시지를 화면에 표시
+            setMessages((currentMessages) => [...currentMessages, newAlert]);
+        },
+        [setMessages]
+    );
+
+    const fetchAlerts = useCallback(async () => {
+        try {
+            const response = await fetch('https://willyouback.shop/alerts', {
+                method: 'GET',
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+
+            const parsedAlerts = data.data.map((alertData: any) => ({
+                id: alertData.id,
+                receiver: alertData.receiver,
+                sender: alertData.sender,
+                message: alertData.message,
+                url: alertData.url,
+                readStatus: alertData.readStatus,
+                time: formatDate(alertData.time),
+            }));
+
+            setAlerts(parsedAlerts);
+        } catch (error) {
+            console.error('Fetching alerts failed:', error);
+        }
+    }, [token]);
+
     useEffect(() => {
-        initializeSSE();
+        // 데이터베이스에서 알림 데이터를 가져오는 함수 호출
         fetchAlerts();
-        return () => {
-            sse?.close();
-        };
-    }, [initializeSSE]);
+
+        // 30초마다 알림 데이터를 새로고침
+        const interval = setInterval(fetchAlerts, 30000);
+
+        // 컴포넌트가 언마운트될 때 인터벌을 정리
+        return () => clearInterval(interval);
+    }, []);
+
+    // const initializeSSE = useCallback(() => {
+    //     const newSSE = new EventSource('https://willyouback.shop/subscribe', {
+    //         headers: {
+    //             Authorization: `${token}`,
+    //             'Content-Type': 'text/event-stream',
+    //             Connection: 'keep-alive',
+    //             'Cache-Control': 'no-cache',
+    //         },
+    //         heartbeatTimeout: 3600000,
+    //     });
+
+    //     newSSE.onopen = () => {
+    //         console.log('SSE 연결됨');
+    //     };
+
+    //     newSSE.onmessage = (event) => {
+    //         console.log('알림 메시지 전달받음');
+    //         console.log(event);
+    //         console.log(event.data);
+
+    //         // 데이터를 JSON으로 파싱
+    //         try {
+    //             if (event.data.startsWith('{')) {
+    //                 const jsonData = JSON.parse(event.data);
+    //                 if (Array.isArray(jsonData)) {
+    //                     // 데이터가 배열로 온 경우, 각 메시지를 처리
+    //                     jsonData.forEach((newAlert) => {
+    //                         if (newAlert && newAlert.message) {
+    //                             handleNewAlert(newAlert.message);
+    //                         }
+    //                     });
+    //                 } else if (jsonData && jsonData.message) {
+    //                     // 데이터가 개별 메시지인 경우, 해당 메시지를 처리
+    //                     handleNewAlert(jsonData.message);
+    //                 }
+    //             }
+    //         } catch (error) {
+    //             console.error('Parsing JSON failed:', error);
+    //         }
+    //     };
+
+    //     newSSE.onerror = (e) => {
+    //         console.error('EventSource error:', e);
+    //         newSSE.close();
+    //     };
+
+    //     setSse(newSSE);
+    // }, [token, handleNewAlert]);
+
+    useEffect(() => {
+        setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
+    }, [alerts]);
+
+    // // 컴포넌트가 마운트될 때 EventSource 초기화
+    // useEffect(() => {
+    //     initializeSSE();
+    //     fetchAlerts();
+    //     return () => {
+    //         sse?.close();
+    //     };
+    // }, [initializeSSE]);
 
     return (
         <>
@@ -199,11 +240,21 @@ const RealTimeModal = ({ close }: RealTimeModalProps) => {
                         {alerts.map((alert) => (
                             <div key={alert.id} className="">
                                 {!alert.readStatus && (
-                                    <div className="flex flex-row items-center">
+                                    <div className="flex flex-row items-center py-2">
+                                        {alert.sender.profileImages[0] && (
+                                            <img
+                                                src={
+                                                    alert.sender
+                                                        .profileImages[0].image
+                                                }
+                                                alt="Profile"
+                                                className="w-10 h-10 rounded-full mr-1"
+                                            />
+                                        )}
                                         <p className="text-base">
                                             {alert.message}
                                         </p>
-                                        <p className="text-[#aaa] text-xs ml-3 mr-5">
+                                        <p className="text-[#aaa] text-xs ml-2 mr-1">
                                             {formatDate(alert.time)}
                                         </p>
                                         <button
@@ -224,3 +275,97 @@ const RealTimeModal = ({ close }: RealTimeModalProps) => {
 };
 
 export default RealTimeModal;
+
+// const reconnectSSE = useCallback((retries = 3, delay = 5000) => {
+//     setTimeout(() => {
+//         if (retries > 0) {
+//             console.log(`재연결 시도 중... 남은 시도 횟수: ${retries}`);
+//             initializeSSE();
+//         }
+//     }, delay);
+// }, []);
+
+// 실시간 알림을 받았을 때 처리하는 함수
+// const handleNewAlert = useCallback(
+//     (newAlert: string) => {
+//         // 새로운 알림 메시지를 화면에 표시
+//         setMessages((currentMessages) => [...currentMessages, newAlert]);
+//     },
+//     [setMessages]
+// );
+
+// const initializeSSE = useCallback(() => {
+//     const newSSE = new EventSource('https://willyouback.shop/subscribe', {
+//         headers: {
+//             Authorization: `${token}`,
+//             'Content-Type': 'text/event-stream',
+//             Connection: 'keep-alive',
+//             'Cache-Control': 'no-cache',
+//         },
+//         heartbeatTimeout: 3600000,
+//     });
+
+//     newSSE.onopen = () => {
+//         console.log('SSE 연결됨');
+//     };
+
+//     newSSE.onmessage = (event) => {
+//         console.log('알림 메시지 전달받음');
+//         console.log(event);
+//         console.log(event.data);
+
+//         // 데이터를 JSON으로 파싱
+//         try {
+//             if (event.data.startsWith('{')) {
+//                 const jsonData = JSON.parse(event.data);
+//                 if (Array.isArray(jsonData)) {
+//                     // 데이터가 배열로 온 경우, 각 메시지를 처리
+//                     jsonData.forEach((newAlert) => {
+//                         if (newAlert && newAlert.message) {
+//                             handleNewAlert(newAlert.message);
+//                         }
+//                     });
+//                 } else if (jsonData && jsonData.message) {
+//                     // 데이터가 개별 메시지인 경우, 해당 메시지를 처리
+//                     handleNewAlert(jsonData.message);
+//                 }
+//             }
+//         } catch (error) {
+//             console.error('Parsing JSON failed:', error);
+//         }
+//     };
+
+//     newSSE.onerror = (e) => {
+//         console.error('EventSource error:', e);
+//         newSSE.close();
+//     };
+
+//     setSse(newSSE);
+// }, [token, handleNewAlert]);
+
+// const fetchAlerts = useCallback(async () => {
+//     try {
+//         const response = await fetch('https://willyouback.shop/alerts', {
+//             method: 'GET',
+//             headers: {
+//                 Authorization: `${token}`,
+//             },
+//         });
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         const data = await response.json();
+//         setAlerts(data.data); // 모든 알림 데이터를 저장
+//     } catch (error) {
+//         console.error('Fetching alerts failed:', error);
+//     }
+// }, [token]);
+
+// // 컴포넌트가 마운트될 때 EventSource 초기화
+// useEffect(() => {
+//     initializeSSE();
+//     fetchAlerts();
+//     return () => {
+//         sse?.close();
+//     };
+// }, [initializeSSE]);

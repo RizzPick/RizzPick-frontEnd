@@ -5,7 +5,7 @@ import Board from '@/components/plan/Board';
 export default function BoardPage() {
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <Board />
             <Footer />
         </>

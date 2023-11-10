@@ -3,12 +3,25 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { UserInfo } from '@/types/user';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import AuthAPI from '@/features/auth';
 import { getCookie } from '@/utils/cookie';
 import Alarm from '@/components/alarm/Alarm';
 import Logo from '../../../public/Logo_color.png';
 import RealTimeModal from '../alarm/RealTimeModal';
+import { Dispatch, SetStateAction } from 'react';
+import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+
+type Alert = {
+    id: number;
+    receiver: { id: number };
+    sender: { id: number };
+    message: string;
+    content: string;
+    url: string;
+    time: string;
+    readStatus: boolean;
+};
 
 export default function Header() {
     const [showOverlay, setShowOverlay] = useState(false);
@@ -16,6 +29,15 @@ export default function Header() {
     const [showRealTimeModal, setShowRealTimeModal] = useState(false);
     const token = getCookie('Authorization');
     const [userInfo, setUserInfo] = useState<UserInfo>();
+
+    const [unreadAlertCount, setUnreadAlertCount] = useState(0);
+
+    const [closeModal] = useState(true);
+    const [alerts, setAlerts] = useState<Alert[]>([]);
+    const [messages, setMessages] = useState<string[]>([]);
+
+    const EventSource = EventSourcePolyfill || NativeEventSource;
+    const [sse, setSse] = useState<EventSourcePolyfill | null>(null);
 
     const Open = () => {
         setShowOverlay(true);
@@ -36,6 +58,101 @@ export default function Header() {
         setShowOverlay(false);
         setShowRealTimeModal(false);
     };
+
+    const handleNewAlert = useCallback(
+        (newAlert: string) => {
+            // 새로운 알림 메시지를 화면에 표시
+            setMessages((currentMessages) => [...currentMessages, newAlert]);
+        },
+        [setMessages]
+    );
+
+    const fetchAlerts = useCallback(async () => {
+        try {
+            const response = await fetch('https://willyouback.shop/alerts', {
+                method: 'GET',
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setAlerts(data.data); // 모든 알림 데이터를 저장
+
+            // 여기서 unreadAlertCount를 업데이트합니다.
+            setUnreadAlertCount(
+                data.data.filter((alert: any) => !alert.readStatus).length
+            );
+        } catch (error) {
+            console.error('Fetching alerts failed:', error);
+        }
+    }, [token]);
+
+    const initializeSSE = useCallback(() => {
+        const newSSE = new EventSource('https://willyouback.shop/subscribe', {
+            headers: {
+                Authorization: `${token}`,
+                'Content-Type': 'text/event-stream',
+                Connection: 'keep-alive',
+                'Cache-Control': 'no-cache',
+            },
+            heartbeatTimeout: 3600000,
+        });
+
+        newSSE.onopen = () => {
+            console.log('SSE 연결됨');
+            fetchAlerts();
+        };
+
+        newSSE.onmessage = (event) => {
+            fetchAlerts();
+            console.log('알림 메시지 전달받음');
+            console.log(event);
+            console.log(event.data);
+
+            // 데이터를 JSON으로 파싱
+            try {
+                if (event.data.startsWith('{')) {
+                    const jsonData = JSON.parse(event.data);
+                    if (Array.isArray(jsonData)) {
+                        // 데이터가 배열로 온 경우, 각 메시지를 처리
+                        jsonData.forEach((newAlert) => {
+                            if (newAlert && newAlert.message) {
+                                handleNewAlert(newAlert.message);
+                            }
+                        });
+                    } else if (jsonData && jsonData.message) {
+                        // 데이터가 개별 메시지인 경우, 해당 메시지를 처리
+                        handleNewAlert(jsonData.message);
+                    }
+                }
+            } catch (error) {
+                console.error('Parsing JSON failed:', error);
+            }
+        };
+
+        newSSE.onerror = (e) => {
+            console.error('EventSource error:', e);
+            newSSE.close();
+        };
+
+        setSse(newSSE);
+    }, [token, handleNewAlert]);
+
+    useEffect(() => {
+        setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
+    }, [alert]);
+
+    // 컴포넌트가 마운트될 때 EventSource 초기화
+    useEffect(() => {
+        initializeSSE();
+        fetchAlerts();
+        return () => {
+            sse?.close();
+        };
+    }, [initializeSSE]);
 
     useEffect(() => {
         if (token) {
@@ -71,8 +188,16 @@ export default function Header() {
                 <span onClick={openRealTimeModal} className="cursor-pointer">
                     실시간
                 </span>
+                {unreadAlertCount > 0 && (
+                    <span className="mb-6 ml-[-45px] px-1 text-xs border rounded-full bg-[red] text-white">
+                        {unreadAlertCount}
+                    </span>
+                )}
                 {showRealTimeModal && (
-                    <RealTimeModal close={closeRealTimeModal} />
+                    <RealTimeModal
+                        close={closeRealTimeModal}
+                        setUnreadAlertCount={setUnreadAlertCount}
+                    />
                 )}
                 <Link href="/user/plan/board">데이트</Link>
                 <span onClick={Open} className="cursor-pointer">

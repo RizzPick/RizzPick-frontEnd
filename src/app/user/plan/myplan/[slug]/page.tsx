@@ -224,7 +224,7 @@ export default function PostPage({ params: { slug } }: Props) {
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             {!isEditing && (
                 <div className="hidden sm:block">
                     <div
