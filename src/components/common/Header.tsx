@@ -183,7 +183,7 @@ export default function Header() {
                             priority
                             alt="로고"
                             fill={true}
-                            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 350px"
+                            sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"
                             object-fit="cover"
                         />
                     </div>

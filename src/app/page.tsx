@@ -22,6 +22,8 @@ export default function Home() {
                         alt="로고"
                         fill
                         style={{ objectFit: 'cover' }}
+                        priority
+                        sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"
                         onLoadingComplete={() => setTimeout(() => setLoaded(true), 2000)}
                     />
                 </div>
@@ -34,7 +36,7 @@ export default function Home() {
             <div className='flex flex-col items-center justify-center h-screen w-full bg-[#062643]'>
                 <div className='absolute inset-0 bg-gradient-to-b from-[#a627a9]/50 via-[#9015db]/38 via-[#b122c8]/53 via-[#6721c1]/40 to-[#262d6d]/30'/>
             <div className='relative w-32 h-20 mx-auto'>
-                <Image src={RizzPickLogo} alt='리즈픽 로고' fill style={{objectFit : 'cover'}} />
+                <Image src={RizzPickLogo} alt='리즈픽 로고' fill style={{objectFit : 'cover'}} priority sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"/>
             </div>
             <div className="items-center flex-col mt-40 flex z-20 gap-6">
                 <button
@@ -64,6 +66,7 @@ export default function Home() {
                             alt="로고"
                             fill
                             style={{ objectFit: 'cover' }}
+                            sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"
                         />
                     </div>
                     <div className='text-3xl text-white font-bold ml-10 cursor-pointer' onClick={()=>router.push('/about')}>
@@ -83,6 +86,7 @@ export default function Home() {
                 alt="메인페이지"
                 fill
                 priority
+                sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"
                 className={`absolute z-0 transform transition-transform duration-1000 pointer-events-none`}
                 style={{
                     top: '-100px',

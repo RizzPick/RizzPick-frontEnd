@@ -20,6 +20,7 @@ function AboutPage() {
                             src={RizzPickLogo}
                             alt="로고"
                             fill
+                            sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"
                             style={{ objectFit: 'cover' }}
                         />
                     </div>
