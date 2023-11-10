@@ -83,7 +83,7 @@ export default function Home() {
                 alt="메인페이지"
                 fill
                 priority
-                className={`absolute z-0 transform transition-transform duration-1000`}
+                className={`absolute z-0 transform transition-transform duration-1000 pointer-events-none`}
                 style={{
                     top: '-100px',
                     left: '-400px',
