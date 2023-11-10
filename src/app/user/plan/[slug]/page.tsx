@@ -49,7 +49,7 @@ export default function PostPage({ params: { slug } }: Props) {
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const [dateList, setDateList] = useState<DateItem[]>([]);
     const [activePage, setActivePage] = useState(slug);
-    const targetUserId = userProfile?.userId as string;
+    const targetUserId = userProfile?.userId as number;
     const userId = getCookie('userId') as string;
     const router = useRouter();
 
@@ -126,7 +126,7 @@ export default function PostPage({ params: { slug } }: Props) {
     };
 
     // 좋아요 보내기 함수
-    const sendLike = async (userId: string, targetUserId: string) => {
+    const sendLike = async (userId: string, targetUserId: number) => {
         try {
             const url = `https://willyouback.shop/api/like/${targetUserId}`;
             const response = await axios.post(
@@ -149,7 +149,7 @@ export default function PostPage({ params: { slug } }: Props) {
     };
 
     // 싫어요 보내기 함수
-    const sendNope = async (userId: string, targetUserId: string) => {
+    const sendNope = async (userId: string, targetUserId: number) => {
         try {
             const url = `https://willyouback.shop/api/nope/${targetUserId}`;
             const response = await axios.post(
@@ -367,12 +367,6 @@ export default function PostPage({ params: { slug } }: Props) {
                                                 <LocationIcon />
                                                 <p className="ml-4">
                                                     {userProfile.location}
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-row">
-                                                <EducationIcon />
-                                                <p className="ml-4">
-                                                    {userProfile.education}
                                                 </p>
                                             </div>
                                         </div>
