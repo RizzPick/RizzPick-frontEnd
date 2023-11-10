@@ -143,7 +143,7 @@ export default function Header() {
 
     useEffect(() => {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
-    }, [alert]);
+    }, [alerts]);
 
     // 컴포넌트가 마운트될 때 EventSource 초기화
     useEffect(() => {
@@ -170,10 +170,12 @@ export default function Header() {
 
     return (
         <header className="flex justify-between item-center px-8 sm:px-4 py-4 border-b border-zinc-300 sm:border-none">
-            <nav className='flex items-center text-2xl gap-12'>
+            <nav className="flex items-center text-2xl gap-12">
                 <Link
                     href="/user/match"
-                    onClick={() => sessionStorage.setItem('selectedIcon', 'home')}
+                    onClick={() =>
+                        sessionStorage.setItem('selectedIcon', 'home')
+                    }
                 >
                     <div className="relative w-[71px] h-[45px]">
                         <Image
@@ -182,11 +184,13 @@ export default function Header() {
                             alt="로고"
                             fill={true}
                             sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 350px"
-                            object-fit='cover'
+                            object-fit="cover"
                         />
                     </div>
                 </Link>
-                <Link href="/user/plan/board" className='sm:hidden'>데이트</Link>
+                <Link href="/user/plan/board" className="sm:hidden">
+                    데이트
+                </Link>
             </nav>
             <nav className="flex gap-12 items-center sm:hidden text-2xl">
                 <span onClick={openRealTimeModal} className="cursor-pointer">
