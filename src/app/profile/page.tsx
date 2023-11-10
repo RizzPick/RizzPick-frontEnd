@@ -8,12 +8,10 @@ export default function ProfilePage() {
     return (
         <div>
             <div className="sm:hidden">
-                {/* <Header /> */}
                 <UserProfile />
             </div>
 
             <div className="sm:block hidden height-screen-vh">
-                {/* <Header /> */}
                 <UserProfileMobile />
                 <Footer />
             </div>

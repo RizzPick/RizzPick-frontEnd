@@ -196,7 +196,6 @@ export default function PostPage({ params: { slug } }: Props) {
 
     return (
         <>
-            {/* <Header /> */}
             <div className="hidden sm:block">
                 <div
                     className="flex flex-row h-20 mb-4 items-center"

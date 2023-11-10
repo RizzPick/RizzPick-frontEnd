@@ -23,13 +23,11 @@ export default function MatchPage() {
         <div className="bg-white">
             {mobile ? (
                 <div className="height-screen-vh">
-                    <Header />
                     <MatchMobile />
                     <Footer />
                 </div>
             ) : (
                 <div>
-                    <Header />
                     <Match />
                 </div>
             )}
