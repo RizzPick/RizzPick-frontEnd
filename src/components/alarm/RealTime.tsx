@@ -1,9 +1,9 @@
-//? EventSource.onopen : 서버와 연결이 open되었을 때 호출하는 이벤트 핸들러
-//? EventSource.onmessage : 서버로부터 message를 수신했을 때 호출하는 이벤트 핸들러
-//? EventSource.onerror : 에러가 발생하거나 EventSource 객체에서 error event가 감지되었을 때 호출하는 이벤트 핸들러
+// ? EventSource.onopen : 서버와 연결이 open되었을 때 호출하는 이벤트 핸들러
+// ? EventSource.onmessage : 서버로부터 message를 수신했을 때 호출하는 이벤트 핸들러
+// ? EventSource.onerror : 에러가 발생하거나 EventSource 객체에서 error event가 감지되었을 때 호출하는 이벤트 핸들러
 
 'use client';
-
+import React from 'react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { getCookie } from '@/utils/cookie';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
@@ -28,6 +28,7 @@ const RealTime = () => {
     const EventSource = EventSourcePolyfill || NativeEventSource;
     const [sse, setSse] = useState<EventSourcePolyfill | null>(null);
     const [processedEventIds, setProcessedEventIds] = useState<string[]>([]);
+    const sseRef = useRef<EventSourcePolyfill | null>(null);
 
     const showToast = useCallback((message: string) => {
         (toast as any)(message, {
@@ -41,43 +42,9 @@ const RealTime = () => {
         });
     }, []);
 
-    // 새로운 알림이 추가될 때마다 토스트를 띄우는 useEffect
     // useEffect(() => {
-    //     if (alerts.length > 0) {
-    //         const lastAlert = alerts[alerts.length - 1];
-    //         showToast(lastAlert.message);
-    //     }
-    // }, [alerts, showToast]);
-
-    useEffect(() => {
-        showToast('실시간 버튼을 클릭해서 좋아요, 매칭 현황을 확인해보세요!');
-    }, [showToast]);
-
-    const reconnectSSE = useCallback((retries = 3, delay = 5000) => {
-        setTimeout(() => {
-            if (retries > 0) {
-                console.log(`재연결 시도 중... 남은 시도 횟수: ${retries}`);
-                initializeSSE();
-            }
-        }, delay);
-    }, []);
-
-    // const updateReadStatus = useCallback(
-    //     async (alertId: number) => {
-    //         try {
-    //             await fetch(`https://willyouback.shop/alerts/${alertId}/read`, {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     Authorization: `${token}`,
-    //                 },
-    //             });
-    //             // 성공적으로 readStatus가 업데이트 되었다면, 여기에 로직 추가
-    //         } catch (error) {
-    //             console.error('Updating read status failed:', error);
-    //         }
-    //     },
-    //     [token]
-    // );
+    //     showToast('실시간 버튼을 클릭해서 좋아요, 매칭 현황을 확인해보세요!');
+    // }, [token]);
 
     const handleNewMessage = useCallback(
         (event: any) => {
@@ -112,46 +79,52 @@ const RealTime = () => {
         [showToast, processedEventIds]
     );
 
-    const initializeSSE = useCallback(() => {
-        const newSSE = new EventSource('https://willyouback.shop/subscribe', {
-            headers: {
-                Authorization: `${token}`,
-                'Content-Type': 'text/event-stream',
-                Connection: 'keep-alive',
-                'Cache-Control': 'no-cache',
-            },
-            heartbeatTimeout: 3600000, // 1시간 타임아웃 설정
-        });
-
-        newSSE.onopen = () => {
-            console.log('SSE 연결됨');
-            fetchAlerts();
-        };
-
-        // 서버로부터 message를 수신했을 때 호출하는 이벤트 핸들러
-        newSSE.onmessage = (event) => {
-            console.log('알림 메시지 전달받음');
-            console.log(event);
-            console.log(event.data);
-            // 구독한 아이디에 실시간으로 알림이 왔을 때 실행될 함수를 명시
-            handleNewMessage(event);
-        };
-
-        newSSE.onerror = (e) => {
-            console.error('EventSource error:', e);
-            newSSE.close();
-            reconnectSSE();
-        };
-
-        setSse(newSSE);
-    }, [token]);
-
     useEffect(() => {
-        initializeSSE();
-        return () => {
-            sse?.close();
+        if (!token || sseRef.current) return;
+
+        console.log('Initializing SSE connection...');
+        const initializeSSE = () => {
+            const sse = new EventSource('https://willyouback.shop/subscribe', {
+                headers: {
+                    Authorization: `${token}`,
+                    'Content-Type': 'text/event-stream',
+                    Connection: 'keep-alive',
+                    'Cache-Control': 'no-cache',
+                },
+                heartbeatTimeout: 3600000, // 1시간 타임아웃 설정
+            });
+
+            sse.onopen = () => {
+                console.log('SSE 연결됨');
+                fetchAlerts();
+            };
+
+            sse.onmessage = (event: any) => {
+                console.log('알림 메시지 전달받음');
+                console.log(event);
+                console.log(event.data);
+                handleNewMessage(event);
+            };
+
+            sse.onerror = (e) => {
+                console.error('EventSource error:', e);
+                // 에러 발생 시 재연결 로직이 있다면 여기에 넣기
+                sse.close();
+                sseRef.current = null;
+            };
+
+            sseRef.current = sse;
         };
-    }, [initializeSSE]);
+        initializeSSE();
+
+        return () => {
+            if (sseRef.current) {
+                console.log('Closing SSE connection...');
+                sseRef.current.close();
+                sseRef.current = null;
+            }
+        };
+    }, [token, handleNewMessage]); // 의존성 배열에 token과 handleNewMessage 포함
 
     const fetchAlerts = useCallback(async () => {
         try {
@@ -178,32 +151,58 @@ const RealTime = () => {
         }
     }, [token]);
 
-    return (
-        <></>
-        // <>
-        //     {/* toast.custom 호출 부분에도 위치 설정을 추가합니다. */}
-        //     {toast.custom(
-        //         (t) => (
-        //             <div
-        //                 className={`bg-white ${
-        //                     t.visible ? 'animate-enter' : 'animate-leave'
-        //                 }`}
-        //             >
-        //                 {/* alerts 배열을 이용하여 토스트 UI를 업데이트합니다. */}
-        //                 {alerts.map((alert) => (
-        //                     <div key={alert.id}>
-        //                         <p>{alert.message}</p>
-        //                     </div>
-        //                 ))}
-        //             </div>
-        //         ),
-        //         {
-        //             position: 'top-right', // 여기에도 위치를 top-right로 설정합니다.
-        //             // 기타 필요한 옵션들...
-        //         }
-        //     )}
-        // </>
-    );
+    return null;
 };
 
-export default RealTime;
+export default React.memo(RealTime);
+
+// const reconnectSSE = useCallback(
+//     (retries = 3, delay = 5000) => {
+//         if (sse) return; // 이미 연결이 있는 경우 재연결 시도를 하지 않습니다.
+
+//         setTimeout(() => {
+//             if (retries > 0) {
+//                 console.log(`재연결 시도 중... 남은 시도 횟수: ${retries}`);
+//                 initializeSSE();
+//             }
+//         }, delay);
+//     },
+//     [sse, initializeSSE]
+// );
+
+// useEffect(() => {
+//     if (!sse) {
+//         initializeSSE();
+//     }
+//     return () => {
+//         if (sse) {
+//             sse.close();
+//             setSse(null);
+//         }
+//     };
+// }, []);
+
+// const updateReadStatus = useCallback(
+//     async (alertId: number) => {
+//         try {
+//             await fetch(`https://willyouback.shop/alerts/${alertId}/read`, {
+//                 method: 'POST',
+//                 headers: {
+//                     Authorization: `${token}`,
+//                 },
+//             });
+//             // 성공적으로 readStatus가 업데이트 되었다면, 여기에 로직 추가
+//         } catch (error) {
+//             console.error('Updating read status failed:', error);
+//         }
+//     },
+//     [token]
+// );
+
+// 새로운 알림이 추가될 때마다 토스트를 띄우는 useEffect
+// useEffect(() => {
+//     if (alerts.length > 0) {
+//         const lastAlert = alerts[alerts.length - 1];
+//         showToast(lastAlert.message);
+//     }
+// }, [alerts, showToast]);

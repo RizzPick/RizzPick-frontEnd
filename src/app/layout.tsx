@@ -1,6 +1,8 @@
+import RealTime from '@/components/alarm/RealTime';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
+import Header from '@/components/common/Header';
 
 export const metadata: Metadata = {
     title: 'Rizz Pick',
@@ -18,8 +20,13 @@ export default function RootLayout({
 }) {
     return (
         <html lang="ko">
-            <body style={{fontFamily:'SUITE'}}>
-                <Toaster position='top-center' toastOptions={{duration:1500}}/>
+            <body style={{ fontFamily: 'SUITE' }}>
+                <Header />
+                <RealTime />
+                <Toaster
+                    position="top-center"
+                    toastOptions={{ duration: 1500 }}
+                />
                 {children}
             </body>
         </html>

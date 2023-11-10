@@ -196,7 +196,7 @@ export default function PostPage({ params: { slug } }: Props) {
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <div className="hidden sm:block">
                 <div
                     className="flex flex-row h-20 mb-4 items-center"
@@ -355,7 +355,11 @@ export default function PostPage({ params: { slug } }: Props) {
                                         {/* 이름, 나이 */}
                                         <div className="flex flex-row w-full h-16 border-b-2 border-[#C5C5C5] items-center justify-center text-[28px]">
                                             <h2>{userProfile.nickname}</h2>
-                                            <p>{calculateAge(userProfile.birthday)}</p>
+                                            <p>
+                                                {calculateAge(
+                                                    userProfile.birthday
+                                                )}
+                                            </p>
                                         </div>
 
                                         {/* 지역, 학력 */}
