@@ -84,7 +84,7 @@ export default function Alarm({ close }: AlarmProps) {
                         }}
                     >
                         {likesData.map((like, index) => (
-                                <div onClick={()=>router.push('/user/notifications/liked')} className="rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer" key={like.userId}>
+                                <div onClick={()=>router.push('/user/notifications/liked')} className="bg-profile-border-gradient rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer" key={like.userId}>
                                     <div className="relative w-[60px] h-[60px]">
                                         <Image
                                             src={like.profilePic.image}

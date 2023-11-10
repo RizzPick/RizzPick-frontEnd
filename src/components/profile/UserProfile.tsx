@@ -3,7 +3,6 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic';
 import { MyProfileRes } from '@/types/profile';
-import Link from 'next/link';
 import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
@@ -44,13 +43,13 @@ function UserProfile() {
         <div className='flex items-center justify-center mt-6 text-3xl'>
             {profile.nickname}, {calculateAge(profile.birthday)}
         </div>
-        <div className='flex items-center justify-center mt-6 text-xl px-2 bg-white py-1 rounded-3xl max-w-[400px] mx-auto' style={{ whiteSpace: 'pre-wrap' }}>
+        <div className='flex items-center justify-center mt-6 text-xl px-2 bg-white py-2 rounded-3xl max-w-[400px] mx-auto' style={{ whiteSpace: 'pre-wrap' }}>
             &quot;{profile.intro}&quot;
         </div>
         <section className='flex items-start justify-center flex-row gap-9 mt-[57px]'>
-          <article className='w-[424px] h-[428px]'>
+          <article className='w-[424px] h-[463px]'>
             <div className='flex flex-col w-full items-center'>
-                <div className='p-4 bg-white h-[200px] w-full rounded-2xl flex flex-col gap-3 justify-center'>
+                <div className='p-4 bg-white h-[189px] w-full rounded-2xl flex flex-col gap-3 justify-center border border-neutral-400 border-opacity-80'>
                     {!profile.location && !profile.education && !profile.mbti && !profile.religion ? 
                         <p className="text-center">작성된 내용이 없습니다.</p> 
                         : 
@@ -64,17 +63,15 @@ function UserProfile() {
                         </>
                     }
                 </div>
-                  <Link href={'/profile/edit'} className='w-full'>
-                      <button className='px-4 py-2 bg-[#D67dff] mt-4 w-full rounded-3xl text-white font-bold hover:bg-pink-300'>정보수정</button>
-                  </Link>
-                <div className='mt-4 w-full rounded-2xl bg-white p-6 h-20 flex flex-col items-start justify-center text-gray-400 gap-1'>
+                    <button onClick={()=>router.push('/profile/edit')} className='px-4 py-3 bg-[#D67dff] my-7 w-full rounded-3xl text-white font-bold hover:bg-pink-300'>정보수정</button>
+                <div className='w-full rounded-2xl bg-white p-6 h-24 flex flex-col items-start justify-center text-gray-400 gap-2 border border-neutral-400 border-opacity-80'>
                     <p className='cursor-pointer' onClick={()=> router.push("profile/viewChangePasswd")}>비밀번호 변경</p>
                     <hr className='w-full'/>
                     <p onClick={()=>setShowLogoutModal(true)} className='cursor-pointer'>로그아웃</p>
                 </div>
 
                 {showLogoutModal && <LogoutModal setShowLogoutModal={setShowLogoutModal}/>}
-                <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9] cursor-pointer' onClick={()=>setResignModal(true)}>
+                <div className='mt-4 w-full rounded-2xl bg-white p-6 h-10 flex flex-col items-start justify-center text-[#cb17f9] cursor-pointer border border-neutral-400 border-opacity-80' onClick={()=>setResignModal(true)}>
                     회원탈퇴
                 </div>
                 {showResignModal && <ResignModal setResignModal={setResignModal} profile={profile}/>}
@@ -83,7 +80,7 @@ function UserProfile() {
               <article id='images'>
                   <div className='grid grid-cols-3 gap-4'>
                       {Array(6).fill(null).map((_, idx) => (
-                          <div key={idx} className='w-[183px] h-[221px] border bg-white relative'>
+                          <div key={idx} className='w-[183px] h-[221px] relative rounded-xl border border-neutral-400 border-opacity-80'>
                               {profile.profileImages && profile.profileImages[idx] ? (
                                   <Image
                                       src={profile.profileImages[idx].image}
@@ -92,9 +89,10 @@ function UserProfile() {
                                       sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 350px"
                                       fill={true}
                                       object-fit="cover"
+                                      className='rounded-xl'
                                   />
                               ) : (
-                                  <div className="absolute inset-0 bg-white flex items-center justify-center">
+                                  <div className="absolute inset-0 bg-white flex items-center justify-center rounded-xl">
                                       <span></span>
                                   </div>
                               )}

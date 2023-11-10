@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
-import MainImage from '../../public/images/mainPage.png';
+import MainImage from '../../public/images/Main.png';
 import { useRouter } from 'next/navigation';
 import RizzPickLogo from '../../public/RizzPickLogo.png';
 import { useMediaQuery } from 'react-responsive';
@@ -85,11 +85,11 @@ export default function Home() {
                 priority
                 className={`absolute z-0 transform transition-transform duration-1000`}
                 style={{
-                    top: '450px',
-                    left: '-160px',
+                    top: '-100px',
+                    left: '-400px',
                     objectFit: 'cover',
-                    scale: 1.2,
-                    objectPosition:"center"
+                    scale: 1.4,
+                    objectPosition:"top"
                 }}
                 onLoadingComplete={() => setTimeout(() => setLoaded(true), 2000)}
             />

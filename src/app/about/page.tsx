@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import Logo from '../../../public/Logo.png';
+import RizzPickLogo from '../../../public/RizzPickLogo.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -15,9 +15,9 @@ function AboutPage() {
                 <div
                     className={`text-white flex flex-row items-center`}
                 >
-                    <div className="w-[95px] h-[40px] relative cursor-pointer" onClick={()=>router.push('/')}>
+                    <div className="w-[71px] h-[43px] relative cursor-pointer" onClick={()=>router.push('/')}>
                         <Image
-                            src={Logo}
+                            src={RizzPickLogo}
                             alt="로고"
                             fill
                             style={{ objectFit: 'cover' }}
@@ -37,14 +37,14 @@ function AboutPage() {
                 <div className='flex flex-col text-white w-[60vw] items-center mx-auto'>
 
                 {/* 첫 번째 블록 */}
-                <div className='text-2xl font-semibold mb-[53px]'>Will You</div>
+                <div className='text-2xl font-semibold mb-[53px]'>RizzPick</div>
                 <div className='text-3xl font-bold'>우리는 친밀하고 의미 있는 관계를 유도하고자 합니다.</div>
                 <div className='text-3xl font-bold mb-[64px]'>매력적인 데이트 계획을 중심으로</div>
                 <hr className='w-full text-white mb-[39px]'/>
 
                 {/* 두 번째 블록 */}
                 <div className='flex justify-start flex-col w-full px-14'>
-                    <div className='text-2xl mb-[52px]'>Will You의 가치</div>
+                    <div className='text-2xl mb-[52px]'>RizzPick의 가치</div>
                     <div className='text-xl mb-[37px]'>
                         매력적인 데이트 계획은 관계의 핵심입니다.<br/>
                         데이트 계획이 단순한 만남 이상의 의미를 갖게 되는 순간,<br/>
@@ -78,7 +78,7 @@ function AboutPage() {
 
                     {/* 세 번째 블록 */}
                     <div className='flex flex-col justify-start w-full px-14'>
-                        <div className='text-2xl mb-[52px]'>Will You의 원칙</div>
+                        <div className='text-2xl mb-[52px]'>RizzPick의 원칙</div>
                         <div className='text-xl mb-[33px]'>
                             우리는 데이트 계획의 중요성을 실천하고 있습니다.<br/>
                             우리의 원칙은 모든 결정에서 &quot;완벽한 데이트 계획&quot;의 가치를 중심으로 합니다.
@@ -91,7 +91,7 @@ function AboutPage() {
                                 계획을 위한 설계
                             </div>
                             <div className='text-2xl'>
-                                Will You는 사용자가 더 의미있고 매력적인 데이트 계획을 세울<br/>
+                                RizzPick은 사용자가 더 의미있고 매력적인 데이트 계획을 세울<br/>
                                 수 있도록 도와줍니다. 우리의 목표는 사용자가 서로의 시간을 최<br/>
                                 대한 활용하도록 도와주는 것입니다.
                             </div>
@@ -127,7 +127,7 @@ function AboutPage() {
                                 데이트 계획의 혁신
                             </div>
                             <div className='text-2xl mb-[22px]'>
-                                Will You는 전통적인 데이트 방식을 넘어서, 새롭고 독창적인<br/>
+                                RizzPick은 전통적인 데이트 방식을 넘어서, 새롭고 독창적인<br/>
                                 데이트 아이디어를 제안합니다. 우리는 사용자들의 특별하고<br/>
                                 기억에 남는 데이트를 경험할 수 있도록 끊임없이 연구하고<br/>
                                 발접시킵니다.
@@ -166,8 +166,8 @@ function AboutPage() {
                                 매력적인 계획의 주역들
                             </div>
                             <div className='text-2xl mb-[22px]'>
-                                Will You 팀은 데이트 계획의 중요성을 실천하는 팀 플레이어로<br/>
-                                구성되어 있습니다. 여기에서 우리는 Will You의 문화를 함께<br/>
+                                RizzPick 팀은 데이트 계획의 중요성을 실천하는 팀 플레이어로<br/>
+                                구성되어 있습니다. 여기에서 우리는 RizzPick의 문화를 함께<br/>
                                 창조하고, 그 가치를 만듭니다.
                             </div>
                         </div>
@@ -176,19 +176,19 @@ function AboutPage() {
 
                     {/* 네 번째 블록 */}
                     <div className='flex justify-start flex-col w-full px-14'>
-                    <div className='text-2xl mb-[76px]'>Will You와 함께하는 데이트의 특별함</div>
+                    <div className='text-2xl mb-[76px]'>RizzPick와 함께하는 데이트의 특별함</div>
                     <div className='text-2xl mb-[12px]'>
                         당신만을 위한 데이트 스토리
                     </div>
                     <div className='text-xl mb-[39px]'>
-                        각자의 데이트는 독특한 이야기를 담고 있습니다. Will You는 그 이야기를<br/>
+                        각자의 데이트는 독특한 이야기를 담고 있습니다. RizzPick은 그 이야기를<br/>
                         완벽하게 반영한 데이트 계획을 제시합니다.<br/>
                     </div>
                     <div className='text-2xl mb-[12px]'>
                         당신의 데이트 후기, 그 소중한 이야기
                     </div>
                     <div className='text-xl mb-[39px]'>
-                        데이트 후의 소감이 궁금합니다. 소중한 순간을 Will You와 함께<br/>
+                        데이트 후의 소감이 궁금합니다. 소중한 순간을 RizzPick와 함께<br/>
                         나누어 보세요.<br/>
                     </div>
                     <div className='text-2xl mb-[12px]'>
@@ -196,13 +196,13 @@ function AboutPage() {
                     </div>
                     <div className='text-xl mb-[39px]'>
                         데이트의 성공은 케미스트리에서 시작됩니다.<br/>
-                        WIll You의 특별한 매칭 시스템으로 최적의 데이트를 경험하세요.<br/>
+                        RizzPick의 특별한 매칭 시스템으로 최적의 데이트를 경험하세요.<br/>
                     </div>
                     <div className='text-2xl mb-[12px]'>
                         매력적인 데이트, 그것이 우리의 목표
                     </div>
                     <div className='text-xl mb-[39px]'>
-                        당신의 시간은 소중합니다. Will You는 특별하고 의미 있는<br/>
+                        당신의 시간은 소중합니다. RizzPick은 특별하고 의미 있는<br/>
                         데이트를 위해 항상 노력합니다.<br/>
                     </div>
                     <div className='text-2xl mb-[12px]'>
@@ -217,14 +217,14 @@ function AboutPage() {
                     </div>
                     <div className='text-xl mb-[39px]'>
                         당신의 데이트 경험을 솔직하게 공유하세요.<br/>
-                        그것이 Will You가 더 나아질 수 있는 원동력입니다.<br/>
+                        그것이 RizzPick가 더 나아질 수 있는 원동력입니다.<br/>
                     </div>
                     <div className='text-2xl mb-[12px]'>
-                        똑똑한 데이트, Will You와 함께
+                        똑똑한 데이트, RizzPick와 함께
                     </div>
                     <div className='text-xl mb-[107px]'>
                         당신의 데이트 스타일, 선호도, 기대를 이해하고, 그에 맞는<br/>
-                        데이트를 지속적으로 제안합니다. Will You와 함께라면<br/>
+                        데이트를 지속적으로 제안합니다. RizzPick와 함께라면<br/>
                         데이트가 더 특별해집니다.
                     </div>
                 </div>
