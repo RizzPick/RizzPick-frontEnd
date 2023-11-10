@@ -3,7 +3,7 @@ import { GoAlert } from 'react-icons/go'
 
 const NoUserAlert: React.FC = () => {
   return (
-    <div className='flex items-center flex-col justify-center h-full'>
+    <div className='flex items-center flex-col justify-center h-screen'>
         <div className='flex items-center flex-col'>
             <div className='font-bold text-[47px] mb-4'><GoAlert color="#cb17f9"/></div>
             <h1 className='text-4xl font-black mb-[48px]'>sorry</h1>

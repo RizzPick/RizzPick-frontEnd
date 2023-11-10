@@ -1,4 +1,5 @@
 'use client'
+import Header from '@/components/common/Header';
 import UserImageGrid from '@/components/profile/UserImageGrid';
 import UserProfileEdit from '@/components/profile/UserProfileEdit';
 import ProfileAPI from '@/features/profile'
@@ -43,13 +44,16 @@ function ProfilEditPage() {
       </div>
     ) : 
     (
-      <div className='bg-profile-edit-gradient w-[100vw] h-full p-4 '>
-        <h1 className='flex justify-center text-4xl py-14'>프로필 등록</h1>
-          <div className='flex justify-center gap-32 relative'>
-            <UserProfileEdit />
-            <UserImageGrid />
-          </div>
-      </div>
+      <>
+        <Header />
+        <div className='bg-profile-edit-gradient w-[100vw] h-full p-4 '>
+          <h1 className='flex justify-center text-4xl py-14'>프로필 등록</h1>
+            <div className='flex justify-center gap-32 relative'>
+              <UserProfileEdit />
+              <UserImageGrid />
+            </div>
+        </div>
+      </>
     )}
   </div>
   )
