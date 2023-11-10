@@ -8,21 +8,14 @@ import { GoAlert, GoDotFill } from "react-icons/go"
 import { MdKeyboardDoubleArrowDown } from "react-icons/md"
 
 // ICON
-import WhiteHeartIcon from '../../../public/matchIcon/Like.png';
-import BadIcon from '../../../public/matchIcon/Nope.png';
 import ReadMore from '../../../public/matchIcon/Intro.png';
+import ReportIcon from "../../../public/profileIcon/Report.svg";
 import LeftButton from '../../../public/matchIcon/left.svg';
 import RightButton from '../../../public/matchIcon/right.svg';
-import axios from 'axios';
-import apologize from "../../../public/images/apologize.gif"
-import EducationIcon from "../../../public/profileIcon/graduationcap.fill.small.svg"
 import Home from "../../../public/profileIcon/house.fill.small.svg"
-import { getCookie } from '@/utils/cookie';
 import toast from 'react-hot-toast';
-import { SyncLoader } from 'react-spinners';
 import { calculateAge } from '@/utils/dateUtils';
 import Loader from '../common/Loader';
-import NoUserAlert from './NoUserAlert';
 import ReportModal from '../common/ReportModal';
 import MatchControls from './MatchControls';
 
@@ -33,6 +26,7 @@ function MatchMobile() {
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
     const [isReportModalVisible, setReportModalVisible] = useState(false);
+    const [detailSlideIndex, setDetailSlideIndex] = useState(0);
 
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
@@ -60,18 +54,6 @@ function MatchMobile() {
         fetchUsers();
     }, [fetchUsers]);
 
-    const handleButtonClick = () => {
-        if (userIndex >= users.length - 1) {
-            toast('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요', {icon : '🥹'})
-            setUsers([]);
-            setUserIndex(0);
-        } else {
-            setUserIndex((prevIndex) => prevIndex + 1); // 다음 사용자의 인덱스로 업데이트합니다.
-            setSlideIndex(0);
-        }
-    };
-
-    //! 사진 슬라이드
     const currentUser = users[userIndex];
     const [slideIndex, setSlideIndex] = useState(0);
 
@@ -91,7 +73,7 @@ function MatchMobile() {
         );
     };
 
-    const handleUserChange = (increment:any) => {
+    const handleUserChange = (increment : boolean) => {
         if (increment && userIndex >= users.length - 1) {
             toast('현재 등록되어 있는 유저추천이 끝났습니다, 다음에 다시 또 이용해주세요', { icon: '🥹' });
             setUsers([]);
@@ -114,6 +96,15 @@ function MatchMobile() {
             console.error(reaction === 'like' ? '좋아요 보내기 오류:' : '싫어요 보내기 오류:', error);
         }
     };
+
+    const nextDetailSlide = () => {
+        setDetailSlideIndex((prevIndex) => (prevIndex + 1) % 2); // Assuming there are only two slides
+      };
+      
+      // Function to go to the previous detail slide
+      const prevDetailSlide = () => {
+        setDetailSlideIndex((prevIndex) => (prevIndex - 1 + 2) % 2); // Assuming there are only two slides
+      };
 
     if (isLoading) return <Loader />;
     
@@ -209,8 +200,16 @@ function MatchMobile() {
                         </div>
 
                         <MatchControls onReaction={handleUserReaction} />
-                        <div className={`absolute -bottom-1 w-full transform ${detailsStyle} transition-transform duration-300 ease-in-out p-6 bg-white z-40 rounded-t-3xl h-[170px]`}>
+                        <div className={`absolute -bottom-1 w-full transform ${detailsStyle} transition-transform duration-300 ease-in-out px-2 py-4 ${detailSlideIndex === 0 ? ("bg-white"):("bg-pink-100")} z-40 rounded-t-3xl h-[170px]`} id="intro">
                         <div className={`group ${!isDetailsVisible && "hidden"}`}>
+                        <div className="absolute inset-0 flex items-center justify-between px-2">
+                            <button onClick={prevDetailSlide} className="z-50">
+                                {"<"}
+                            </button>
+                            <button onClick={nextDetailSlide} className="z-50">
+                                {">"}
+                            </button>
+                        </div>
                                 <div 
                                     onClick={toggleDetailsVisibility} 
                                     className="absolute -top-1 left-[50%] text-white animate-bounce px-2 py-2 bg-fuchsia-400 rounded-full cursor-pointer"
@@ -218,22 +217,49 @@ function MatchMobile() {
                                     <MdKeyboardDoubleArrowDown />
                                 </div>
                             </div>
+                            {detailSlideIndex === 0 && (
                             <div className="flex items-center justify-between">
-                            <div className='bg-white rounded-2xl flex flex-col gap-3 justify-center text-xs w-full'>
-                                {!users[userIndex].location && !users[userIndex].education && !users[userIndex].mbti && !users[userIndex].religion ? 
-                                        <p className="text-center">작성된 내용이 없습니다.</p> 
-                                        : 
-                                        <>
-                                            { users[userIndex].education ? <><div className='flex items-center gap-4'><EducationIcon/>{users[userIndex].education}</div><hr/></> : null }
-                                            { users[userIndex].location ? <><div className='flex items-center gap-4'><Home/>{users[userIndex].location}</div><hr/></> : null }
-                                            <div className='flex items-center gap-4'>
-                                            { users[userIndex].mbti ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].mbti}</div> : null }
-                                            { users[userIndex].religion ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].religion}</div> : null }
-                                            </div>
-                                        </>
-                                }
+                                <div className="absolute top-4 right-4 z-50" onClick={() => setReportModalVisible(true)}>
+                                    <ReportIcon />
+                                </div>
+                                <div className='bg-white rounded-2xl flex flex-col justify-center text-xs w-full px-4'>
+                                    {!users[userIndex].location && !users[userIndex].mbti && !users[userIndex].religion ? 
+                                            <p className="text-center">작성된 내용이 없습니다.</p> 
+                                            : 
+                                            <>
+                                                { users[userIndex].location ? <div className='flex items-center gap-4 border-b py-1'><Home/>{users[userIndex].location}</div> : null }
+                                                <div className='flex items-center gap-4 border-b py-2'>
+                                                { users[userIndex].mbti ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].mbti}</div> : null }
+                                                { users[userIndex].religion ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].religion}</div> : null }
+                                                </div>
+                                                <div className='flex items-center gap-4 py-2'>
+                                                { users[userIndex].hobby ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].hobby}</div> : null }
+                                                { users[userIndex].interest ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].interest}</div> : null }
+                                                </div>
+                                            </>
+                                    }
+                                </div>
                             </div>
-                            </div>
+                            )}
+
+                            {detailSlideIndex === 1 && (
+                                <div className="flex items-center justify-between flex-col py-4 bg-white h-full rounded-2xl">
+                                    <h1 className='text-2xl'>💜데이트 계획💜</h1>
+                                    <div className='flex items-center justify-center h-full'>
+                                        {!users[userIndex].dating && <p>작성한 계획이 없습니다.</p>}
+                                        {users[userIndex].dating && 
+                                            <li>
+                                                {users[userIndex].dating?.map((data)=> {
+                                                    return (
+                                                        <li key={data.datingId}>{data.datingTitle}</li>
+                                                    )
+                                                })}
+                                            </li>
+                                        }
+                                        
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                     </div>

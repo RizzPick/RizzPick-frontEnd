@@ -34,7 +34,7 @@ const ReportModal = ({ isOpen, onClose, userId } : any) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={handleBackdropClick}>
-      <div className="bg-white px-4 py-2 rounded-lg shadow-md relative w-[361px]" onClick={e => e.stopPropagation()}>
+      <div className="bg-white px-4 py-2 rounded-lg shadow-md relative w-[361px] sm:w-[70vw]" onClick={e => e.stopPropagation()}>
         <div className='flex justify-center items-center'>
             <h2 className="text-xl font-bold py-1">신고 하기</h2>
         </div>

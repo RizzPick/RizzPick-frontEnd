@@ -53,7 +53,7 @@ function ChatProfile() {
               priority
           />
           </div>
-          <div className='flex flex-col items-center gap-4 mt-[31px]'>
+          <div className='flex flex-col items-center gap-2 mt-[31px]'>
             {chat && 
               <div>
                 <p className='text-3xl font-semibold'>{chat.nickname}, {calculateAge(chat.birthday)}</p>
@@ -73,7 +73,7 @@ function ChatProfile() {
               {chat.mbti && <div className='text-fuchsia-400 text-xl border border-fuchsia-400 rounded-2xl px-2 py-1'>#{chat.mbti}</div>}
               {chat.religion && <div className='border border-fuchsia-400 text-fuchsia-400 text-xl rounded-2xl px-2 py-1'>{chat.religion === "NONE" ? ("종교 없음"):(`#${chat.religion}`)}</div>}
             </div>
-            <div className='flex items-center justify-center w-28 h-7 p-2.5 bg-neutral-100 rounded-3xl shadow mt-[29px] cursor-pointer' onClick={() => setReportModalVisible(true)}>
+            <div className='flex items-center justify-center w-28 h-7 p-2.5 bg-neutral-100 rounded-3xl shadow mt-[5px] cursor-pointer' onClick={() => setReportModalVisible(true)}>
               <div className='flex items-center justify-center gap-2 text-neutral-400 text-base font-semibold'>
                 <div>
                   <ReportIcon/>

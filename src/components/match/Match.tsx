@@ -276,6 +276,7 @@ function Match() {
                                         </div>
                                     ) : null}
                                     <div className="flex gap-4 flex-col">
+                                    {users[userIndex].mbti || users[userIndex].religion ? (
                                         <div className='flex gap-4 border-b py-2'>
                                         {users[userIndex].mbti ? (
                                             <div className="px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400">
@@ -288,6 +289,8 @@ function Match() {
                                             </div>
                                         ) : null}
                                         </div>
+                                    ): null }
+                                        
                                         <div className='flex gap-4'>
                                         {users[userIndex].hobby ? (
                                             <div className="px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400">

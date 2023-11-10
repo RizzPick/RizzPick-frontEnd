@@ -19,12 +19,12 @@ function MatchControls({ onReaction }: Props) {
   };
 
   return (
-    <div className="absolute text-white w-[30vw] flex justify-center -bottom-28 gap-48">
+    <div className="absolute text-white w-[30vw] flex justify-center -bottom-28 gap-48 sm:bottom-5 z-60 sm:w-full sm:justify-center sm:px-4 z-20">
       <button onClick={handleNopeClick} className='transform transition-transform duration-500 hover:rotate-90'>
-        <Image src={NopeIcon} alt="Nope" width={50} height={50} />
+        <Image src={NopeIcon} alt="Nope" width={60} height={60} />
       </button>
       <button onClick={handleLikeClick} className='animate-pulse animate-twice animate-ease-in-out'>
-        <Image src={LikeIcon} alt="Like" width={50} height={50} />
+        <Image src={LikeIcon} alt="Like" width={60} height={60} />
       </button>
     </div>
   );
