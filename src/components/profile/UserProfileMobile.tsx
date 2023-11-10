@@ -46,17 +46,20 @@ function UserProfileMobile() {
             </div>
         <div className='flex flex-col mt-16 w-full items-center'>
           <div className='text-zinc-800 text-2xl font-semibold'>{profile.nickname}, {calculateAge(profile.birthday)}</div>
-            <div className='p-4 bg-white h-[200px] w-full mt-10 rounded-2xl flex flex-col gap-3 justify-center'>
-                {!profile.location && !profile.education && !profile.mbti && !profile.religion ? 
+            <div className='px-4 bg-white h-[180px] w-full mt-10 rounded-2xl flex flex-col justify-center'>
+                {!profile.location && !profile.mbti && !profile.religion ? 
                     <p className="text-center">작성된 내용이 없습니다.</p> 
                     : 
                     <>
-                        { profile.education ? <div className='flex items-center gap-4 border-b py-2'><EducationIcon/>{profile.education}</div> : null }
                         { profile.location ? <div className='flex items-center gap-4 border-b py-2'><Home/>{profile.location}</div> : null }
-                        <div className='flex items-center gap-4'>
+                        <div className='flex items-center gap-4 border-b py-2'>
                         { profile.mbti ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.mbti}</div> : null }
                         { profile.religion ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.religion}</div> : null }
                         </div>
+                        <div className='flex items-center gap-4 py-2'>
+                            { profile.hobby ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.hobby}</div> : null }
+                            { profile.interest ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{profile.interest}</div> : null }
+                            </div>
                     </>
                 }
             </div>

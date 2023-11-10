@@ -1,4 +1,5 @@
 import OtherUserProfile from '@/components/profile/OtherUserProfile';
+import OtherUserProfileMobile from '@/components/profile/OtherUserProfileMobile';
 import { MyProfileRes } from '@/types/profile';
 import axios from 'axios';
 import { cookies } from 'next/headers';
@@ -23,11 +24,15 @@ async function OtherUserProfilepage({ params: { slug } }: Props) {
         }
     );
     const profile: MyProfileRes = response.data.data;
-    console.log(profile);
     return (
-        <div>
-            <OtherUserProfile profile={profile} />
-        </div>
+        <>
+            <div className='block sm:hidden'>
+                <OtherUserProfile profile={profile} />
+            </div>
+            <div className='hidden sm:block'>
+                <OtherUserProfileMobile profile={profile} />
+            </div>
+        </>
     );
 }
 

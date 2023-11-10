@@ -10,7 +10,6 @@ import Loader from '../common/Loader';
 import NoUserAlert from './NoUserAlert';
 import MatchControls from './MatchControls';
 
-import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg";
 import HomeIcon from "../../../public/profileIcon/Home.svg";
 import ReportIcon from "../../../public/profileIcon/Report.svg";
 import LeftBtnIcon from "../../../public/matchIcon/left.svg";
@@ -231,11 +230,11 @@ function Match() {
                     className="flex-1 w-[20vw] h-[60vh] relative ml-12"
                     style={{ display: isDetailsVisible ? 'block' : 'none' }}
                 >
-                    <div className="border p-4 bg-matchpage-date-gradient rounded-3xl">
+                    <div className="border p-4 bg-matchpage-date-gradient rounded-3xl border-neutral-800">
                         <h2 className="text-2xl font-bold mb-4 text-black text-center">
                             나랑 이런 데이트 어때요?
                         </h2>
-                        <div className="h-[20vh] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center">
+                        <div className="h-[20vh] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center border-neutral-800">
                             {currentUser &&
                             currentUser.dating &&
                             currentUser.dating.length > 1 ? (
@@ -257,13 +256,12 @@ function Match() {
                     </div>
 
                     <div
-                        className={`p-[18px] bg-profile-edit-gradient max-w-md relative rounded-3xl mx-auto h-[30vh] mt-3 ${
+                        className={`p-[18px] bg-profile-edit-gradient border border-neutral-800 max-w-md relative rounded-3xl mx-auto h-[30vh] mt-3 ${
                             isDetailsVisible ? '' : 'hidden'
                         }`}
                     >
-                        <div className="p-4 bg-white rounded-3xl h-[25vh] w-full flex flex-col justify-center gap-3 relative">
+                        <div className="p-4 bg-white rounded-3xl h-[25vh] w-full flex flex-col justify-center relative border border-neutral-800">
                             {!users[userIndex].location &&
-                            !users[userIndex].education &&
                             !users[userIndex].mbti &&
                             !users[userIndex].religion ? (
                                 <p className="text-center">
@@ -271,19 +269,15 @@ function Match() {
                                 </p>
                             ) : (
                                 <>
-                                    {users[userIndex].education ? (
-                                        <div className="flex items-center gap-4 border-b py-2">
-                                            <EducationIcon />
-                                            {users[userIndex].education}
-                                        </div>
-                                    ) : null}
                                     {users[userIndex].location ? (
                                         <div className="flex items-center gap-4 border-b py-2">
                                             <HomeIcon />
                                             {users[userIndex].location}
                                         </div>
                                     ) : null}
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex gap-4 flex-col">
+                                    {users[userIndex].mbti || users[userIndex].religion ? (
+                                        <div className='flex gap-4 border-b py-2'>
                                         {users[userIndex].mbti ? (
                                             <div className="px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400">
                                                 #{users[userIndex].mbti}
@@ -294,6 +288,21 @@ function Match() {
                                                 #{users[userIndex].religion}
                                             </div>
                                         ) : null}
+                                        </div>
+                                    ): null }
+                                        
+                                        <div className='flex gap-4'>
+                                        {users[userIndex].hobby ? (
+                                            <div className="px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400">
+                                                #{users[userIndex].hobby}
+                                            </div>
+                                        ) : null}
+                                        {users[userIndex].interest ? (
+                                            <div className="px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400">
+                                                #{users[userIndex].interest}
+                                            </div>
+                                        ) : null}
+                                        </div>
                                         <div className='cursor-pointer absolute bottom-4 right-4' onClick={() => setReportModalVisible(true)}>
                                             <ReportIcon />
                                         </div>

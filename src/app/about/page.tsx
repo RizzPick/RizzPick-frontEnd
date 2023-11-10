@@ -3,7 +3,6 @@ import React from 'react';
 import RizzPickLogo from '../../../public/RizzPickLogo.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import Header from '@/components/common/Header';
 
 function AboutPage() {
     const router = useRouter();

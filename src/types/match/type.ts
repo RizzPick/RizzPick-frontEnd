@@ -7,10 +7,11 @@ export type Dating = {
 };
 
 export type UserProfile = {
-    userId: string;
+    userId: number;
     nickname: string;
     birthday: string;
-    education?: string;
+    hobby : string;
+    interest : string;
     gender?: string;
     location?: string;
     mbti?: string;

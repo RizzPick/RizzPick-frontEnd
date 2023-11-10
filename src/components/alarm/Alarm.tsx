@@ -72,7 +72,7 @@ export default function Alarm({ close }: AlarmProps) {
         <>
             <div className="absolute top-[100px] right-[60px] translate-[-50%] bg-white p-6 w-[400px] h-[500px] flex flex-col z-50 border border-zinc-800 rounded-3xl">
                 <div className="h-[20vh]">
-                    <h2 className="mb-2 cursor-pointer" onClick={()=>router.push('/user/notifications/liked')}>
+                    <h2 className="mb-2 cursor-pointer" onClick={()=>{router.push('/user/notifications/liked'), close()}}>
                         좋아요 ({likesData.length})
                     </h2>
                     <div
@@ -84,7 +84,7 @@ export default function Alarm({ close }: AlarmProps) {
                         }}
                     >
                         {likesData.map((like, index) => (
-                                <div onClick={()=>router.push('/user/notifications/liked')} className="bg-profile-border-gradient rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer" key={like.userId}>
+                                <div onClick={()=>{router.push('/user/notifications/liked'), close()}} className="bg-profile-border-gradient rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer" key={like.userId}>
                                     <div className="relative w-[60px] h-[60px]">
                                         <Image
                                             src={like.profilePic.image}

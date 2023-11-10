@@ -14,6 +14,9 @@ type Props = {
   onNext? : () => void;
 }
 
+const hobbies = ["운동","외국어 배우기","요리","독서","산책","낚시","게임","그림","전시회 가기","노래","음악 듣기","영화","런닝","자전거 타기","술","맛집 탐방","쇼핑","드라이브","여행","캠핑","카페","악기"]
+const interests = ["문화","예술","과학","여가","레저","스포츠","사회","음식","요리"]
+
 function UserProfileEdit({onNext} : Props) {
   const { data : profile } = useSWR<MyProfileRes>(PROFILE_KEY);
   const { setCurrentProfile } = UseProfile();
@@ -36,7 +39,8 @@ function UserProfileEdit({onNext} : Props) {
     const profileFormKeys: (keyof ProfileForm)[] = [
         'nickname',
         'birthday',
-        'education',
+        'hobby',
+        'interest',
         'gender',
         'location',
         'religion',
@@ -138,7 +142,7 @@ function UserProfileEdit({onNext} : Props) {
           <label className="block text-gray-700 mb-2">한줄 소개</label>
           {errors.intro && <p className="text-red-500 text-[10px]">✱ 소개글은 30자 내외로 작성부탁드립니다!</p>}
           </div>
-          <textarea {...register("intro", { maxLength: 30,})} rows={2} onChange={handleIntroChange} className='text-sm w-full px-2 py-1 h-16 bg-white rounded-2xl border border-neutral-400' placeholder='취미, 관심사를 작성하면 매칭률이 높아져요!'/>
+          <textarea {...register("intro", { maxLength: 30,})} rows={2} onChange={handleIntroChange} className='resize-none text-sm w-full px-2 py-1 h-16 bg-white rounded-2xl border border-neutral-400' placeholder='취미, 관심사를 작성하면 매칭률이 높아져요!'/>
           <p className="text-right text-xs text-gray-600">{introLength}/30</p>
           <div className="relative flex py-5 items-center">
             <div className="flex-grow border-t border-gray-400"></div>
@@ -201,14 +205,21 @@ function UserProfileEdit({onNext} : Props) {
             <option value="기타">기타</option>
           </select>
 
-          {/* <label className="block text-gray-700 my-2">취미</label>
-          <select {...register("religion")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
-            <option value="">선택</option>
-          </select>
-          <label className="block text-gray-700 my-2">관심사</label>
-          <select {...register("religion")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center" >
-            <option value="">선택</option>
-          </select> */}
+          <label className="block text-gray-700 my-2">취미</label>
+            <select {...register("hobby")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
+              <option value="">선택</option>
+              {hobbies.map(hobby => (
+                <option key={hobby} value={hobby}>{hobby}</option>
+              ))}
+            </select>
+
+            <label className="block text-gray-700 my-2">관심사</label>
+            <select {...register("interest")} className="w-36 h-10 bg-white rounded-3xl border border-neutral-400 text-center">
+              <option value="">선택</option>
+              {interests.map(interest => (
+                <option key={interest} value={interest}>{interest}</option>
+              ))}
+            </select>
         </div>
         <div className='flex justify-end'>
         <button className="w-56 h-16 bg-fuchsia-600 rounded-full shadow-inner justify-center items-center absolute bottom-32 right-[24%] sm:hidden text-white text-3xl">저장하기</button>
