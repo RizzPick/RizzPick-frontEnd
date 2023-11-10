@@ -1,6 +1,7 @@
 # RizzPick
 
-## {서비스 사진 예정}
+![프로젝트소개](https://github.com/RizzPick/RizzPick-frontEnd/assets/111734939/ab3ea87f-68ca-42c6-821c-496a3ddc1bf0)
+
 
 # 매력적인 데이트, 맞춤형 매치 _그 시작은 <b>RizzPick!</b>
 <span>📎 https://rizzpick.com</span>
