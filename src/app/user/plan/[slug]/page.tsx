@@ -193,9 +193,11 @@ export default function PostPage({ params: { slug } }: Props) {
     const handleBackButtonClick = () => {
         history.back();
     };
+    const showHeader = true;
 
     return (
         <>
+            {showHeader && <Header />}
             <div className="hidden sm:block">
                 <div
                     className="flex flex-row h-20 mb-4 items-center"

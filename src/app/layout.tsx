@@ -6,22 +6,25 @@ import Header from '@/components/common/Header';
 
 export const metadata: Metadata = {
     title: 'Rizz Pick',
-    description: '만나서 뭘 할까 고민 없이 바로 Rizz Pick 나만의 데이트 계획을 공유해보세요',
+    description:
+        '만나서 뭘 할까 고민 없이 바로 Rizz Pick 나만의 데이트 계획을 공유해보세요',
     viewport: 'width=device-width,initial-scale=1',
-    icons : {
-        icon : "/favicon.ico"
-    }
+    icons: {
+        icon: '/favicon.ico',
+    },
 };
 
-export default function RootLayout({
-    children,
-}: {
+type RootLayoutProps = {
     children: React.ReactNode;
-}) {
+    showHeader?: boolean; // showHeader prop을 옵셔널하게 선언
+};
+
+export default function RootLayout({ children }: RootLayoutProps) {
+    const showHeader = false;
     return (
         <html lang="ko">
             <body style={{ fontFamily: 'SUITE' }}>
-                <Header />
+                <Header isVisible={showHeader} />
                 <RealTime />
                 <Toaster
                     position="top-center"
