@@ -1,6 +1,6 @@
-// // ? EventSource.onopen : 서버와 연결이 open되었을 때 호출하는 이벤트 핸들러
-// // ? EventSource.onmessage : 서버로부터 message를 수신했을 때 호출하는 이벤트 핸들러
-// // ? EventSource.onerror : 에러가 발생하거나 EventSource 객체에서 error event가 감지되었을 때 호출하는 이벤트 핸들러
+// ? EventSource.onopen : 서버와 연결이 open되었을 때 호출하는 이벤트 핸들러
+// ? EventSource.onmessage : 서버로부터 message를 수신했을 때 호출하는 이벤트 핸들러
+// ? EventSource.onerror : 에러가 발생하거나 EventSource 객체에서 error event가 감지되었을 때 호출하는 이벤트 핸들러
 
 // 'use client';
 // import React from 'react';

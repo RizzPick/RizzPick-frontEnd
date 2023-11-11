@@ -2,8 +2,9 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 import Header from '@/components/common/Header';
+import { EventSourceProvider } from './EventSourceContext';
 
-const Metadata: Metadata = {
+export const metadata: Metadata = {
     title: 'Rizz Pick',
     description:
         '만나서 뭘 할까 고민 없이 바로 Rizz Pick 나만의 데이트 계획을 공유해보세요',
@@ -13,27 +14,26 @@ const Metadata: Metadata = {
     },
 };
 
-interface RootLayoutProps {
+export default function RootLayout({
+    children,
+}: {
     children: React.ReactNode;
     showHeader?: boolean;
-}
+}) {
+    // const showHeader = true;
 
-const RootLayout: React.FC<RootLayoutProps> = ({
-    children,
-    showHeader = true,
-}) => {
     return (
         <html lang="ko">
             <body style={{ fontFamily: 'SUITE' }}>
-                {showHeader && <Header />}
-                <Toaster
-                    position="top-center"
-                    toastOptions={{ duration: 1500 }}
-                />
-                {children}
+                <EventSourceProvider>
+                    {/* {showHeader && <Header />} */}
+                    <Toaster
+                        position="top-center"
+                        toastOptions={{ duration: 1500 }}
+                    />
+                    {children}
+                </EventSourceProvider>
             </body>
         </html>
     );
-};
-
-export default RootLayout;
+}

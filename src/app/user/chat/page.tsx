@@ -38,7 +38,6 @@ export default function ChatPage() {
 
             {!isMobile ? (
                 <div>
-                    <Header />
                     <div className="grid grid-cols-4">
                         <ChatList />
                         {chat == undefined || chat == null ? (

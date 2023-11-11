@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Header from '@/components/common/Header';
 import RootLayout from '../layout';
+import { EventSourceProvider } from '../EventSourceContext';
 
 export const metadata: Metadata = {
     title: 'Rizz Pick',
@@ -17,5 +18,10 @@ export default function UserLayout({
 }: {
     children: React.ReactNode;
 }) {
-    return <section>{children}</section>;
+    return (
+        <section>
+            <Header />
+            {children}
+        </section>
+    );
 }
