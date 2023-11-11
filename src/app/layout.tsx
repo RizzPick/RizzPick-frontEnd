@@ -11,6 +11,8 @@ export const metadata: Metadata = {
     icons: {
         icon: '/favicon.ico',
     },
+    appleWebApp: { statusBarStyle: 'black-translucent', capable: true },
+    themeColor: { color: '#D67DFF' },
 };
 
 export default function RootLayout({
@@ -18,12 +20,16 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    // const showHeader = true;
-
     return (
         <html lang="ko">
-            <body style={{ fontFamily: 'SUITE' }}>
-                {/* <Header /> */}
+            <head>
+                <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0, user-scalable=yes"
+                />
+                <meta name="msapplication-tap-highlight" content="no" />
+            </head>
+            <body style={{ fontFamily: 'SUITE' }} className='min-h-screen'>
                 <Toaster
                     position="top-center"
                     toastOptions={{ duration: 1500 }}

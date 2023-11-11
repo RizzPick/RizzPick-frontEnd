@@ -24,7 +24,7 @@ export default function Home() {
                         style={{ objectFit: 'cover' }}
                         priority
                         sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"
-                        onLoadingComplete={() => setTimeout(() => setLoaded(true), 2000)}
+                        onLoadingComplete={() => setLoaded(true)}
                     />
                 </div>
         </div>

@@ -207,7 +207,7 @@ export default function Header({ isVisible = true }) {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
     }, [alerts]);
 
-    // // 컴포넌트가 마운트될 때 EventSource 초기화
+    // 컴포넌트가 마운트될 때 EventSource 초기화
     // useEffect(() => {
     //     initializeSSE();
     //     fetchAlerts();

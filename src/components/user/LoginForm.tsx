@@ -60,62 +60,66 @@ function LoginForm() {
                 return;
             }
 
-            const token = res.headers['authorization'];
-            const { auth }: JwtPayload = jwtDecode<JwtPayload>(token);
-            const refreshToken = res.headers['authorization_refresh'];
-            setCookie('Authorization', token);
-            setCookie('Authorization_Refresh', refreshToken);
-
-            const userInfoResponse = await AuthAPI.getUserInfo();
-            initializeUserActiveStatus(userInfoResponse.data.data.userActiveStatus);
-            initializeUserInfo(userInfoResponse.data);
-            const isNew = userInfoResponse.data.data.new;
-
-            if( auth === "ADMIN" ) {
-                toast.success("관리자 계정으로 접속하였습니다.")
-                router.push('/admin');
-                return;
-            } 
-
-            if (userInfoResponse.data.data.userActiveStatus) {
-                toast.success('로그인 성공');
-                router.replace('/user/match');
-            } else if (!userInfoResponse.data.data.userActiveStatus && !isNew) {
-                toast.custom((t) => (
-                    <div
-                      className={`${
-                        t.visible ? 'animate-enter' : 'animate-leave'
-                      } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-                    >
-                      <div className="flex-1 w-0 p-4">
-                        <div className="flex items-center">
-                          <div className="flex text-3xl">
-                            <AiOutlineUnlock/>
-                          </div>
-                          <div className="ml-3 flex-1">
-                            <p className="text-sm font-medium text-gray-900">
-                              현재 로그인 한 계정이 비활성화된 상태입니다
-                            </p>
-                            <p className="mt-1 text-sm text-gray-500">
-                              활성화 하시겠습니까?
-                            </p>
+            if (res.status === 200) {
+              const token = res.headers['authorization'];
+              const { auth }: JwtPayload = jwtDecode<JwtPayload>(token);
+              const refreshToken = res.headers['authorization_refresh'];
+              setCookie('Authorization', token);
+              setCookie('Authorization_Refresh', refreshToken);
+  
+              const userInfoResponse = await AuthAPI.getUserInfo();
+              console.log(userInfoResponse);
+              initializeUserActiveStatus(userInfoResponse.data.data.userActiveStatus);
+              initializeUserInfo(userInfoResponse.data);
+              const isNew = userInfoResponse.data.data.new;
+  
+              if( auth === "ADMIN" ) {
+                  toast.success("관리자 계정으로 접속하였습니다.")
+                  router.push('/admin');
+                  return;
+              } 
+  
+              if (userInfoResponse.data.data.userActiveStatus) {
+                  toast.success('로그인 성공');
+                  router.replace('/user/match');
+              } else if (!userInfoResponse.data.data.userActiveStatus && !isNew) {
+                  toast.custom((t) => (
+                      <div
+                        className={`${
+                          t.visible ? 'animate-enter' : 'animate-leave'
+                        } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                      >
+                        <div className="flex-1 w-0 p-4">
+                          <div className="flex items-center">
+                            <div className="flex text-3xl">
+                              <AiOutlineUnlock/>
+                            </div>
+                            <div className="ml-3 flex-1">
+                              <p className="text-sm font-medium text-gray-900">
+                                현재 로그인 한 계정이 비활성화된 상태입니다
+                              </p>
+                              <p className="mt-1 text-sm text-gray-500">
+                                활성화 하시겠습니까?
+                              </p>
+                            </div>
                           </div>
                         </div>
+                        <div className="flex border-l border-gray-200">
+                          <button
+                            onClick={() => {toast.dismiss(t.id), activate()}}
+                            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          >
+                            활성화
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex border-l border-gray-200">
-                        <button
-                          onClick={() => {toast.dismiss(t.id), activate()}}
-                          className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                          활성화
-                        </button>
-                      </div>
-                    </div>
-                  ), {duration : 5000})
-            } else {
-                toast('프로필 등록이 필요합니다', { icon: '✏️' });
-                router.replace('/profile/edit');
+                    ), {duration : 5000})
+              } else {
+                  toast('프로필 등록이 필요합니다', { icon: '✏️' });
+                  router.replace('/profile/edit');
+              }
             }
+            
         } catch (error) {
             toast.error('아이디 또는 비밀번호가 틀렸습니다.');
         }
