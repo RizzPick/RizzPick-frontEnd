@@ -3,12 +3,16 @@ import React from 'react';
 import RizzPickLogo from '../../../public/RizzPickLogo.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Header from '@/components/common/Header';
 
 function AboutPage() {
     const router = useRouter();
 
+    const showHeader = false;
+
     return (
-        <>
+        <div>
+            {showHeader && <Header />}
             <div className="height-screen-vh w-full bg-[#062643]">
                 <div className="absolute inset-0 bg-gradient-to-b from-[#a627a9]/50 via-[#9015db]/38 via-[#b122c8]/53 via-[#6721c1]/40 to-[#262d6d]/30" />
                 <div className="relative z-10">
@@ -310,7 +314,7 @@ function AboutPage() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

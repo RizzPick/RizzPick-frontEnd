@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 type Props = { dating: Dating };
 export default function DatingCard({
-    dating: { datingTitle, datingId, userNickname, createdAt, userProfilePic },
+    dating: { datingTitle, datingId, userNickname, createdAt, datingImage },
 }: Props) {
     function timeAgo(createdAt: string): string {
         // 영국 시간을 해석합니다.
@@ -43,14 +43,13 @@ export default function DatingCard({
         const differenceString = timeAgo(createdAt);
         setTimeDifferenceString(differenceString);
     }, [createdAt]);
-
     return (
         <Link href={`${datingId}`}>
             <article className=" flex flex-col justify-between rounded-md overflow-hidden shadow-lg hover:shadow-xl w-[233px] h-[349px] bg-white sm:w-[306px] sm:h-[218]">
                 <div className="relative w-full h-[260px]">
                     <Image
                         className="w-full h-full"
-                        src={userProfilePic.image}
+                        src={datingImage.image}
                         alt={datingTitle}
                         width={233}
                         height={260}

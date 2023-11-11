@@ -20,12 +20,10 @@ async function Likedpage() {
         }
     );
     const liked: LikeData[] = response.data.data;
-    const showHeader = true;
 
     return (
         <>
             <div>
-                <div className='sm:hidden block'>{showHeader && <Header />}</div>
                 <LikeList liked={liked} />
             </div>
         </>

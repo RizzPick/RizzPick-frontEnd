@@ -335,23 +335,24 @@ export default function Write({
                                                 placeholder="어디서 만나실건가요?"
                                             />
                                         </div>
+                                        <div className="w-[574px]">
+                                            <label
+                                                htmlFor="theme"
+                                                className="block text-gray-700 text-sm font-normal mb-2 sm:ml-2 sm:text-lg"
+                                            >
+                                                주제
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="theme"
+                                                value={theme}
+                                                onChange={handleThemeChange}
+                                                className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[300px] sm:h-[40px]"
+                                                placeholder="어떤 컨셉의 데이트인가요?"
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="w-[574px]">
-                                        <label
-                                            htmlFor="theme"
-                                            className="block text-gray-700 text-sm font-normal mb-2 sm:ml-2 sm:text-lg"
-                                        >
-                                            주제
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="theme"
-                                            value={theme}
-                                            onChange={handleThemeChange}
-                                            className="flex h-[55px] py-[16px] px-[20px] rounded-[12px] border shadow appearance-none  w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline sm:w-[300px] sm:h-[40px]"
-                                            placeholder="어떤 컨셉의 데이트인가요?"
-                                        />
-                                    </div>
+
                                     <div className="absolute bottom-0 flex justify-center items-center w-full h-10 right-[10px] sm:justify-normal sm: left-32">
                                         <button
                                             className="w-[234px] h-[65px] mr-[260px] mb-[100px] bg-fuchsia-600 rounded-[30px] text-white text-[32px] font-semibold font-['SUITE'] leading-loose tracking-widest sm:text-xl sm:w-[130px] sm:h-10 sm:mt-12"

@@ -18,19 +18,16 @@ export default function MatchPage() {
     useEffect(() => {
         setMobile(isMobile);
     }, [isMobile]);
-    const showHeader = true;
 
     return (
         <div className="bg-white">
             {mobile ? (
                 <div className="height-screen-vh">
-                    {showHeader && <Header />}
                     <MatchMobile />
                     <Footer />
                 </div>
             ) : (
                 <div>
-                    {showHeader && <Header />}
                     <Match />
                 </div>
             )}
