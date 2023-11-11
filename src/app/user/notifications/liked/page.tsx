@@ -25,7 +25,7 @@ async function Likedpage() {
     return (
         <>
             <div>
-                <div>{showHeader && <Header />}</div>
+                <div className='sm:hidden block'>{showHeader && <Header />}</div>
                 <LikeList liked={liked} />
             </div>
         </>

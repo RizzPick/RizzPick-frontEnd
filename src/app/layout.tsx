@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 type RootLayoutProps = {
     children: React.ReactNode;
-    showHeader?: boolean; // showHeader prop을 옵셔널하게 선언
+    showHeader?: boolean;
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {

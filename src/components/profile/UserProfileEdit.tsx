@@ -109,7 +109,7 @@ function UserProfileEdit({onNext} : Props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className='w-[605px] h-full sm:ml-0 sm:bg-profile-gradient md:bg-white lg:bg-white px-8 py-4 rounded-xl sm:rounded-3xl border border-black sm:border-none sm:mt-4 sm:w-[100vw] sm:h-full'>
+      <form onSubmit={handleSubmit(onSubmit)} className='w-[605px] h-full sm:ml-0 sm:bg-profile-gradient md:bg-white lg:bg-white px-8 py-4 rounded-xl sm:rounded-3xl border border-black sm:border-none sm:w-[100vw] sm:h-full'>
       <h1 className='justify-center text-zinc-800 text-2xl leading-10 tracking-widest mb-3 hidden sm:flex'>{`${profile?.userActiveStatus ? ("프로필 수정"): ("프로필 등록")}`}</h1>
         <div className="mb-4">
           <div className='flex justify-between'>
@@ -135,7 +135,6 @@ function UserProfileEdit({onNext} : Props) {
             <option value="">선택</option>
             <option value="MALE">남자</option>
             <option value="FEMALE">여자</option>
-            <option value="TRANSGENDER">트랜스젠더</option>
           </select>
           </div>
           <div className='flex justify-between mt-2'>

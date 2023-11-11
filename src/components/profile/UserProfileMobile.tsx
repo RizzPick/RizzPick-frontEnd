@@ -2,7 +2,6 @@
 import { MyProfileRes } from '@/types/profile'
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
-import EducationIcon from "../../../public/profileIcon/graduationcap.fill.svg"
 import Home from "../../../public/profileIcon/Home.svg"
 import Link from 'next/link';
 import useSWR from 'swr';
