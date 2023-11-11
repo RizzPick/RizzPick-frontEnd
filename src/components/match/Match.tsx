@@ -122,7 +122,7 @@ function Match() {
     if (users.length === 0) return <NoUserAlert />;
 
     return (
-        <div className="relative flex bg-matchpage-gradient h-[100vh]">
+        <div className="relative flex bg-matchpage-gradient h-[calc(100vh-78px)]">
             <ReportModal
                     isOpen={isReportModalVisible}
                     onClose={() => setReportModalVisible(false)}

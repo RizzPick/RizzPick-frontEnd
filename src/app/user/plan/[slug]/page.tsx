@@ -20,6 +20,7 @@ import BackIcon from '../../../../../public/planIcon/back.svg';
 import Header from '@/components/common/Header';
 import toast from 'react-hot-toast';
 import { calculateAge } from '@/utils/dateUtils';
+import UserLayout from '../../layout';
 
 type Props = {
     params: {
@@ -196,6 +197,7 @@ export default function PostPage({ params: { slug } }: Props) {
 
     return (
         <>
+        <UserLayout showHeader={true}>
             <div className="hidden sm:block">
                 <div
                     className="flex flex-row h-20 mb-4 items-center"
@@ -234,6 +236,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     </div>
                 </div>
             </div>
+            
             <div className="w-full pl-4 mx-auto sm:p-0">
                 <div className="flex flex-row">
                     <div className="w-[365px] ml-4 my-auto sm:hidden">
@@ -413,6 +416,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     </div>
                 </div>
             </div>
+        </UserLayout>
         </>
     );
 }

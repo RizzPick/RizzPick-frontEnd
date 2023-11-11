@@ -31,7 +31,7 @@ export default function RootLayout({
                 />
                 <meta name="msapplication-tap-highlight" content="no" />
             </head>
-            <body style={{ fontFamily: 'SUITE' }} className='min-h-screen'>
+            <body style={{ fontFamily: 'SUITE' }}>
                 <EventSourceProvider>
                     {/* {showHeader && <Header />} */}
                     <Toaster

@@ -14,6 +14,7 @@ import { MatchAPI } from '@/features/match'
 import toast from 'react-hot-toast'
 import ReportModal from '../common/ReportModal'
 import { useRouter } from 'next/navigation'
+import UserLayout from '@/app/user/layout'
 
 type Props = {
     profile : MyProfileRes
@@ -64,6 +65,7 @@ function OtherUserProfile({profile} : Props) {
 
 
   return (
+    <UserLayout showHeader={true}>
     <div>
         <div className='h-full bg-profile-gradient p-4'>
         <ReportModal
@@ -249,6 +251,7 @@ function OtherUserProfile({profile} : Props) {
           </div>
       </div>
   </div>
+  </UserLayout>
   )
 }
 

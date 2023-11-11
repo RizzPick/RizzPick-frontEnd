@@ -4,6 +4,7 @@ import { LikeData } from '@/types/like';
 import axios from 'axios';
 import { cookies } from 'next/headers';
 import React from 'react';
+import UserLayout from '../../layout';
 
 async function Likedpage() {
     const cookieStore = cookies();
@@ -23,7 +24,12 @@ async function Likedpage() {
 
     return (
         <>
-            <div>
+            <div className='block sm:hidden'>
+                <UserLayout showHeader={true}>
+                        <LikeList liked={liked} />
+                </UserLayout>
+            </div>
+            <div className='hidden sm:block'>
                 <LikeList liked={liked} />
             </div>
         </>

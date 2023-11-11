@@ -1,26 +1,13 @@
-import type { Metadata } from 'next';
+'use client'
 import Header from '@/components/common/Header';
-import RootLayout from '../layout';
-import { EventSourceProvider } from '../EventSourceContext';
-
-export const metadata: Metadata = {
-    title: 'Rizz Pick',
-    description:
-        '만나서 뭘 할까 고민 없이 바로 Rizz Pick 나만의 데이트 계획을 공유해보세요',
-    viewport: 'width=device-width,initial-scale=1',
-    icons: {
-        icon: '/favicon.ico',
-    },
-};
 
 export default function UserLayout({
-    children,
-}: {
-    children: React.ReactNode;
+    children, showHeader = false}: {
+    children: React.ReactNode; showHeader:boolean
 }) {
     return (
         <section>
-            <Header />
+            {showHeader && <Header />}
             {children}
         </section>
     );
