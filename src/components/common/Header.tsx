@@ -120,6 +120,9 @@ export default function Header({ isVisible = true }) {
     );
 
     const fetchAlerts = useCallback(async () => {
+        if (!token) {
+            return null;
+        }
         try {
             const response = await fetch('https://willyouback.shop/alerts', {
                 method: 'GET',
@@ -196,7 +199,6 @@ export default function Header({ isVisible = true }) {
         };
 
         newSSE.onerror = (e) => {
-            console.error('EventSource error:', e);
             newSSE.close();
         };
 

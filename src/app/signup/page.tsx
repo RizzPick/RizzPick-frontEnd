@@ -1,4 +1,3 @@
-import Header from '@/components/common/Header';
 import SignupComponent from '@/components/user/SignupForm';
 import React from 'react';
 
