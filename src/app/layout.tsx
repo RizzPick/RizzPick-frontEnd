@@ -18,12 +18,12 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const showHeader = true;
+    // const showHeader = true;
 
     return (
         <html lang="ko">
             <body style={{ fontFamily: 'SUITE' }}>
-                <Header isVisible={showHeader} />
+                {/* <Header /> */}
                 <Toaster
                     position="top-center"
                     toastOptions={{ duration: 1500 }}
