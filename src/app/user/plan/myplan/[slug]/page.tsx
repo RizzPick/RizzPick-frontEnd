@@ -222,11 +222,8 @@ export default function PostPage({ params: { slug } }: Props) {
         }
     };
 
-    const showHeader = true;
-
     return (
         <>
-            {showHeader && <Header />}
             {!isEditing && (
                 <div className="hidden sm:block">
                     <div

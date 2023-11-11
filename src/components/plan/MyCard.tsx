@@ -5,13 +5,7 @@ import { useEffect, useState } from 'react';
 
 type Props = { myDating: MyDating };
 export default function MyCard({
-    myDating: {
-        datingTitle,
-        datingId,
-        createdAt,
-        userNickname,
-        userProfilePic,
-    },
+    myDating: { datingTitle, datingId, createdAt, userNickname, datingImage },
 }: Props) {
     function timeAgo(createdAt: string): string {
         // 영국 시간을 해석합니다.
@@ -56,7 +50,7 @@ export default function MyCard({
                 <div className="relative w-full h-[260px]">
                     <Image
                         className="w-full h-full"
-                        src={userProfilePic.image}
+                        src={datingImage.image}
                         alt={datingTitle}
                         width={233}
                         height={260}

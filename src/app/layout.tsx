@@ -1,4 +1,3 @@
-import RealTime from '@/components/alarm/RealTime';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
@@ -14,18 +13,17 @@ export const metadata: Metadata = {
     },
 };
 
-type RootLayoutProps = {
+export default function RootLayout({
+    children,
+}: {
     children: React.ReactNode;
-    showHeader?: boolean; // showHeader prop을 옵셔널하게 선언
-};
+}) {
+    const showHeader = true;
 
-export default function RootLayout({ children }: RootLayoutProps) {
-    const showHeader = false;
     return (
         <html lang="ko">
             <body style={{ fontFamily: 'SUITE' }}>
                 <Header isVisible={showHeader} />
-                <RealTime />
                 <Toaster
                     position="top-center"
                     toastOptions={{ duration: 1500 }}

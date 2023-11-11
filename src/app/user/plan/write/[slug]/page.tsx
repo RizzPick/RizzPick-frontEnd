@@ -52,12 +52,8 @@ export default function WritePage({ params: { slug } }: Props) {
         return <div>Loading...</div>;
     }
 
-    const showHeader = true;
-
     return (
         <>
-            {showHeader && <Header />}
-
             <Write
                 initialData={dating}
                 initialActivities={dating ? dating.activities : []}

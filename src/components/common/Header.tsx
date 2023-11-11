@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { UserInfo } from '@/types/user';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import AuthAPI from '@/features/auth';
 import { getCookie } from '@/utils/cookie';
 import Alarm from '@/components/alarm/Alarm';
@@ -11,6 +11,7 @@ import Logo from '../../../public/RizzPick_color.png';
 import RealTimeModal from '../alarm/RealTimeModal';
 import { Dispatch, SetStateAction } from 'react';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import { toast } from 'react-hot-toast';
 
 type Alert = {
     id: number;
@@ -39,6 +40,12 @@ export default function Header({ isVisible = true }) {
     const EventSource = EventSourcePolyfill || NativeEventSource;
     const [sse, setSse] = useState<EventSourcePolyfill | null>(null);
 
+    const [shownAlertsIds, setShownAlertsIds] = useState<Set<number>>(
+        new Set()
+    );
+    const [processedEventIds, setProcessedEventIds] = useState<string[]>([]);
+    const sseRef = useRef<EventSourcePolyfill | null>(null);
+
     const Open = () => {
         setShowOverlay(true);
         setOpenChatModal(true);
@@ -59,12 +66,57 @@ export default function Header({ isVisible = true }) {
         setShowRealTimeModal(false);
     };
 
+    const showToast = useCallback((message: string) => {
+        (toast as any)(message, {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }, []);
+
     const handleNewAlert = useCallback(
         (newAlert: string) => {
             // 새로운 알림 메시지를 화면에 표시
             setMessages((currentMessages) => [...currentMessages, newAlert]);
         },
         [setMessages]
+    );
+
+    const handleNewMessage = useCallback(
+        (event: any) => {
+            if (event.data.startsWith('{')) {
+                const newAlert: Alert = JSON.parse(event.data);
+                const eventId = event.lastEventId; // 이벤트 ID 가져오기
+
+                // 이벤트 ID가 이미 처리되었는지 확인
+                if (!processedEventIds.includes(eventId)) {
+                    // 이벤트 ID를 처리 목록에 추가
+                    setProcessedEventIds((prevIds) => [...prevIds, eventId]);
+
+                    // readStatus가 false인 경우에만 새 알림을 처리
+                    if (!newAlert.readStatus) {
+                        setAlerts((currentAlerts) => {
+                            // 이미 표시된 알림인지 확인
+                            if (
+                                !currentAlerts.some(
+                                    (alert) => alert.id === newAlert.id
+                                )
+                            ) {
+                                showToast(newAlert.message);
+                                return [...currentAlerts, newAlert]; // 새 알림을 상태에 추가
+                            } else {
+                                return currentAlerts; // 이미 있는 알림이면 상태를 변경하지 않음
+                            }
+                        });
+                    }
+                }
+            }
+        },
+        [showToast, processedEventIds]
     );
 
     const fetchAlerts = useCallback(async () => {
@@ -79,9 +131,17 @@ export default function Header({ isVisible = true }) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setAlerts(data.data); // 모든 알림 데이터를 저장
+            setAlerts((currentAlerts) => {
+                // 새로운 알림들만 필터링
+                const newAlerts = data.data.filter(
+                    (newAlert: any) =>
+                        !currentAlerts.some((alert) => alert.id === newAlert.id)
+                );
+                // 현재 알림 목록에 새 알림들을 추가
+                return [...currentAlerts, ...newAlerts];
+            });
 
-            // 여기서 unreadAlertCount를 업데이트합니다.
+            // unreadAlertCount를 업데이트합니다. 아직 읽지 않은 알림의 수를 세어줍니다.
             setUnreadAlertCount(
                 data.data.filter((alert: any) => !alert.readStatus).length
             );
@@ -91,6 +151,8 @@ export default function Header({ isVisible = true }) {
     }, [token]);
 
     const initializeSSE = useCallback(() => {
+        if (!token || sseRef.current) return;
+
         const newSSE = new EventSource('https://willyouback.shop/subscribe', {
             headers: {
                 Authorization: `${token}`,
@@ -111,7 +173,7 @@ export default function Header({ isVisible = true }) {
             console.log('알림 메시지 전달받음');
             console.log(event);
             console.log(event.data);
-
+            handleNewMessage(event);
             // 데이터를 JSON으로 파싱
             try {
                 if (event.data.startsWith('{')) {
