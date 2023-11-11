@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Header from '@/components/common/Header';
+import RootLayout from '../layout';
+
 export const metadata: Metadata = {
     title: 'Rizz Pick',
     description:
@@ -15,10 +17,5 @@ export default function UserLayout({
 }: {
     children: React.ReactNode;
 }) {
-    return (
-        <section>
-            <Header />
-            {children}
-        </section>
-    );
+    return <section>{children}</section>;
 }

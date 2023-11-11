@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 import Header from '@/components/common/Header';
 
-export const metadata: Metadata = {
+const Metadata: Metadata = {
     title: 'Rizz Pick',
     description:
         '만나서 뭘 할까 고민 없이 바로 Rizz Pick 나만의 데이트 계획을 공유해보세요',
@@ -13,17 +13,19 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RootLayout({
-    children,
-}: {
+interface RootLayoutProps {
     children: React.ReactNode;
-}) {
-    // const showHeader = true;
+    showHeader?: boolean;
+}
 
+const RootLayout: React.FC<RootLayoutProps> = ({
+    children,
+    showHeader = true,
+}) => {
     return (
         <html lang="ko">
             <body style={{ fontFamily: 'SUITE' }}>
-                {/* <Header /> */}
+                {showHeader && <Header />}
                 <Toaster
                     position="top-center"
                     toastOptions={{ duration: 1500 }}
@@ -32,4 +34,6 @@ export default function RootLayout({
             </body>
         </html>
     );
-}
+};
+
+export default RootLayout;
