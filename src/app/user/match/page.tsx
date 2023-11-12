@@ -6,6 +6,7 @@ import MatchMobile from '@/components/match/MatchMobile';
 // import useGeolocation from '@/hooks/useGeolocation';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import UserLayout from '../layout';
 
 export default function MatchPage() {
     const [mobile, setMobile] = useState(false);
@@ -22,14 +23,18 @@ export default function MatchPage() {
     return (
         <div className="bg-white">
             {mobile ? (
-                <div className="height-screen-vh">
-                    <MatchMobile />
-                    <Footer />
-                </div>
+                <UserLayout showHeader={true}>
+                    <div className="height-screen-vh">
+                        <MatchMobile />
+                        <Footer />
+                    </div>
+                </UserLayout>
             ) : (
-                <div>
-                    <Match />
-                </div>
+                <UserLayout showHeader={true}>
+                    <div>
+                        <Match />
+                    </div>
+                </UserLayout>
             )}
         </div>
     );

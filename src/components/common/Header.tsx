@@ -6,17 +6,15 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { UserInfo } from '@/types/user';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import AuthAPI from '@/features/auth';
 import { getCookie } from '@/utils/cookie';
 import Alarm from '@/components/alarm/Alarm';
 import Logo from '../../../public/RizzPick_color.png';
 import RealTimeModal from '../alarm/RealTimeModal';
-import { Dispatch, SetStateAction } from 'react';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { toast } from 'react-hot-toast';
 import { useEventSource } from '@/app/EventSourceContext';
+import { useRouter } from 'next/navigation';
 
 // interface ProfileImage {
 //     id: number;
@@ -53,6 +51,7 @@ export default function Header({ isVisible = true }) {
     const [openChatModal, setOpenChatModal] = useState(false);
     const [showRealTimeModal, setShowRealTimeModal] = useState(false);
     const token = getCookie('Authorization');
+    const router = useRouter();
 
     const [unreadAlertCount, setUnreadAlertCount] = useState(0);
 
@@ -245,7 +244,7 @@ export default function Header({ isVisible = true }) {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
     }, [alerts]);
 
-    // // 컴포넌트가 마운트될 때 EventSource 초기화
+    // 컴포넌트가 마운트될 때 EventSource 초기화
     // useEffect(() => {
     //     initializeSSE();
     //     fetchAlerts();
@@ -306,6 +305,9 @@ export default function Header({ isVisible = true }) {
                         setUnreadAlertCount={setUnreadAlertCount}
                     />
                 )}
+                <span className="cursor-pointer" onClick={()=>router.push('/user/chat')}>
+                    채팅
+                </span>
                 <span onClick={Open} className="cursor-pointer">
                     알림
                 </span>

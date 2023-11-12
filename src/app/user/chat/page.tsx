@@ -6,21 +6,18 @@ import { useMediaQuery } from 'react-responsive';
 import Back from '../../../../public/chatIcon/Button.svg';
 import { useRouter } from 'next/navigation';
 import Footer from '@/components/common/Footer';
-import Header from '@/components/common/Header';
 import { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import { ChatData } from '@/types/chat';
 import useSWR from 'swr';
+import UserLayout from '../layout';
 
 export default function ChatPage() {
     const router = useRouter();
-    const isMobile = useMediaQuery({
-        query: '(max-width:767px)',
-    });
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
 
     return (
         <div>
-            {isMobile ? (
+            <div className='sm:block hidden'>
                 <div className="grid grid-cols-1 w-full height-screen-vh">
                     <header className="text-center text-neutral-700 text-xl flex justify-center p-4 border-b-1 border">
                         <button
@@ -34,9 +31,10 @@ export default function ChatPage() {
                     <ChatList />
                     <Footer />
                 </div>
-            ) : null}
+            </div>
 
-            {!isMobile ? (
+            <div className='sm:hidden'>
+                <UserLayout showHeader={true}>
                 <div>
                     <div className="grid grid-cols-4">
                         <ChatList />
@@ -55,7 +53,8 @@ export default function ChatPage() {
                         )}
                     </div>
                 </div>
-            ) : null}
+            </UserLayout>
+            </div>
         </div>
     );
 }

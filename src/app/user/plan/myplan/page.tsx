@@ -1,12 +1,20 @@
 import Footer from '@/components/common/Footer';
 import MyPlanList from '@/components/plan/MyPlanList';
-import Header from '@/components/common/Header';
+import UserLayout from '../../layout';
 
 export default function matchPage() {
     return (
         <>
-            <MyPlanList />
-            <Footer />
+        <div className='sm:hidden'>
+            <UserLayout showHeader={true}>
+                <MyPlanList />
+                <Footer />
+            </UserLayout>
+            </div>
+        <div className='hidden sm:block'>
+                <MyPlanList />
+                <Footer />
+            </div>
         </>
     );
 }

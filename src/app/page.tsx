@@ -17,18 +17,16 @@ export default function Home() {
         <div className="fixed inset-0 flex items-center justify-center z-20 bg-[#062643]">
             <div className="absolute inset-0 bg-gradient-to-b from-[#a627a9]/50 via-[#9015db]/38 via-[#b122c8]/53 via-[#6721c1]/40 to-[#262d6d]/30" />
             <div className="w-[132px] h-[85px] relative animate-pulse animate-once animate-ease-in-out">
-                <Image
-                    src={RizzPickLogo}
-                    alt="로고"
-                    fill
-                    style={{ objectFit: 'cover' }}
-                    priority
-                    sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"
-                    onLoadingComplete={() =>
-                        setTimeout(() => setLoaded(true), 2000)
-                    }
-                />
-            </div>
+                    <Image
+                        src={RizzPickLogo}
+                        alt="로고"
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        priority
+                        sizes="(max-width: 393px) 71px, (max-width: 1200px) 30vw, 350px"
+                        onLoadingComplete={() => setLoaded(true)}
+                    />
+                </div>
         </div>
     );
 

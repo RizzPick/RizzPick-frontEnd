@@ -19,7 +19,7 @@ function MatchControls({ onReaction }: Props) {
   };
 
   return (
-    <div className="absolute w-[30vw] flex justify-center -bottom-28 gap-48 sm:bottom-5 z-60 sm:w-full sm:justify-center sm:px-4 z-20">
+    <div className="absolute w-[30vw] flex justify-center -bottom-24 gap-48 sm:bottom-5 z-60 sm:w-full sm:justify-center sm:px-4 z-20">
       <button onClick={handleNopeClick} className='transform transition-transform duration-500 hover:rotate-90'>
         <Image src={NopeIcon} alt="Nope" width={60} height={60} />
       </button>

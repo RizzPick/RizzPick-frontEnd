@@ -34,11 +34,10 @@ function UserProfile() {
     }, [initializeProfile]);
 
     if (!profile) return;
-    const showHeader = true;
 
     return (
         <>
-            <div className="bg-profile-gradient h-[100vh] py-[67px]">
+            <div className="bg-profile-gradient h-full py-[67px]">
                 <div className="relative w-[169px] h-[169px] mx-auto">
                     <Image
                         src={profile.profileImages[0].image}
