@@ -31,6 +31,8 @@ export default function Write({
         initialData.datingLocation
     );
     const [theme, setTheme] = useState<string>(initialData.datingTheme);
+    const [datingImage, setDatingImage] = useState(null);
+
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const [activityContent, setActivityContent] = useState('');
@@ -61,6 +63,13 @@ export default function Write({
 
     const handleThemeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTheme(e.target.value);
+    };
+
+    const handleImageChange = (event: any) => {
+        const file = event.target.files[0];
+        if (file) {
+            setDatingImage(file);
+        }
     };
 
     const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,9 +110,8 @@ export default function Write({
 
     //? 더미 데이터 수정하기 (유저 = 작성하기)
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        console.log('Form Submit');
         e.preventDefault();
-        //! activity는  1개 이상 추가 되어야 합니다.
+
         if (activities.length < 1) {
             setResponseMessage(
                 'Please add at least one activity before submitting.'
@@ -111,7 +119,16 @@ export default function Write({
             toast.error('1개 이상의 활동을 추가해주세요');
             return;
         }
+
         try {
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('location', location);
+            formData.append('theme', theme);
+            if (datingImage) {
+                formData.append('image', datingImage);
+            }
+
             const id = Number(param.slug);
             const response = await PlanAPI.updateDatingData(id.toString(), {
                 title,
@@ -134,7 +151,7 @@ export default function Write({
     }, [param.slug, fetchDatingData]);
 
     const handleThemeTagClick = (themeTag: string) => {
-        const tagWithoutHash = themeTag.replace('#', '.');
+        const tagWithoutHash = themeTag.replace('#', '');
         if (selectedTags.includes(tagWithoutHash)) {
             // 이미 선택된 태그라면 제거합니다.
             setSelectedTags(
@@ -294,7 +311,7 @@ export default function Write({
                                 : '100vh',
                         }}
                     >
-                        <div className="flex flex-col items-center p-4 w-full mb-8">
+                        <div className="flex flex-col items-center p-4 w-full">
                             <div className=" flex-col items-center p-4 w-full">
                                 {successMessage && (
                                     <div className="alert alert-success">
@@ -369,7 +386,52 @@ export default function Write({
                                 </form>
                             </div>
                         </div>
-
+                        <div className="flex flex-row justify-around">
+                            <label
+                                htmlFor="file-upload"
+                                className="relative cursor-pointer bg-white rounded-md font-medium focus:outline-none"
+                            >
+                                <div className="flex justify-center items-center h-60 px-6 pt-5 pb-6 border-2 border-dashed rounded-md mb-10">
+                                    <div className="space-y-1 text-center">
+                                        <svg
+                                            className="mx-auto h-12 w-12 text-gray-400"
+                                            stroke="currentColor"
+                                            fill="none"
+                                            viewBox="0 0 48 48"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12m20-24l8 8m0 0l-8 8m8-8H4"
+                                                strokeWidth={2}
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            />
+                                        </svg>
+                                        <div className="flex text-sm text-gray-600">
+                                            <span className="text-myplan-button hover:text-[pink]">
+                                                데이트 계획에 대표사진을
+                                                추가해주세요!
+                                            </span>
+                                            <input
+                                                id="file-upload"
+                                                name="file-upload"
+                                                type="file"
+                                                className="sr-only"
+                                                onChange={handleImageChange}
+                                            />
+                                            <p className="pl-1">
+                                                또는 사진을 드래그해서
+                                                업로드해주세요!
+                                            </p>
+                                        </div>
+                                        <p className="text-xs text-gray-500">
+                                            PNG, JPG, GIF up to 20MB
+                                        </p>
+                                    </div>
+                                </div>
+                            </label>
+                            <div></div>
+                        </div>
                         <div className="flex flex-row w-full mx-auto px-8 gap-10 sm:gap-0 sm:flex-col">
                             <div className="w-[574px] sm:w-[393px]">
                                 <p className="text-[30px] font-medium mb-4 sm:text-xl">

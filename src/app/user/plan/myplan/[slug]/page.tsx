@@ -15,6 +15,7 @@ import Link from 'next/link';
 import BackIcon from '../../../../../../public/planIcon/back.svg';
 import Header from '@/components/common/Header';
 import toast from 'react-hot-toast';
+import LocationIcon from '../../../../../../public/planIcon/location.svg';
 
 type Props = {
     params: {
@@ -36,6 +37,7 @@ interface DatingInfo {
     datingLocation: string;
     datingTheme: string;
     createdAt: string;
+    datingImage: { image: string };
     activities: { activityContent: string }[];
 }
 
@@ -45,6 +47,7 @@ export default function PostPage({ params: { slug } }: Props) {
         datingLocation: '',
         datingTheme: '',
         createdAt: new Date().toISOString(),
+        datingImage: { image: '' },
         activities: [],
     });
     const [createdAt, setCreatedAt] = useState(null);
@@ -105,6 +108,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     datingLocation: datingData.datingLocation,
                     datingTheme: datingData.datingTheme,
                     createdAt: datingData.createdAt,
+                    datingImage: datingData.datingImage,
                     activities: datingData.activityResponseDtoList || [],
                 });
                 setActivities(datingData.activityResponseDtoList); // activities 상태 업데이트
@@ -151,6 +155,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     datingTheme: datingData.data.datingTheme,
                     activities: datingData.data.activityResponseDtoList,
                     createdAt: datingData.createdAt,
+                    datingImage: datingData.datingImage,
                 });
                 setIsEditing(false); // 그리고 isEditing 상태를 false로 설정합니다.
             })
@@ -340,20 +345,32 @@ export default function PostPage({ params: { slug } }: Props) {
                                 </ul>
                             </div>
                             <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5] sm:border-none">
-                                <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-b-2 sm:max-w-[350px] sm:mt-0 sm:w-full">
+                                <div className="flex flex-col mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-b-2 sm:max-w-[350px] sm:mt-0 sm:w-full">
                                     <div className="flex flex-col p-4">
-                                        <p className="text-[25px] text-[#666666] sm:text-base sm:font-medium">
+                                        <div className="flex flex-row justify-between">
+                                            <p className="text-[36px] mt-1 mb-4 font-semibold sm:text-xl sm:font-medium sm:my-4">
+                                                {dating.datingTitle}
+                                            </p>
+                                            <span className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
+                                                {timeAgo(dating.createdAt)}
+                                            </span>
+                                        </div>
+                                        <p className="flex flex-row items-center text-[25px] text-base text-[#666666] mt-[-10px] ml-2 sm:text-base sm:font-medium">
+                                            <LocationIcon />
                                             {dating.datingLocation}
                                         </p>
-                                        <p className="text-[36px] mt-1 mb-4 font-semibold sm:text-xl sm:font-medium sm:my-4">
-                                            {dating.datingTitle}
-                                        </p>
-                                        <p className="text-[25px] sm:text-lg sm:font-medium">
+                                        <p className="text-[25px] text-base mt-2 ml-2 sm:text-lg sm:font-medium">
                                             {dating.datingTheme}
                                         </p>
-                                        <span className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
-                                            {timeAgo(dating.createdAt)}
-                                        </span>
+                                        <Image
+                                            className="w-full h-full"
+                                            src={dating.datingImage.image}
+                                            alt="Dating Image"
+                                            width={233}
+                                            height={260}
+                                            objectFit="cover"
+                                            objectPosition="center"
+                                        />
                                     </div>
                                 </div>
                                 <div className="flex flex-col mx-auto p-4 w-5/6 sm:w-full ">
