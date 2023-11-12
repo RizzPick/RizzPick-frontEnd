@@ -16,11 +16,13 @@ import LeftBtnIcon from "../../../public/matchIcon/left.svg";
 import RightBtnIcon from "../../../public/matchIcon/right.svg";
 import ReportModal from '../common/ReportModal';
 
+type Props = {
+    users : UserProfile[]
+    setUsers : any
+}
 
-function Match() {
+function Match({users, setUsers} : Props) {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
     const [slideIndex, setSlideIndex] = useState(0);
     const [isReportModalVisible, setReportModalVisible] = useState(false);
@@ -28,25 +30,6 @@ function Match() {
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
     };
-
-    const fetchUsers = useCallback(async () => {
-        setIsLoading(true);
-        try {
-            const response = await MatchAPI.fetchRandomUser();
-            setUsers(response.data.data);
-            setUserIndex(0);
-            setSlideIndex(0);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            toast.error('데이터를 가져오는 중 오류가 발생했습니다.');
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        fetchUsers();
-    }, [fetchUsers]);
 
     const currentUser = users[userIndex] || {};
     
@@ -117,7 +100,6 @@ function Match() {
         }
     };
 
-    if (isLoading) return <Loader />;
     if (users.length === 0) return <NoUserAlert />;
 
     return (

@@ -7,10 +7,31 @@ import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import UserLayout from '../layout';
 import { useSearchParams } from 'next/navigation';
+import { MatchAPI } from '@/features/match';
+import { UserProfile } from '@/types/match/type';
+import Loader from '@/components/common/Loader';
 
 export default function MatchPage() {
     const params = useSearchParams();
     const [mobile, setMobile] = useState(false);
+    const [users, setUsers] = useState<UserProfile[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await MatchAPI.fetchRandomUser();
+                setIsLoading(false);
+                setUsers(response.data.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []);
     // const location = useGeolocation();
 
     const isMobile = useMediaQuery({
@@ -21,19 +42,22 @@ export default function MatchPage() {
         setMobile(isMobile);
     }, [isMobile]);
 
+
+    if (isLoading) return <Loader />;
+
     return (
         <div className="bg-white">
             {mobile ? (
                 <UserLayout showHeader={true}>
                     <div className="height-screen-vh">
-                        <MatchMobile />
+                        <MatchMobile users={users} setUsers={setUsers} />
                         <Footer />
                     </div>
                 </UserLayout>
             ) : (
                 <UserLayout showHeader={true}>
                     <div>
-                        <Match />
+                        <Match users={users} setUsers={setUsers}/>
                     </div>
                 </UserLayout>
             )}

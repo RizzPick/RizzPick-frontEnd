@@ -1,11 +1,8 @@
 'use client';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { MyProfileRes } from '@/types/profile';
-import useSWR from 'swr';
-import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
-import AuthAPI from '@/features/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { calculateAge } from '@/utils/dateUtils';
 import LogoutModal from '../common/LogoutModal';
@@ -13,27 +10,16 @@ import ResignModal from '../common/ResignModal';
 
 const HomeIcon = dynamic(() => import('../../../public/profileIcon/Home.svg'));
 
-function UserProfile() {
+type Props = {
+    profile : MyProfileRes
+}
+
+function UserProfile({profile} : Props) {
     const params = useSearchParams();
-    const { data: profile } = useSWR<MyProfileRes>(PROFILE_KEY);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [showResignModal, setResignModal] = useState(false);
-    const { initializeProfile } = UseProfile();
+    
     const router = useRouter();
-
-    useEffect(() => {
-        const fetchData = async (): Promise<void> => {
-            try {
-                const response = await AuthAPI.getUserInfo();
-                initializeProfile(response.data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchData();
-    }, [initializeProfile]);
-
-    if (!profile) return;
 
     return (
         <>

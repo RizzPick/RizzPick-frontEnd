@@ -19,11 +19,14 @@ import Loader from '../common/Loader';
 import ReportModal from '../common/ReportModal';
 import MatchControls from './MatchControls';
 
+type Props = {
+    users : UserProfile[]
+    setUsers : any
+}
 
-function MatchMobile() {
+function MatchMobile({users, setUsers} : Props) {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [users, setUsers] = useState<UserProfile[]>([]);
     const [userIndex, setUserIndex] = useState(0);
     const [isReportModalVisible, setReportModalVisible] = useState(false);
     const [detailSlideIndex, setDetailSlideIndex] = useState(0);
@@ -33,27 +36,6 @@ function MatchMobile() {
     };
 
     const detailsStyle = isDetailsVisible ? 'translate-y-0' : 'translate-y-full';
-    
-
-    const fetchUsers = useCallback(async () => {
-        setIsLoading(true);
-        try {
-            const response = await MatchAPI.fetchRandomUser();
-            setUsers(response.data.data);
-            setUserIndex(0);
-            setSlideIndex(0);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            toast.error('데이터를 가져오는 중 오류가 발생했습니다.');
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        fetchUsers();
-    }, [fetchUsers]);
-
     const currentUser = users[userIndex];
     const [slideIndex, setSlideIndex] = useState(0);
 

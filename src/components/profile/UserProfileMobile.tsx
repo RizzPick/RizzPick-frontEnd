@@ -1,38 +1,23 @@
 'use client';
 import { MyProfileRes } from '@/types/profile';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import Home from '../../../public/profileIcon/Home.svg';
 import Link from 'next/link';
-import useSWR from 'swr';
-import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
-import AuthAPI from '@/features/auth';
 import useAuth from '@/hooks/useAuth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { calculateAge } from '@/utils/dateUtils';
 
-function UserProfileMobile() {
+type Props = {
+    profile : MyProfileRes;
+}
+
+function UserProfileMobile({profile} : Props) {
     const params = useSearchParams();
-    const { data: profile } = useSWR<MyProfileRes>(PROFILE_KEY);
-    const { initializeProfile } = UseProfile();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [showResignModal, setResignModal] = useState(false);
     const router = useRouter();
     const { logout, deActiveUser } = useAuth();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await AuthAPI.getUserInfo();
-                initializeProfile(response.data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchData();
-    }, [initializeProfile]);
-
-    if (!profile) return;
 
     return (
         <div>
