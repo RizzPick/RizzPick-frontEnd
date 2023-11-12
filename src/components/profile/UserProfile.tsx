@@ -6,15 +6,15 @@ import { MyProfileRes } from '@/types/profile';
 import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { calculateAge } from '@/utils/dateUtils';
 import LogoutModal from '../common/LogoutModal';
 import ResignModal from '../common/ResignModal';
-import Header from '@/components/common/Header';
 
 const HomeIcon = dynamic(() => import('../../../public/profileIcon/Home.svg'));
 
 function UserProfile() {
+    const params = useSearchParams();
     const { data: profile } = useSWR<MyProfileRes>(PROFILE_KEY);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [showResignModal, setResignModal] = useState(false);

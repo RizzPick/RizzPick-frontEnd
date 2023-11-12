@@ -2,9 +2,8 @@
 import Chat from '@/components/chat/Chat';
 import ChatList from '@/components/chat/ChatList';
 import ChatProfile from '@/components/chat/ChatProfile';
-import { useMediaQuery } from 'react-responsive';
 import Back from '../../../../public/chatIcon/Button.svg';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Footer from '@/components/common/Footer';
 import { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import { ChatData } from '@/types/chat';
@@ -13,6 +12,7 @@ import UserLayout from '../layout';
 
 export default function ChatPage() {
     const router = useRouter();
+    const params = useSearchParams();
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
 
     return (

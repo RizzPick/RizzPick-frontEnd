@@ -18,7 +18,6 @@ import ReportModal from '../common/ReportModal';
 
 
 function Match() {
-    
     const [isDetailsVisible, setDetailsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState<UserProfile[]>([]);

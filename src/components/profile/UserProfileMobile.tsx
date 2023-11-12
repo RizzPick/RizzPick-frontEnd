@@ -2,17 +2,17 @@
 import { MyProfileRes } from '@/types/profile';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import EducationIcon from '../../../public/profileIcon/graduationcap.fill.svg';
 import Home from '../../../public/profileIcon/Home.svg';
 import Link from 'next/link';
 import useSWR from 'swr';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import AuthAPI from '@/features/auth';
 import useAuth from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { calculateAge } from '@/utils/dateUtils';
 
 function UserProfileMobile() {
+    const params = useSearchParams();
     const { data: profile } = useSWR<MyProfileRes>(PROFILE_KEY);
     const { initializeProfile } = UseProfile();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
