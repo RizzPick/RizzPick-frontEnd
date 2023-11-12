@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { MatchAPI } from '../../features/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
@@ -15,7 +15,6 @@ import RightButton from '../../../public/matchIcon/right.svg';
 import Home from "../../../public/profileIcon/house.fill.small.svg"
 import toast from 'react-hot-toast';
 import { calculateAge } from '@/utils/dateUtils';
-import Loader from '../common/Loader';
 import ReportModal from '../common/ReportModal';
 import MatchControls from './MatchControls';
 
@@ -26,7 +25,6 @@ type Props = {
 
 function MatchMobile({users, setUsers} : Props) {
     const [isDetailsVisible, setDetailsVisible] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const [userIndex, setUserIndex] = useState(0);
     const [isReportModalVisible, setReportModalVisible] = useState(false);
     const [detailSlideIndex, setDetailSlideIndex] = useState(0);
@@ -40,14 +38,14 @@ function MatchMobile({users, setUsers} : Props) {
     const [slideIndex, setSlideIndex] = useState(0);
 
     const nextSlide = () => {
-        if (!currentUser) return; // currentUser가 undefined인 경우 early return
+        if (!currentUser) return;
         setSlideIndex(
             (prevIndex) => (prevIndex + 1) % currentUser.profileImages.length
         );
     };
 
     const prevSlide = () => {
-        if (!currentUser) return; // currentUser가 undefined인 경우 early return
+        if (!currentUser) return;
         setSlideIndex(
             (prevIndex) =>
                 (prevIndex - 1 + currentUser.profileImages.length) %
@@ -83,12 +81,10 @@ function MatchMobile({users, setUsers} : Props) {
         setDetailSlideIndex((prevIndex) => (prevIndex + 1) % 2); // Assuming there are only two slides
       };
       
-      // Function to go to the previous detail slide
       const prevDetailSlide = () => {
         setDetailSlideIndex((prevIndex) => (prevIndex - 1 + 2) % 2); // Assuming there are only two slides
       };
 
-    if (isLoading) return <Loader />;
     
 
     return (
@@ -194,21 +190,23 @@ function MatchMobile({users, setUsers} : Props) {
                         </div>
                                 <div 
                                     onClick={toggleDetailsVisibility} 
-                                    className="absolute -top-1 left-[50%] text-white animate-bounce px-2 py-2 bg-fuchsia-400 rounded-full cursor-pointer"
+                                    className="absolute -top-1 left-[50%] text-white animate-bounce w-4 h-4 bg-fuchsia-400 rounded-full cursor-pointer"
                                 >
                                     <MdKeyboardDoubleArrowDown />
                                 </div>
                             </div>
                             {detailSlideIndex === 0 && (
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between h-full">
                                 <div className="absolute top-4 right-4 z-50" onClick={() => setReportModalVisible(true)}>
                                     <ReportIcon />
                                 </div>
-                                <div className='bg-white rounded-2xl flex flex-col justify-center text-xs w-full px-4'>
+                                <div className='w-full'>
                                     {!users[userIndex].location && !users[userIndex].mbti && !users[userIndex].religion ? 
-                                            <p className="text-center">작성된 내용이 없습니다.</p> 
+                                            <div className='bg-white rounded-2xl flex flex-col justify-center text-xs w-full px-4 items-center'>
+                                                <p className="text-center">작성된 내용이 없습니다.</p> 
+                                            </div>
                                             : 
-                                            <>
+                                            <div className='bg-white rounded-2xl flex flex-col justify-center text-xs w-full px-4'>
                                                 { users[userIndex].location ? <div className='flex items-center gap-4 border-b py-1'><Home/>{users[userIndex].location}</div> : null }
                                                 <div className='flex items-center gap-4 border-b py-2'>
                                                 { users[userIndex].mbti ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].mbti}</div> : null }
@@ -218,7 +216,7 @@ function MatchMobile({users, setUsers} : Props) {
                                                 { users[userIndex].hobby ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].hobby}</div> : null }
                                                 { users[userIndex].interest ? <div className='px-3 py-1 border-fuchsia-400 border-2 rounded-3xl text-fuchsia-400'>#{users[userIndex].interest}</div> : null }
                                                 </div>
-                                            </>
+                                            </div>
                                     }
                                 </div>
                             </div>
