@@ -5,15 +5,40 @@ import ChatProfile from '@/components/chat/ChatProfile';
 import Back from '../../../../public/chatIcon/Button.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Footer from '@/components/common/Footer';
-import { CURRENT_CHAT_KEY } from '@/hooks/useChat';
+import UseChat, { CHAT_KEY, CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import { ChatData } from '@/types/chat';
 import useSWR from 'swr';
 import UserLayout from '../layout';
+import { useEffect, useState } from 'react';
+import ChatAPI from '@/features/chat';
+import Loader from '@/components/common/Loader';
 
 export default function ChatPage() {
     const router = useRouter();
     const params = useSearchParams();
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
+    const {data:chats} = useSWR<ChatData[]>(CHAT_KEY);
+    const [isLoading, setIsLoading] = useState(true);
+    const { initializeChats } = UseChat();
+
+    useEffect(()=>{
+        const getChatRooms = async() => {
+            try {
+                const response = await ChatAPI.getChats();
+                if(response.status === 200) {
+                    initializeChats(response.data);
+                }   
+            } catch (error) {
+            console.log(error);
+            } finally {
+            setIsLoading(false);
+            }
+        }
+        getChatRooms();
+    },[initializeChats])
+
+    if(!chats) return;
+    if(isLoading) return <Loader />
 
     return (
         <div>
@@ -28,7 +53,7 @@ export default function ChatPage() {
                         </button>
                         <h1>메시지</h1>
                     </header>
-                    <ChatList />
+                    <ChatList chats={chats} />
                     <Footer />
                 </div>
             </div>
@@ -37,7 +62,7 @@ export default function ChatPage() {
                 <UserLayout showHeader={true}>
                 <div>
                     <div className="grid grid-cols-4">
-                        <ChatList />
+                        <ChatList chats={chats}/>
                         {chat == undefined || chat == null ? (
                             <div
                                 className="col-span-3 bg-profile-edit-gradient"
