@@ -7,7 +7,7 @@ const ProfileAPI = {
             `${process.env.NEXT_PUBLIC_SERVER_URL}/api/updateProfile`,
             data
         ),
-    updateImage: (data: any) =>
+    updateImage: (data: FormData) =>
         service.put(
             `${process.env.NEXT_PUBLIC_SERVER_URL}/api/profileImage/updateImage`,
             data,

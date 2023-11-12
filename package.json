@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "analyze": "ANALYZE=true next build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -10,8 +11,12 @@
   },
   "dependencies": {
     "@stomp/stompjs": "^7.0.0",
+    "@types/eventsource": "^1.1.15",
     "@types/react-transition-group": "^4.4.8",
     "axios": "^1.5.1",
+    "event-source-polyfill": "^1.0.31",
+    "@types/jwt-decode": "^3.1.0",
+    "jwt-decode": "^4.0.0",
     "moment": "^2.29.4",
     "next": "13.5.4",
     "react": "^18",
@@ -21,6 +26,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "react-multi-carousel": "^2.8.4",
+    "react-query": "^3.39.3",
     "react-responsive": "^9.0.2",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.18.0",
@@ -33,7 +39,9 @@
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.0.1",
     "@svgr/webpack": "^8.1.0",
+    "@types/event-source-polyfill": "^1.0.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

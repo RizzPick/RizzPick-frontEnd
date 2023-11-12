@@ -1,28 +1,28 @@
 export type ChatData = {
-    chatRoomId : number;
-    image : string;
-    latestMessage? : string;
-    nickname : string;
-    users : string[];
-    age? :number;
-    education? : string;
-    intro? : string;
-    latestMessageTime? : string;
-    location? : string;
-    mbti? : string;
-    religion? : string;
-    userId? : number;
-}
+    chatRoomId: number;
+    image: string;
+    latestMessage?: string;
+    nickname: string;
+    users: string[];
+    birthday: string;
+    // education? : string;
+    intro?: string;
+    latestMessageTime?: string;
+    location?: string;
+    mbti?: string;
+    religion?: string;
+    userId?: number;
+};
 
 export type MessagesRes = {
-    chatRoomId? : number;
-    message : string;
-    sender : string;
-    time : string;
-}
+    chatRoomId?: number;
+    message: string;
+    sender: string;
+    time: string;
+};
 
 export type ChatRoomInfo = {
-    chatRoomId : number;
-    nickname : string;
-    image : string;
-}
+    chatRoomId: number;
+    nickname: string;
+    image: string;
+};

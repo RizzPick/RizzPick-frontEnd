@@ -19,6 +19,8 @@ import BadIcon from '../../../../../public/matchIcon/Nope.png';
 import BackIcon from '../../../../../public/planIcon/back.svg';
 import Header from '@/components/common/Header';
 import toast from 'react-hot-toast';
+import { calculateAge } from '@/utils/dateUtils';
+import UserLayout from '../../layout';
 
 type Props = {
     params: {
@@ -48,7 +50,7 @@ export default function PostPage({ params: { slug } }: Props) {
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const [dateList, setDateList] = useState<DateItem[]>([]);
     const [activePage, setActivePage] = useState(slug);
-    const targetUserId = userProfile?.userId as string;
+    const targetUserId = userProfile?.userId as number;
     const userId = getCookie('userId') as string;
     const router = useRouter();
 
@@ -125,7 +127,7 @@ export default function PostPage({ params: { slug } }: Props) {
     };
 
     // 좋아요 보내기 함수
-    const sendLike = async (userId: string, targetUserId: string) => {
+    const sendLike = async (userId: string, targetUserId: number) => {
         try {
             const url = `https://willyouback.shop/api/like/${targetUserId}`;
             const response = await axios.post(
@@ -148,7 +150,7 @@ export default function PostPage({ params: { slug } }: Props) {
     };
 
     // 싫어요 보내기 함수
-    const sendNope = async (userId: string, targetUserId: string) => {
+    const sendNope = async (userId: string, targetUserId: number) => {
         try {
             const url = `https://willyouback.shop/api/nope/${targetUserId}`;
             const response = await axios.post(
@@ -195,7 +197,7 @@ export default function PostPage({ params: { slug } }: Props) {
 
     return (
         <>
-            <Header />
+        <UserLayout showHeader={true}>
             <div className="hidden sm:block">
                 <div
                     className="flex flex-row h-20 mb-4 items-center"
@@ -234,6 +236,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     </div>
                 </div>
             </div>
+            
             <div className="w-full pl-4 mx-auto sm:p-0">
                 <div className="flex flex-row">
                     <div className="w-[365px] ml-4 my-auto sm:hidden">
@@ -354,7 +357,11 @@ export default function PostPage({ params: { slug } }: Props) {
                                         {/* 이름, 나이 */}
                                         <div className="flex flex-row w-full h-16 border-b-2 border-[#C5C5C5] items-center justify-center text-[28px]">
                                             <h2>{userProfile.nickname}</h2>
-                                            <p>{userProfile.age}</p>
+                                            <p>
+                                                {calculateAge(
+                                                    userProfile.birthday
+                                                )}
+                                            </p>
                                         </div>
 
                                         {/* 지역, 학력 */}
@@ -363,12 +370,6 @@ export default function PostPage({ params: { slug } }: Props) {
                                                 <LocationIcon />
                                                 <p className="ml-4">
                                                     {userProfile.location}
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-row">
-                                                <EducationIcon />
-                                                <p className="ml-4">
-                                                    {userProfile.education}
                                                 </p>
                                             </div>
                                         </div>
@@ -415,6 +416,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     </div>
                 </div>
             </div>
+        </UserLayout>
         </>
     );
 }

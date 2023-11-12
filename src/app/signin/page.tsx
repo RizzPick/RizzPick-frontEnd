@@ -1,13 +1,12 @@
-import LoginForm from '@/components/user/LoginForm'
-import React from 'react'
+import LoginForm from '@/components/user/LoginForm';
+import React from 'react';
 
 function Loginpage() {
-
-  return (
-    <div className='bg-signuppage-gradient'>
-      <LoginForm />
-    </div>
-  )
+    return (
+        <div className="bg-signuppage-gradient">
+            <LoginForm />
+        </div>
+    );
 }
 
-export default Loginpage
+export default Loginpage;

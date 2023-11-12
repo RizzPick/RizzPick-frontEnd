@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Write from '@/components/plan/Write';
 import { Activity } from '@/types/plan/activity/type';
-
+import Header from '@/components/common/Header';
+import UserLayout from '@/app/user/layout';
 type Props = {
     params: {
         slug: string;
@@ -53,10 +54,23 @@ export default function WritePage({ params: { slug } }: Props) {
     }
 
     return (
-        <Write
-            initialData={dating}
-            initialActivities={dating ? dating.activities : []}
-            onEditComplete={handleEditComplete}
-        />
+        <>
+            <div className='sm:hidden'>
+                <UserLayout showHeader={true}>
+                    <Write
+                        initialData={dating}
+                        initialActivities={dating ? dating.activities : []}
+                        onEditComplete={handleEditComplete}
+                        />
+                </UserLayout>
+            </div>
+            <div className='hidden sm:block'>
+                <Write
+                    initialData={dating}
+                    initialActivities={dating ? dating.activities : []}
+                    onEditComplete={handleEditComplete}
+                    />
+            </div>
+        </>
     );
 }

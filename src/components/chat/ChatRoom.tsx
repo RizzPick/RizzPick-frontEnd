@@ -15,17 +15,28 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const ChatRoom = () => {
-    const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
-    const [messages, setMessages] = useState<MessagesRes[]>();
-    const [isLoading, setIsLoading] = useState(false);
-    const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
+  const [message, setMessage] = useState(""); // 메시지를 위한 상태 추가
+  const [messages, setMessages] = useState<MessagesRes[]>();
+  const [isLoading, setIsLoading] = useState(false);
+  const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
     const fullToken = getCookie('Authorization');
     const MY_TOKEN = fullToken?.split(' ')[1];
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const { clearCurrentChat } = UseChat();
+
+    type StompMessage = {
+      body: string; 
+    }
     
-    const client = useRef(
+    type MessageData  = {
+      chatRoomId: number;
+      message: string;
+      sender: string;
+      time: string;
+    }
+    
+    const client = useRef<Client>(
       new Client({
         brokerURL: "wss://willyouback.shop/chatroom",
         debug: function (str) {
@@ -37,7 +48,7 @@ const ChatRoom = () => {
       })
     );
 
-    const stompSendFn = (des: any, body: any) => {
+    const stompSendFn = (des: string, body: Record<string, unknown>) => {
       if (client.current.connected) {
         client.current.publish({
           destination: des,
@@ -72,8 +83,8 @@ const ChatRoom = () => {
         }
     }
 
-    const messageCallbackHandler = (message: any) => {
-      const msgData = JSON.parse(message.body);
+    const messageCallbackHandler = (message: StompMessage) => {
+      const msgData:MessageData = JSON.parse(message.body);
       const newData = {
         chatRoomId : msgData.chatRoomId,
         message: msgData.message,
@@ -82,12 +93,15 @@ const ChatRoom = () => {
       };
       setMessages(prevMessages => [...(prevMessages || []), newData]);
     };
+
+    const userCallbackHandler = (message: StompMessage) => {
+      console.log((JSON.parse(message.body)));
+    };
     
     const currentClient = client.current;
     currentClient.onConnect = () => {
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
       currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
-      currentClient.subscribe(`/topic/${chat?.chatRoomId}/readMessage`, readMessageCallbackHandler);
       stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId:chat?.chatRoomId, message: "채팅방에 입장하셨습니다" });
     };
     currentClient.activate();;
@@ -124,17 +138,12 @@ const ChatRoom = () => {
       onClick();
     }
   }
-  const readMessageCallbackHandler = (message : any) => {
-    console.log((JSON.parse(message.body)));
-  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block:"end" });
   };
 
-  const userCallbackHandler = (message: any) => {
-    console.log((JSON.parse(message.body)));
-  };
+  
 
   const backBtnClick = () => {
     clearCurrentChat();
@@ -174,13 +183,13 @@ const ChatRoom = () => {
                   {messagesForDate.map(mes => (
                       <div key={mes.time} className={`flex ${mes.sender === chat?.users[0] ? 'justify-start' : 'justify-end'}`}>
                           {mes.sender === chat?.users[0] ?
-                              (<div className='flex items-center gap-2 mb-2 relative' ref={messagesEndRef}>
+                              (<div className='flex items-center gap-2 mb-2 relative max-w-[70vw]' ref={messagesEndRef}>
                                 <Link href={`/user/profile/${chat.userId}`}>
                                 <div className='relative w-[30px] h-[30px]'>
                                   <Image src={chat.image} alt='프로필 이미지' fill priority style={{objectFit:'cover'}} className='rounded-full' />
                                 </div>
                                 </Link>
-                                  <p className='bg-gray-200 rounded-2xl px-3 py-2 whitespace-pre-line max-w-[70vw]'>
+                                  <p className='bg-gray-200 rounded-2xl px-3 py-2 whitespace-pre-line max-w-[60vw]' id={mes.message} style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                                       {mes.message}
                                   </p>
                                   <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>

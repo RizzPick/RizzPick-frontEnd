@@ -101,5 +101,6 @@ button:last-of-type {
 @font-face {
   font-family: "SUITE";
   font-weight: 200;
-  src: url("/fonts/SUITE-Medium.ttf") format("opentype");
+  font-display: swap;
+  src: url("/fonts/SUITE-Medium.ttf") format("truetype");
 }

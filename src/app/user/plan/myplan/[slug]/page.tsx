@@ -15,6 +15,7 @@ import Link from 'next/link';
 import BackIcon from '../../../../../../public/planIcon/back.svg';
 import Header from '@/components/common/Header';
 import toast from 'react-hot-toast';
+import UserLayout from '@/app/user/layout';
 
 type Props = {
     params: {
@@ -224,7 +225,7 @@ export default function PostPage({ params: { slug } }: Props) {
 
     return (
         <>
-            <Header />
+        <UserLayout showHeader={true}>
             {!isEditing && (
                 <div className="hidden sm:block">
                     <div
@@ -440,6 +441,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     </>
                 )}
             </div>
+            </UserLayout>
         </>
     );
 }

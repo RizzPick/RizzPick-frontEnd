@@ -58,14 +58,15 @@ export enum Action {
 
 export type ProfileForm = {
   nickname: string;
-  age: number;
-  education: string;
+  birthday: string;
   userActiveStatus?: boolean;
   gender: Gender;
   location: string;
   mbti: string;
   religion: string;
   intro : string;
+  hobby : string;
+  interest : string;
 };
 
 export type Dating = {
@@ -78,10 +79,11 @@ export type Dating = {
 export type MyProfileRes = {
   userId : number;
   nickname: string;
-  age: number;
-  education: string;
+  birthday: string;
+  hobby : string;
+  interest : string;
   userActiveStatus: boolean;
-  gender: Gender;
+  gender: string;
   location: string;
   mbti: string;
   religion: string;

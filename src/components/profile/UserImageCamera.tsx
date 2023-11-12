@@ -4,7 +4,14 @@ import toast from 'react-hot-toast'
 import {AiOutlineCloseCircle,AiFillCheckCircle} from "react-icons/ai"
 import {FcCancel} from "react-icons/fc"
 
-const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
+type Props = {
+    onAddImage: (file: File) => void;
+    setCameraVisible: (isVisible: boolean) => void;
+    setModalVisible: (isVisible: boolean) => void; 
+}
+
+
+const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:Props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [CanvasState, setCanvasState] = useState<string>('none');
@@ -12,13 +19,29 @@ const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
     const [isConfirmVisible, setConfirmVisible] = useState<boolean>(false);
     const [image, setImage] = useState<File | null>(null);
 
+
+    const getWebcam = useCallback((callback: (stream: MediaStream) => void) => {
+        const constraints = {
+            'video': true,
+            'audio': false
+        };
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then(callback)
+        .catch(err => {
+            console.error("The following error occurred: " + err);
+            toast.error("카메라에 접근할 수 없습니다. 카메라가 연결되어 있고, 웹사이트에서 카메라 사용이 허용되어 있는지 확인해주세요.")
+            setModalVisible(false);
+            setCameraVisible(false);
+        });
+    }, [setCameraVisible, setModalVisible]);
+
     const startWebcam = useCallback(() => {
         getWebcam((stream: MediaStream) => {
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
             }
         });
-    }, [videoRef]);
+    }, [getWebcam]);
 
     useEffect(() => {
         startWebcam();
@@ -35,13 +58,15 @@ const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
     
 
     const addImage = () => {
-        onAddImage(image);
-        setModalVisible(false);
-        setCameraVisible(false);
-        setImage(null);
-        setCanvasState('none');
-        setCameraState('');
-        setConfirmVisible(false);
+        if (image instanceof File) {
+            onAddImage(image);
+            setModalVisible(false);
+            setCameraVisible(false);
+            setImage(null);
+            setCanvasState('none');
+            setCameraState('');
+            setConfirmVisible(false);
+        }
     }
 
     // 캔버스 상태를 초기화하는 함수
@@ -50,21 +75,6 @@ const UserImageCamera = ({onAddImage,setCameraVisible,setModalVisible}:any) => {
         const context = canvasRef.current.getContext('2d');
         context?.setTransform(1, 0, 0, 1, 0, 0);
     }
-    }
-
-    const getWebcam = (callback: (stream: MediaStream) => void) => {
-        const constraints = {
-            'video': true,
-            'audio': false
-        };
-        navigator.mediaDevices.getUserMedia(constraints)
-        .then(callback)
-        .catch(err => {
-            console.error("The following error occurred: " + err);
-            toast.error("카메라에 접근할 수 없습니다. 카메라가 연결되어 있고, 웹사이트에서 카메라 사용이 허용되어 있는지 확인해주세요.")
-            setModalVisible(false);
-            setCameraVisible(false);
-        });
     }
 
     const cancel = () => {

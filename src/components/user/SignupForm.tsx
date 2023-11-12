@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { SyncLoader } from 'react-spinners';
-import Logo from "../../../public/Logo.png"
+import Logo from "../../../public/RizzPickLogo.png"
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import axios from "axios"
 
 function SignupComponent() {
     const {
@@ -58,10 +59,11 @@ function SignupComponent() {
             setIntervalId(interval);
           }
         }
-      } catch(error:any) {
-        if (error.response) {
-          const errorMessage = error.response.data.message;
-          toast.error(errorMessage);
+      } catch(error:unknown) {
+        if (axios.isAxiosError(error)) {
+          toast.error(error.response?.data.message || "An error occurred");
+        } else {
+          console.error("An unexpected error occurred:", error);
         }
       } finally {
         setIsLoading(false);
@@ -78,15 +80,12 @@ function SignupComponent() {
         if(response.status === 200) {
           toast.success(response.data.message);
           setVerificationSuccessful(true);
-          if (intervalId) clearInterval(intervalId); // 인증이 성공하면 타이머를 멈춤
+          if (intervalId) clearInterval(intervalId);
           setShowTimer(false);
         }
-      } catch(error:any) {
+      } catch(error) {
         console.log(error);
-        if (error.response) {
-          const errorMessage = error.response.data.message;
-          toast.error(errorMessage);
-        }
+        toast.error("잘못된 인증 번호입니다.")
       }
     }
 
@@ -108,7 +107,7 @@ function SignupComponent() {
         }
     };
 
-    function renderPasswordErrorMessages(error: any) {
+    function renderPasswordErrorMessages(error: { type: string }): JSX.Element | null {
       switch (error.type) {
         case 'pattern':
           return <p className="text-red-500 text-[10px]">✱ 알파벳 대소문자, 숫자, 특수문자를 포함해야 합니다.</p>;
@@ -121,7 +120,7 @@ function SignupComponent() {
       }
     }
 
-  function renderUsernameErrorMessages(error: any) {
+  function renderUsernameErrorMessages(error: { type: string }): JSX.Element | null {
     switch (error.type) {
       case 'pattern':
         return <p className="text-red-500 text-[10px]">✱ 아이디는 소문자와 숫자만 포함해야 합니다.</p>;
@@ -134,7 +133,7 @@ function SignupComponent() {
 
   return (
     <section  className='flex justify-center h-[100vh]'>
-      <div className='w-[141px] h-[60px] absolute top-[40px] sm:block hidden'>
+      <div className='w-32 h-20 absolute top-[40px] sm:block hidden'>
             <Image src={Logo} alt='로고' fill style={{objectFit:"cover"}} priority/>
       </div>
     <form onSubmit={handleSubmit(onSubmit)} className="sm:absolute sm:bottom-0 p-[80px] sm:p-8 flex flex-col gap-2 bg-white rounded-3xl shadow-xl w-[580px] sm:w-full sm:h-[80vh] h-[730px] sm:rounded-none sm:rounded-tl-[56px] justify-center">
@@ -151,7 +150,7 @@ function SignupComponent() {
         <input
             id="username"
             className="border rounded-3xl py-2 px-3 w-full text-sm"
-            placeholder='아이디를 입력하세요'
+            placeholder='아이디는 최대 10자까지 가능합니다'
             required
             {...register("username", {
                 required: true,
@@ -169,7 +168,7 @@ function SignupComponent() {
             id="password"
             type="password"
             className="border rounded-3xl py-2 px-3 w-full text-sm mb-2"
-            placeholder='비밀번호를 입력하세요'
+            placeholder='영어 대소문자,숫자,특수문자 포함 6자 이상'
             required
             {...register("password", {
                 required: true,
@@ -182,7 +181,7 @@ function SignupComponent() {
             type="password"
             id="password_confirm"
             className="border rounded-3xl py-2 px-3 w-full text-sm"
-            placeholder='비밀번호를 한번 더 입력하세요'
+            placeholder='비밀번호를 한번 더 입력해주세요'
             required
             {...register("password_confirm", {
                 required: true,
@@ -199,7 +198,7 @@ function SignupComponent() {
               type="email"
               disabled={isEmailVerified}
               className="border rounded-3xl py-2 px-3 text-sm w-[286px] sm:w-[50vw]"
-              placeholder='이메일을 입력하세요'
+              placeholder='이메일을 입력해주세요'
               required
               {...register("email", {
                   required: true,
@@ -212,7 +211,7 @@ function SignupComponent() {
             </div>
         <div className='flex gap-2 w-full'>
             <div className='relative flex justify-between w-full sm:w-[50vw]'>
-                <input type='text' name='verify' onChange={handleChange} value={verify?.authKey} placeholder='인증번호를 입력하세요' className="w-[286px] sm:w-[50vw] border rounded-3xl py-2 px-3 text-sm" required/>
+                <input type='text' name='verify' onChange={handleChange} value={verify?.authKey} placeholder='인증번호를 입력해주세요' className="w-[286px] sm:w-[50vw] border rounded-3xl py-2 px-3 text-sm" required/>
                 {showTimer && <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-red-500 font-bold">{Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</span>}
             </div>
             <button type='button' onClick={onCheckEmailVerify} disabled={!isEmailVerified || isVerificationSuccessful} className={`bg-gray-500 text-white text-sm px-4 py-1 rounded-full w-40 ${!isEmailVerified && 'bg-opacity-30'} sm:hidden`}>인증하기</button>

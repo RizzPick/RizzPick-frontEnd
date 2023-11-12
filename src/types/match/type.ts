@@ -7,10 +7,11 @@ export type Dating = {
 };
 
 export type UserProfile = {
-    userId: string;
+    userId: number;
     nickname: string;
-    age: number;
-    education?: string;
+    birthday: string;
+    hobby : string;
+    interest : string;
     gender?: string;
     location?: string;
     mbti?: string;
@@ -24,3 +25,8 @@ export type ImageObject = {
     id: number;
     image: string;
 };
+
+export type reportReq = {
+    reportedUserId : number;
+    content : string;
+}

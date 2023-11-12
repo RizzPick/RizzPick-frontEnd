@@ -9,8 +9,13 @@ import { useRouter } from 'next/navigation';
 import { SyncLoader } from 'react-spinners';
 import toast from 'react-hot-toast';
 import { setCookie } from '@/utils/cookie';
+import axios from "axios";
 
-function UserImageGrid({onPrev} : any) {
+type Props = {
+  onPrev? : () => void;
+}
+
+function UserImageGrid({onPrev} : Props) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null); 
   const { data: profile, isValidating } = useSWR<MyProfileRes>(PROFILE_KEY);
@@ -32,10 +37,15 @@ function UserImageGrid({onPrev} : any) {
       if(response.status === 200) {
         toast.success("추가 완료");
       }
-      mutate(PROFILE_KEY, (currentData:any) => ({
-        ...currentData,
-        profileImages: [...currentData.profileImages, response.data.data]
-      }), false);
+      mutate(PROFILE_KEY, (currentData: MyProfileRes | undefined) => {
+        if (currentData) {
+          return {
+            ...currentData,
+            profileImages: [...currentData.profileImages, response.data.data],
+          };
+        }
+        return undefined;
+      }, false);
     } catch (error) {
       console.log(error);
       toast.error("이미지 추가 실패");
@@ -51,14 +61,23 @@ function UserImageGrid({onPrev} : any) {
     try {
       const response = await ProfileAPI.updateImage(formData);
       if(response.status === 200) {
-        mutate(PROFILE_KEY, (currentData:any) => ({
-          ...currentData,
-          profileImages: currentData.profileImages.filter((image:any) => image.id !== imageId)
-        }), false);
+        mutate(PROFILE_KEY, (currentData: MyProfileRes | undefined) => {
+          if (currentData) {
+            return {
+              ...currentData,
+              profileImages: currentData.profileImages.filter((image) => image.id !== imageId),
+            };
+          }
+          return undefined;
+        }, false);
         toast.success('삭제되었습니다');
       }
-    } catch (error:any) {
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data.message || "오류가 발생했습니다.");
+      } else {
+        console.error("예상치 못한 오류가 발생했습니다:", error);
+      }
     }
   };
 
