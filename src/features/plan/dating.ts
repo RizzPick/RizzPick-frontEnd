@@ -2,7 +2,12 @@ import axios from 'axios';
 import service from '@/features';
 import { getCookie } from '@/utils/cookie';
 
-import type { createDate, updateDate, ActivityResponse } from '@/types/dating';
+import type {
+    createDate,
+    updateDate,
+    ActivityResponse,
+    updateImage,
+} from '@/types/dating';
 export const PlanAPI = {
     //! 더미데이터 생성
     createDating: (data: createDate) =>
@@ -16,6 +21,13 @@ export const PlanAPI = {
             `${process.env.NEXT_PUBLIC_SERVER_URL}/api/dating/${id}`,
             data
         ),
+    //! 이미지 수정 (유저 = 신규작성)
+    updateImageData: (slug: string, formData: FormData) =>
+        service.put(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/dating/image/${slug}`,
+            formData
+        ),
+
     //! 활동 작성
     createActivity: async (
         datingId: number,

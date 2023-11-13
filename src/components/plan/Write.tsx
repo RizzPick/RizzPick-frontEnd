@@ -14,6 +14,7 @@ import DeleteIcon from '../../../public/planIcon/delete.svg';
 import { Activity } from '../../types/plan/activity/type';
 import BackIcon from '../../../public/planIcon/back.svg';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 interface WriteProps {
     initialData: DatingInfo;
@@ -42,6 +43,7 @@ export default function Write({
 
     const [successMessage, setSuccessMessage] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
+    const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
 
     const transformedActivities = initialActivities
         ? initialActivities.map((activity) => ({
@@ -50,6 +52,10 @@ export default function Write({
           }))
         : [];
     const [activities, setActivities] = useState(transformedActivities);
+    const [imageData, setImageData] = useState<{
+        id: number | null;
+        url: string;
+    }>({ id: null, url: '' });
 
     const param = useParams();
 
@@ -65,10 +71,84 @@ export default function Write({
         setTheme(e.target.value);
     };
 
-    const handleImageChange = (event: any) => {
-        const file = event.target.files[0];
-        if (file) {
-            setDatingImage(file);
+    //? 이미지 추가
+    // const handleImageChange = async (
+    //     event: React.ChangeEvent<HTMLInputElement>
+    // ) => {
+    //     if (event.target.files && event.target.files.length > 0) {
+    //         const file = event.target.files[0];
+    //         const id = Number(param.slug);
+
+    //         const formData = new FormData();
+    //         formData.append('action', 'ADD');
+    //         formData.append('image', file);
+
+    //         try {
+    //             const response = await PlanAPI.updateImageData(id, formData);
+
+    //             if (response.data.status === 'success') {
+    //                 toast.success('이미지 업로드 및 수정 완료');
+    //             } else {
+    //                 toast.error('이미지 업로드 및 수정 실패: 서버 응답 오류');
+    //             }
+    //         } catch (error) {
+    //             console.error('이미지 업로드 및 수정 실패:', error);
+    //             toast.error('이미지 업로드 및 수정 실패: 클라이언트 오류');
+    //         }
+    //     }
+    // };
+
+    const handleImageChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        if (event.target.files && event.target.files.length > 0) {
+            const file = event.target.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                let response;
+                // fetchDatingData를 호출하여 이미지 정보를 가져옵니다.
+                await fetchDatingData();
+
+                const slug = Array.isArray(param.slug)
+                    ? param.slug[0]
+                    : param.slug;
+                // imageData.url이 'profileImage'를 포함하고 있다면 'ADD' 액션을 사용합니다.
+                if (
+                    imageData.url.includes('datingImage') &&
+                    imageData.id !== null
+                ) {
+                    formData.append('action', 'MODIFY');
+                    formData.append('id', imageData.id.toString()); // null이 아니므로 toString() 호출 가능
+                    response = await PlanAPI.updateImageData(slug, formData);
+                } else {
+                    // 그렇지 않으면 'ADD' 액션을 사용합니다.
+                    formData.append('action', 'ADD');
+                    response = await PlanAPI.updateImageData(slug, formData);
+                }
+
+                if (response.data.status === 'success') {
+                    toast.success(
+                        `이미지가 성공적으로 ${
+                            imageData.url.includes('profileImage')
+                                ? '추가'
+                                : '수정'
+                        }되었습니다.`
+                    );
+                    setImageData({
+                        id: response.data.data.id || imageData.id,
+                        url: response.data.data.imageUrl,
+                    });
+                    setPreviewImageUrl(response.data.data.imageUrl);
+                    fetchDatingData();
+                } else {
+                    // toast.error(`이미지 업로드 실패: ${response.data.message}`);
+                }
+            } catch (error) {
+                console.error('이미지 업로드 실패:', error);
+                toast.error('이미지 업로드 실패: 클라이언트 오류');
+            }
         }
     };
 
@@ -98,13 +178,37 @@ export default function Write({
     }, []);
 
     //? 더미 데이터를 받아요
+    // const fetchDatingData = useCallback(async () => {
+    //     const slug = Array.isArray(param.slug) ? param.slug[0] : param.slug;
+    //     try {
+    //         const data = await PlanAPI.fetchDatingData(slug);
+    //         console.log('Received data:', data);
+    //         console.log(data.data);
+    //     } catch (error) {
+    //         console.error('Failed to fetch dating data:', error);
+    //     }
+    // }, [param.slug]);
+
     const fetchDatingData = useCallback(async () => {
         const slug = Array.isArray(param.slug) ? param.slug[0] : param.slug;
         try {
-            const data = await PlanAPI.fetchDatingData(slug);
-            console.log('Received data:', data);
+            const response = await PlanAPI.fetchDatingData(slug);
+            if (response.data.status === 'success') {
+                const { datingImage } = response.data.data;
+                setImageData({
+                    id: datingImage?.id ?? null,
+                    url: datingImage?.image ?? '',
+                });
+                setPreviewImageUrl(datingImage?.image);
+            } else {
+                console.error(
+                    '데이터를 가져오는데 실패했습니다:',
+                    response.data.message
+                );
+            }
+            console.log(response.data.data.datingImage);
         } catch (error) {
-            console.error('Failed to fetch dating data:', error);
+            console.error('데이터를 가져오는데 실패했습니다:', error);
         }
     }, [param.slug]);
 
@@ -219,6 +323,7 @@ export default function Write({
         console.log('null?', id);
     };
 
+    console.log(previewImageUrl);
     return (
         <div className="overflow-x-hidden">
             <div className="hidden sm:block">
@@ -305,7 +410,7 @@ export default function Write({
                         className="flex flex-col items-center w-[1248px] relative "
                         style={{
                             height: isSmallScreen
-                                ? `calc(78cvh + ${
+                                ? `calc(78vh + ${
                                       Math.min(activities.length, 5) * 9
                                   }vh)`
                                 : '100vh',
@@ -370,7 +475,7 @@ export default function Write({
                                         </div>
                                     </div>
 
-                                    <div className="absolute bottom-0 flex justify-center items-center w-full h-10 right-[10px] sm:justify-normal sm: left-32">
+                                    <div className="absolute bottom-[-300px] flex justify-center items-center w-full h-10 right-[10px] sm:justify-normal sm: left-32">
                                         <button
                                             className="w-[234px] h-[65px] mr-[260px] mb-[100px] bg-fuchsia-600 rounded-[30px] text-white text-[32px] font-semibold font-['SUITE'] leading-loose tracking-widest sm:text-xl sm:w-[130px] sm:h-10 sm:mt-12"
                                             style={{
@@ -386,13 +491,25 @@ export default function Write({
                                 </form>
                             </div>
                         </div>
-                        <div className="flex flex-row justify-around">
+                        <div className="flex flex-col justify-around mb-10 mt-[-40px]">
                             <label
                                 htmlFor="file-upload"
                                 className="relative cursor-pointer bg-white rounded-md font-medium focus:outline-none"
                             >
-                                <div className="flex justify-center items-center h-60 px-6 pt-5 pb-6 border-2 border-dashed rounded-md mb-10">
-                                    <div className="space-y-1 text-center">
+                                {/* 이미지 프리뷰를 보여줄 조건부 렌더링 */}
+                                {previewImageUrl ? (
+                                    <Image
+                                        src={previewImageUrl}
+                                        width={400}
+                                        height={400}
+                                        alt="Preview"
+                                        objectFit="cover"
+                                        objectPosition="center"
+                                        className=" w-96 h-96 mx-auto"
+                                    />
+                                ) : (
+                                    // 이미지가 없을 경우, 업로드 영역을 보여줍니다.
+                                    <div className="flex flex-col justify-center items-center h-60 px-6 pt-5 pb-6 border-2 border-dashed rounded-md mb-10">
                                         <svg
                                             className="mx-auto h-12 w-12 text-gray-400"
                                             stroke="currentColor"
@@ -428,9 +545,29 @@ export default function Write({
                                             PNG, JPG, GIF up to 20MB
                                         </p>
                                     </div>
-                                </div>
+                                )}
+
+                                {/* 파일 선택 인풋 */}
+                                <input
+                                    id="file-upload"
+                                    name="file-upload"
+                                    type="file"
+                                    className="sr-only"
+                                    onChange={handleImageChange}
+                                />
                             </label>
-                            <div></div>
+
+                            <div className="text-xs flex flex-row mx-auto">
+                                데이트계획에 사용되는 이미지는
+                                <p className="text-[red] ">
+                                    본인의 프로필 사진이 기본으로 적용
+                                </p>
+                                됩니다.
+                            </div>
+                            <div className="text-xs mx-auto">
+                                사진을 클릭하여 본인의 데이트 계획에 걸맞는
+                                사진으로 변경해주세요!
+                            </div>
                         </div>
                         <div className="flex flex-row w-full mx-auto px-8 gap-10 sm:gap-0 sm:flex-col">
                             <div className="w-[574px] sm:w-[393px]">

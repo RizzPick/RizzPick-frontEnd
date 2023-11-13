@@ -11,3 +11,9 @@ export interface DatingResponse {
     message: string;
     data: DatingData;
 }
+
+export enum Action {
+    ADD = 'ADD',
+    DELETE = 'DELETE',
+    MODIFY = 'MODIFY',
+}
