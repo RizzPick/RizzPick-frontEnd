@@ -252,7 +252,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     </div>
                 </div>
 
-                <div className="w-full pl-4 mx-auto sm:p-0">
+                <div className="w-full pl-4 mx-auto sm:p-0 overflow-x-hidden">
                     <div className="flex flex-row">
                         <div className="w-[365px] ml-4 my-auto sm:hidden">
                             <ul>
@@ -307,15 +307,15 @@ export default function PostPage({ params: { slug } }: Props) {
                         <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5] sm:border-none">
                             <div className="flex flex-col mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-b-2 sm:border-[#CECECE] sm:max-w-[350px] sm:mt-0 sm:w-full">
                                 <div className="flex flex-col p-4">
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-[36px] mt-1 mb-4 font-semibold sm:text-xl sm:font-medium sm:my-4">
+                                    <div className="flex flex-row justify-between sm:flex-col">
+                                        <p className="text-[36px] mt-1 mb-4 font-semibold sm:text-xl sm:font-medium sm:justify-center">
                                             {dating.datingTitle}
                                         </p>
                                         <span className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
                                             {timeAgo(dating.createdAt)}
                                         </span>
                                     </div>
-                                    <div className="flex flex-row items-center justify-start">
+                                    <div className="flex flex-row items-center justify-start sm:flex-col">
                                         <p className="flex flex-row items-center  text-base text-[#666666]  ml-2 sm:text-base sm:font-medium">
                                             <LocationIcon />
                                             {dating.datingLocation}
@@ -324,10 +324,10 @@ export default function PostPage({ params: { slug } }: Props) {
                                             {dating.datingTheme}
                                         </p>
                                     </div>
-                                    <div className="w-96 h-96 mx-auto my-10">
+                                    <div className="w-96 h-96 mx-auto my-10 sm:mb-[-25px]">
                                         {dating.datingImage.image && (
                                             <Image
-                                                className="w-full h-full"
+                                                className="w-full h-full sm:w-72 sm:h-72"
                                                 src={dating.datingImage.image}
                                                 alt="Dating Image"
                                                 width={233}
@@ -352,7 +352,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                             ) => (
                                                 <div
                                                     key={index}
-                                                    className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg sm:border-[2px] sm:w-[327px]"
+                                                    className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg sm:border-[2px] sm:w-[300px]"
                                                 >
                                                     {activity.activityContent}
                                                 </div>
