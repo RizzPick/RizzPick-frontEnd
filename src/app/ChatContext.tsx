@@ -1,38 +1,43 @@
 'use client'
-import React, { createContext, useState, useEffect, useRef, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, useRef, ReactNode, useCallback } from 'react';
 import ChatAPI from '@/features/chat';
 import { Client } from '@stomp/stompjs';
-import { ChatData, MessagesRes } from '@/types/chat';
+import { ChatData, ChatDetail, MessagesRes } from '@/types/chat';
 import { getCookie } from '@/utils/cookie';
-import UseChat, { CHAT_KEY } from '@/hooks/useChat';
+import UseChat, { CHAT_KEY, CHAT_MESSAGE_KEY } from '@/hooks/useChat';
 import useSWR from 'swr';
 
 interface ChatContextType {
-    messages: Record<number, MessagesRes[]>;
     updateMessages: (newMessage: MessagesRes, chatRoomId: number) => void;
-  }
+    stompSendFn: (destination: string, body: Record<string, unknown>) => void;
+}
   
-  // Context 생성 및 초기값 설정
-  const ChatContext = createContext<ChatContextType>({
-    messages: {},
+const ChatContext = createContext<ChatContextType>({
     updateMessages: () => {},
-  });
-  
-  interface ChatProviderProps {
-    children: ReactNode; // children의 타입을 ReactNode로 명시합니다.
-  }
-  const token = getCookie('Authorization');
+    stompSendFn: () => {},
+});
 
-function ChatProvider({ children } : ChatProviderProps) {
-    const [messages, setMessages] = useState<Record<number, MessagesRes[]>>({}); // 읽지 않은 메시지 처리 가능할듯?
-    const { data: chats } = useSWR<ChatData[]>(CHAT_KEY);
+interface ChatProviderProps {
+    children: ReactNode;
+}
+
+const token = getCookie('Authorization');
+
+function ChatProvider({ children }: ChatProviderProps) {
+
+    const { data : chats } = useSWR<ChatData[]>(CHAT_KEY);
+    const { data : chat } = useSWR<ChatDetail>(CHAT_MESSAGE_KEY);
     const webSocketClients = useRef<Map<number, Client>>(new Map());
-    const { initializeChats } = UseChat();
+    const { initializeChats, initializeChat } = UseChat();
 
-    console.log(messages);
-    console.log(chats);
+    const client = useRef<Client>(new Client({
+        brokerURL: `wss://willyouback.shop/chatroom`,
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+    }));
 
-    useEffect(()=>{
+    useEffect(() => {
         const getChatRooms = async() => {
             try {
                 const response = await ChatAPI.getChats();
@@ -40,66 +45,84 @@ function ChatProvider({ children } : ChatProviderProps) {
                     initializeChats(response.data);
                 }   
             } catch (error) {
-            console.log(error);
+                console.log(error);
             }
         }
         getChatRooms();
-    },[initializeChats])
+    }, [initializeChats]);
 
-    // 메시지 업데이트 함수
-    const updateMessages = (newMessage:MessagesRes, chatRoomId:number) => {
-        setMessages(prevMessages => ({
-            ...prevMessages,
-            [chatRoomId]: [...(prevMessages[chatRoomId] || []), newMessage]
-        }));
+    useEffect(() => {
+        client.current.activate();
+    }, []);
+
+    const updateMessages = useCallback((newMessage: MessagesRes, chatRoomId: number) => {
+
+        if(!chats) return;
+        const updatedChats = chats.map(chat => 
+            chat.chatRoomId === chatRoomId ? { ...chat, latestMessage: newMessage.message } : chat
+        );
+        initializeChats(updatedChats);
+
+        if (chat) {
+            const updatedChatMessages = [...chat.messages, newMessage];
+            initializeChat({ ...chat, messages: updatedChatMessages });
+        }
+    }, [chat, chats, initializeChat, initializeChats]);
+
+    const stompSendFn = (destination: string, body: Record<string, unknown>) => {
+        if (client.current.connected) {
+            client.current.publish({
+                destination,
+                headers: {},
+                body: JSON.stringify(body),
+            });
+        } else {
+            console.error("웹소켓 연결이 활성화되어 있지 않습니다.");
+        }
     };
 
-    // 채팅방 구독 및 메시지 수신 로직
     useEffect(() => {
         if (!token || !chats) return;
-        const subscribeToChatRoom = (chatRoomId:number) => {
-            const client = new Client({
+    
+        const subscribeToChatRoom = (chatRoomId: number) => {
+            const existingClient = webSocketClients.current.get(chatRoomId);
+            if (existingClient && existingClient.connected) {
+                return;
+            }
+            const newClient = new Client({
                 brokerURL: `wss://willyouback.shop/chatroom`,
-                debug: function (str: string) {
-                    console.log(str);
-                  },
-                  reconnectDelay: 5000,
-                  heartbeatIncoming: 4000,
-                  heartbeatOutgoing: 4000,
+                reconnectDelay: 5000,
+                heartbeatIncoming: 4000,
+                heartbeatOutgoing: 4000,
             });
 
-            client.onConnect = () => {
-                client.subscribe(`/topic/${chatRoomId}/message`, (message) => {
+            newClient.onConnect = () => {
+                newClient.subscribe(`/topic/${chatRoomId}/message`, (message) => {
                     const messageData = JSON.parse(message.body);
-                    console.log(messageData);
                     updateMessages(messageData, chatRoomId);
                 });
             };
-
-            client.activate();
-            webSocketClients.current.set(chatRoomId, client);
+            newClient.activate();
+            webSocketClients.current.set(chatRoomId, newClient);
         };
-
+    
         chats.forEach(chat => {
-            if (!webSocketClients.current.has(chat.chatRoomId)) {
-                subscribeToChatRoom(chat.chatRoomId);
-            }
+            subscribeToChatRoom(chat.chatRoomId);
         });
-
+    
         const currentWebSocketClients = webSocketClients.current;
-
+    
         return () => {
             currentWebSocketClients.forEach((client, chatRoomId) => {
-                if (client.connected) {
-                    client.deactivate();
-                }
+                client.deactivate();
                 currentWebSocketClients.delete(chatRoomId);
             });
         };
-    }, [chats]); // chats가 변경될 때마다 구독 로직 실행
+    }, [chats, updateMessages]);
+    
 
     return (
-        <ChatContext.Provider value={{ messages, updateMessages }}>
+        <ChatContext.Provider value={{ updateMessages, stompSendFn }}>
             {children}
         </ChatContext.Provider>
     );

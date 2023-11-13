@@ -16,7 +16,6 @@ export default function ProfilePage() {
     const { data: profile } = useSWR<MyProfileRes>(PROFILE_KEY);
     const [isLoading, setIsLoading] = useState(true);
     const { initializeProfile } = UseProfile();
-    console.log(isLoading);
 
     useEffect(() => {
         const fetchData = async (): Promise<void> => {

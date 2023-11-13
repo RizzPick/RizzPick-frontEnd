@@ -37,7 +37,6 @@ function ViewChangePasswd() {
 
     try {
       const verifyPassword = await AuthAPI.verifyPassword({ password: currentPwd });
-      console.log(verifyPassword);
       if (verifyPassword.status === 200) {
         const res = await AuthAPI.changePassword({ newPassword : newPwd });
         if (res.status === 200) {

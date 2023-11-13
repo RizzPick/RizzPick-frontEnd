@@ -23,8 +23,7 @@ export default function useAuth() {
 
   const deActiveUser = async (userId : number) => {
     try {
-      const response = await AuthAPI.deActiveUser(userId)
-      console.log(response);
+      const response = await AuthAPI.deActiveUser(userId);
       if(response.status === 200) {
         router.push('/');
         toast.success('비활성화 처리되었습니다');

@@ -26,3 +26,11 @@ export type ChatRoomInfo = {
     nickname: string;
     image: string;
 };
+
+export type ChatDetail = {
+    userId : number;
+    nickname : string;
+    username : string;
+    image : string;
+    messages : MessagesRes[]
+}

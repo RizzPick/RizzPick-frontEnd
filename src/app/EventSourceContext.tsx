@@ -39,6 +39,7 @@ export const EventSourceProvider = ({
 
             // 컴포넌트가 언마운트될 때 EventSource를 닫습니다.
             return () => {
+                console.log("SSE 언마운트");
                 es.close();
             };
         }

@@ -1,135 +1,48 @@
 'use client'
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import ChatAPI from '@/features/chat';
-import useSWR from 'swr';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { getCookie } from '@/utils/cookie';
-import { Client } from '@stomp/stompjs';
-import UseChat, { CURRENT_CHAT_KEY } from '@/hooks/useChat';
-import { ChatData, MessagesRes } from '@/types/chat';
+import UseChat from '@/hooks/useChat';
+import { MessagesRes } from '@/types/chat';
 import Image from 'next/image';
 import dayjs from "dayjs"
 import {FiArrowUp} from "react-icons/fi"
 import Back from "../../../public/chatIcon/Button.svg"
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Loader from '../common/Loader';
+import { ChatContext } from '@/app/ChatContext';
 
+type Props = {
+  chat : any
+  chatRoomId : number;
+}
 
-const ChatRoom = () => {
+const ChatRoom = ({chat, chatRoomId} : Props) => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<MessagesRes[]>();
-  const [isLoading, setIsLoading] = useState(true);
-  const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
+  const { stompSendFn } = useContext(ChatContext);
   const fullToken = getCookie('Authorization');
   const MY_TOKEN = fullToken?.split(' ')[1];
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { clearCurrentChat } = UseChat();
 
-    type StompMessage = {
-      body: string; 
-    }
-    
-    type MessageData  = {
-      chatRoomId: number;
-      message: string;
-      sender: string;
-      time: string;
-    }
-    
-    const client = useRef<Client>(
-      new Client({
-        brokerURL: "wss://willyouback.shop/chatroom",
-        debug: function (str) {
-          console.log(str);
-        },
-        reconnectDelay: 5000,
-        heartbeatIncoming: 4000,
-        heartbeatOutgoing: 4000,
-      })
-    );
-
-    const stompSendFn = useCallback((des: string, body: Record<string, unknown>) => {
-      if (client.current.connected) {
-        client.current.publish({
-          destination: des,
-          headers: {},
-          body: JSON.stringify(body),
-        });
-      }
-    }, []);
-
   useEffect(() => {
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block:"end" });
     };
       scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    if(!chat?.chatRoomId) return;
-
-    const getMessages = async() => {
-        try {
-            const response = await ChatAPI.getChatMessages(chat.chatRoomId);
-            if(response.status === 200) {
-                setMessages(response.data.data);
-            }
-        } catch(error) {
-            console.log(error);
-        } finally {
-          setIsLoading(false);
-        }
-    }
-
-    const messageCallbackHandler = (message: StompMessage) => {
-      const msgData:MessageData = JSON.parse(message.body);
-      const newData = {
-        chatRoomId : msgData.chatRoomId,
-        message: msgData.message,
-        sender: msgData.sender,
-        time : msgData.time
-      };
-      setMessages(prevMessages => [...(prevMessages || []), newData]);
-    };
-
-    const userCallbackHandler = (message: StompMessage) => {
-      console.log((JSON.parse(message.body)));
-    };
-    
-    const currentClient = client.current;
-    currentClient.onConnect = () => {
-      currentClient.subscribe(`/topic/${chat?.chatRoomId}/message`, messageCallbackHandler);
-      currentClient.subscribe(`/topic/${chat?.chatRoomId}/user`, userCallbackHandler);
-      stompSendFn("/app/user", { status: "JOIN", token: MY_TOKEN, chatRoomId:chat?.chatRoomId, message: "채팅방에 입장하셨습니다" });
-    };
-    currentClient.activate();;
-    getMessages();
-    return () => {
-      if (currentClient.connected) {
-        stompSendFn("/app/user", {
-          status: "LEAVE",
-          token: MY_TOKEN,
-          chatRoomId : chat?.chatRoomId,
-          message: "채팅방을 나가셨습니다",
-        });
-        currentClient.deactivate();
-      }
-    };
-  }, [MY_TOKEN, chat, stompSendFn]);  
+  }, [chat]);
 
   const onClick = useCallback(() => {
-    if (message.trim()) { // 메시지가 비어있지 않을 때만 전송
+    if (message.trim()) {
       stompSendFn("/app/message", {
         token : MY_TOKEN,
-        chatRoomId: chat?.chatRoomId,
+        chatRoomId: chatRoomId,
         status: "MESSAGE",
         message: message,
       });
-      setMessage(""); // 메시지 초기화
+      setMessage("");
     }
-  }, [message, MY_TOKEN, chat, stompSendFn]);
-
+  }, [message, stompSendFn, MY_TOKEN, chatRoomId]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if(event.nativeEvent.isComposing) return;
@@ -144,7 +57,6 @@ const ChatRoom = () => {
     router.back();
   }
   
-  if(isLoading) return <Loader />
 
     return (
       <div className='relative'>
@@ -156,9 +68,9 @@ const ChatRoom = () => {
         <div className='w-full relative h-[82vh] rounded-3xl px-3'>
             <>
             <div className="h-full overflow-y-auto pb-4 scrollbar-hide">
-            {messages && (() => {
+            {chat.messages && (() => {
               const groupedByDate: Record<string, MessagesRes[]> = {};
-              messages.forEach(mes => {
+              chat.messages.forEach((mes:any) => {
                 const date = dayjs(mes.time).format('YYYY-MM-DD');
                 if (!groupedByDate[date]) {
                   groupedByDate[date] = [];
@@ -172,8 +84,8 @@ const ChatRoom = () => {
                     <span className="mx-4 text-white">{date}</span>
                   </div>
                   {messagesForDate.map(mes => (
-                      <div key={mes.time} className={`flex ${mes.sender === chat?.users[0] ? 'justify-start' : 'justify-end'}`}>
-                          {mes.sender === chat?.users[0] ?
+                      <div key={mes.time} className={`flex ${mes.sender === chat?.username ? 'justify-start' : 'justify-end'}`}>
+                          {mes.sender === chat?.username ?
                               (<div className='flex items-center gap-2 mb-2 relative max-w-[70vw]' ref={messagesEndRef}>
                                 <Link href={`/user/profile/${chat.userId}`}>
                                 <div className='relative w-[30px] h-[30px]'>
