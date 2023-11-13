@@ -14,10 +14,10 @@ import ChatAPI from '@/features/chat';
 import Loader from '@/components/common/Loader';
 
 export default function ChatPage() {
-    const router = useRouter();
     const params = useSearchParams();
+    const router = useRouter();
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
-    const {data:chats} = useSWR<ChatData[]>(CHAT_KEY);
+    const { data: chats } = useSWR<ChatData[]>(CHAT_KEY);
     const [isLoading, setIsLoading] = useState(true);
     const { initializeChats } = UseChat();
 

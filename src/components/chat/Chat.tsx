@@ -7,7 +7,7 @@ import { Client } from '@stomp/stompjs';
 import UseChat, { CURRENT_CHAT_KEY } from '@/hooks/useChat';
 import { ChatData, MessagesRes } from '@/types/chat';
 import Image from 'next/image';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import ChatSkeleton from './ChatSkeleton';
 import {FiArrowUp} from "react-icons/fi"
 import Back from "../../../public/chatIcon/Button.svg"
@@ -171,7 +171,7 @@ const Chat = () => {
             {messages && (() => {
               const groupedByDate: Record<string, MessagesRes[]> = {};
               messages.forEach(mes => {
-                const date = moment(mes.time).format('YYYY-MM-DD');
+                const date = dayjs(mes.time).format('YYYY-MM-DD');
                 if (!groupedByDate[date]) {
                   groupedByDate[date] = [];
                 }
@@ -195,13 +195,13 @@ const Chat = () => {
                                   <p className='bg-gray-200 rounded-2xl px-4 py-2 whitespace-pre-line max-w-[70vw]'>
                                       {mes.message}
                                   </p>
-                                  <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{moment(mes.time).format('A h:mm')}</span>
+                                  <span className="text-gray-500 absolute bottom-0 -right-20 mb-1 mr-2 text-sm">{dayjs(mes.time).format('A h:mm')}</span>
                               </div>) :
                               (<div className='flex flex-col items-end mb-2' ref={messagesEndRef}>
                                   <p className='bg-[#ab62e5] rounded-2xl px-4 py-2 whitespace-pre-line text-white max-w-[70vw]'>
                                       {mes.message}
                                   </p>
-                                  <span className="text-gray-500 relative -bottom-1 mb-1 text-xs mr-1">{moment(mes.time).format('A h:mm')}</span>
+                                  <span className="text-gray-500 relative -bottom-1 mb-1 text-xs mr-1">{dayjs(mes.time).format('A h:mm')}</span>
                               </div>)}
                       </div>
                   ))}

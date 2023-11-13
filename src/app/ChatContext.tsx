@@ -1,7 +1,11 @@
+'use client'
 import React, { createContext, useState, useEffect, useRef, ReactNode } from 'react';
 import ChatAPI from '@/features/chat';
 import { Client } from '@stomp/stompjs';
 import { ChatData, MessagesRes } from '@/types/chat';
+import { getCookie } from '@/utils/cookie';
+import UseChat, { CHAT_KEY } from '@/hooks/useChat';
+import useSWR from 'swr';
 
 interface ChatContextType {
     messages: Record<number, MessagesRes[]>;
@@ -17,11 +21,30 @@ interface ChatContextType {
   interface ChatProviderProps {
     children: ReactNode; // children의 타입을 ReactNode로 명시합니다.
   }
+  const token = getCookie('Authorization');
 
 function ChatProvider({ children } : ChatProviderProps) {
-    const [chats, setChats] = useState<ChatData[]>([]); // ChatData 타입을 배열로 설정
-    const [messages, setMessages] = useState<Record<number, MessagesRes[]>>({}); // messages의 타입을 설정
+    const [messages, setMessages] = useState<Record<number, MessagesRes[]>>({}); // 읽지 않은 메시지 처리 가능할듯?
+    const { data: chats } = useSWR<ChatData[]>(CHAT_KEY);
     const webSocketClients = useRef<Map<number, Client>>(new Map());
+    const { initializeChats } = UseChat();
+
+    console.log(messages);
+    console.log(chats);
+
+    useEffect(()=>{
+        const getChatRooms = async() => {
+            try {
+                const response = await ChatAPI.getChats();
+                if(response.status === 200) {
+                    initializeChats(response.data);
+                }   
+            } catch (error) {
+            console.log(error);
+            }
+        }
+        getChatRooms();
+    },[initializeChats])
 
     // 메시지 업데이트 함수
     const updateMessages = (newMessage:MessagesRes, chatRoomId:number) => {
@@ -33,9 +56,10 @@ function ChatProvider({ children } : ChatProviderProps) {
 
     // 채팅방 구독 및 메시지 수신 로직
     useEffect(() => {
+        if (!token || !chats) return;
         const subscribeToChatRoom = (chatRoomId:number) => {
             const client = new Client({
-                brokerURL: `wss://willyouback.shop/chatroom/${chatRoomId}`,
+                brokerURL: `wss://willyouback.shop/chatroom`,
                 debug: function (str: string) {
                     console.log(str);
                   },
@@ -47,6 +71,7 @@ function ChatProvider({ children } : ChatProviderProps) {
             client.onConnect = () => {
                 client.subscribe(`/topic/${chatRoomId}/message`, (message) => {
                     const messageData = JSON.parse(message.body);
+                    console.log(messageData);
                     updateMessages(messageData, chatRoomId);
                 });
             };
@@ -64,7 +89,6 @@ function ChatProvider({ children } : ChatProviderProps) {
         const currentWebSocketClients = webSocketClients.current;
 
         return () => {
-            // Use the captured value for cleanup
             currentWebSocketClients.forEach((client, chatRoomId) => {
                 if (client.connected) {
                     client.deactivate();
@@ -73,21 +97,6 @@ function ChatProvider({ children } : ChatProviderProps) {
             });
         };
     }, [chats]); // chats가 변경될 때마다 구독 로직 실행
-
-    // 채팅방 목록을 가져오는 로직
-    useEffect(() => {
-        const getChatRooms = async () => {
-            try {
-                const response = await ChatAPI.getChats();
-                if (response.status === 200) {
-                    setChats(response.data);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getChatRooms();
-    }, []);
 
     return (
         <ChatContext.Provider value={{ messages, updateMessages }}>

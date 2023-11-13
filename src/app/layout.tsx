@@ -1,8 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
-import Header from '@/components/common/Header';
 import { EventSourceProvider } from './EventSourceContext';
+import { ChatProvider } from './ChatContext';
 
 export const metadata: Metadata = {
     title: 'Rizz Pick',
@@ -33,12 +33,13 @@ export default function RootLayout({
             </head>
             <body style={{ fontFamily: 'SUITE' }}>
                 <EventSourceProvider>
-                    {/* {showHeader && <Header />} */}
-                    <Toaster
-                        position="top-center"
-                        toastOptions={{ duration: 1500 }}
-                    />
-                    {children}
+                    <ChatProvider>
+                        <Toaster
+                            position="top-center"
+                            toastOptions={{ duration: 1500 }}
+                        />
+                        {children}
+                        </ChatProvider>
                 </EventSourceProvider>
             </body>
         </html>
