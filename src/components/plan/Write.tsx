@@ -307,9 +307,8 @@ export default function Write({
         try {
             const response = await PlanAPI.deleteActivity(id);
             if (response.status === 200) {
-                // response.data.status를 response.status로 변경
                 setActivities(
-                    activities.filter((activity) => activity.id !== id) // activityId를 id로 변경
+                    activities.filter((activity) => activity.id !== id)
                 );
             } else {
                 console.error(
