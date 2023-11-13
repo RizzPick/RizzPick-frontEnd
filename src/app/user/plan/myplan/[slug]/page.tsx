@@ -362,22 +362,31 @@ export default function PostPage({ params: { slug } }: Props) {
                                                     {timeAgo(dating.createdAt)}
                                                 </span>
                                             </div>
-                                            <p className="flex flex-row items-center text-[25px] text-base text-[#666666] mt-[-10px] ml-2 sm:text-base sm:font-medium">
-                                                <LocationIcon />
-                                                {dating.datingLocation}
-                                            </p>
-                                            <p className="text-[25px] text-base mt-2 ml-2 sm:text-lg sm:font-medium">
-                                                {dating.datingTheme}
-                                            </p>
-                                            <Image
-                                                className="w-full h-full"
-                                                src={dating.datingImage.image}
-                                                alt="Dating Image"
-                                                width={233}
-                                                height={260}
-                                                objectFit="cover"
-                                                objectPosition="center"
-                                            />
+                                            <div className="flex flex-row items-center justify-start">
+                                                <p className="flex flex-row items-center  text-base text-[#666666]  ml-2 sm:text-base sm:font-medium">
+                                                    <LocationIcon />
+                                                    {dating.datingLocation}
+                                                </p>
+                                                <p className=" text-base ml-2 sm:text-lg sm:font-medium">
+                                                    {dating.datingTheme}
+                                                </p>
+                                            </div>
+                                            <div className="w-96 h-96 mx-auto my-10">
+                                                {dating.datingImage.image && (
+                                                    <Image
+                                                        src={
+                                                            dating.datingImage
+                                                                .image
+                                                        }
+                                                        className="w-full h-full"
+                                                        alt="Dating Image"
+                                                        width={233}
+                                                        height={260}
+                                                        objectFit="cover"
+                                                        objectPosition="center"
+                                                    />
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="flex flex-col mx-auto p-4 w-5/6 sm:w-full ">

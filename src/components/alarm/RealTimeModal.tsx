@@ -9,6 +9,7 @@ import { getCookie } from '@/utils/cookie';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 // import { RealTimeModalProps } from '@/types/alarm/type';
 import { Dispatch, SetStateAction } from 'react';
+import Image from 'next/image';
 
 type ProfileImage = {
     id: number;
@@ -229,7 +230,10 @@ const RealTimeModal = ({ close, setUnreadAlertCount }: RealTimeModalProps) => {
     return (
         <>
             {closeModal && (
-                <div className="absolute top-[100px] right-[60px] translate-[-50%] bg-white p-6 w-[400px] h-[500px] flex flex-col z-50 border border-zinc-800 rounded-3xl">
+                <div
+                    className="absolute top-[100px] right-[60px] translate-[-50%] bg-white p-6 w-[400px] h-[500px] flex flex-col z-50 border border-zinc-800 rounded-3xl"
+                    style={{ overflowY: 'auto', maxHeight: '90%' }}
+                >
                     <div className="flex justify-between items-center border-b-2 border-[#C5C5C5] mb-2 pb-2">
                         <h1 className="text-xl font-bold">실시간 알림</h1>
                         <button onClick={markAllAsRead} className="">
@@ -241,16 +245,16 @@ const RealTimeModal = ({ close, setUnreadAlertCount }: RealTimeModalProps) => {
                             <div key={alert.id} className="">
                                 {!alert.readStatus && (
                                     <div className="flex flex-row items-center py-2">
-                                        {alert.sender.profileImages[0] && (
-                                            <img
+                                        {/* {alert.sender.profileImages[0] && (
+                                            <Image
                                                 src={
                                                     alert.sender
                                                         .profileImages[0].image
                                                 }
                                                 alt="Profile"
-                                                className="w-10 h-10 rounded-full mr-1"
+                                               
                                             />
-                                        )}
+                                        )} */}
                                         <p className="text-base">
                                             {alert.message}
                                         </p>
