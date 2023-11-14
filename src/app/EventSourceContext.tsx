@@ -23,7 +23,7 @@ export const EventSourceProvider = ({
         }
 
         // EventSource 인스턴스를 생성합니다.
-        try {
+        else {
             const es = new EventSourcePolyfill(
                 'https://willyouback.shop/subscribe',
                 {
@@ -44,8 +44,6 @@ export const EventSourceProvider = ({
                 // console.log('SSE 언마운트');
                 es.close();
             };
-        } catch (error) {
-            console.error('Error initializing EventSource:', error);
         }
     }, []);
 
