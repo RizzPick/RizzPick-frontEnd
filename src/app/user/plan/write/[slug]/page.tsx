@@ -46,7 +46,7 @@ export default function WritePage({ params: { slug } }: Props) {
     }, []);
 
     const handleEditComplete = () => {
-        console.log('Edit Complete');
+        // console.log('Edit Complete');
     };
 
     if (!dating) {
@@ -55,21 +55,21 @@ export default function WritePage({ params: { slug } }: Props) {
 
     return (
         <>
-            <div className='sm:hidden'>
+            <div className="sm:hidden">
                 <UserLayout showHeader={true}>
                     <Write
                         initialData={dating}
                         initialActivities={dating ? dating.activities : []}
                         onEditComplete={handleEditComplete}
-                        />
+                    />
                 </UserLayout>
             </div>
-            <div className='hidden sm:block'>
+            <div className="hidden sm:block">
                 <Write
                     initialData={dating}
                     initialActivities={dating ? dating.activities : []}
                     onEditComplete={handleEditComplete}
-                    />
+                />
             </div>
         </>
     );

@@ -206,7 +206,7 @@ export default function Write({
                     response.data.message
                 );
             }
-            console.log(response.data.data.datingImage);
+            // console.log(response.data.data.datingImage);
         } catch (error) {
             console.error('데이터를 가져오는데 실패했습니다:', error);
         }
@@ -239,7 +239,7 @@ export default function Write({
                 location,
                 theme,
             });
-            console.log(response);
+            // console.log(response);
             onEditComplete();
             handleBackButtonClick();
         } catch (error) {
@@ -319,10 +319,9 @@ export default function Write({
         } catch (error) {
             console.error('Failed to delete activity:', error);
         }
-        console.log('null?', id);
+        // console.log('null?', id);
     };
 
-    console.log(previewImageUrl);
     return (
         <div className="overflow-x-hidden">
             <div className="hidden sm:block">

@@ -129,21 +129,28 @@ export default function Header({ isVisible = true }) {
         if (!isVisible || sseRef.current) return;
 
         try {
-            const response = await axios.get('https://willyouback.shop/alerts', {
-                headers: {
-                    Authorization: `${token}`,
-                },
-            })
-            if(response.status === 200) {
+            const response = await axios.get(
+                'https://willyouback.shop/alerts',
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                }
+            );
+            if (response.status === 200) {
                 setAlerts((currentAlerts) => {
                     const newAlerts = response.data.data.filter(
                         (newAlert: Alert) =>
-                            !currentAlerts.some((alert) => alert.id === newAlert.id)
+                            !currentAlerts.some(
+                                (alert) => alert.id === newAlert.id
+                            )
                     );
                     return [...currentAlerts, ...newAlerts];
                 });
                 setUnreadAlertCount(
-                    response.data.data.filter((alert: Alert) => !alert.readStatus).length
+                    response.data.data.filter(
+                        (alert: Alert) => !alert.readStatus
+                    ).length
                 );
             }
         } catch (error) {
@@ -154,9 +161,44 @@ export default function Header({ isVisible = true }) {
     useEffect(() => {
         if (!eventSource) return;
         const onMessage = (event: any) => {
-            console.log('Received a message:', event.data); // 메시지 로깅
-            handleNewMessage(event); 
-            fetchAlerts(); 
+            // console.log('Received a message:', event.data); // 여기에서 로깅
+            try {
+                const data = JSON.parse(event.data);
+                // console.log('Parsed data:', data);
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+            }
+            fetchAlerts();
+            // console.log('알림 메시지 전달받음');
+            // console.log(event);
+            // console.log(event.data);
+            handleNewMessage(event);
+            // 데이터를 JSON으로 파싱
+            try {
+                if (event.data.startsWith('{')) {
+                    const jsonData = JSON.parse(event.data);
+                    // console.log(jsonData);
+                    if (Array.isArray(jsonData)) {
+                        // 데이터가 배열로 온 경우, 각 메시지를 처리
+                        jsonData.forEach((newAlert) => {
+                            if (newAlert && newAlert.message) {
+                                handleNewAlert(newAlert.message);
+                            }
+                        });
+                    } else if (jsonData && jsonData.message) {
+                        // 데이터가 개별 메시지인 경우, 해당 메시지를 처리
+                        handleNewAlert(jsonData.message);
+                    }
+                }
+            } catch (error) {
+                console.error('Parsing JSON failed:', error);
+            }
+        };
+
+        // 에러 이벤트 핸들러
+        const onError = (error: any) => {
+            // 여기서 에러 처리
+            console.error('EventSource error:', error);
         };
 
         eventSource.addEventListener('message', onMessage);
@@ -167,7 +209,6 @@ export default function Header({ isVisible = true }) {
         };
     }, [eventSource, handleNewMessage, fetchAlerts]);
 
-    
     useEffect(() => {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
     }, [alerts]);
