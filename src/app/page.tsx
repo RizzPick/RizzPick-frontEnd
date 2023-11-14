@@ -10,7 +10,7 @@ export default function Home() {
     const router = useRouter();
     const [loaded, setLoaded] = useState(false);
     const isMobile = useMediaQuery({
-        query: '(max-width:393px)',
+        query: '(max-width:480px)',
     });
 
     const LoadingIndicator = () => (

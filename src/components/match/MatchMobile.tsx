@@ -228,13 +228,9 @@ function MatchMobile({users, setUsers} : Props) {
                                     <div className='flex items-center justify-center h-full'>
                                         {!users[userIndex].dating && <p>작성한 계획이 없습니다.</p>}
                                         {users[userIndex].dating && 
-                                            <li>
-                                                {users[userIndex].dating?.map((data)=> {
-                                                    return (
-                                                        <li key={data.datingId}>{data.datingTitle}</li>
-                                                    )
-                                                })}
-                                            </li>
+                                            <ul>
+                                                <li key={users[userIndex].dating?.datingId}>{users[userIndex].dating?.datingTitle}</li>
+                                            </ul>
                                         }
                                         
                                     </div>

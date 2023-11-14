@@ -1,12 +1,11 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { MatchAPI } from '../../features/match';
 import { UserProfile } from '../../types/match/type';
 import Image from 'next/image';
 import { AiOutlineInfoCircle } from "react-icons/ai"
 import toast from 'react-hot-toast';
 import { calculateAge } from '@/utils/dateUtils';
-import Loader from '../common/Loader';
 import NoUserAlert from './NoUserAlert';
 import MatchControls from './MatchControls';
 
@@ -15,6 +14,7 @@ import ReportIcon from "../../../public/profileIcon/Report.svg";
 import LeftBtnIcon from "../../../public/matchIcon/left.svg";
 import RightBtnIcon from "../../../public/matchIcon/right.svg";
 import ReportModal from '../common/ReportModal';
+import { useRouter } from 'next/navigation';
 
 type Props = {
     users : UserProfile[]
@@ -26,12 +26,14 @@ function Match({users, setUsers} : Props) {
     const [userIndex, setUserIndex] = useState(0);
     const [slideIndex, setSlideIndex] = useState(0);
     const [isReportModalVisible, setReportModalVisible] = useState(false);
+    const router = useRouter();
 
     const toggleDetailsVisibility = () => {
         setDetailsVisible(!isDetailsVisible);
     };
 
     const currentUser = users[userIndex] || {};
+    console.log(currentUser);
     
 
     const nextSlide = () => {
@@ -217,17 +219,10 @@ function Match({users, setUsers} : Props) {
                         </h2>
                         <div className="h-[20vh] border bg-white mx-auto rounded-3xl p-4 flex items-center justify-center border-neutral-800">
                             {currentUser &&
-                            currentUser.dating &&
-                            currentUser.dating.length > 1 ? (
-                                <ul className="list-disc pl-5 space-y-2">
-                                    {users[userIndex].dating?.map((date) => {
-                                        return (
-                                            <li key={date.datingId}>
-                                                {date.datingTitle}
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
+                            currentUser.dating ? (
+                                <div onClick={()=>router.push(`/user/plan/${currentUser.dating?.datingId}`)} className='flex items-center w-full justify-center cursor-pointer'>
+                                    <div className='font-bold text-2xl'>{currentUser.dating.datingTitle}</div>
+                                </div>
                             ) : (
                                 <div className="mx-auto px-4 py-2 mt-4 rounded-3xl font-bold">
                                     작성한 계획이 없습니다
