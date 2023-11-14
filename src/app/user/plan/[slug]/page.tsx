@@ -214,7 +214,7 @@ export default function PostPage({ params: { slug } }: Props) {
                 <div className="hidden sm:block">
                     <div
                         className="flex flex-row h-20 mb-4 items-center"
-                        onClick={() => console.log('Parent clicked')}
+                        // onClick={() => console.log('Parent clicked')}
                     >
                         <button onClick={handleBackButtonClick} className="p-4">
                             <BackIcon />

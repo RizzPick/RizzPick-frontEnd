@@ -18,7 +18,7 @@ export const EventSourceProvider = ({
 
     useEffect(() => {
         if (!token) {
-            console.log('너 토큰 없잖아');
+            // console.log('너 토큰 없잖아');
             return;
         } else {
             const es = new EventSourcePolyfill(
@@ -33,13 +33,13 @@ export const EventSourceProvider = ({
                     heartbeatTimeout: 3600000, // 1 hour
                 }
             );
-            console.log();
+            // console.log();
             // EventSource 객체를 상태에 설정합니다.
             setEventSource(es);
 
             // 컴포넌트가 언마운트될 때 EventSource를 닫습니다.
             return () => {
-                console.log("SSE 언마운트");
+                // console.log('SSE 언마운트');
                 es.close();
             };
         }

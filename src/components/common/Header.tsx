@@ -193,20 +193,20 @@ export default function Header({ isVisible = true }) {
             console.log('Received a message:', event.data); // 여기에서 로깅
             try {
                 const data = JSON.parse(event.data);
-                console.log('Parsed data:', data);
+                // console.log('Parsed data:', data);
             } catch (error) {
                 console.error('Error parsing JSON:', error);
             }
             fetchAlerts();
-            console.log('알림 메시지 전달받음');
-            console.log(event);
-            console.log(event.data);
+            // console.log('알림 메시지 전달받음');
+            // console.log(event);
+            // console.log(event.data);
             handleNewMessage(event);
             // 데이터를 JSON으로 파싱
             try {
                 if (event.data.startsWith('{')) {
                     const jsonData = JSON.parse(event.data);
-                    console.log(jsonData);
+                    // console.log(jsonData);
                     if (Array.isArray(jsonData)) {
                         // 데이터가 배열로 온 경우, 각 메시지를 처리
                         jsonData.forEach((newAlert) => {

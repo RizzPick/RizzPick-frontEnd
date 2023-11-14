@@ -89,7 +89,7 @@ export default function PostPage({ params: { slug } }: Props) {
     }
 
     useEffect(() => {
-        console.log('timeAgo:', timeAgo(dating.createdAt));
+        // console.log('timeAgo:', timeAgo(dating.createdAt));
     }, [dating]);
 
     useEffect(() => {
@@ -101,7 +101,7 @@ export default function PostPage({ params: { slug } }: Props) {
                 },
             })
             .then((response) => {
-                console.log(response.data);
+                // console.log(response.data);
 
                 const datingData = response.data.data;
                 setDating({
@@ -235,7 +235,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     <div className="hidden sm:block">
                         <div
                             className="flex flex-row h-20 mb-4 items-center"
-                            onClick={() => console.log('Parent clicked')}
+                            // onClick={() => console.log('Parent clicked')}
                         >
                             <button
                                 onClick={handleBackButtonClick}
@@ -363,7 +363,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                                 </span>
                                             </div>
                                             <div className="flex flex-row items-center justify-start sm:flex-col">
-                                                <p className="flex flex-row items-center  text-base text-[#666666]  ml-2 sm:text-base sm:font-medium">
+                                                <p className="flex flex-row items-center  text-base text-[#666666] ml-2 sm:text-base sm:font-medium sm:mb-1">
                                                     <LocationIcon />
                                                     {dating.datingLocation}
                                                 </p>
