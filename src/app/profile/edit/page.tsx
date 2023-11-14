@@ -13,7 +13,7 @@ function ProfilEditPage() {
     const [mobile, setMobile] = useState(false);
 
     const isMobile = useMediaQuery({
-        query: '(max-width:393px)',
+        query: '(max-width:480px)',
     });
 
     useEffect(() => {

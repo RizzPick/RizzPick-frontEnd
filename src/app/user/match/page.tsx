@@ -34,7 +34,7 @@ export default function MatchPage() {
     // const location = useGeolocation();
 
     const isMobile = useMediaQuery({
-        query: '(max-width:767px)',
+        query: '(max-width:480px)',
     });
 
     useEffect(() => {

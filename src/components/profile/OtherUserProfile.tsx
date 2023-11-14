@@ -1,7 +1,7 @@
 'use client'
 import { MyProfileRes } from '@/types/profile'
 import { calculateAge } from '@/utils/dateUtils'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { GoDotFill } from 'react-icons/go'
 import LeftButton from '../../../public/matchIcon/left.svg';
@@ -15,14 +15,18 @@ import toast from 'react-hot-toast'
 import ReportModal from '../common/ReportModal'
 import { useRouter } from 'next/navigation'
 import UserLayout from '@/app/user/layout'
+import ChatAPI from '@/features/chat'
+import UseChat from '@/hooks/useChat'
 
 type Props = {
     profile : MyProfileRes
 }
 
 function OtherUserProfile({profile} : Props) {
+  const { clearCurrentChat } = UseChat();
   const [slideIndex, setSlideIndex] = useState(0);
   const [isReportModalVisible, setReportModalVisible] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
     const nextSlide = () => {
@@ -48,6 +52,7 @@ function OtherUserProfile({profile} : Props) {
 
           if (response.status === 200) {
               toast(response.data.message, { icon: reaction === 'like' ? '❤️' : '👎', });
+              router.push(`${reaction === 'like' ? '/user/chat':'/user/notifications/liked'}`)
           }
       } catch (error) {
           console.error(reaction === 'like' ? '좋아요 보내기 오류:' : '싫어요 보내기 오류:', error);
@@ -61,6 +66,20 @@ function OtherUserProfile({profile} : Props) {
     // 싫어요 버튼 클릭 핸들러
     const handleNopeClick = () => {
       handleUserReaction('nope');
+    };
+
+    const cancelMatch = async () => {
+        if (!profile.matchId) return;
+        try {
+            const response = await ChatAPI.deleteChat(profile.matchId);
+            if (response.status === 200) {
+                toast.success(response.data.message);
+                clearCurrentChat();
+                router.push('/user/notifications/liked');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
 
@@ -138,7 +157,7 @@ function OtherUserProfile({profile} : Props) {
                                 <RightButton />
                             </button>
                           </div>
-                          <div className="mt-5 w-[30vw]flex flex-col z-40 bg-white items-start border rounded-3xl p-4 shadow-md cursor-pointer h-[110px]">
+                          <div className="mt-5 w-[30vw]flex flex-col z-40 bg-white items-start border rounded-3xl p-3 shadow-md cursor-pointer h-[110px]">
                                 <div className="text-2xl flex items-center justify-between w-full">
                                         <div className='flex items-center gap-2'>
                                             <div className='font-bold text-3xl'>{profile?.nickname ??
@@ -146,18 +165,68 @@ function OtherUserProfile({profile} : Props) {
                                             <div className='text-xl'>{calculateAge(profile?.birthday) ?? 'Unknown'}</div>
                                         </div>
                                 </div>
-                                <div className="mt-2">{profile?.intro}</div>
+                                <div className="mt-2 text-sm">{profile?.intro}</div>
                             </div>
-                            <div className="flex justify-evenly z-20 mt-3">
-                              <button onClick={handleNopeClick} className='transform transition-transform duration-500 hover:rotate-90'>
-                                <Image src={NopeIcon} alt="Nope" width={60} height={60} />
-                              </button>
-                              <button onClick={handleLikeClick} className='animate-pulse animate-twice animate-ease-in-out'>
-                                <Image src={LikeIcon} alt="Like" width={60} height={60} />
-                              </button>
-                            </div>
-                          </div>
+                            {profile.matchStatus ? (
+                                <div
+                                    className="mx-auto flex justify-center items-center w-[207px] bg-rose-100 rounded-full h-[45px] mt-10 hover:scale-110 transition-all duration-200"
+                                    onClick={() => setShowModal(true)}
+                                >
+                                    <button className="text-red-600 text-xl">
+                                        매칭 취소
+                                    </button>
+                                </div>
+                                ):
+                                (
+                                    <div className="flex justify-evenly z-20 mt-3">
+                                        <button onClick={handleNopeClick} className='transform transition-transform duration-500 hover:rotate-90'>
+                                        <Image src={NopeIcon} alt="Nope" width={60} height={60} />
+                                        </button>
+                                        <button onClick={handleLikeClick} className='animate-pulse animate-twice animate-ease-in-out'>
+                                        <Image src={LikeIcon} alt="Like" width={60} height={60} />
+                                        </button>
+                                    </div>
+                                )}
+                                {showModal && (
+                        <div className="fixed inset-0 flex items-center justify-center z-50">
+                            {/* 모달 외부 배경 (그레이 오버레이) */}
+                            <div
+                                className="absolute inset-0 bg-gray-500 opacity-50"
+                                onClick={() => setShowModal(false)}
+                            ></div>
 
+                            {/* 모달 창 */}
+                            <div className="bg-white p-2 rounded-xl shadow-lg w-[400px] z-10 h-[320px] flex flex-col items-center justify-center">
+                                <div className="font-bold text-2xl mb-10">
+                                    ⚠️ 매칭을 취소하시겠습니까?
+                                </div>
+                                <div className="text-gray-500">
+                                    매칭을 취소하게 되면 대화내용이 모두 삭제되고
+                                    <br /> 채팅목록에서도 삭제됩니다.
+                                </div>
+                                <div className="flex justify-between mt-6 w-full px-10">
+                                    <button
+                                        onClick={() =>
+                                            setShowModal(false)
+                                        }
+                                        className="mr-2 px-4 py-2 rounded"
+                                    >
+                                        취소
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            cancelMatch();
+                                            setShowModal(false);
+                                        }}
+                                        className="px-4 py-2rounded-lg transition-all hover:scale-125"
+                                    >
+                                        나가기
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                            </div>
                   {/* 인적사항 영역 */}
                   <div className='w-[50vw]'>
                   <div

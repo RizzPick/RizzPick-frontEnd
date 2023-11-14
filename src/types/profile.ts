@@ -91,6 +91,7 @@ export type MyProfileRes = {
   profileImages : ProfileImages[];
   intro : string;
   matchId? : number;
+  matchStatus? : boolean;
 }
 
 export type ProfileImages = {

@@ -64,14 +64,14 @@ const Chat = ({ chatRoomId } : Props ) => {
         status: "MESSAGE",
         message: message,
       });
-      setMessage(""); // 메시지 초기화
+      setMessage("");
     }
   }
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if(event.nativeEvent.isComposing) return;
     if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault(); // 줄바꿈을 방지하기 위해 기본 동작을 방지
+      event.preventDefault();
       onClick();
     }
   }
