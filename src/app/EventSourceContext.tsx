@@ -43,7 +43,7 @@ export const EventSourceProvider = ({
                 es.close();
             };
         }
-    }, [token]);
+    }, []);
 
     return (
         <EventSourceContext.Provider value={eventSource}>

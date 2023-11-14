@@ -186,6 +186,10 @@ export default function Header({ isVisible = true }) {
     }, [token, isVisible]);
 
     useEffect(() => {
+        fetchAlerts(); // 컴포넌트 마운트 시 초기 데이터 로드
+    }, [fetchAlerts]);
+
+    useEffect(() => {
         if (!eventSource) return;
 
         // 메시지 이벤트 핸들러
@@ -238,15 +242,11 @@ export default function Header({ isVisible = true }) {
             eventSource.removeEventListener('message', onMessage);
             eventSource.removeEventListener('error', onError);
         };
-    }, [eventSource]);
+    }, [eventSource, fetchAlerts, handleNewAlert, handleNewMessage]);
 
     useEffect(() => {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
     }, [alerts]);
-
-    useEffect(() => {
-        fetchAlerts(); // 컴포넌트 마운트 시 초기 데이터 로드
-    }, []);
 
     // 컴포넌트가 마운트될 때 EventSource 초기화
     // useEffect(() => {

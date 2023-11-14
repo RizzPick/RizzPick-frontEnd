@@ -128,7 +128,7 @@ export default function PostPage({ params: { slug } }: Props) {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-    }, []);
+    }, [slug]);
 
     useEffect(() => {});
     if (dating == undefined) {
