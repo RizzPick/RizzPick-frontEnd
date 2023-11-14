@@ -371,7 +371,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                                     {dating.datingTheme}
                                                 </p>
                                             </div>
-                                            <div className="w-96 h-96 mx-auto my-10 sm:mb-[-25px]">
+                                            <div className="w-[520px] h-96 mx-auto my-10 sm:mb-[-25px]">
                                                 {dating.datingImage.image && (
                                                     <Image
                                                         src={
