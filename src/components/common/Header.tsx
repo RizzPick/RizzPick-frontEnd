@@ -162,10 +162,11 @@ export default function Header({ isVisible = true }) {
         if (!eventSource) return;
         const onMessage = (event: any) => {
             // console.log('Received a message:', event.data); // 여기에서 로깅
+            handleNewMessage(event);
+            fetchAlerts();
             try {
                 const data = JSON.parse(event.data);
-                handleNewMessage(event);
-                fetchAlerts();
+
                 // console.log('Parsed data:', data);
             } catch (error) {
                 console.error('Error parsing JSON:', error);
