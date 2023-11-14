@@ -33,8 +33,6 @@ function Match({users, setUsers} : Props) {
     };
 
     const currentUser = users[userIndex] || {};
-    console.log(currentUser);
-    
 
     const nextSlide = () => {
         if (users[userIndex].profileImages.length === 2) {
