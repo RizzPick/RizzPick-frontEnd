@@ -244,6 +244,10 @@ export default function Header({ isVisible = true }) {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
     }, [alerts]);
 
+    useEffect(() => {
+        fetchAlerts(); // 컴포넌트 마운트 시 초기 데이터 로드
+    }, []);
+
     // 컴포넌트가 마운트될 때 EventSource 초기화
     // useEffect(() => {
     //     initializeSSE();
@@ -305,7 +309,10 @@ export default function Header({ isVisible = true }) {
                         setUnreadAlertCount={setUnreadAlertCount}
                     />
                 )}
-                <span className="cursor-pointer" onClick={()=>router.push('/user/chat')}>
+                <span
+                    className="cursor-pointer"
+                    onClick={() => router.push('/user/chat')}
+                >
                     채팅
                 </span>
                 <span onClick={Open} className="cursor-pointer">
