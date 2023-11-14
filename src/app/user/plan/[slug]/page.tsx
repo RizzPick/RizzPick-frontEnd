@@ -376,6 +376,8 @@ export default function PostPage({ params: { slug } }: Props) {
                                             width={231}
                                             height={231}
                                             priority
+                                            objectFit="cover"
+                                            objectPosition="center"
                                         />
                                     ) : (
                                         <Image
@@ -391,9 +393,11 @@ export default function PostPage({ params: { slug } }: Props) {
                                     {userProfile && (
                                         <div>
                                             {/* 이름, 나이 */}
-                                            <div className="flex flex-row w-full h-16 border-b-2 border-[#C5C5C5] items-center justify-center text-[28px]">
-                                                <h2>{userProfile.nickname}</h2>
-                                                <p>
+                                            <div className="flex flex-row w-full h-16 border-b-2 border-[#C5C5C5] justify-center text-[28px]">
+                                                <h2 className="mx-2">
+                                                    {userProfile.nickname}
+                                                </h2>
+                                                <p className="mx-2">
                                                     {calculateAge(
                                                         userProfile.birthday
                                                     )}
