@@ -198,7 +198,7 @@ export default function PostPage({ params: { slug } }: Props) {
     // 싫어요 버튼 클릭 핸들러
     const handleNope = async () => {
         try {
-            const response = await sendNope(userId, targetUserId); // userId와 targetUserId 값을 제공하세요
+            const response = await sendNope(userId, targetUserId);
         } catch (error) {
             console.error('싫어요 보내기 오류:', error);
         }
@@ -324,7 +324,7 @@ export default function PostPage({ params: { slug } }: Props) {
                                             {dating.datingTheme}
                                         </p>
                                     </div>
-                                    <div className="w-96 h-96 mx-auto my-10 sm:mb-[-25px]">
+                                    <div className="w-[520px] h-96 mx-auto my-10 sm:mb-[-25px]">
                                         {dating.datingImage.image && (
                                             <Image
                                                 className="w-full h-full sm:w-72 sm:h-72"
