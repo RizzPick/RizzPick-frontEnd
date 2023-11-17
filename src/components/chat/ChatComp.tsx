@@ -16,7 +16,7 @@ function ChatComp({data}:Props) {
     const [mobile, setMobile] = useState(false);
     const router = useRouter();
     const isMobile = useMediaQuery({
-        query : "(max-width:767px)"
+        query : "(max-width:480px)"
     });
 
     const { setCurrentChat } = UseChat();

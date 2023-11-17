@@ -23,30 +23,29 @@ export default function WritePage({ params: { slug } }: Props) {
     const [dating, setDating] = useState<DatingInfo | null>(null); // datingInfo를 dating으로 변경하고 타입을 추가합니다.
 
     // 데이터를 불러오는 함수
-    const fetchData = async () => {
-        try {
-            const datingResponse = await axios.get(
-                `https://willyouback.shop/api/dating/${slug}`
-            );
-
-            // 데이터 구조가 기대한대로라고 가정하고, 데이터를 dating 상태에 저장합니다.
-            setDating({
-                datingTitle: datingResponse.data.datingTitle,
-                datingLocation: datingResponse.data.datingLocation,
-                datingTheme: datingResponse.data.datingTheme,
-                activities: datingResponse.data.activityResponseDtoList, // activities 데이터를 추가합니다.
-            });
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const datingResponse = await axios.get(
+                    `https://willyouback.shop/api/dating/${slug}`
+                );
+
+                // 데이터 구조가 기대한대로라고 가정하고, 데이터를 dating 상태에 저장합니다.
+                setDating({
+                    datingTitle: datingResponse.data.datingTitle,
+                    datingLocation: datingResponse.data.datingLocation,
+                    datingTheme: datingResponse.data.datingTheme,
+                    activities: datingResponse.data.activityResponseDtoList, // activities 데이터를 추가합니다.
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
         fetchData();
-    }, []);
+    }, [slug]);
 
     const handleEditComplete = () => {
-        console.log('Edit Complete');
+        // console.log('Edit Complete');
     };
 
     if (!dating) {
@@ -55,21 +54,21 @@ export default function WritePage({ params: { slug } }: Props) {
 
     return (
         <>
-            <div className='sm:hidden'>
+            <div className="sm:hidden">
                 <UserLayout showHeader={true}>
                     <Write
                         initialData={dating}
                         initialActivities={dating ? dating.activities : []}
                         onEditComplete={handleEditComplete}
-                        />
+                    />
                 </UserLayout>
             </div>
-            <div className='hidden sm:block'>
+            <div className="hidden sm:block">
                 <Write
                     initialData={dating}
                     initialActivities={dating ? dating.activities : []}
                     onEditComplete={handleEditComplete}
-                    />
+                />
             </div>
         </>
     );

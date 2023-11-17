@@ -14,10 +14,10 @@ import ChatAPI from '@/features/chat';
 import Loader from '@/components/common/Loader';
 
 export default function ChatPage() {
-    const router = useRouter();
     const params = useSearchParams();
+    const router = useRouter();
     const { data: chat } = useSWR<ChatData>(CURRENT_CHAT_KEY);
-    const {data:chats} = useSWR<ChatData[]>(CHAT_KEY);
+    const { data: chats } = useSWR<ChatData[]>(CHAT_KEY);
     const [isLoading, setIsLoading] = useState(true);
     const { initializeChats } = UseChat();
 
@@ -29,9 +29,9 @@ export default function ChatPage() {
                     initializeChats(response.data);
                 }   
             } catch (error) {
-            console.log(error);
+                console.log(error);
             } finally {
-            setIsLoading(false);
+                setIsLoading(false);
             }
         }
         getChatRooms();
@@ -41,7 +41,7 @@ export default function ChatPage() {
     if(isLoading) return <Loader />
 
     return (
-        <div>
+        <div className='font-sans'>
             <div className='sm:block hidden'>
                 <div className="grid grid-cols-1 w-full height-screen-vh">
                     <header className="text-center text-neutral-700 text-xl flex justify-center p-4 border-b-1 border">
@@ -71,7 +71,7 @@ export default function ChatPage() {
                         ) : (
                             <>
                                 <div className="col-span-2 border-l-2 border-r-2">
-                                    <Chat />
+                                    <Chat chatRoomId={chat.chatRoomId}/>
                                 </div>
                                 <ChatProfile />
                             </>

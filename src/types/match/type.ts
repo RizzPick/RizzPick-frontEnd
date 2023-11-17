@@ -4,6 +4,12 @@ export type Dating = {
     datingTitle: string;
     datingLocation: string;
     datingTheme: string;
+    createAt : string;
+    datingImage : {
+        id:number;
+        image:string
+    };
+    userNickname : string;
 };
 
 export type UserProfile = {
@@ -17,7 +23,7 @@ export type UserProfile = {
     mbti?: string;
     religion?: string;
     profileImages: ImageObject[];
-    dating?: Dating[];
+    dating?: Dating;
     intro? :string;
 };
 

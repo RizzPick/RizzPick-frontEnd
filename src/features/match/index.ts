@@ -10,4 +10,6 @@ export const MatchAPI = {
         service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/nope/${targetUserId}`),
     reportUser: (data: reportReq) => 
         service.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/report/user?content=${data.content}&reportedUserId=${data.reportedUserId}`),
+    getMatches: () => 
+        service.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/matches`)
 };

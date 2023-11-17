@@ -20,7 +20,6 @@ function UserProfile({profile} : Props) {
     const [showResignModal, setResignModal] = useState(false);
     
     const router = useRouter();
-
     return (
         <>
             <div className="bg-profile-gradient h-full py-[67px]">

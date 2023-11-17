@@ -16,6 +16,7 @@ import BackIcon from '../../../../../../public/planIcon/back.svg';
 import Header from '@/components/common/Header';
 import toast from 'react-hot-toast';
 import UserLayout from '@/app/user/layout';
+import LocationIcon from '../../../../../../public/planIcon/location.svg';
 
 type Props = {
     params: {
@@ -37,6 +38,7 @@ interface DatingInfo {
     datingLocation: string;
     datingTheme: string;
     createdAt: string;
+    datingImage: { image: string };
     activities: { activityContent: string }[];
 }
 
@@ -46,6 +48,7 @@ export default function PostPage({ params: { slug } }: Props) {
         datingLocation: '',
         datingTheme: '',
         createdAt: new Date().toISOString(),
+        datingImage: { image: '' },
         activities: [],
     });
     const [createdAt, setCreatedAt] = useState(null);
@@ -86,7 +89,7 @@ export default function PostPage({ params: { slug } }: Props) {
     }
 
     useEffect(() => {
-        console.log('timeAgo:', timeAgo(dating.createdAt));
+        // console.log('timeAgo:', timeAgo(dating.createdAt));
     }, [dating]);
 
     useEffect(() => {
@@ -98,7 +101,7 @@ export default function PostPage({ params: { slug } }: Props) {
                 },
             })
             .then((response) => {
-                console.log(response.data);
+                // console.log(response.data);
 
                 const datingData = response.data.data;
                 setDating({
@@ -106,6 +109,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     datingLocation: datingData.datingLocation,
                     datingTheme: datingData.datingTheme,
                     createdAt: datingData.createdAt,
+                    datingImage: datingData.datingImage,
                     activities: datingData.activityResponseDtoList || [],
                 });
                 setActivities(datingData.activityResponseDtoList); // activities 상태 업데이트
@@ -124,7 +128,7 @@ export default function PostPage({ params: { slug } }: Props) {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-    }, []);
+    }, [slug]);
 
     useEffect(() => {});
     if (dating == undefined) {
@@ -152,6 +156,7 @@ export default function PostPage({ params: { slug } }: Props) {
                     datingTheme: datingData.data.datingTheme,
                     activities: datingData.data.activityResponseDtoList,
                     createdAt: datingData.createdAt,
+                    datingImage: datingData.datingImage,
                 });
                 setIsEditing(false); // 그리고 isEditing 상태를 false로 설정합니다.
             })
@@ -225,181 +230,207 @@ export default function PostPage({ params: { slug } }: Props) {
 
     return (
         <>
-        <UserLayout showHeader={true}>
-            {!isEditing && (
-                <div className="hidden sm:block">
-                    <div
-                        className="flex flex-row h-20 mb-4 items-center"
-                        onClick={() => console.log('Parent clicked')}
-                    >
-                        <button onClick={handleBackButtonClick} className="p-4">
-                            <BackIcon />
-                        </button>
-                        <p className="text-neutral-700 text-xl font-medium leading-tight tracking-wide mx-auto">
-                            데이트 계획
-                        </p>
+            <UserLayout showHeader={true}>
+                {!isEditing && (
+                    <div className="hidden sm:block">
                         <div
-                            className="h-[45px] w-[45px] rounded-full overflow-hidden mr-2 z-50 pointer-events-auto"
-                            onClick={handleImageClick}
-                            onTouchStart={handleImageClick}
+                            className="flex flex-row h-20 mb-4 items-center"
+                            // onClick={() => console.log('Parent clicked')}
                         >
-                            {userProfile &&
-                            userProfile.profileImages &&
-                            userProfile.profileImages.length > 0 ? (
-                                <Image
-                                    src={
-                                        userProfile.profileImages[0].image || ''
-                                    }
-                                    alt="User profile image"
-                                    width={231}
-                                    height={231}
-                                    priority
-                                />
-                            ) : (
-                                <Image
-                                    src={profiledog}
-                                    alt="Default profile image"
-                                    width={231}
-                                    height={231}
-                                    priority
-                                />
-                            )}
+                            <button
+                                onClick={handleBackButtonClick}
+                                className="p-4"
+                            >
+                                <BackIcon />
+                            </button>
+                            <p className="text-neutral-700 text-xl font-medium leading-tight tracking-wide mx-auto">
+                                데이트 계획
+                            </p>
+                            <div
+                                className="h-[45px] w-[45px] rounded-full overflow-hidden mr-2 z-50 pointer-events-auto"
+                                onClick={handleImageClick}
+                                onTouchStart={handleImageClick}
+                            >
+                                {userProfile &&
+                                userProfile.profileImages &&
+                                userProfile.profileImages.length > 0 ? (
+                                    <Image
+                                        src={
+                                            userProfile.profileImages[0]
+                                                .image || ''
+                                        }
+                                        alt="User profile image"
+                                        width={231}
+                                        height={231}
+                                        priority
+                                    />
+                                ) : (
+                                    <Image
+                                        src={profiledog}
+                                        alt="Default profile image"
+                                        width={231}
+                                        height={231}
+                                        priority
+                                    />
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-            <div className="w-full mx-auto sm:p-0">
-                {isEditing ? (
-                    <Write
-                        initialData={
-                            isEditing
-                                ? dating
-                                : {
-                                      datingTitle: '',
-                                      datingLocation: '',
-                                      datingTheme: '',
-                                      activities: [],
-                                  }
-                        }
-                        initialActivities={activities}
-                        onEditComplete={handleEditComplete}
-                    />
-                ) : (
-                    <>
-                        <div className="flex flex-row">
-                            <div className="w-[365px] my-auto ml-4 sm:hidden">
-                                <ul>
-                                    {dateList.map((date, index) => (
-                                        <li
-                                            key={index}
-                                            className={`flex flex-col border-2 border-rgba(172, 172, 172, 0.69) w-[332px] h-[74px] px-2 pt-2 ${
-                                                activePage ===
-                                                date.datingId.toString()
-                                                    ? 'bg-[#F9ECFF]'
-                                                    : ''
-                                            }`}
-                                            style={{
-                                                borderRadius: '4px 0px 0px 4px',
-                                                overflow: 'hidden',
-                                                whiteSpace: 'nowrap',
-                                            }}
-                                            onClick={() =>
-                                                setActivePage(
+                )}
+                <div className="w-full mx-auto sm:p-0">
+                    {isEditing ? (
+                        <Write
+                            initialData={
+                                isEditing
+                                    ? dating
+                                    : {
+                                          datingTitle: '',
+                                          datingLocation: '',
+                                          datingTheme: '',
+                                          activities: [],
+                                      }
+                            }
+                            initialActivities={activities}
+                            onEditComplete={handleEditComplete}
+                        />
+                    ) : (
+                        <>
+                            <div className="flex flex-row overflow-x-hidden">
+                                <div className="w-[365px] my-auto ml-4 sm:hidden">
+                                    <ul>
+                                        {dateList.map((date, index) => (
+                                            <li
+                                                key={index}
+                                                className={`flex flex-col border-2 border-rgba(172, 172, 172, 0.69) w-[332px] h-[74px] px-2 pt-2 ${
+                                                    activePage ===
                                                     date.datingId.toString()
-                                                )
-                                            }
-                                        >
-                                            <Link href={`${date.datingId}`}>
-                                                <div
-                                                    className={`font-bold-500 text-[24px] ${
-                                                        activePage ===
+                                                        ? 'bg-[#F9ECFF]'
+                                                        : ''
+                                                }`}
+                                                style={{
+                                                    borderRadius:
+                                                        '4px 0px 0px 4px',
+                                                    overflow: 'hidden',
+                                                    whiteSpace: 'nowrap',
+                                                }}
+                                                onClick={() =>
+                                                    setActivePage(
                                                         date.datingId.toString()
-                                                            ? 'text-black'
-                                                            : ''
-                                                    }`}
-                                                >
-                                                    <span>
-                                                        {date.datingTitle}
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    className={`text-[#aaa] mt-2 text-xs text-end ${
-                                                        activePage ===
-                                                        date.datingId.toString()
-                                                            ? 'text-black'
-                                                            : ''
-                                                    }`}
-                                                >
-                                                    <span>
-                                                        {timeAgo(
-                                                            date.createdAt
-                                                        )}
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5] sm:border-none">
-                                <div className="flex flex-col mt-28 mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-b-2 sm:max-w-[350px] sm:mt-0 sm:w-full">
-                                    <div className="flex flex-col p-4">
-                                        <p className="text-[25px] text-[#666666] sm:text-base sm:font-medium">
-                                            {dating.datingLocation}
-                                        </p>
-                                        <p className="text-[36px] mt-1 mb-4 font-semibold sm:text-xl sm:font-medium sm:my-4">
-                                            {dating.datingTitle}
-                                        </p>
-                                        <p className="text-[25px] sm:text-lg sm:font-medium">
-                                            {dating.datingTheme}
-                                        </p>
-                                        <span className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
-                                            {timeAgo(dating.createdAt)}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col mx-auto p-4 w-5/6 sm:w-full ">
-                                    <div className="flex-col items-center p-4 w-full">
-                                        <p className="flex justify-center mb-10 text-[30px]">
-                                            데이트 내용 🎈
-                                        </p>
-                                        {dating &&
-                                            dating.activities.map(
-                                                (
-                                                    activity,
-                                                    index // activities 배열을 매핑합니다.
-                                                ) => (
+                                                    )
+                                                }
+                                            >
+                                                <Link href={`${date.datingId}`}>
                                                     <div
-                                                        key={index}
-                                                        className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg sm:border-[2px] sm:w-[300px]"
+                                                        className={`font-bold-500 text-[24px] ${
+                                                            activePage ===
+                                                            date.datingId.toString()
+                                                                ? 'text-black'
+                                                                : ''
+                                                        }`}
                                                     >
-                                                        {
-                                                            activity.activityContent
-                                                        }
+                                                        <span>
+                                                            {date.datingTitle}
+                                                        </span>
                                                     </div>
-                                                )
-                                            )}
+                                                    <div
+                                                        className={`text-[#aaa] mt-2 text-xs text-end ${
+                                                            activePage ===
+                                                            date.datingId.toString()
+                                                                ? 'text-black'
+                                                                : ''
+                                                        }`}
+                                                    >
+                                                        <span>
+                                                            {timeAgo(
+                                                                date.createdAt
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="flex flex-col w-full border-l-[2px] border-r-[2px] border-[#C5C5C5] sm:border-none">
+                                    <div className="flex flex-col mx-auto p-4 w-5/6 border-b-2 border-[#C5C5C5] sm:border-b-2 sm:max-w-[350px] sm:mt-0 sm:w-full">
+                                        <div className="flex flex-col p-4">
+                                            <div className="flex flex-row justify-between sm:flex-col">
+                                                <p className="text-[36px] mt-1 mb-4 font-semibold sm:text-xl sm:font-medium sm:justify-center">
+                                                    {dating.datingTitle}
+                                                </p>
+                                                <span className="text-[#aaa] mt-10 text-xs text-end sm:order-first sm:text-start sm:mb-8 sm:mt-0">
+                                                    {timeAgo(dating.createdAt)}
+                                                </span>
+                                            </div>
+                                            <div className="flex flex-row items-center justify-start sm:flex-col">
+                                                <p className="flex flex-row items-center  text-base text-[#666666] ml-2 sm:text-base sm:font-medium sm:mb-1">
+                                                    <LocationIcon />
+                                                    {dating.datingLocation}
+                                                </p>
+                                                <p className=" text-base ml-2 sm:text-lg sm:font-medium">
+                                                    {dating.datingTheme}
+                                                </p>
+                                            </div>
+                                            <div className="w-[520px] h-96 mx-auto my-10 sm:mb-[-25px]">
+                                                {dating.datingImage.image && (
+                                                    <Image
+                                                        src={
+                                                            dating.datingImage
+                                                                .image
+                                                        }
+                                                        className="w-full h-full sm:w-72 sm:h-72"
+                                                        alt="Dating Image"
+                                                        width={233}
+                                                        height={260}
+                                                        objectFit="cover"
+                                                        objectPosition="center"
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col mx-auto p-4 w-5/6 sm:w-full ">
+                                        <div className="flex-col items-center p-4 w-full">
+                                            <p className="flex justify-center mb-10 text-[30px]">
+                                                데이트 내용 🎈
+                                            </p>
+                                            {dating &&
+                                                dating.activities.map(
+                                                    (
+                                                        activity,
+                                                        index // activities 배열을 매핑합니다.
+                                                    ) => (
+                                                        <div
+                                                            key={index}
+                                                            className="p-2 my-2 border-[3px] border-[#D67DFFCC] rounded-lg sm:border-[2px] sm:w-[300px]"
+                                                        >
+                                                            {
+                                                                activity.activityContent
+                                                            }
+                                                        </div>
+                                                    )
+                                                )}
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row justify-end w-5/6 gap-4 mb-2 ml-10 text-[24px] sm:mb-2 sm:justify-center sm:w-full sm:mx-auto">
+                                        <button
+                                            className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
+                                            onClick={handleEditClick}
+                                        >
+                                            수정
+                                        </button>
+                                        <button
+                                            className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
+                                            onClick={handlePlanDelete}
+                                        >
+                                            삭제
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="flex flex-row justify-end w-5/6 gap-4 mb-2 ml-10 text-[24px] sm:mb-2 sm:justify-center sm:w-full sm:mx-auto">
-                                    <button
-                                        className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
-                                        onClick={handleEditClick}
-                                    >
-                                        수정
-                                    </button>
-                                    <button
-                                        className="bg-myplan-button w-[102px] h-[50px] text-white rounded-[30px]"
-                                        onClick={handlePlanDelete}
-                                    >
-                                        삭제
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="w-[394px] sm:hidden">
-                                <div className="h-screen w-[395px] flex flex-col items-center">
-                                    <div className="h-[231px] w-[231px] rounded-full overflow-hidden mx-auto mt-[136px]">
-                                        {/* {userProfile &&
+                                <div className="w-[394px] sm:hidden">
+                                    <div className="h-screen w-[395px] flex flex-col items-center">
+                                        <div className="h-[231px] w-[231px] rounded-full overflow-hidden mx-auto mt-[136px]">
+                                            {/* {userProfile &&
                                     userProfile.profileImages &&
                                     userProfile.profileImages.length > 0 ? (
                                         <Image
@@ -421,9 +452,9 @@ export default function PostPage({ params: { slug } }: Props) {
                                             priority
                                         />
                                     )} */}
-                                    </div>
-                                    <div>
-                                        {/* {userProfile && (
+                                        </div>
+                                        <div>
+                                            {/* {userProfile && (
                                         <div>
                                             <h2>{userProfile.nickname}</h2>
                                             <p>나이: {userProfile.age}</p>
@@ -434,13 +465,13 @@ export default function PostPage({ params: { slug } }: Props) {
                                             </p>
                                         </div>
                                     )} */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </>
-                )}
-            </div>
+                        </>
+                    )}
+                </div>
             </UserLayout>
         </>
     );

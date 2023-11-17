@@ -1,7 +1,3 @@
-// ? EventSource.onopen : 서버와 연결이 open되었을 때 호출하는 이벤트 핸들러
-// ? EventSource.onmessage : 서버로부터 message를 수신했을 때 호출하는 이벤트 핸들러
-// ? EventSource.onerror : 에러가 발생하거나 EventSource 객체에서 error event가 감지되었을 때 호출하는 이벤트 핸들러
-
 'use client';
 
 import Link from 'next/link';
@@ -11,20 +7,11 @@ import { getCookie } from '@/utils/cookie';
 import Alarm from '@/components/alarm/Alarm';
 import Logo from '../../../public/RizzPick_color.png';
 import RealTimeModal from '../alarm/RealTimeModal';
-import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 import { toast } from 'react-hot-toast';
 import { useEventSource } from '@/app/EventSourceContext';
 import { useRouter } from 'next/navigation';
-
-// interface ProfileImage {
-//     id: number;
-//     image: string;
-// }
-
-// interface User {
-//     id: number;
-//     profileImages: ProfileImage[];
-// }
+import axios from 'axios';
 
 type Alert = {
     id: number;
@@ -42,10 +29,6 @@ type Alert = {
     readStatus: boolean;
 };
 
-// interface ExtendedEventSourcePolyfill extends EventSourcePolyfill {
-//     lastConnectionTime?: number;
-// }
-
 export default function Header({ isVisible = true }) {
     const [showOverlay, setShowOverlay] = useState(false);
     const [openChatModal, setOpenChatModal] = useState(false);
@@ -58,12 +41,6 @@ export default function Header({ isVisible = true }) {
     const [closeModal] = useState(true);
     const [alerts, setAlerts] = useState<Alert[]>([]);
     const [messages, setMessages] = useState<string[]>([]);
-
-    // const EventSource = EventSourcePolyfill || NativeEventSource;
-    // const [sse, setSse] = useState<EventSourcePolyfill | null>(null);
-    // const [shownAlertsIds, setShownAlertsIds] = useState<Set<number>>(
-    //     new Set()
-    // );
     const [processedEventIds, setProcessedEventIds] = useState<number[]>([]);
     const sseRef = useRef<EventSourcePolyfill | null>(null);
 
@@ -152,61 +129,62 @@ export default function Header({ isVisible = true }) {
         if (!isVisible || sseRef.current) return;
 
         try {
-            const response = await fetch('https://willyouback.shop/alerts', {
-                method: 'GET',
-                headers: {
-                    Authorization: `${token}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-
-            setAlerts((currentAlerts) => {
-                // 새로운 알림들만 필터링
-                const newAlerts = data.data.filter(
-                    (newAlert: Alert) =>
-                        !currentAlerts.some((alert) => alert.id === newAlert.id)
-                );
-
-                // 현재 알림 목록에 새 알림들을 추가
-                return [...currentAlerts, ...newAlerts];
-            });
-
-            // 아직 읽지 않은 알림의 수를 업데이트
-            setUnreadAlertCount(
-                data.data.filter((alert: Alert) => !alert.readStatus).length
+            const response = await axios.get(
+                'https://willyouback.shop/alerts',
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                }
             );
+            if (response.status === 200) {
+                setAlerts((currentAlerts) => {
+                    const newAlerts = response.data.data.filter(
+                        (newAlert: Alert) =>
+                            !currentAlerts.some(
+                                (alert) => alert.id === newAlert.id
+                            )
+                    );
+                    return [...currentAlerts, ...newAlerts];
+                });
+                setUnreadAlertCount(
+                    response.data.data.filter(
+                        (alert: Alert) => !alert.readStatus
+                    ).length
+                );
+            }
         } catch (error) {
             console.error('Fetching alerts failed:', error);
         }
     }, [token, isVisible]);
 
     useEffect(() => {
-        if (!eventSource) return;
+        fetchAlerts(); // 컴포넌트 마운트 시 초기 데이터 로드
+    }, [fetchAlerts]);
 
-        // 메시지 이벤트 핸들러
+    useEffect(() => {
+        if (!eventSource) return;
         const onMessage = (event: any) => {
-            console.log('Received a message:', event.data); // 여기에서 로깅
+            // console.log('Received a message:', event.data); // 여기에서 로깅
+            handleNewMessage(event);
+            fetchAlerts();
             try {
                 const data = JSON.parse(event.data);
-                console.log('Parsed data:', data);
+
+                // console.log('Parsed data:', data);
             } catch (error) {
                 console.error('Error parsing JSON:', error);
             }
             fetchAlerts();
-            console.log('알림 메시지 전달받음');
-            console.log(event);
-            console.log(event.data);
+            // console.log('알림 메시지 전달받음');
+            // console.log(event);
+            // console.log(event.data);
             handleNewMessage(event);
             // 데이터를 JSON으로 파싱
             try {
                 if (event.data.startsWith('{')) {
                     const jsonData = JSON.parse(event.data);
-                    console.log(jsonData);
+                    // console.log(jsonData);
                     if (Array.isArray(jsonData)) {
                         // 데이터가 배열로 온 경우, 각 메시지를 처리
                         jsonData.forEach((newAlert) => {
@@ -231,14 +209,12 @@ export default function Header({ isVisible = true }) {
         };
 
         eventSource.addEventListener('message', onMessage);
-        eventSource.addEventListener('error', onError);
-
-        // 컴포넌트 언마운트 시 이벤트 리스너 제거 및 EventSource 닫기
         return () => {
-            eventSource.removeEventListener('message', onMessage);
-            eventSource.removeEventListener('error', onError);
+            if (eventSource) {
+                eventSource.removeEventListener('message', onMessage);
+            }
         };
-    }, [eventSource]);
+    }, [eventSource, fetchAlerts, handleNewAlert, handleNewMessage]);
 
     useEffect(() => {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
@@ -305,7 +281,10 @@ export default function Header({ isVisible = true }) {
                         setUnreadAlertCount={setUnreadAlertCount}
                     />
                 )}
-                <span className="cursor-pointer" onClick={()=>router.push('/user/chat')}>
+                <span
+                    className="cursor-pointer"
+                    onClick={() => router.push('/user/chat')}
+                >
                     채팅
                 </span>
                 <span onClick={Open} className="cursor-pointer">
@@ -331,75 +310,3 @@ export default function Header({ isVisible = true }) {
         </header>
     );
 }
-
-// const initializeSSE = useCallback(() => {
-//     const currentSSE = sseRef.current;
-//     if (
-//         currentSSE &&
-//         Date.now() - currentSSE.lastConnectionTime! < 3600000
-//     ) {
-//         console.log(
-//             '1시간이 지나지 않았으므로 SSE 재연결을 시도하지 않음.'
-//         );
-//         return;
-//     }
-
-//     const newSSE: EventSourcePolyfill & { lastConnectionTime?: number } =
-//         new EventSourcePolyfill('https://willyouback.shop/subscribe', {
-//             headers: {
-//                 Authorization: `${token}`,
-//                 'Content-Type': 'text/event-stream',
-//                 Connection: 'keep-alive',
-//                 'Cache-Control': 'no-cache',
-//             },
-//             heartbeatTimeout: 3600000,
-//         }) as EventSourcePolyfill & { lastConnectionTime: number };
-
-//     newSSE.onopen = () => {
-//         console.log('SSE 연결됨');
-//         fetchAlerts();
-//         newSSE.lastConnectionTime = Date.now();
-//     };
-
-//     newSSE.onmessage = (event) => {
-//         console.log('Received a message:', event.data); // 여기에서 로깅
-//         try {
-//             const data = JSON.parse(event.data);
-//             console.log('Parsed data:', data);
-//         } catch (error) {
-//             console.error('Error parsing JSON:', error);
-//         }
-//         fetchAlerts();
-//         console.log('알림 메시지 전달받음');
-//         console.log(event);
-//         console.log(event.data);
-//         handleNewMessage(event);
-//         // 데이터를 JSON으로 파싱
-//         try {
-//             if (event.data.startsWith('{')) {
-//                 const jsonData = JSON.parse(event.data);
-//                 if (Array.isArray(jsonData)) {
-//                     // 데이터가 배열로 온 경우, 각 메시지를 처리
-//                     jsonData.forEach((newAlert) => {
-//                         if (newAlert && newAlert.message) {
-//                             handleNewAlert(newAlert.message);
-//                         }
-//                     });
-//                 } else if (jsonData && jsonData.message) {
-//                     // 데이터가 개별 메시지인 경우, 해당 메시지를 처리
-//                     handleNewAlert(jsonData.message);
-//                 }
-//             }
-//         } catch (error) {
-//             console.error('Parsing JSON failed:', error);
-//         }
-//     };
-
-//     newSSE.onerror = (e) => {
-//         newSSE.close();
-//     };
-
-//     sseRef.current = newSSE;
-
-//     setSse(newSSE);
-// }, [token, handleNewAlert]);

@@ -5,7 +5,6 @@ import { EventSourcePolyfill } from 'event-source-polyfill';
 import { getCookie } from '@/utils/cookie';
 
 const EventSourceContext = createContext<EventSourcePolyfill | null>(null);
-const token = getCookie('Authorization');
 
 export const EventSourceProvider = ({
     children,
@@ -17,15 +16,19 @@ export const EventSourceProvider = ({
     );
 
     useEffect(() => {
+        const token = getCookie('Authorization');
         if (!token) {
-            console.log('너 토큰 없잖아');
+            console.error('Authorization token is missing.');
             return;
-        } else {
+        }
+
+        // EventSource 인스턴스를 생성합니다.
+        else {
             const es = new EventSourcePolyfill(
                 'https://willyouback.shop/subscribe',
                 {
                     headers: {
-                        Authorization: `${token}`,
+                        Authorization: token,
                         'Content-Type': 'text/event-stream',
                         Connection: 'keep-alive',
                         'Cache-Control': 'no-cache',
@@ -33,16 +36,16 @@ export const EventSourceProvider = ({
                     heartbeatTimeout: 3600000, // 1 hour
                 }
             );
-            console.log();
-            // EventSource 객체를 상태에 설정합니다.
+
             setEventSource(es);
 
             // 컴포넌트가 언마운트될 때 EventSource를 닫습니다.
             return () => {
+                // console.log('SSE 언마운트');
                 es.close();
             };
         }
-    }, [token]);
+    }, []);
 
     return (
         <EventSourceContext.Provider value={eventSource}>
@@ -51,6 +54,7 @@ export const EventSourceProvider = ({
     );
 };
 
+// useEventSource 훅을 정의합니다.
 export const useEventSource = () => {
     return useContext(EventSourceContext);
 };

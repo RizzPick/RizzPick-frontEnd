@@ -10,6 +10,11 @@ export type updateDate = {
     theme: string;
 };
 
+export type updateImage = {
+    id: number;
+    image: string;
+};
+
 export type ActivityResponse = {
     status: string;
     message: string;

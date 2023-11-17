@@ -30,7 +30,6 @@ export default function Alarm({ close }: AlarmProps) {
         const getChatRooms = async () => {
             try {
                 const response = await ChatAPI.getChats();
-                console.log(response);
                 if (response.status === 200) {
                     initializeChats(response.data);
                 }
@@ -52,7 +51,6 @@ export default function Alarm({ close }: AlarmProps) {
                         },
                     }
                 );
-                console.log(response);
                 setLikesData(response.data.data); // Set the likes data
             } catch (error) {
                 console.error(error);
