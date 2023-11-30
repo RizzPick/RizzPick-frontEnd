@@ -65,7 +65,7 @@ const RealTimeModal = ({ close, setUnreadAlertCount }: RealTimeModalProps) => {
 
     useEffect(() => {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
-    }, [alerts]);
+    }, [alerts, setUnreadAlertCount]);
 
     const markAsRead = async (id: number) => {
         try {
@@ -163,7 +163,7 @@ const RealTimeModal = ({ close, setUnreadAlertCount }: RealTimeModalProps) => {
 
         // 컴포넌트가 언마운트될 때 인터벌을 정리
         return () => clearInterval(interval);
-    }, []);
+    }, [fetchAlerts]);
 
     // const initializeSSE = useCallback(() => {
     //     const newSSE = new EventSource('https://willyouback.shop/subscribe', {
@@ -216,7 +216,7 @@ const RealTimeModal = ({ close, setUnreadAlertCount }: RealTimeModalProps) => {
 
     useEffect(() => {
         setUnreadAlertCount(alerts.filter((alert) => !alert.readStatus).length);
-    }, [alerts]);
+    }, [alerts, setUnreadAlertCount]);
 
     // // 컴포넌트가 마운트될 때 EventSource 초기화
     // useEffect(() => {
