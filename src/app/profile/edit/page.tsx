@@ -1,8 +1,7 @@
 'use client';
-import Header from '@/components/common/Header';
 import UserImageGrid from '@/components/profile/UserImageGrid';
 import UserProfileEdit from '@/components/profile/UserProfileEdit';
-import ProfileAPI from '@/features/profile';
+import AuthAPI from '@/features/auth';
 import UseProfile from '@/hooks/useProfile';
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -11,7 +10,6 @@ function ProfilEditPage() {
     const { initializeProfile } = UseProfile();
     const [showImageGrid, setShowImageGrid] = useState(false);
     const [mobile, setMobile] = useState(false);
-
     const isMobile = useMediaQuery({
         query: '(max-width:480px)',
     });
@@ -23,7 +21,7 @@ function ProfilEditPage() {
     useEffect(() => {
         const getProfile = async () => {
             try {
-                const response = await ProfileAPI.getMyProfile();
+                const response = await AuthAPI.getUserInfo();
                 if (response.status === 200) {
                     initializeProfile(response.data.data);
                 }
@@ -35,7 +33,7 @@ function ProfilEditPage() {
     }, [initializeProfile]);
 
     return (
-        <div>
+        <div>   
             {mobile ? (
                 <div className="grid grid-cols-1 sm:h-[100vh]">
                     {!showImageGrid && (

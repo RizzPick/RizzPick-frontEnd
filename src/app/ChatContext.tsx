@@ -1,5 +1,5 @@
 'use client'
-import React, { createContext, useState, useEffect, useRef, ReactNode, useCallback } from 'react';
+import React, { createContext, useEffect, useRef, ReactNode, useCallback } from 'react';
 import ChatAPI from '@/features/chat';
 import { Client } from '@stomp/stompjs';
 import { ChatData, ChatDetail, MessagesRes } from '@/types/chat';
@@ -21,14 +21,13 @@ interface ChatProviderProps {
     children: ReactNode;
 }
 
-const token = getCookie('Authorization');
-
 function ChatProvider({ children }: ChatProviderProps) {
 
     const { data : chats } = useSWR<ChatData[]>(CHAT_KEY);
     const { data : chat } = useSWR<ChatDetail>(CHAT_MESSAGE_KEY);
     const webSocketClients = useRef<Map<number, Client>>(new Map());
     const { initializeChats, initializeChat } = UseChat();
+    const token = getCookie('Authorization');
 
     const client = useRef<Client>(new Client({
         brokerURL: `wss://willyouback.shop/chatroom`,
@@ -38,6 +37,7 @@ function ChatProvider({ children }: ChatProviderProps) {
     }));
 
     useEffect(() => {
+        if(!token) return;
         const getChatRooms = async() => {
             try {
                 const response = await ChatAPI.getChats();
@@ -49,7 +49,7 @@ function ChatProvider({ children }: ChatProviderProps) {
             }
         }
         getChatRooms();
-    }, [initializeChats]);
+    }, [initializeChats, token]);
 
     useEffect(() => {
         client.current.activate();
@@ -118,7 +118,7 @@ function ChatProvider({ children }: ChatProviderProps) {
                 currentWebSocketClients.delete(chatRoomId);
             });
         };
-    }, [chats, updateMessages]);
+    }, [chats, token, updateMessages]);
     
 
     return (

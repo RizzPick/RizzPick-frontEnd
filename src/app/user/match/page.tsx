@@ -2,17 +2,14 @@
 import Footer from '@/components/common/Footer';
 import Match from '@/components/match/Match';
 import MatchMobile from '@/components/match/MatchMobile';
-// import useGeolocation from '@/hooks/useGeolocation';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import UserLayout from '../layout';
-import { useSearchParams } from 'next/navigation';
 import { MatchAPI } from '@/features/match';
 import { UserProfile } from '@/types/match/type';
 import Loader from '@/components/common/Loader';
 
 export default function MatchPage() {
-    const params = useSearchParams();
     const [mobile, setMobile] = useState(false);
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +28,6 @@ export default function MatchPage() {
 
         fetchUsers();
     }, []);
-    // const location = useGeolocation();
 
     const isMobile = useMediaQuery({
         query: '(max-width:480px)',

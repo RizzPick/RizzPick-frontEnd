@@ -1,4 +1,3 @@
-import Header from '@/components/common/Header';
 import LikeList from '@/components/notifications/LikeList';
 import { LikeData } from '@/types/like';
 import axios from 'axios';
@@ -26,7 +25,7 @@ async function Likedpage() {
         <>
             <div className='block sm:hidden'>
                 <UserLayout showHeader={true}>
-                        <LikeList liked={liked} />
+                    <LikeList liked={liked} />
                 </UserLayout>
             </div>
             <div className='hidden sm:block'>

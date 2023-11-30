@@ -5,13 +5,11 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import Like from "../../../public/notificationsIcon/Like.svg"
 import { LikeData } from '@/types/like';
-import UseLiked from '@/hooks/useLiked';
 import { useRouter } from 'next/navigation';
 
 function LikeComp() {
     const [likesData, setLikesData] = useState<LikeData[]>([]);
     const router = useRouter();
-    const {initializeLiked} = UseLiked();
 
     useEffect(()=>{
         const fetchLikesData = async () => {
@@ -27,14 +25,13 @@ function LikeComp() {
                         },
                     }
                 );
-                initializeLiked(response.data.data);
                 return setLikesData(response.data.data);
             } catch (error) {
                 console.error(error);
             }
         };
         fetchLikesData();
-    },[initializeLiked])
+    },[])
   return (
     <div>
         <h2 onClick={()=>router.push('notifications/liked')} className='text-zinc-800 text-xl font-semibold leading-tight tracking-wide px-5 pb-2.5'>좋아요({likesData.length})</h2>

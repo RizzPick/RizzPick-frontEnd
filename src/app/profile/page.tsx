@@ -7,15 +7,23 @@ import UserProfileMobile from '@/components/profile/UserProfileMobile';
 import AuthAPI from '@/features/auth';
 import UseProfile, { PROFILE_KEY } from '@/hooks/useProfile';
 import { MyProfileRes } from '@/types/profile';
-import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import useSWR from 'swr';
 
 export default function ProfilePage() {
-    const params = useSearchParams();
     const { data: profile } = useSWR<MyProfileRes>(PROFILE_KEY);
     const [isLoading, setIsLoading] = useState(true);
     const { initializeProfile } = UseProfile();
+    const [mobile, setMobile] = useState(false);
+    const isMobile = useMediaQuery({
+        query: '(max-width:480px)',
+    });
+
+    useEffect(() => {
+        setMobile(isMobile);
+    }, [isMobile]);
+
 
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
@@ -36,16 +44,19 @@ export default function ProfilePage() {
 
     return (
         <div>
-            <div className="sm:hidden">
+            {!mobile &&
+                <div>
                 <Header />
                 <UserProfile profile={profile}/>
-            </div>
-
-            <div className="sm:block hidden height-screen-vh">
-                <Header />
-                <UserProfileMobile profile={profile}/>
-                <Footer />
-            </div>
+                </div>
+            }
+            {mobile &&
+                <div className="height-screen-vh">
+                    <Header />
+                    <UserProfileMobile profile={profile}/>
+                    <Footer />
+                </div>
+            }
         </div>
     );
 }

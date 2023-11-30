@@ -1,4 +1,3 @@
-import { UserActiveStatus } from "@/types/auth";
 import { MyProfileRes } from "@/types/profile";
 import { UserInfo } from "@/types/user";
 import { setCookie } from "@/utils/cookie";
@@ -20,7 +19,6 @@ const UseProfile = () => {
         mutate(USER_INFO_KEY, user)
     },[])
 
-    // 로그인 한 유저의 프로필 등록 상태를 저장하는 함수
     const initializeUserActiveStatus = useCallback((userAcitiveStatus : boolean) => {
         mutate(USER_STATUS_KEY,userAcitiveStatus);
         if(userAcitiveStatus) {
